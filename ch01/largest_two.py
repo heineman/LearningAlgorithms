@@ -101,7 +101,7 @@ def tournament_two_object(A):
     if len(A) < 2:
         raise ValueError('Must have at least two values')
     if len(A) % 2 == 1:
-        raise "Only works for lists with even number of values."
+        raise ValueError('Only works for lists with even number of values.')
 
     tourn = []
     for i in range(0, len(A), 2):

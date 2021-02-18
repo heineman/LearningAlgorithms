@@ -20,16 +20,78 @@ def generate_hash():
 
 def readable_table(ht):
     """Return string representing keys in hashtable."""
-    return ' '.join([(' -' if s is None else str(s.key)) for s in ht.table])
+    return ' '.join([' --' if s is None else ' {:2d}'.format(s.key) for s in ht.table])
+
+def readable_linked_list_table(ht):
+    """Return string representing keys in linked list hashtable."""
+    s = ' '.join([' --' if s is None else '[x]' for s in ht.table]) + '\n'
+    
+    for ct in range(0, ht.N):
+        t = '                      '
+        found = False
+        for idx in range(ht.M):
+            mct = ct
+            node = ht.table[idx]
+            last = node
+            while mct > 0 and not node is None:
+                mct -= 1
+                node = node.next
+                last = node
+            if last:
+                t += '{:2d}  '.format(last.key)
+                found = True
+            else:
+                t += '    '
+
+        s += t + '\n'
+        if not found:
+            break
+    return s
 
 def sample_hashtable():
     """Generate Figure output."""
     from ch03.hashtable_open import Hashtable
-    ht = Hashtable(6)
-    vals = [20, 15, 12, 19, 14]
+    ht = Hashtable(7)
+    vals = [20, 15, 5, 26, 19]
     for i,v in enumerate(vals):
         ht.put(v, 'e{}'.format(i))
-        print(readable_table(ht),'        {} % {} = {}'.format(vals[i], ht.M, vals[i] % ht.M))
+        print(readable_table(ht),
+              '        {:2d} % {:2d} = {:2d}'.format(vals[i], ht.M, vals[i] % ht.M))
+
+def sample_separate_chaining_hashtable():
+    """Generate Figure output."""
+    from ch03.hashtable_linked import Hashtable
+    ht = Hashtable(7)
+    vals = [20, 15, 5, 26, 19]
+    for i,v in enumerate(vals):
+        ht.put(v, 'e{}'.format(i))
+        print('        {:2d} % {:2d} = {:2d}'.format(vals[i], ht.M, vals[i] % ht.M), 
+              readable_linked_list_table(ht))
+
+def sample_separate_chaining_hashtable_resize():
+    """Generate Figure output."""
+    from ch03.hashtable_linked import DynamicHashtable
+    ht = DynamicHashtable(7)
+    vals = [20, 15, 5, 26, 19]
+    for i,v in enumerate(vals):
+        ht.put(v, 'e{}'.format(i))
+        print('        {:2d} % {:2d} = {:2d}'.format(vals[i], ht.M, vals[i] % ht.M), 
+              readable_linked_list_table(ht))
+    ht.resize(2*ht.M+1)
+    print('                     ', readable_linked_list_table(ht))
+
+def sample_hashtable_resize():
+    """Generate Figure output."""
+    from ch03.hashtable_open import DynamicHashtable
+    ht = DynamicHashtable(7)
+    vals = [20, 15, 5, 26, 19]
+    for i,v in enumerate(vals):
+        ht.put(v, 'e{}'.format(i))
+        print(readable_table(ht),
+              '        {:2d} % {:2d} = {:2d}'.format(vals[i], ht.M, vals[i] % ht.M))
+    ht.resize(2*ht.M+1)
+    print()
+    print(readable_table(ht))
 
 def time_results_open_addressing():
     """Average time to insert a key in growing hashtable_open (in microseconds)."""
@@ -60,7 +122,7 @@ for word in {all_words}:
     return tbl
 
 def count_collisions_dynamic():
-    """Generate data counting collisions for dynamic hashtables."""
+    """Generate data counting collisions for dynamic hashtables. Not used in book."""
     all_words = english_words()
     # start twice as big as the number of words, and reduce steadily, counting collisions
     N = len(all_words)
@@ -94,8 +156,7 @@ def count_collisions():
     all_words = english_words()
     # start twice as big as the number of words, and reduce steadily, counting collisions
     N = len(all_words)
-    M = 2*N
-
+    
     from ch03.hashtable_linked import Hashtable as HL
     from ch03.hashtable_linked import stats_linked_lists
     from ch03.hashtable_open import Hashtable as OHL
@@ -104,6 +165,13 @@ def count_collisions():
     tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'], decimals=2)
     tbl.format('Max LL', 'd')
     tbl.format('Max OA', 'd')
+    
+    M = 20*N
+    avg_size_linked = stats_linked_lists(all_words, HL(M), False)
+    avg_size_open = stats_open_addressing(all_words, OHL(M), False)
+    tbl.row([M, avg_size_linked[0], avg_size_linked[1], avg_size_open[0], avg_size_open[1]])
+
+    M = 2*N
     while M > N/16:
         avg_size_linked = stats_linked_lists(all_words, HL(M), False)
         if N < M:
@@ -276,6 +344,23 @@ def iteration_order():
     for p1,p2,p3 in zip(table_entries(ht_oa), linked_list_entries(ht_ll), table_entries(ht_ph)):
         tbl.row([p1[0], p2[0], p3[0]])
 
+def perfect_trial(key):
+    from ch03.perfect.generated_dictionary import G, S1, S2, hash_f
+    hk1 = hash_f(key, S1)
+    print('hash_f(',key,'S1)=',hk1)
+    hk2 = hash_f(key, S2)
+    print('hash_f(',key,'S2)=',hk2)
+    print('G[',hk1,'] = ',G[hk1])
+    print('G[',hk2,'] = ',G[hk2])
+    from ch03.hashtable_open_perfect import Hashtable
+    ht1 = Hashtable()
+    ht1.put(key,key)
+    for idx,val in enumerate(ht1.table):
+        if val:
+            print(val,'at index position',idx)
+            return idx
+    return None
+
 def generate_ch03():
     """Generate Tables and Figures for chapter 03."""
     chapter = 3
@@ -306,22 +391,75 @@ def generate_ch03():
                 'Average performance to insert N keys into a Hashtable of size M',
                 yaxis='Time (in microseconds)')
 
+    with FigureNum(3) as figure_number:
+        description  = 'Structure of Hashtable linked list storage after adding five (key, value) pairs'
+        label = captionx(chapter, figure_number)
+        sample_separate_chaining_hashtable()
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(4) as figure_number:
+        description  = 'Removing the first node in a linked list'
+        label = captionx(chapter, figure_number)
+        print("hand-drawn image")
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(5) as figure_number:
+        description  = 'Removing any other node in a linked list'
+        label = captionx(chapter, figure_number)
+        print("hand-drawn image")
+        print('{}. {}'.format(label, description))
+        print()
+
     with TableNum(3) as table_number:
-        process(compare_dynamic_build_and_access_time(),
-                chapter, table_number,
-                'Comparing resizable hash tables against fixed-size (time in ms)')
-
-    with TableNum(4) as table_number:
-        process(count_hash(),
-                chapter, table_number,
-                'Words whose addition causes a resize event, with total # of insertions and average')
-
-    with TableNum(5) as table_number:
         process(count_collisions(),
                 chapter, table_number,
-                'Dynamic growing hash tables')
+                'Average Performance when inserting N=321,165 keys into a Hashtable of size M as M decreases in size')
+
+    with FigureNum(6) as figure_number:
+        description  = 'For a fixed number of elements, N, the average and maximum chain length follow predictable paths'
+        label = captionx(chapter, figure_number)
+        print('Figure 3-6 comes from plotting results of Table 3-3')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(7) as figure_number:
+        description  = 'Increasing M means existing entries can become "lost" since computed hash code depends on M'
+        label = captionx(chapter, figure_number)
+        sample_hashtable()
+        sample_separate_chaining_hashtable()
+        print('The above are original before resize.')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(8) as figure_number:
+        description  = 'Resulting Hsahtable storage after successful resizing'
+        label = captionx(chapter, figure_number)
+        sample_hashtable_resize()
+        sample_separate_chaining_hashtable_resize()
+        print('The above are original before resize.')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with TableNum(4) as table_number:
+        process(compare_dynamic_build_and_access_time(),
+                chapter, table_number,
+                'Comparing growing tables against fixed-size construction',
+                yaxis = 'Time (in ms)')
+
+    with TableNum(5) as table_number:
+        process(count_hash(),
+                chapter, table_number,
+                'Words whose addition causes a resize event, with total # of insertions and average number of times a word was inserted')
+
+    print('Additional computations for perfect hashing')
+    perfect_trial('by')
+    perfect_trial('etching')
+    perfect_trial('zzzaaa')
 
     with TableNum(6) as table_number:
-        process(count_collisions_dynamic(), 
+        process(iteration_order(),
                 chapter, table_number,
-                'Dynamic growing hash tables')
+                'Order of words returned by hashtable iterators',
+                create_image = False)
