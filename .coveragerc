@@ -1,0 +1,7 @@
+# c:\Python37\Scripts\coverage-3.7.exe run -m unittest discover
+#
+
+[run]
+omit = 
+    # Anything outside of Learning Algorithms code
+    */AppData/*
