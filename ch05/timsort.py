@@ -44,6 +44,7 @@ def merge(A, lo, mid, hi, aux):
 # of 2; merge_compute_minrun() is a deceptively simple function.
 
 def compute_min_run(n):
+    """Compute min_run to use when sorting n total values."""
     # Used to add 1 if any remaining bits are set
     r = 0 
     while n >= 64:
@@ -123,6 +124,7 @@ A.extend(B)''', repeat=10, number=1))
 
         tbl.row([n, t_ms, t_qs, t_ts, t_ps])
 
+#######################################################################
 if __name__ == '__main__':
     timing_nlogn_sorting()
 

@@ -572,8 +572,3 @@ def generate_ch05():
         label = captionx(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
-
-tim_sort_figure()
-#show_heapify()
-#timing_nlogn_sorting()
-#timing_selection_insertion()
