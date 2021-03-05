@@ -1,5 +1,6 @@
 # c:\Python37\Scripts\coverage-3.7.exe run -m unittest discover
 #
+# c:\Python37\Scripts\coverage-3.7.exe html
 
 [run]
 omit = 
