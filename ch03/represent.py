@@ -98,7 +98,7 @@ def random_words(all_words, n):
 
     low_bar = len(all_words) / 2
     if n > low_bar:
-        raise RuntimeError("n must be smaller than " + low_bar)
+        raise RuntimeError('n must be smaller than ' + low_bar)
 
     while len(random_list) < n:
         s = all_words[random.randint(0, len(all_words))]
@@ -264,14 +264,14 @@ def stats_just_1024():
         oa_stats_avg.append(avg_max_oa[0])
         oa_stats_max.append(avg_max_oa[1])
 
-    print("linked list average is ", statistics.mean(ll_stats_avg), "+/-",
+    print('linked list average is', statistics.mean(ll_stats_avg), '+/-',
           statistics.stdev(ll_stats_avg))
-    print("linked list max is ", statistics.mean(ll_stats_max), "+/-",
+    print('linked list max is', statistics.mean(ll_stats_max), '+/-',
           statistics.stdev(ll_stats_max))
 
-    print("open addressing average is ", statistics.mean(oa_stats_avg), "+/-",
+    print('open addressing average is', statistics.mean(oa_stats_avg), '+/-',
           statistics.stdev(oa_stats_avg))
-    print("open addressing max is ", statistics.mean(oa_stats_max), "+/-",
+    print('open addressing max is', statistics.mean(oa_stats_max), '+/-',
           statistics.stdev(oa_stats_max))
 
 #######################################################################

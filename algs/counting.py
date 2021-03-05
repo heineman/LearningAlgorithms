@@ -22,7 +22,7 @@ class RecordedItem:
     @classmethod
     def header(cls):
         """Terms in the report."""
-        return ("eq", "lt", "gt")
+        return ('eq', 'lt', 'gt')
 
     @classmethod
     def clear(cls):

@@ -28,3 +28,9 @@ class Hashtable:
         hc = perfect_hash(k)
         self.table[hc] = Entry(k, v)
         self.N += 1
+
+    def __iter__(self):
+        """Generate all (k, v) tuples for entries in the table."""
+        for entry in self.table:
+            if not entry is None:
+                yield (entry.key, entry.value)

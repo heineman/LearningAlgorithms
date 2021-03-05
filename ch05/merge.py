@@ -19,22 +19,22 @@ def merge_sort(A):
         # copy results of sorted sub-problems into auxiliary storage
         aux[lo:hi+1] = A[lo:hi+1]
 
-        i = lo       # starting index into left sorted sub-array
-        j = mid+1    # starting index into right sorted sub-array
+        left = lo        # starting index into left sorted sub-array
+        right = mid+1    # starting index into right sorted sub-array
 
-        for k in range(lo, hi+1):
-            if i > mid:
-                A[k] = aux[j]
-                j += 1
-            elif j > hi:
-                A[k] = aux[i]
-                i += 1
-            elif aux[j] < aux[i]:
-                A[k] = aux[j]
-                j += 1
+        for i in range(lo, hi+1):
+            if left > mid:
+                A[i] = aux[right]
+                right += 1
+            elif right > hi:
+                A[i] = aux[left]
+                left += 1
+            elif aux[right] < aux[left]:
+                A[i] = aux[right]
+                right += 1
             else:
-                A[k] = aux[i]
-                i += 1
+                A[i] = aux[left]
+                left += 1
 
     rsort(0, len(A)-1)
 

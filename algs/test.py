@@ -32,7 +32,7 @@ class TestHashing(unittest.TestCase):
         self.assertEqual(0, RecordedItem.report()[2])
 
     def test_recorded_item(self):
-        self.assertEqual(("eq", "lt", "gt"), RecordedItem.header())
+        self.assertEqual(('eq', 'lt', 'gt'), RecordedItem.header())
 
     def test_helper(self):
         self.assertEqual([RecordedItem(0), RecordedItem(1)], RecordedItem.range(2))
@@ -40,7 +40,15 @@ class TestHashing(unittest.TestCase):
     def test_node(self):
         n = Node('sample')
         self.assertEqual('[sample]', str(n))
-       
+
+    def test_node_2(self):
+        node1 = Node('sample')
+        node2 = Node('other', node1)
+        self.assertEqual('other', node2.value)
+        self.assertEqual('sample', node2.next.value)
+
+        self.assertEqual(['other', 'sample'], list(node2))
+
     def test_table(self): 
         tbl = DataTable([8, 8, 8], ['N', 'Another', 'SquareRoot'], output=False, decimals=4)
         tbl.format('Another', 'd')
@@ -58,7 +66,7 @@ class TestHashing(unittest.TestCase):
         model = tbl.best_model('Another')[0]
         self.assertEqual(model[0], Model.LINEAR)
         self.assertAlmostEqual(model[3], 1.0000, places=5)
-        
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

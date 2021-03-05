@@ -14,4 +14,6 @@ Requires `perfect-hash` library: install using
 """
 from perfect_hash import main
 
-main()
+#######################################################################
+if __name__ == '__main__':
+    main()

@@ -7,7 +7,8 @@ This repository contains the Python code for:
 	ISBN: 978-1-49-209106-6
 	
 Each chapter has its own folder containing the code for that chapter.
-All Python code conforms to Python 3.
+All Python code conforms to Python 3.6 to take advantage of f-strings
+for formatting text strings.
 
 ## Chapter structure
 

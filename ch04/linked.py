@@ -24,7 +24,7 @@ class PQ:
     def enqueue(self, v, p):
         """Enqueue (v, p) entry into priority queue."""
         if self.N == self.size:
-            raise Exception ("Priority Queue is Full!")
+            raise Exception ('Priority Queue is Full!')
         self.N += 1
         to_add = LinkedEntry(v, p)
 

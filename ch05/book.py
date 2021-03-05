@@ -10,22 +10,39 @@ Or the binary-split formula for N!
 
    http://www.luschny.de/math/factorial/binarysplitfact.html
 
+Lengthy runs (several hours) for timing results in:
+
+Building models for Insertion Sort. This may take awhile...
+Quadratic SS = 4.586897358514126e-09*N*N + 1.406849880773368e-07*N
+Quadratic IS = 4.504032979491163e-09*N*N + 1.8245472574666622e-07*N
+
+           N        TimeSS       ModelSS        TimeIS       ModelIS    
+         256         0.000         0.000         0.000         0.000    
+         512         0.001         0.001         0.001         0.001    
+       1,024         0.005         0.005         0.005         0.005    
+       2,048         0.020         0.020         0.019         0.019    
+       4,096         0.078         0.078         0.076         0.076    
+       8,192         0.307         0.309         0.304         0.304    
+      16,384         1.238         1.234         1.221         1.212    
+      32,768         4.881         4.930         4.754         4.842    
+      65,536        19.585        19.710        19.716        19.357    
+
+
 """
 import timeit
 import random
 import numpy as np
 from scipy.optimize import curve_fit
+from algs.table import captionx, FigureNum
 
-from algs.table import caption, TABLE, DataTable
-from algs.table import n_log_n_model, log_linear_model, linear_model, quadratic_model
-labels_chapter5 = {}
+from algs.table import DataTable, n_log_n_model, log_linear_model, linear_model, quadratic_model
 
-def fact(n):
+def fact(N):
     """Inefficient recursive implementation to introduce recursion."""
-    if n <= 1:
+    if N <= 1:
         return 1
 
-    return n * fact(n-1)
+    return N * fact(N-1)
 
 def modeling_insertion_worst_case():
     """Generate table for worst case of Insertion Sort."""
@@ -260,11 +277,11 @@ def timing_selection_insertion():
     for n in [2**k for k in range(8, 13)]:
         # Not much need to repeat since Selection Sort behaves the same
         # every time. I'll do it five times.
-        t_ss = min(timeit.repeat(stmt='selection_sort(A)', setup=f'''
+        t_ss = timeit.timeit(stmt='selection_sort(A)', setup=f'''
 import random
 from ch05.sorting import selection_sort
 A=list(range({n}))
-random.shuffle(A)''', repeat=5, number=10))/10
+random.shuffle(A)''', number=1)
 
         # Insertion Sort is highly dependent upon its input, so execute
         # far more repetitions, and take average. This is the only time
@@ -276,7 +293,7 @@ random.shuffle(A)''', repeat=5, number=10))/10
 import random
 from ch05.sorting import insertion_sort
 A=list(range({n}))
-random.shuffle(A)''', repeat=100, number=10))/(10*100)
+random.shuffle(A)''', repeat=100, number=1))/100   # since seeking average from sum
 
         x.append(n)
         y_ss.append(t_ss)
@@ -290,46 +307,273 @@ random.shuffle(A)''', repeat=100, number=10))/(10*100)
     print('Quadratic IS = {}*N*N + {}*N'.format(quadratric_is[0], quadratric_is[1]))
     print()
 
-    tbl = DataTable([12,10,10,10,10],['N','TimeSS','ModelSS','TimeIS', 'ModelIS'])
+    tbl = DataTable([12,10,10,10,10,10,10],['N','TimeSS','ModelSS','MinIS', 'TimeIS', 'MaxIs', 'ModelIS'])
     for n,t_ss,t_is in zip(x,y_ss,y_is):
         tbl.row([n, t_ss, quadratic_model(n, quadratric_ss[0], quadratric_ss[1]),
-                    t_is, quadratic_model(n, quadratric_is[0], quadratric_is[1])])
+                    t_is, t_is, t_is, quadratic_model(n, quadratric_is[0], quadratric_is[1])])
 
-    for n in [2**k for k in range(13, 16)]:
-        t_ss = min(timeit.repeat(stmt='selection_sort(A)', setup=f'''
+    for n in [2**k for k in range(13, 18)]:
+        # selection is stable, so just run once
+        t_ss = timeit.timeit(stmt='selection_sort(A)', setup=f'''
 import random
 from ch05.sorting import selection_sort
 A=list(range({n}))
-random.shuffle(A)''', repeat=50, number=10))/10
+random.shuffle(A)''', number=1)
 
         # Once again, take average for Insertion Sort, this time
-        # for 50 runs.
-        t_is = sum(timeit.repeat(stmt='insertion_sort(A)', setup=f'''
+        # for 50 runs. But also compute min and max for graphing
+        all_times = timeit.repeat(stmt='insertion_sort(A)', setup=f'''
 import random
 from ch05.sorting import insertion_sort
 A=list(range({n}))
-random.shuffle(A)''', repeat=50, number=10))/(10*50)
+random.shuffle(A)''', repeat=5, number=1)
+        t_is = sum(all_times)/5
+        t_min = min(all_times)
+        t_max = max(all_times)
 
         tbl.row([n, t_ss, quadratic_model(n, quadratric_ss[0], quadratric_ss[1]),
-                    t_is, quadratic_model(n, quadratric_is[0], quadratric_is[1])])
+                    t_min, t_is, t_max, quadratic_model(n, quadratric_is[0], quadratric_is[1])])
 
-def generate_ch05():
-    """Generate tables/figures for chapter 5."""
-    chapter = 5
+def timing_nlogn_sorting():
+    """
+    Confirm N Log N performance of Merge Sort, Heap Sort, Quicksort and Python's built-in sort.
+    """
+    # Build model from Generate 5 data points
+    tbl = DataTable([12,10,10,10,10,10],['N','MergeSort', 'QuickSort', 'HeapSort', 'TimSort', 'PythonSort'])
     
-    timing_selection_insertion()
+    x = []
+    y_ms = []
+    y_qs = []
+    y_hs = []
+    y_ts = []
+    y_ps = []
+    for n in [2**k for k in range(8, 16)]:
+        t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup=f'''
+import random
+from ch05.merge import merge_sort
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))
 
-    print(caption(chapter, labels_chapter5, TABLE,
-        'Modeling Insertion Sort and Selection Sort'))
-    modeling_insertion_selection()
+        t_qs = min(timeit.repeat(stmt='quick_sort(A)', setup=f'''
+import random
+from ch05.sorting import quick_sort
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))
+        
+        t_hs = min(timeit.repeat(stmt='heap_sort(A)', setup=f'''
+import random
+from ch05.heapsort import heap_sort
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))
+        
+        t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup=f'''
+import random
+from ch05.timsort import tim_sort
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))        
 
-    print(fact(7))
+        t_ps = min(timeit.repeat(stmt='A.sort()', setup=f'''
+import random
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))
 
-    modeling_insertion_worst_case()
-    print(caption(chapter, labels_chapter5, TABLE,
-                  'Comparing different mathematical models with actual performance'))
-    prototype_table()
+        x.append(n)
+        y_ms.append(t_ms)
+        y_qs.append(t_qs)
+        y_hs.append(t_hs)
+        y_ts.append(t_ts)
+        y_ps.append(t_ps)
 
-    print(caption(chapter, labels_chapter5, TABLE,
-        'Modeling Insertion Sort and Selection Sort'))
-    modeling_insertion_selection()
+    # Coefficients are returned as first argument
+    [nlogn_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ms))
+    [nlogn_qs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_qs))
+    [nlogn_hs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_hs))
+    [nlogn_ts, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ts))
+    [nlogn_ps, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ps))
+
+    for n,t_ms,t_qs,t_hs,t_ts,t_ps in zip(x,y_ms,y_qs,y_hs,y_ts,y_ps):
+        tbl.row([n, t_ms, t_qs, t_hs, t_ts, t_ps])
+
+    for n in [2**k for k in range(16, 21)]:
+        # selection is stable, so just run once
+        t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup=f'''
+import random
+from ch05.merge import merge_sort
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))
+
+        t_qs = min(timeit.repeat(stmt='quick_sort(A)', setup=f'''
+import random
+from ch05.sorting import quick_sort
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))
+
+        t_hs = min(timeit.repeat(stmt='heap_sort(A)', setup=f'''
+import random
+from ch05.heapsort import heap_sort
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))
+
+        t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup=f'''
+import random
+from ch05.timsort import tim_sort
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))        
+
+        t_ps = min(timeit.repeat(stmt='A.sort()', setup=f'''
+import random
+A=list(range({n}))
+random.shuffle(A)''', repeat=10, number=1))
+
+        tbl.row([n, t_ms, t_qs, t_hs, t_ts, t_ps])
+
+    print('NLOGN MS = {}*N*N + {}*N'.format(nlogn_ms[0], nlogn_ms[1]))
+    print('NLOGN QS = {}*N*N + {}*N'.format(nlogn_qs[0], nlogn_qs[1]))
+    print('NLOGN HS = {}*N*N + {}*N'.format(nlogn_hs[0], nlogn_hs[1]))
+    print('NLOGN TS = {}*N*N + {}*N'.format(nlogn_ts[0], nlogn_ts[1]))
+    print('NLOGN PS = {}*N*N + {}*N'.format(nlogn_ps[0], nlogn_ps[1]))
+    print()
+
+def show_partition():
+    """Show how Quicksort partitions an array."""
+    from ch01.challenge import partition
+    A = [15, 21, 20, 2, 15, 24, 5, 19]
+    print('|'.join([' {:>2} '.format(k) for k in A]))
+    
+    idx = partition(A, 0, len(A)-1, 0)
+    print('|'.join([' {:>2} '.format(k) for k in A]))
+    print('pivot=A[{}]={}'.format(idx, A[idx]))
+    
+def show_heapify():
+    """Show how array is turned into a heap, step by step."""
+    from ch05.heapsort import HeapSortCounting
+    
+    # After a few minutes of tweaking (based on partial results from the challenge
+    # problem area), I found this input that produces the Heap. nice! 
+    A = [14, 13, 12, 5, 10, 6, 14, 12, 9, 1, 11, 8, 15, 9, 7, 4, 8, 2]
+    heap = HeapSortCounting(A, output=True) 
+
+def tim_sort_figure():
+    """Recreate data for timsort figure."""
+    from ch05.timsort import insertion_sort, merge
+    # Small arrays are sorted using insertion sort
+    A=[14, 13, 12, 5, 10, 6, 14, 12, 9, 1, 11, 8, 15, 9, 7, 4, 8, 2]
+    print('\t' +'|'.join([' {:>2} '.format(k) for k in A]))
+    
+    N = len(A)
+    
+    # Insertion sort in strips of 'size'
+    size = 4
+    for lo in range(0, N, size):
+        print('lo={:2d}\t'.format(lo) + '|'.join([' {:>2} '.format(k) for k in A]))
+        insertion_sort(A, lo, min(lo+size-1, N-1))
+
+    
+    aux = [None]*N
+    while size < N:
+        print('size={:2d}\t'.format(size) + '|'.join([' {:>2} '.format(k) for k in A]))
+
+        # Merge all doubled ranges, taking care with last one
+        for lo in range(0, N, 2*size):
+            mid = min(lo + size - 1, N-1)
+            hi  = min(lo + 2*size - 1, N-1)
+            merge(A, lo, mid, hi, aux)
+
+        size = 2 * size
+
+    print('size={:2d}\t'.format(size) + '|'.join([' {:>2} '.format(k) for k in A]))
+    
+def generate_ch05():
+    """Generate Tables and Figures for chapter 05."""
+    chapter = 5
+
+    with FigureNum(1) as figure_number:
+        description  = 'Sample array, A, to sort'
+        label = captionx(chapter, figure_number)
+        ar = [15, 21, 20, 2, 15, 24, 5, 19]
+        print('|'.join([' {:>2} '.format(k) for k in ar]))
+        moves = [(0,3),(5,7),(1,6),None,(2,4),None,(4,5)]
+        for m in moves:
+            if m:
+                ar[m[0]],ar[m[1]] = ar[m[1]],ar[m[0]]
+            print('|'.join([' {:>2} '.format(k) for k in ar]))
+        
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(2) as figure_number:
+        description  = 'Sorting sample array using Selection Sort'
+        label = captionx(chapter, figure_number)
+        ar = [15, 21, 20, 2, 15, 24, 5, 19]
+        print('|'.join([' {:>2} '.format(k) for k in ar]))
+        moves = [(0,3),(1,6),(2,3),(3,4),(4,7),(5,7),(6,6)]
+        for m in moves:
+            if m:
+                ar[m[0]],ar[m[1]] = ar[m[1]],ar[m[0]]
+            print('|'.join([' {:>2} '.format(k) for k in ar]))
+        
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(3) as figure_number:
+        description  = 'Visualizing the formula for triangle numbers: sum of 1 through 7 is 28'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(4) as figure_number:
+        description  = 'Sorting sample array using Insertion Sort'
+        label = captionx(chapter, figure_number)
+        ar = [15, 21, 20, 2, 15, 24, 5, 19]
+        print('|'.join([' {:>2} '.format(k) for k in ar]))
+        moves = [None,[(2,1)], [(3,2),(2,1),(1,0)], [(4,3),(3,2)], None, [(6,5),(5,4),(4,3),(3,2),(2,1)],[(7,6),(6,5),(5,4)]]
+        for p in moves:
+            if p:
+                for m in p:
+                    ar[m[0]],ar[m[1]] = ar[m[1]],ar[m[0]]
+            print('|'.join([' {:>2} '.format(k) for k in ar]))
+        
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(5) as figure_number:
+        description  = 'Visualizing the recursive invocation of fact(3)'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+        
+    with FigureNum(6) as figure_number:
+        description  = 'Recursive invocation when calling rmax(0,3) on A=[15,21,20,2]'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+        
+    with FigureNum(7) as figure_number:
+        description  = 'Complete recursive invocation of rmax'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+        
+    with FigureNum(8) as figure_number:
+        description  = 'Merging two stacks into one'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+        
+    with FigureNum(9) as figure_number:
+        description  = 'Step by step merge sort of two sorted sub-arrays of size 4'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(10) as figure_number:
+        show_partition()
+        description  = 'Results of partition(A,0,7,0)'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+tim_sort_figure()
+#show_heapify()
+#timing_nlogn_sorting()
+#timing_selection_insertion()

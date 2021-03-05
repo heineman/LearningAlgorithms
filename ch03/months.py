@@ -67,11 +67,11 @@ def day_of_week(y, m, d):
     after 1752 when Gregorian calendar formally adopted. 1 <= m <= 12 and y > 1752.
     """
     y -= m<3
-    return (y + y//4 - y//100 + y//400 + ord("-bed=pen+mad."[m]) + d) % 7
+    return (y + y//4 - y//100 + y//400 + ord('-bed=pen+mad.'[m]) + d) % 7
 
 def day_of_week_one_line(y, m, d):
     """Oneliner just for fun."""
-    return (y-(m<3)+(y-(m<3))//4-(y-(m<3))//100+(y-(m<3))//400+ord("-bed=pen+mad."[m])+d)%7
+    return (y-(m<3)+(y-(m<3))//4-(y-(m<3))//100+(y-(m<3))//400+ord('-bed=pen+mad.'[m])+d)%7
 
 def days_mixed(month):
     """Demonstrate using mixed-type array to compute month length."""

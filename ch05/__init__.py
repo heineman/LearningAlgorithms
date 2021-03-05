@@ -1,3 +1,3 @@
 """
-Module containing Python code for Chapter 6.
+Module containing Python code for Chapter 5.
 """

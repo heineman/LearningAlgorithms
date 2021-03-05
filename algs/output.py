@@ -49,8 +49,8 @@ def image_file(relative_name):
     # If directory exists, then return
     if os.path.isdir(IMAGE_DIR):
         return ''.join([IMAGE_DIR, os.sep, relative_name])
-    
+
     if os.path.isdir(''.join(['..', os.sep, IMAGE_DIR])):
         return ''.join(['..', os.sep, IMAGE_DIR, os.sep, relative_name])
-    
+
     return ''.join(['.',os.sep,relative_name])

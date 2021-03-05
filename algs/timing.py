@@ -79,9 +79,9 @@ def stages_of_timing():
 
     """
     return min(timeit.repeat(stmt='''
-print("real statement", val)
+print('real statement', val)
 val += 1''', setup = '''
-print("in setup")
+print('in setup')
 val = 1''', repeat=2, number=3))
 
 def timing_trials():

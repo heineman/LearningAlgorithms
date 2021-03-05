@@ -51,24 +51,3 @@ def search_for_base():
 
     # failed...
     return (None, None)
-
-def duplicate_hash(m, day_array):
-    """Generate list of duplicate words."""
-    print('lots of words produce results when using modulo')
-    num_found = 10
-    for w in english_words():
-        idx = base26(w) % m
-        if day_array[idx] != -1:
-            print(w,'has idx',idx)
-            num_found -= 1
-            if num_found <= 0:
-                break
-
-#######################################################################
-if __name__ == '__main__':
-    print(base26('sample'))
-    (mod, discovered_array) = search_for_base()
-    print('Discovered modulo base:', mod)
-    print('day_array =', discovered_array)
-
-    duplicate_hash(mod, discovered_array)

@@ -4,13 +4,20 @@ import unittest
 BEST_CASE = list(range(10))
 WORST_CASE = list(range(10,0,-1))
 
-class Test_Ch05(unittest.TestCase):
+class Test_ch05(unittest.TestCase):
 
     def test_merge_sort(self):
         from ch05.merge import merge_sort
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
         expected = sorted(sample)
         merge_sort(sample)
+        self.assertEqual(expected, sample)
+
+    def test_quick_sort(self):
+        from ch05.sorting import quick_sort
+        sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
+        expected = sorted(sample)
+        quick_sort(sample)
         self.assertEqual(expected, sample)
 
     def test_selection_sort(self):
@@ -25,6 +32,13 @@ class Test_Ch05(unittest.TestCase):
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
         expected = sorted(sample)
         insertion_sort(sample)
+        self.assertEqual(expected, sample)
+        
+    def test_insertion_sort_cmp(self):
+        from ch05.sorting import insertion_sort_cmp
+        sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
+        expected = list(reversed(sorted(sample)))
+        insertion_sort_cmp(sample, lambda one, two: two < one)
         self.assertEqual(expected, sample)
 
     def test_insertion_sort_bas(self):
@@ -116,11 +130,11 @@ class Test_Ch05(unittest.TestCase):
         my_copy = list(my_list)
         self.assertEqual(recursive_two(my_list), (9, 8))
         self.assertEqual(my_list, my_copy)
-    
+
     def test_recursive_counting(self):
         from algs.counting import RecordedItem
         from ch05.challenge import recursive_two
-        
+
         # Must be power of two
         N = 128
         values = tuple(reversed([RecordedItem(k) for k in range(N)]))
@@ -129,6 +143,12 @@ class Test_Ch05(unittest.TestCase):
         self.assertEqual(actual[0].val, N-1)
         self.assertEqual(actual[1].val, N-2)
         self.assertEqual(N + N//2 - 2, RecordedItem.report()[1])
+
+    def test_tim_sort(self):
+        from ch05.timsort import insertion_sort
+        A=[9,8,7,6,5,4]
+        insertion_sort(A, 2, 4)  # Sort from 2 UP TO AND INCLUDING 4
+        self.assertEqual([9,8,5,6,7,4], A)
 
 #######################################################################
 if __name__ == '__main__':

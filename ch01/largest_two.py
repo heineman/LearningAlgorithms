@@ -1,10 +1,6 @@
 """
 Algorithms to locate top two values in an arbitrary list.
 """
-import itertools
-
-from algs.table import DataTable
-from algs.counting import RecordedItem
 
 def largest_two(A):
     """
@@ -167,38 +163,3 @@ def tournament_two(A):
         m = prior[m]
 
     return (largest, second)
-
-def run_trial():
-    """Produce results on # less-than for different algorithms and data sets."""
-    headers = ['Algorithm', 'Ascending', 'Descending', 'Alternating']
-
-    n = 524288
-
-    tbl = DataTable([15,10,10,10], headers)
-    for hdr in headers:
-        tbl.format(hdr, ',d')
-    tbl.format('Algorithm', 's')
-
-    # Ascending / Descending / Weave
-    funcs = [largest_two, sorting_two, double_two, mutable_two, tournament_two]
-    algs  = ["largest_two", "sorting_two", "double_two", "mutable_two", "tournament_two"]
-
-    for label,func in zip(algs,funcs):
-        RecordedItem.clear()
-        func([RecordedItem(i) for i in range(n)])
-        up_count = sum(RecordedItem.report())
-
-        RecordedItem.clear()
-        func([RecordedItem(i) for i in range(n,0,-1)])
-        down_count = sum(RecordedItem.report())
-
-        RecordedItem.clear()
-        up_down = zip(range(0,n,2),range(n-1,0,-2))
-        func([RecordedItem(i) for i in itertools.chain(*up_down)])
-        weave_count = sum(RecordedItem.report())
-
-        tbl.row([label, up_count, down_count, weave_count])
-
-#######################################################################
-if __name__ == '__main__':
-    run_trial()

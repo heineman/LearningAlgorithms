@@ -23,10 +23,10 @@ for day in s_data:
 
 def timeResults_linked(words):
     """Average time to find a key in growing hashtable_open."""
-    print("link", end='')
+    print('link', end='')
     sizes = [8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576]
     for s in sizes:
-        print("\t" + str(s), end='')
+        print('\t' + str(s), end='')
     print()
 
     # Now start with M words to be added into a table of size N.

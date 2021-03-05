@@ -2,119 +2,46 @@
 Priority Queue implementation using Symbol Tree Binary Tree implementation.
 
 Cannot use symbol table implementation "as is" because there may be multiple
-values with the same priority.
+values with the same priority. It is for this reason that the remove() is more
+complicated since you have to be careful not to lose values when there happen
+to be multiple values with the same priority.
 
 """
-from ch06.avl import rotate_left, rotate_left_right, rotate_right, rotate_right_left
-from ch06.avl import height_difference, compute_height
-
-from ch06.binary_size import binary_node_size
+from ch06.avl import resolve_left_leaning, resolve_right_leaning
 
 class BinaryNode:
     """
     Node structure to use in a binary tree.
+
+    Attributes
+    ----------
+        left - left child (or None)
+        right - right child (or None)
+        height - height of the node
+        value - value for (value, priority) pair
+        priority - key for (value, priority) pair
     """
-    def __init__(self, k, v, n=1):
-        self.key = k
+    def __init__(self, v, p):
         self.value = v
-        self.left = None
+        self.priority = p
+        self.left  = None
         self.right = None
         self.height = 0
-        self.N = n
 
-    def __str__(self):
-        return '{} -> {}'.format(self.key, self.value)
+    def height_difference(self):
+        """
+        Compute height difference of node's children in BST. Can return
+        a negative number or positive number.
+        """
+        left_height = self.left.height if self.left else -1
+        right_height = self.right.height if self.right else -1
+        return left_height - right_height
 
-    def add(self, k, v):
-        """Adds a new BinaryNode to the tree containing this (k, v) pair."""
-        new_root = self
-
-        if k <= self.key:
-            if self.left:
-                self.left = self.left.add(k, v)
-            else:
-                self.left = BinaryNode(k, v)
-
-            if self.height_difference() == 2:
-                if k <= self.left.key:
-                    new_root = rotate_right(self)
-                else:
-                    new_root = rotate_left_right(self)
-        else:
-            if self.right:
-                self.right = self.right.add(k, v)
-            else:
-                self.right = BinaryNode(k, v)
-
-            if height_difference(self) == -2:
-                if k > self.right.key:
-                    new_root = rotate_left(self)
-                else:
-                    new_root = rotate_right_left(self)
-
-        compute_height(new_root)
-        new_root.N = 1 + binary_node_size(new_root.left) + binary_node_size(new_root.right)
-        return new_root
-
-    def remove(self, key):
-        """Remove (key, val) from self in BinaryTree and return self."""
-        new_root = self
-
-        if key < self.key:
-            if self.left:
-                self.left = self.left.remove(key)
-            if height_difference(self) == -2:
-                if height_difference(self.right) <= 0:
-                    new_root = rotate_left(self)
-                else:
-                    new_root = rotate_right_left(self)
-        elif key > self.key:
-            if self.right:
-                self.right = self.right.remove(key)
-            if height_difference(self) == 2:
-                if height_difference(self.left) >= 0:
-                    new_root = rotate_right(self)
-                else:
-                    new_root = rotate_left_right(self)
-        else:
-            if self.left is None:
-                return self.right
-            if self.right is None:
-                return self.left
-
-            child = self.left
-            while child.right:
-                child = child.right
-
-            # replace root value with largest value from left subtree
-            child_key,child_value = child.key, child.value
-            self.left = self.left.remove(child_key)
-            self.key, self.value = child_key, child_value
-
-            if self.height_difference() == -2:
-                if self.right.height_difference() <= 0:
-                    new_root = rotate_left(self)
-                else:
-                    new_root = rotate_right_left(self)
-
-        compute_height(new_root)
-        new_root.N = 1 + binary_node_size(new_root.left) + binary_node_size(new_root.right)
-        return new_root
-
-    def inorder(self):
-        """In order traversal generator of tree rooted at given node."""
-        # visit every one in the left subtree first
-        if self.left:
-            for pair in self.left.inorder():
-                yield pair
-
-        # then visit self
-        yield (self.key, self.value)
-
-        # finally visit every one in the right subtree
-        if self.right:
-            for pair in self.right.inorder():
-                yield pair
+    def compute_height(self):
+        """Compute height of node in BST."""
+        left_height = self.left.height if self.left else -1
+        right_height = self.right.height if self.right else -1
+        self.height = 1 + max(left_height, right_height)
 
 class BinaryTree:
     """
@@ -123,61 +50,63 @@ class BinaryTree:
     def __init__(self):
         self.root = None
 
-    def size(self):
-        """Return the number of nodes in Binary Tree."""
-        return BinaryNode.size(self.root)
+    def is_empty(self):
+        """Returns whether tree is empty."""
+        return self.root is None
 
-    def put(self, k, v):
-        """Insert (k,v) into Binary Tree."""
-        if self.root is None:
-            self.root = BinaryNode(k, v)
+    def insert(self, v, p):
+        """Insert (value, priority) entry into Binary Tree."""
+        self.root = self._insert(self.root, v, p)
+
+    def _insert(self, node, v, p):
+        """Inserts a new BinaryNode to the tree containing (value, priority) pair."""
+        if node is None:
+            return BinaryNode(v, p)
+
+        if p <= node.priority:
+            node.left = self._insert(node.left, v, p)
+            node = resolve_left_leaning(node)
         else:
-            self.root = self.root.add(k, v)
+            node.right = self._insert(node.right, v, p)
+            node = resolve_right_leaning(node)
 
-    def remove(self, key):
-        """Remove key and associated value from tree."""
-        if self.root:
-            self.root = self.root.remove(key)
+        node.compute_height()
+        return node
 
-    def __contains__(self, key):
-        """Check whether BST contains key value."""
+    def __contains__(self, target):
+        """Check whether BST contains target value."""
         node = self.root
         while node:
-            if key == node.key:
+            if target == node.value:
                 return True
-            if key < node.key:
+            if target < node.value:
                 node = node.left
             else:
                 node = node.right
 
         return False
 
-    def get(self, key):
-        """Symbol table API to retrieve value associated with key."""
-        node = self.root
-        while node:
-            if key == node.key:
-                return node.value
-            if key < node.key:
-                node = node.left
-            else:
-                node = node.right
-
-        return None
-
     def __iter__(self):
         """In order traversal of elements in the tree."""
-        if self.root:
-            for pair in self.root.inorder():
-                yield pair
+        for p in self._inorder(self.root):
+            yield p
 
-    def __str__(self):
-        if self.root:
-            return str(self.root)
+    def _inorder(self, node):
+        """Inorder traversal of tree."""
+        if node is None:
+            return
+
+        for pair in self._inorder(node.left):
+            yield pair
+
+        yield (node.value, node.priority)
+
+        for pair in self._inorder(node.right):
+            yield pair
 
 class PQ:
     """
-    Binary Tree storage for a MAX priority queue.
+    PriorityQueue using a Binary Tree to store entries, although this stored N.
     """
     def __init__(self):
         self.tree = BinaryTree()
@@ -196,33 +125,45 @@ class PQ:
         return False
 
     def enqueue(self, v, p):
-        """Enqueue (v, p) entry into priority queue."""
+        """Enqueue (v, p) entry into priority queue. Priority cannot be None."""
+        if p is None:
+            raise ValueError('key for symbol table cannot be None.')
+
         self.N += 1
-        self.tree.put(p, v)
+        self.tree.insert(v, p)
 
     def peek(self):
-        """Return the value at the top of the priority queue."""
+        """Return value associated with node with maximum priority in queue."""
         if self.N == 0:
             raise RuntimeError('PriorityQueue is empty!')
 
-        return self.tree.root.value
+        node = self.tree.root
+        while node.right:
+            node = node.right
+
+        return node.value
+
+    def _remove_max(self, node):
+        """
+        Remove max and unwind, addressing AVL property on way back. Return 
+        pair (value, new root)
+        """
+        if node.right is None:
+            return (node.value, node.left)
+
+        (value, node.right) = self._remove_max(node.right)
+        node = resolve_left_leaning(node)
+        node.compute_height()
+        return (value, node)
 
     def dequeue(self):
         """Remove and return value with highest priority in priority queue."""
         if self.N == 0:
             raise RuntimeError('PriorityQueue is empty!')
 
-        # Find the maximum
-        node = self.tree.root
-        if node:
-            if node.right:
-                while node.right:
-                    node = node.right
-
-        val = node.value
-        self.tree.remove(node.key)
+        (value, self.tree.root) = self._remove_max(self.tree.root)
         self.N -= 1
-        return val
+        return value
 
     def __iter__(self):
         """In order traversal of elements in the PQ."""

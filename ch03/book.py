@@ -162,7 +162,7 @@ def count_collisions():
     from ch03.hashtable_open import Hashtable as OHL
     from ch03.hashtable_open import stats_open_addressing
 
-    tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'], decimals=2)
+    tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'], decimals=1)
     tbl.format('Max LL', 'd')
     tbl.format('Max OA', 'd')
     
@@ -321,12 +321,19 @@ def count_hash():
             break
     return tbl
 
+def avoid_digit(n, d):
+    """Sample Python generator to yield all integers from 1 to n that do not involve d."""
+    sd = str(d)
+    for i in range(n):
+        if not sd in str(i):
+            yield i
+
 def iteration_order():
     """Generate iteration orders for multiple hashtable types."""
 
     s = 'a rose by any other name would smell as sweet'
-    from ch03.hashtable_open import Hashtable as Open_Hashtable, table_entries
-    from ch03.hashtable_linked import Hashtable as Linked_Hashtable, linked_list_entries
+    from ch03.hashtable_open import Hashtable as Open_Hashtable
+    from ch03.hashtable_linked import Hashtable as Linked_Hashtable
     from ch03.hashtable_open_perfect import Hashtable as Perfect_Hashtable
     ht_oa = Open_Hashtable(13)
     ht_ll = Linked_Hashtable(13)
@@ -341,7 +348,7 @@ def iteration_order():
     tbl.format('Open Addressing', 's')
     tbl.format('Separate Chaining', 's')
     tbl.format('Perfect Hash', 's')
-    for p1,p2,p3 in zip(table_entries(ht_oa), linked_list_entries(ht_ll), table_entries(ht_ph)):
+    for p1,p2,p3 in zip(ht_oa, ht_ll, ht_ph):
         tbl.row([p1[0], p2[0], p3[0]])
 
 def perfect_trial(key):
@@ -401,14 +408,14 @@ def generate_ch03():
     with FigureNum(4) as figure_number:
         description  = 'Removing the first node in a linked list'
         label = captionx(chapter, figure_number)
-        print("hand-drawn image")
+        print('hand-drawn image')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(5) as figure_number:
         description  = 'Removing any other node in a linked list'
         label = captionx(chapter, figure_number)
-        print("hand-drawn image")
+        print('hand-drawn image')
         print('{}. {}'.format(label, description))
         print()
 

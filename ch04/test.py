@@ -74,7 +74,7 @@ class Test_Ch04(unittest.TestCase):
             queue.enqueue(i)
         try:
             queue.enqueue(99999)
-            self.fail("should have detected full queue")
+            self.fail('should have detected full queue')
         except RuntimeError:
             pass
 

@@ -3,17 +3,18 @@
     This table can replace values associated with a given key.  When two keys attempt to use
     the same location, OPEN ADDRESSING resolves the conflict.
 
-    Always leaves at least ONE empty spot so code is simpler
+    Always leaves at least ONE empty spot so code is simpler, which means that an 
+    open addressing hashtable must have M >= 2.
 """
 
-from ch03.entry import Entry
+from ch03.entry import Entry, MarkedEntry
 
 class Hashtable:
     """Open Addressing Hashtable."""
     def __init__(self, M=10):
         self.table = [None] * M
-        if M < 1:
-            raise ValueError('Hashtable must contain at least one (key, value) pair.')
+        if M < 2:
+            raise ValueError('Hashtable must contain space for at least two (key, value) pairs.')
         self.M = M
         self.N = 0
 
@@ -45,12 +46,18 @@ class Hashtable:
         self.table[hc] = Entry(k, v)
         self.N += 1
 
+    def __iter__(self):
+        """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""
+        for entry in self.table:
+            if entry:
+                yield (entry.key, entry.value)
+
 class DynamicHashtable:
     """Open Addressing Hashtable that supports resizing."""
     def __init__(self, M=10):
         self.table = [None] * M
         if M < 1:
-            raise ValueError('Hashtable must contain at least one (key, value) pair.')
+            raise ValueError('Hashtable must contain space for at least two (key, value) pairs.')
         self.M = M
         self.N = 0
 
@@ -103,18 +110,23 @@ class DynamicHashtable:
             self.resize(2*self.M + 1)
             hc = hash(k) % self.M
 
+    def __iter__(self):
+        """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""
+        for entry in self.table:
+            if entry:
+                yield (entry.key, entry.value)
+
 class DynamicHashtablePlusRemove:
     """
     Supports removal of entries, which causes numerous little changes
     throughout the class.
 
-    Note that table_entries_filter_deleted() properly filters out all
-    entries that had been deleted.
+    Note that __iter__() properly filters out entries that have been deleted.
     """
     def __init__(self, M=10):
         self.table = [None] * M
-        if M < 1:
-            raise ValueError('Hashtable must contain at least one (key, value) pair.')
+        if M < 2:
+            raise ValueError('Hashtable must contain space for at least two (key, value) pairs.')
         self.M = M
         self.N = 0
         self.deleted = 0
@@ -136,7 +148,7 @@ class DynamicHashtablePlusRemove:
 
     def resize(self, new_size):
         """Resize table and rehash existing entries into new table."""
-        temp = DynamicHashtable(new_size)
+        temp = DynamicHashtablePlusRemove(new_size)
         for n in self.table:
             if n and not n.is_marked():
                 temp.put(n.key, n.value)
@@ -154,8 +166,10 @@ class DynamicHashtablePlusRemove:
                 if self.table[hc].is_marked():    # has already been removed
                     return None                   # so return None
 
-                self.table[hc].mark()             # record its been deleted
+                self.table[hc].mark()             # record it's been deleted
                 self.N -= 1
+                if (self.N < 0):
+                    print ("SDSD")
                 self.deleted += 1
                 return self.table[hc].value       # and return former value
             hc = (hc + 1) % self.M
@@ -167,63 +181,64 @@ class DynamicHashtablePlusRemove:
         while self.table[hc]:
             if self.table[hc].key == k:     # Overwrite if already here
                 self.table[hc].value = v
-                if not self.table[hc].is_marked():  # Weren't deleted?
-                    self.table[hc].unmark()         # Return now
+                if self.table[hc].is_marked():      # Was marked as deleted?
+                    self.table[hc].unmark()         # Reset
+                    self.deleted -= 1               # Adjust counts
+                    self.N += 1
                 return
 
             hc = (hc + 1) % self.M
+
+        # With Open Addressing, you HAVE to insert first into the
+        # empty bucket before checking whether you have hit
+        # the threshold, otherwise you have to search again to
+        # find an empty space. The impact is that this last entry
+        # is "inserted twice" on resize; small price to pay. Note
+        # That this last entry COULD be the last empty bucket, but
+        # the forced resize below will resolve that issue
+        self.table[hc] = MarkedEntry(k, v)
+        self.N += 1
 
         if (self.N + self.deleted) >= self.threshold:
             self.resize(2*self.M + 1)
             hc = hash(k) % self.M
 
-        self.table[hc] = Entry(k, v)
-        self.N += 1
-
-def table_entries_filter_deleted(ht):
-    """Generate all (k, v) tuples for entries in DynamicHashtablePlusRemove."""
-    for entry in ht.table:
-        if not entry is None and not entry.is_marked():
-            yield (entry.key, entry.value)
-
-def table_entries(ht):
-    """Generate all (k, v) tuples for entries in the table."""
-    for entry in ht.table:
-        if not entry is None:
-            yield (entry.key, entry.value)
+    def __iter__(self):
+        """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""
+        for entry in self.table:
+            if not entry is None and not entry.is_marked():
+                yield (entry.key, entry.value)
 
 def stats_open_addressing(words, table, output=False):
-    """Produce stats on the table for open addressing IF POSSIBLE."""
+    """
+    Produce statistics on the open addressing implemented table IF POSSIBLE.
+    It may be that the table is not large enough for the provided words. 
+    Returns (average chain length for non-empty buckets, max chain length)
+    """
     original_size = len(table.table)
     for w in words:
         table.put(w, 1)
 
     size = len(table.table)
     sizes = {}                      # record how many chains of given size exist
-    total_search = 0
     max_length = 0
 
     for idx in range(size):
         if table.table[idx]:
 
-            # compute hash code for entry found there AND see how far away it is from where
-            # it should have been. Anything more than 1 shows the inherent inefficiencies
-            start = hash(table.table[idx].key) % size
-            num = 1
-
-            if start == idx:
-                num = 1              # in proper location
-            elif start > idx:        # wrap around!
-                num = (size - start) + idx
-            else:
-                num = idx - start + 1
-            total_search += num      # each entry in the linked list requires more searches to find
-
+            # count to next empty entry. ASSUMES there will be one....
+            i = idx
+            num = 0
+            while table.table[i]:
+                i = (i + 1) % size
+                num += 1
+            
             if num in sizes:
                 total = sizes[num] + 1
                 sizes[num] = total
             else:
                 sizes[num] = 1
+                
             if num > max_length:
                 max_length = num
 
@@ -233,4 +248,8 @@ def stats_open_addressing(words, table, output=False):
             if i in sizes:
                 print('{} entries have size of {}'.format(sizes[i], i))
 
-    return ((1.0*total_search) / len(words), max_length)
+    weighted_total = 0
+    for i in sizes:
+        weighted_total += i*sizes[i]
+
+    return (weighted_total/len(words), max_length)

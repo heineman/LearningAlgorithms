@@ -7,7 +7,7 @@ from ch01.largest import largest, alternate, just_three, native_largest
 from ch01.largest_two import largest_two, tournament_two, mutable_two
 from ch01.largest_two import sorting_two, double_two, tournament_two_object
 from ch01.challenge import linear_median, is_palindrome_letters_only, counting_sort
-from ch01.challenge import counting_sort_improved
+from ch01.challenge import counting_sort_improved, is_palindrome1, is_palindrome2
 
 BEST_CASE = list(range(10))
 WORST_CASE = list(range(10,0,-1))
@@ -152,6 +152,10 @@ class Test_Ch01(unittest.TestCase):
         self.assertEqual(expected, original)
 
     def test_palindromes(self):
+        for pal in ['aba', 'abba', 'a']:
+            self.assertTrue(is_palindrome1(pal))
+            self.assertTrue(is_palindrome2(pal))
+        
         palindromes = [
             'Able was I ere I saw Elba',
             'A man, a plan, a canal - Panama',

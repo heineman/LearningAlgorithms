@@ -1,12 +1,12 @@
 """
-A queue implemented using linked Lists, storing (value, priority)
-pairs to be retrieved in First-in, First-out fashion.
+A queue implemented using linked Lists, storing values
+to be retrieved in First-in, First-out fashion.
 """
 from algs.node import Node
 
 class Queue:
     """
-    Implementation of a Queue using a circular buffer.
+    Implementation of a Queue using linked lists.
     """
     def __init__(self):
         self.first = None
@@ -27,7 +27,7 @@ class Queue:
     def dequeue(self):
         """Remove and return first item from queue."""
         if self.is_empty():
-            raise Exception("Queue is empty")
+            raise Exception('Queue is empty')
 
         val = self.first.value
         self.first = self.first.next

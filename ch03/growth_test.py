@@ -128,10 +128,10 @@ def run_trials():
 
 def time_results_open(file):
     """Average time to find a key in growing hashtable_open."""
-    print("open", end='')
+    print('open', end='')
     sizes = [8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576]
     for s in sizes:
-        print("\t" + str(s), end='')
+        print('\t' + str(s), end='')
     print()
 
     # Now start with M words to be added into a table of size N.

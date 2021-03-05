@@ -1,5 +1,7 @@
 """Challenge questions for chapter 5"""
 
+numRecursiveImproved = [0]
+
 def num_swaps(A):
     """Given an array of integers from 0 to N-1, return number of swaps to sort."""
     N = len(A)
@@ -86,7 +88,7 @@ def slice_merge_sort(A):
                 i += 1
 
     rsort(0, len(A)-1)
-    
+
 def recursive_two(A):
     """Return two largest values in A, using recursive approach."""
 
@@ -107,15 +109,119 @@ def recursive_two(A):
             if R[1] is None:
                 return (R[0], L[0])
             return (R[0], R[1]) if L[0] < R[1] else (R[0], L[0])
-        else:
-            if L[1] is None:
-                return (L[0], R[0])
-            return (L[0], L[1]) if R[0] < L[1] else (L[0], R[0])
+        if L[1] is None:
+            return (L[0], R[0])
+        return (L[0], L[1]) if R[0] < L[1] else (L[0], R[0])
 
     return rtwo(0, len(A)-1)
 
+def fib(n):
+    """Inefficient Fibonacci recurive implementation."""
+    if n <= 0: return 0
+    if n == 1: return 1
+
+    return fib(n-1) + fib(n-2)
+
+fib_profile_count = [0]
+def fib_profile(n):
+    """Inefficient Fibonacci recurive implementation."""
+    print (fib_profile_count[0],'\t',n)
+    fib_profile_count[0] += 1
+    if n <= 0: return 0
+    if n <= 1: return 1
+
+    return fib_profile(n-1) + fib_profile(n-2)
+
+def fib_with_lucas(n):
+    """
+    F_(x+y) = 1/2 * (F_x * L_y) + (F_y * L_x)
+
+    Improved efficiency using Lucas numbers.
+    """
+    print(numRecursiveImproved[0],'\t',n)
+    numRecursiveImproved[0] += 1
+    if n == 0: return 0
+    if n <= 2: return 1
+    if n == 3: return 2     # Needs to be here to prevent infinite recursion
+
+    remainder = n - n//2
+    return (fib_with_lucas(n//2)*lucas_with_fib(remainder) + fib_with_lucas(remainder)*lucas_with_fib(n//2)) / 2
+
+def lucas_with_fib(n):
+    """
+    Improved recursive implementation that takes advantage of identify that:
+
+    Ln = Fn-1 + Fn+1 for n > 1
+    """
+    print(numRecursiveImproved[0],'\t',-n)
+    numRecursiveImproved[0] += 1
+    if n == 0: return 2
+    if n == 1: return 1
+
+    return fib_with_lucas(n-1) + fib_with_lucas(n+1)
+
+def fib_table():
+    """Generate table showing reduced recursive invocations of fibonacci."""
+    from algs.table import DataTable
+    import numpy as np
+    from scipy.optimize import curve_fit
+
+    tbl = DataTable([8,12,12],['N', 'FiRec', 'Model'])
+
+    def exp_model(n, a, b):
+        """Formula for A*N^B ."""
+        return a*np.power(n, b)
+
+    for n in range(3, 100):
+        old = numRecursiveImproved[0]
+        fib_with_lucas(n)
+        model = exp_model(n, 0.28711343, 2.58031481)
+        tbl.row([n, (numRecursiveImproved[0] - old), model])
+
+    x_arr = np.array(tbl.column(tbl.labels[0]))
+    y_arr = np.array(tbl.column(tbl.labels[1]))
+
+    [exp_coeffs, _]        = curve_fit(exp_model, x_arr, y_arr)
+    print (exp_coeffs)
+    
+def rediscover_heap():
+    """
+    Given a partial heap, rediscover original input probabilistically.
+    
+    This might not work the first time, but after repeated attempts, the following
+    possible starting points were found:
+    
+    [15, 12, 7, 4, 13, 8, 11, 14, 2, 1, 10, 9, 6, 9, 12, 8, 5, 14]
+    
+    [8, 2, 15, 5, 1, 14, 11, 4, 12, 12, 10, 13, 6, 9, 7, 14, 9, 8]  found in 2,380,433 tries
+    
+    [13, 14, 12, 5, 10, 6, 14, 11, 9, 1, 12, 8, 15, 9, 7, 4, 8, 2]
+
+    """
+    from ch05.heapsort import HeapSort
+    from random import shuffle
+    A = [15, 13, 14, 12, 11, 12, 14, 8, 9, 1, 10, 8, 6, 9, 7, 4, 5, 2]
+    N = len(A)
+    more = 2
+    for i in range(10000000):
+        copy = list(A)
+        shuffle(copy)
+        copy1 = list(copy)
+        hs = HeapSort(copy)
+        one = hs.A[N//2 - more:]
+        two = A[N//2 - more:]
+        if one == two:
+            print(copy1)
+            return i
+    
+    return 'none found in {} attempts'.format(i)
+
 #######################################################################
 if __name__ == '__main__':
+    print(rediscover_heap())
+    
+    print(fib_with_lucas(12))
+    
     print(num_swaps_hashable(['15', '21', '20', '2', '15', '24', '5', '19']))
 
     # Construct an array with UP-DOWN-UP structure.

@@ -16,7 +16,7 @@ canceling the N*Log N term.
 
 """
 from enum import Enum
-from contextlib import contextmanager 
+from contextlib import contextmanager
 
 import numpy as np
 from scipy.optimize import curve_fit
@@ -131,7 +131,7 @@ class DataTable:
         """
         if self.output:
             formats = self.entry_fmt.split('\t')
-            
+
             if SKIP in row:
                 new_formats = []
                 for fmt,val,width in zip(formats, row, self.widths):
@@ -140,7 +140,7 @@ class DataTable:
                     else:
                         new_formats.append(fmt)
                 formats = new_formats
-                
+
             if len(row) == len(self.labels):
                 print('\t'.join(formats).format(row))
             else:
@@ -175,12 +175,12 @@ class DataTable:
                 cols.append(vals[column])
             elif column == self.labels[0]:   # might be row label
                 cols.append(label)
-            
-        # SKIP ALL remaining values...    
+
+        # SKIP ALL remaining values...
         if SKIP in cols:
             idx = cols.index(SKIP)
             cols = cols[:idx]
-            
+
         return cols
 
     def best_model(self, column, preselected = None):
@@ -226,7 +226,8 @@ class DataTable:
 
         return pearsonr(y_act, y_fit)
 
-def process(table, chapter, number, description, create_image=True, xaxis='Problem instance size', yaxis='Time (in seconds)'):
+def process(table, chapter, number, description, create_image=True, xaxis='Problem instance size',
+            yaxis='Time (in seconds)'):
     """Process Table by printing label/Description and visualizing table."""
     label = '{} {}-{}'.format(number.args[0].element(), chapter, number.args[0])
     print('{}. {}'.format(label, description))
@@ -356,38 +357,41 @@ def best_models(nval, yval, preselected = None):
     models.sort(key=lambda x:x[1], reverse=True)
     return models
 
-class Chapter(object):
+class Chapter:
+    """Represents a chapter."""
     def __init__(self, num):
         self.number = num
-        
+
     @contextmanager
     def __enter__(self):
         return self.number
-    
+
     def __exit__(self, arg1, arg2, arg3):
         self.number = -1
 
     def __str__(self):
         return '{}'.format(self.number)
-    
-class FigureNum(object):
+
+class FigureNum:
+    """Represents a figure number in a chapter."""
     def __init__(self, num):
         self.number = num
 
     def element(self):
         return "Figure"
-    
+
     @contextmanager
     def __enter__(self):
         return self.number
-    
+
     def __exit__(self, arg1, arg2, arg3):
         self.number = -1
 
     def __str__(self):
         return '{}'.format(self.number)
 
-class TableNum(object):
+class TableNum:
+    """Represents a table number in a chapter."""
     def __init__(self, num):
         self.number = num
 
@@ -397,9 +401,9 @@ class TableNum(object):
     @contextmanager
     def __enter__(self):
         return '{}'.format(self.number)
-    
+
     def __exit__(self, arg1, arg2, arg):
         self.number = -1
-        
+
     def __str__(self):
         return '{}'.format(self.number)

@@ -11,17 +11,23 @@
 from ch03.entry import LinkedEntry
 
 def stats_linked_lists(words, table, output=False):
-    """Produce statistics on the linked-list implemented table."""
+    """
+    Produce statistics on the linked-list implemented table. Returns
+    (average chain length for non-empty buckets, max chain length)
+    """
     for w in words:
         table.put(w, 1)
     size = len(table.table)
     sizes = {}                      # record how many chains of given size exist
     total_search = 0
     max_length = 0
+    total_non_empty = 0
     for i in range(size):
         num = 0
         idx = i
         entry = table.table[idx]
+        total_non_empty += 1 if entry else 0
+        
         while entry:                # count how many are in this entry
             entry = entry.next
             num += 1
@@ -39,14 +45,9 @@ def stats_linked_lists(words, table, output=False):
             if i in sizes:
                 print('{} linked lists have size of {}'.format(sizes[i], i))
 
-    return ((1.0*total_search) / len(words), max_length)
-
-def linked_list_entries(ht):
-    """Generate all (k, v) tuples for entries in all linked lists table."""
-    for entry in ht.table:
-        while entry:
-            yield (entry.key, entry.value)
-            entry = entry.next
+    if total_non_empty == 0:
+        return (0, 0)
+    return (len(words)/total_non_empty, max_length)
 
 class Hashtable:
     """Hashtable using array of M linked lists."""
@@ -97,6 +98,13 @@ class Hashtable:
             prev, entry = entry, entry.next
 
         return None                 # Nothing was removed
+
+    def __iter__(self):
+        """Generate all (k, v) tuples for entries in all linked lists table."""
+        for entry in self.table:
+            while entry:
+                yield (entry.key, entry.value)
+                entry = entry.next
 
 class DynamicHashtable:
     """Hashtable usingn array of M linked lists that can resize over time."""
@@ -169,3 +177,10 @@ class DynamicHashtable:
             prev, entry = entry, entry.next
 
         return None                 # Nothing was removed
+
+    def __iter__(self):
+        """Generate all (k, v) tuples for entries in all linked lists table."""
+        for entry in self.table:
+            while entry:
+                yield (entry.key, entry.value)
+                entry = entry.next

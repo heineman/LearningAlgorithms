@@ -51,5 +51,5 @@ class MarkedEntry:
 
     def __str__(self):
         """Return entry as a string."""
-        marks = '[Marked]' if self.marked else ''
-        return '{} -> {} {}'.format(self.key, self.value, marks)
+        marks = ' [Marked]' if self.marked else ''
+        return '{} -> {}{}'.format(self.key, self.value, marks)

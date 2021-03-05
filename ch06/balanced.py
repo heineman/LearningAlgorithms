@@ -1,5 +1,5 @@
 """
-Data Structure for non-balancing Binary Search Tree.
+Data Structure for self-balancing AVL Binary Search Tree.
 
 The tree can contain duplicate values.
 """
@@ -13,19 +13,12 @@ class BinaryNode:
     ----------
         left - left child (or None)
         right - right child (or None)
-        height - height of the node
-        key - key for (key, value) pair
-        value - value for (key, value) pair
     """
-    def __init__(self, k, v):
-        self.key = k
-        self.value = v
-        self.left = None
+    def __init__(self, val):
+        self.value = val
+        self.left  = None
         self.right = None
         self.height = 0
-
-    def __str__(self):
-        return '{} -> {} [{}]'.format(self.key, self.value, self.height)
 
     def height_difference(self):
         """
@@ -53,40 +46,33 @@ class BinaryTree:
         """Returns whether tree is empty."""
         return self.root is None
 
-    def put(self, k, v):
-        """
-        Adds a new BinaryNode to the tree containing this value or update
-        association of (k, v). Key cannot be None.
-        """
-        if k is None:
-            raise ValueError('key for symbol table cannot be None.')
-        self.root = self._put(self.root, k, v)
+    def insert(self, val):
+        """Insert value into Binary Tree."""
+        self.root = self._insert(self.root, val)
 
-    def _put(self, node, k, v):
-        """
-        Adds a new BinaryNode to the subtree rooted at node or update
-        association of (k, v).
-        """
+    def _insert(self, node, val):
+        """Inserts a new BinaryNode to the tree containing this value."""
         if node is None:
-            return BinaryNode(k,v)
+            return BinaryNode(val)
 
-        if k == node.key:
-            node.value = v
-            return node
-
-        if k < node.key:
-            node.left = self._put(node.left, k, v)
+        if val <= node.value:
+            node.left = self._insert(node.left, val)
             node = resolve_left_leaning(node)
         else:
-            node.right = self._put(node.right, k, v)
+            node.right = self._insert(node.right, val)
             node = resolve_right_leaning(node)
 
         node.compute_height()
         return node
 
-    def remove(self, key):
-        """Remove (key, val) from self in BinaryTree and return self."""
-        self.root = self._remove(self.root, key)
+    def min(self):
+        """Return minimum value in tree without causing any changes."""
+        if self.root is None:
+            return None
+        node = self.root
+        while node.left:
+            node = node.left
+        return node.value
 
     def _remove_min(self, node):
         """
@@ -96,20 +82,26 @@ class BinaryTree:
         if node.left is None:
             return node.right
 
+        # Might have made right-leaning, since deleted from left. Deal with it
         node.left = self._remove_min(node.left)
+        node = resolve_right_leaning(node)
         node.compute_height()
         return node
 
-    def _remove(self, node, key):
-        """Remove (key,value) from subtree rooted at node and return resulting subtree."""
+    def remove(self, val):
+        """Remove value from tree."""
+        self.root = self._remove(self.root, val)
+
+    def _remove(self, node, val):
+        """Remove val from subtree rooted at node and return resulting subtree."""
         if node is None:
             return None
 
-        if key < node.key:
-            node.left = self._remove(node.left, key)
+        if val < node.value:
+            node.left = self._remove(node.left, val)
             node = resolve_right_leaning(node)
-        elif key > node.key:
-            node.right = self._remove(node.right, key)
+        elif val > node.value:
+            node.right = self._remove(node.right, val)
             node = resolve_left_leaning(node)
         else:
             if node.left is None:
@@ -117,7 +109,7 @@ class BinaryTree:
             if node.right is None:
                 return node.left
 
-            # replace self value with largest value from left subtree
+            # replace self value with node containing smallest value from right subtree
             original = node
 
             # find SMALLEST child in right subtree and remove it
@@ -128,42 +120,39 @@ class BinaryTree:
             node.right = self._remove_min(original.right)
             node.left = original.left
 
+            # Might have made left-leaning by shrinking right side
             node = resolve_left_leaning(node)
 
         node.compute_height()
         return node
 
-    def __contains__(self, key):
-        """Check whether BST contains key value."""
-        return not self.get(key) is None
-
-    def get(self, key):
-        """Symbol table API to retrieve value associated with key."""
+    def __contains__(self, target):
+        """Check whether BST contains target value."""
         node = self.root
         while node:
-            if key == node.key:
-                return node.value
-            if key < node.key:
+            if target == node.value:
+                return True
+            if target < node.value:
                 node = node.left
             else:
                 node = node.right
 
-        return None
+        return False
 
     def __iter__(self):
         """In order traversal of elements in the tree."""
-        for pair in self._inorder(self.root):
-            yield pair
+        for v in self._inorder(self.root):
+            yield v
 
     def _inorder(self, node):
         """Inorder traversal of tree."""
         if node is None:
             return
 
-        for pair in self._inorder(node.left):
-            yield pair
+        for v in self._inorder(node.left):
+            yield v
 
-        yield (node.key, node.value)
+        yield node.value
 
-        for pair in self._inorder(node.right):
-            yield pair
+        for v in self._inorder(node.right):
+            yield v

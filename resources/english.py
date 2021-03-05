@@ -18,7 +18,7 @@ def english_words():
     """Return list of 321,165 English words from dictionary."""
     if _english_words:
         return _english_words
-    
+
     # Try to load up...
     try:
         import importlib.resources as pkg_resources
