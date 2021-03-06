@@ -13,6 +13,20 @@ class Test_ch05(unittest.TestCase):
         merge_sort(sample)
         self.assertEqual(expected, sample)
 
+    def test_merge_sort_counting(self):
+        from ch05.merge import merge_sort_counting
+        sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
+        expected = sorted(sample)
+        merge_sort_counting(sample)
+        self.assertEqual(expected, sample)
+        
+    def test_slice_merge_sort_counting(self):
+        from ch05.challenge import slice_merge_sort
+        sample = [1, 2, 3, 4, 5, 6, 7, 8]               # standard example in chapter
+        expected = sorted(sample)
+        slice_merge_sort(sample)
+        self.assertEqual(expected, sample)
+        
     def test_quick_sort(self):
         from ch05.sorting import quick_sort
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
@@ -60,7 +74,7 @@ class Test_ch05(unittest.TestCase):
         self.assertEqual(9, find_max([9, 3, 0, 4, 1, 2, 6, 8, 7, 5]))
 
     def test_heap_sort(self):
-        from ch05.heapsort import HeapSort
+        from ch05.heapsort import HeapSort, heap_sort, HeapSortCounting
         from random import shuffle
 
         # try a bunch of random arrays. Not a full test, but useful stress test
@@ -70,6 +84,21 @@ class Test_ch05(unittest.TestCase):
             shuffle(A)
             HeapSort(A).sort()
             self.assertEqual(list(range(size)), A)
+            
+        size = 16
+        for _ in range(1000):
+            A = list(range(size))
+            shuffle(A)
+            HeapSortCounting(A).sort()
+            self.assertEqual(list(range(size)), A)
+            
+        size = 16
+        for _ in range(50):
+            A = list(range(size))
+            shuffle(A)
+            heap_sort(A)
+            self.assertEqual(list(range(size)), A)
+
 
     def test_heap_first_step(self):
         from ch05.heapsort import HeapSort
@@ -153,6 +182,11 @@ class Test_ch05(unittest.TestCase):
         A=[2,4,6,8,1,3,5,7]
         merge(A, 0, 3, 7, [None]*8)
         self.assertEqual([1,2,3,4,5,6,7,8], A)
+
+        # tim sort on small size array
+        A = list(reversed(range(20)))
+        tim_sort(A)
+        self.assertEqual(list(range(20)), A)
 
         A = list(range(100))
         random.shuffle(A)
