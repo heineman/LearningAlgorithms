@@ -43,11 +43,11 @@ class Test_Ch04(unittest.TestCase):
     def test_heap_pq(self):
         from ch04.heap import PQ
         from resources.english import english_words
-        words = english_words()
-        pair = self.priority_queue_stress_test(PQ(len(words)))
+        words = english_words()[:1000]
+        pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
 
         # Note: we cannot guarantee individual words BUT we can guarantee length
-        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
+        self.assertEqual((len('abdominohysterectomy'), len('a')), (len(pair[0]), len(pair[1])))
         
     def test_array_pq(self):
         from ch04.array import PQ
@@ -76,10 +76,10 @@ class Test_Ch04(unittest.TestCase):
     def test_factorial_heap_pq(self):
         from ch04.factorial_heap import PQ
         from resources.english import english_words
-        words = english_words()
-        pair = self.priority_queue_stress_test(PQ(len(words)))
+        words = english_words()[:1000]
+        pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
         # Note: we cannot guarantee individual words BUT we can guarantee length
-        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
+        self.assertEqual((len('abdominohysterectomy'), len('a')), (len(pair[0]), len(pair[1])))
         
     def test_builtin_heap_pq(self):
         from ch04.builtin import PQ

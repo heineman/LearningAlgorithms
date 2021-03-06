@@ -27,7 +27,7 @@ class PQ:
     def enqueue(self, v, p):
         """Enqueue (v, p) entry into priority queue."""
         if self.N == self.size:
-            raise Exception ('Priority Queue is full!')
+            raise RuntimeError('Priority Queue is full!')
         self.N += 1
 
         self.storage[self.N] = Entry(v, p)
