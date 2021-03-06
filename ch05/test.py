@@ -145,10 +145,19 @@ class Test_ch05(unittest.TestCase):
         self.assertEqual(N + N//2 - 2, RecordedItem.report()[1])
 
     def test_tim_sort(self):
-        from ch05.timsort import insertion_sort
+        from ch05.timsort import insertion_sort, merge, tim_sort
+        import random
         A=[9,8,7,6,5,4]
         insertion_sort(A, 2, 4)  # Sort from 2 UP TO AND INCLUDING 4
         self.assertEqual([9,8,5,6,7,4], A)
+        A=[2,4,6,8,1,3,5,7]
+        merge(A, 0, 3, 7, [None]*8)
+        self.assertEqual([1,2,3,4,5,6,7,8], A)
+
+        A = list(range(100))
+        random.shuffle(A)
+        tim_sort(A)
+        self.assertEqual(list(range(100)), A)
 
 #######################################################################
 if __name__ == '__main__':
