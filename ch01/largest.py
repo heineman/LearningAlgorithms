@@ -37,7 +37,7 @@ def just_three(A):
     all problem instances.
     """
     if len(A) != 3:
-        raise ValueError("I only work on lists of size 3.")
+        raise ValueError('I only work on lists of size 3.')
 
     if A[1] < A[0]:
         if A[2] < A[1]:

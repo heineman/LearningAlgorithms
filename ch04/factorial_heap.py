@@ -131,32 +131,3 @@ class PQ:
         self.sink(1)
 
         return max_entry.value
-
-#######################################################################
-if __name__ == '__main__':
-    fpq = PQ(1000)
-
-    for ival in range (1, 1000):
-        fpq.enqueue(str(ival), ival)
-        if not validate(fpq):
-            print('Fails on', ival)
-
-    last = len(fpq.storage)+1
-    while fpq:
-        m = fpq.dequeue()
-        if not validate(fpq):
-            print('Fails on', m)
-        if int(m) > last:
-            print('Fails with', m, 'and', last)
-        last = int(m)
-
-    fpq.enqueue('apple', 5)
-    fpq.enqueue('ball', 8)
-    print(fpq.dequeue())
-    fpq.enqueue('alternate', 5)
-    fpq.enqueue('car', 11)
-    fpq.enqueue('desk', 7)
-    print(fpq.dequeue())
-    print(fpq.dequeue())
-    print(fpq.dequeue())
-    print(fpq.dequeue())

@@ -168,8 +168,6 @@ class DynamicHashtablePlusRemove:
 
                 self.table[hc].mark()             # record it's been deleted
                 self.N -= 1
-                if (self.N < 0):
-                    print ("SDSD")
                 self.deleted += 1
                 return self.table[hc].value       # and return former value
             hc = (hc + 1) % self.M

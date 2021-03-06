@@ -56,6 +56,7 @@ class TestHashing(unittest.TestCase):
             tbl.row([n, n, n ** 0.5])
         self.assertEqual(tbl.entry(3, 'Another'), 3)
 
+        print('Testing that Table is print to console')
         tbl = DataTable([8, 8, 8], ['N', 'Another', 'SquareRoot'], decimals=4)
         tbl.format('Another', 'd')
         for n in range(2,10):

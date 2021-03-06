@@ -82,7 +82,7 @@ _operators = { '+' : add, '-' : sub, '*' : mult, '/' : divide }
 def add_operator(op, func):
     """Add an operator to the known operators."""
     if op in _operators:
-        raise ValueError("Attempting to overwrite existing operator: " + str(op))
+        raise ValueError('Attempting to overwrite existing operator: {}'.format(op))
 
     _operators[op] = func
 

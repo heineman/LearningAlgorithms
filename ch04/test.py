@@ -33,8 +33,13 @@ class Test_Ch04(unittest.TestCase):
         first = pq.dequeue()
         while pq:
             last = pq.dequeue()
-        return (first, last)
 
+        # Should be drained
+        with self.assertRaises(RuntimeError):
+            pq.dequeue()
+
+        return (first, last)
+    
     def test_heap_pq(self):
         from ch04.heap import PQ
         from resources.english import english_words
@@ -86,10 +91,17 @@ class Test_Ch04(unittest.TestCase):
         
     def test_dynamic_heap_pq(self):
         from ch04.dynamic_heap import PQ
-        from resources.english import english_words
         pair = self.priority_queue_stress_test(PQ(625))
         # Note: we cannot guarantee individual words BUT we can guarantee length
         self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
+        
+    def test_binary_tree_from_chapter_06(self):
+        from ch06.pq import PQ
+        from resources.english import english_words
+        words = english_words()
+        pair = self.priority_queue_stress_test(PQ(), len(words))
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))        
         
     def stress(self, queue, ct):
         """Stress test queue with valid sequence of operations."""
@@ -101,7 +113,7 @@ class Test_Ch04(unittest.TestCase):
             i += 1
             queue.enqueue(i)
 
-            result.append(queue.dequeue())           # will eventually drain
+            result.append(queue.dequeue())  # will eventually drain
             if queue.is_empty():
                 return result
             result.append(queue.dequeue())
