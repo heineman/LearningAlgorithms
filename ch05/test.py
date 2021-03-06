@@ -41,11 +41,25 @@ class Test_ch05(unittest.TestCase):
         selection_sort(sample)
         self.assertEqual(expected, sample)
 
+    def test_selection_sort_counting(self):
+        from ch05.sorting import selection_sort_counting
+        sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
+        expected = sorted(sample)
+        selection_sort_counting(sample)
+        self.assertEqual(expected, sample)
+
     def test_insertion_sort(self):
         from ch05.sorting import insertion_sort
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
         expected = sorted(sample)
         insertion_sort(sample)
+        self.assertEqual(expected, sample)
+        
+    def test_insertion_sort_counting(self):
+        from ch05.sorting import insertion_sort_counting
+        sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
+        expected = sorted(sample)
+        insertion_sort_counting(sample)
         self.assertEqual(expected, sample)
         
     def test_insertion_sort_cmp(self):

@@ -15,7 +15,82 @@ class Test_Ch04(unittest.TestCase):
         self.assertEqual(20, queue.dequeue())
         self.assertEqual(30, queue.dequeue())
         self.assertEqual(40, queue.dequeue())
+        
+    def priority_queue_stress_test(self, pq, max_length=None):
+        """
+        Given an empty Priority queue, add words from English dictionary where
+        priority is length of word. Because some PQ implementations are so 
+        inefficient, allow a caller to restrict
+        """
+        from resources.english import english_words
+        words = english_words()
+        if max_length:
+            words = words[:max_length]
+        for w in words:
+            pq.enqueue(w, len(w))
+            
+        # First word out is longest... / Last one out is smallest
+        first = pq.dequeue()
+        while pq:
+            last = pq.dequeue()
+        return (first, last)
 
+    def test_heap_pq(self):
+        from ch04.heap import PQ
+        from resources.english import english_words
+        words = english_words()
+        pair = self.priority_queue_stress_test(PQ(len(words)))
+
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
+        
+    def test_array_pq(self):
+        from ch04.array import PQ
+        from resources.english import english_words
+        words = english_words()[:1000]
+        pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('abdominohysterectomy'), len('a')), (len(pair[0]), len(pair[1])))
+
+    def test_ordered_list_pq(self):
+        from ch04.ordered_list import PQ
+        from resources.english import english_words
+        words = english_words()[:10000]
+        pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('acetylphenylhydrazine'), len('a')), (len(pair[0]), len(pair[1])))
+
+    def test_ordered_pq(self):
+        from ch04.ordered import PQ
+        from resources.english import english_words
+        words = english_words()[:10000]
+        pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('acetylphenylhydrazine'), len('a')), (len(pair[0]), len(pair[1])))
+
+    def test_factorial_heap_pq(self):
+        from ch04.factorial_heap import PQ
+        from resources.english import english_words
+        words = english_words()
+        pair = self.priority_queue_stress_test(PQ(len(words)))
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
+        
+    def test_builtin_heap_pq(self):
+        from ch04.builtin import PQ
+        from resources.english import english_words
+        words = english_words()[:1000]
+        pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('abdominohysterectomy'), len('a')), (len(pair[0]), len(pair[1])))
+        
+    def test_dynamic_heap_pq(self):
+        from ch04.dynamic_heap import PQ
+        from resources.english import english_words
+        pair = self.priority_queue_stress_test(PQ(625))
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
+        
     def stress(self, queue, ct):
         """Stress test queue with valid sequence of operations."""
         result = []

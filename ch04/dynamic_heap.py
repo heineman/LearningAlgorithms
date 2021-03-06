@@ -83,23 +83,3 @@ class PQ:
         replace = [None] * (new_size+1)
         replace[0:self.N+1] = self.storage[0:self.N+1]
         self.storage = replace
-
-#######################################################################
-if __name__ == '__main__':
-    pq = PQ(20)
-    for idx in range(2000):
-        pq.enqueue('sample' + str(idx), idx)
-
-    while not pq.is_empty():
-        print(pq.dequeue())
-
-    pq.enqueue('apple', 5)
-    pq.enqueue('ball', 8)
-    print(pq.dequeue())
-    pq.enqueue('alternate', 5)
-    pq.enqueue('car', 11)
-    pq.enqueue('desk', 7)
-    print(pq.dequeue())
-    print(pq.dequeue())
-    print(pq.dequeue())
-    print(pq.dequeue())

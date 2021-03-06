@@ -80,18 +80,3 @@ class PQ:
         self.N -= 1
         self.sink(1)
         return max_entry.value
-
-#######################################################################
-if __name__ == '__main__':
-    pq = PQ(20)
-
-    pq.enqueue('apple', 5)
-    pq.enqueue('ball', 8)
-    print(pq.dequeue())
-    pq.enqueue('alternate', 5)
-    pq.enqueue('car', 11)
-    pq.enqueue('desk', 7)
-    print(pq.dequeue())
-    print(pq.dequeue())
-    print(pq.dequeue())
-    print(pq.dequeue())
