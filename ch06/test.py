@@ -460,6 +460,33 @@ class TestChapter06(unittest.TestCase):
             check_avl_property(tree.root)
             self.assertEqual((n-1)//2 - 1, rotations[0])
 
+    def test_fill_fibonacci_avl_trees(self):
+        from ch06.challenge import fibonacci_avl_tree, rotations
+        from ch05.challenge import fib
+        from ch06.avl import check_avl_property
+                
+        tree = fibonacci_avl_tree(6)
+        check_avl_property(tree.root)
+        orig = tree.root.height
+        for i in range(fib(7), 2**(tree.root.height+1)):     # up to a complete tree...
+            tree.insert(i)
+            check_avl_property(tree.root)
+        self.assertTrue(abs(tree.root.height - orig) <= 1)
+
+        # Number of rotations continue to increase. Hope to find some formula
+        # to account for these all! 
+        #    [0, 0, 1, 5, 16, 39, 90, 196, 418, 874, 1809, 3712, 7575, 15389 
+        for n in range(2, 12):
+            rotations[0] = 0
+            
+            tree = fibonacci_avl_tree(n)
+            check_avl_property(tree.root)
+            orig = tree.root.height
+            for i in range(fib(n+1), 2**(tree.root.height+1)):     # up to a complete tree...
+                tree.insert(i)
+                check_avl_property(tree.root)
+            self.assertTrue(abs(tree.root.height - orig) <= 1)
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()
