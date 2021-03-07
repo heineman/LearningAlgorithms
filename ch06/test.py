@@ -436,6 +436,30 @@ class TestChapter06(unittest.TestCase):
         # Prefix representation, with value first, then left and then right
         self.assertEqual('(5,(4,(2,(1,,),(3,,)),),(6,,(7,,)))', tree_structure(bt1.root))
 
+    def test_fibonacci_avl_trees(self):
+        from ch06.challenge import fibonacci_avl_tree, rotations
+        from ch05.challenge import fib
+        from ch06.avl import check_avl_property
+        
+        tree = fibonacci_avl_tree(8)
+        check_avl_property(tree.root)
+        self.assertEqual(fib(8), tree.root.value)
+        
+        # multiple rotations detect when remove lARGEST VALUE
+        self.assertTrue(fib(9)-1 in tree)
+        tree.remove(fib(9)-1)
+        self.assertEqual(3, rotations[0])   # three rotations
+        
+        # Number of rotations continue to increase, every other one
+        for n in range(5, 20):
+            rotations[0] = 0
+            tree = fibonacci_avl_tree(n)
+            check_avl_property(tree.root)
+            self.assertEqual(fib(n), tree.root.value)
+            tree.remove(fib(n)-1)
+            check_avl_property(tree.root)
+            self.assertEqual((n-1)//2 - 1, rotations[0])
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

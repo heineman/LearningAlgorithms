@@ -184,6 +184,19 @@ class BinaryTree:
         node.compute_height()
         return node
 
+    def __contains__(self, target):
+        """Check whether BST contains target value."""
+        node = self.root
+        while node:
+            if target == node.value:
+                return True
+            if target < node.value:
+                node = node.left
+            else:
+                node = node.right
+
+        return False
+
 def height_tree(n):
     """Recursive method to find height of binary node."""
     if n is None:
@@ -365,9 +378,9 @@ def speaking_tree():
     
 def fibonacci_avl(N, lo=1):
     """
-    Return an AVL tree corresponding to Fibonacci AVL using Fn as root. Use challenge AVL
-    tree to be able to count # rotations after inserting 0, which should force most rotations
-    
+    Return root node of an AVL tree corresponding to Fibonacci AVL using Fn as root. 
+    Use challenge AVL tree to be able to count # rotations after inserting 0, which
+    should force most rotations. Note that this node must be hacked into a BinaryTree.    
     """
     from ch05.challenge import fib
     
@@ -381,8 +394,15 @@ def fibonacci_avl(N, lo=1):
     n = BinaryNode(lo+val-1)
     n.left = fibonacci_avl(N-1, lo)
     n.right = fibonacci_avl(N-2, lo+fib(N))
+    n.compute_height()
     return n
-    
+
+def fibonacci_avl_tree(N):
+    """Return AVL tree for Fibonacci AVL Binary Tree."""
+    tree = BinaryTree()
+    tree.root = fibonacci_avl(N)
+    return tree
+
 #######################################################################
 if __name__ == '__main__':
     n = fibonacci_avl(7)
