@@ -170,7 +170,7 @@ class Test_Ch03(unittest.TestCase):
         self.assertEqual([(7,sample(7)), (13,sample(13)), (24, sample(24))], entries)
 
     def test_linked_list_updates(self):
-        from ch03.hashtable_linked import Hashtable, stats_linked_lists
+        from ch03.hashtable_linked import Hashtable
         ht = Hashtable(11)
         ht.put(13,sample(13))
         ht.put(13,sample(17))
