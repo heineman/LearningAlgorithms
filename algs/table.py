@@ -23,6 +23,7 @@ from scipy.optimize import curve_fit
 from scipy.stats.stats import pearsonr
 from scipy.special import factorial
 from algs.output import visualize
+from mysqlx.protobuf.mysqlx_crud_pb2 import Column
 
 TABLE = "Table"
 FIGURE = "Figure"
@@ -156,8 +157,12 @@ class DataTable:
         for idx in range(1,len(row)):
             self.values[row[0]][self.labels[idx]] = row[idx]
 
+    def header(self, column):
+        """Return the header for the row."""
+        return self.labels[column]
+
     def entry(self, row, column):
-        """If row and column are value, return entry."""
+        """If row and column belongs to value, return entry."""
         if row in self.values:
             vals = self.values[row]
             if column in vals:

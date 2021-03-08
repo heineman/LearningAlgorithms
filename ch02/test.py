@@ -55,7 +55,20 @@ class Test_Ch02(unittest.TestCase):
         A = [8, 7, 6, 5, 4]
         permutation_sort(A)
         self.assertTrue(check_sorted(A))
+
+    def test_challenge(self):
+        from ch02.challenge import log_log_table, run_max_sort_worst_case, run_permutation_sort
         
+        tbl = log_log_table(output=False)
+        self.assertEqual(4, tbl.entry(1024, 'NumSqrt'))
+        
+        tbl = run_permutation_sort(max_n=8, output=False)
+        self.assertTrue(tbl.entry(2, 'PermutationSort') > 0)
+        self.assertTrue(tbl.entry(2, 'Model') > 0)
+        
+        tbl = run_max_sort_worst_case(max_k=10, output=False)
+        self.assertTrue(tbl.entry(128, 'MaxSort') > 0)
+        self.assertTrue(tbl.entry(128, 'Model') > 0)
 
 #######################################################################
 if __name__ == '__main__':
