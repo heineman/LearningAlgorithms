@@ -23,7 +23,6 @@ from scipy.optimize import curve_fit
 from scipy.stats.stats import pearsonr
 from scipy.special import factorial
 from algs.output import visualize
-from mysqlx.protobuf.mysqlx_crud_pb2 import Column
 
 TABLE = "Table"
 FIGURE = "Figure"
