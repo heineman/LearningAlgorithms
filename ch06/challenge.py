@@ -3,6 +3,8 @@ Randomly generate n values uniformly and insert into a non-balancing BST.
 When the BST hits depth K what is the value of (a) the root; (b) and N
 """
 import random
+from ch06.avl import check_avl_property
+from algs.table import DataTable
 
 class BinaryNode:
     """
@@ -207,9 +209,9 @@ def height_tree(n):
 def one_run(k, bt):
     """Add random values to binary tree until height exceeds k."""
     while height_tree(bt.root) <= k:
-        bt.add(random.random())
+        bt.insert(random.random())
 
-    return (bt.root.value, bt.size())
+    return (bt.root.value, bt.root.size())
 
 def produce_height_stats_balanced(k, trials):
     """Generate table showing heights of random AVL binary trees for number of trials."""
@@ -218,37 +220,58 @@ def produce_height_stats_balanced(k, trials):
         (run, n) = one_run(k, BinaryTree())
         print('{}\t{}\t{}'.format(k, run, n))
 
-def produce_height_stats_balanced_integers():
-    """Generate statistics on smallest N such that AVL binary search trees increases in height."""
+def produce_height_stats_balanced_integers(max_k=13, output=True):
+    """
+    Generate statistics on smallest N such that AVL binary search trees increases
+    in height, up to (but not including) max_k.
+    """
     from ch06.balanced import BinaryTree
-    for k in range(30):
+    
+    tbl = DataTable([8,10,10],['N', 'height', 'rootValue'], output=output)
+    tbl.format('height', 'd')
+    tbl.format('rootValue', ',d')
+    for k in range(max_k):
         bt = BinaryTree()
         idx = 0
         while height_tree(bt.root) <= k:
             bt.insert(idx)
             idx += 1
-        print('{}\t{}\t{}'.format(k, bt.root.value, idx))
+        tbl.row([idx, k, bt.root.value])
+        
+    return tbl
 
-def produce_table():
-    """Generate table showing heights of random non-balancing binary trees for T total."""
+def produce_table(max_k=15, output=True):
+    """
+    Generate table showing heights of random non-balancing binary trees up 
+    to (but including) heights of max_k.
+    """
     from ch06.tree import BinaryTree
-    for k in range(15):
+    
+    tbl = DataTable([8,10,10], ['N', 'RootValue', 'Height'], output=output, decimals=4)
+    tbl.format('Height', 'd')
+    for k in range(max_k):
         (run, n) = one_run(k, BinaryTree())
-        print(k, run, n)
+        tbl.row([n, run, k])
+    return tbl
 
-def worst_heights():
-    """Generate random AVL trees of height to see which ones have worst heights."""
+def worst_heights(max_n=50, output=True):
+    """
+    Generate random AVL trees of n Nodes to find which ones have greatest height.
+    Purely speculative and not definitive exploration of potential trees.
+    """
     from ch06.balanced import BinaryTree
-
+    tbl = DataTable([8,8],['N', 'WorstHeight'], output=output)
+    tbl.format('WorstHeight', 'd')
     max_height = -1
-    for n in range(1,50):
+    for n in range(1,max_n):
         for _ in range(10000):
             avl = BinaryTree()
             for _ in range(n):
                 avl.insert(random.random())
             if avl.root.height > max_height:
                 max_height = avl.root.height
-                print(n, max_height)
+                tbl.row([n, max_height])        # Unorthodox to call inside loop, but works.
+    return tbl
 
 def tree_structure(n):
     """Return structure of binary tree using parentheses to show nodes with left/right subtrees."""
@@ -308,8 +331,6 @@ def recreate_tree(expr):
 
 def find_multiple_rotations():
     """Find the smallest binary-tree that requires multiple rotations upon insert."""
-    from ch06.avl import check_avl_property
-    
 
     # Single rotation on remove with four nodes
     # for n=4, found (3,(1,,(3,,)),(3,,)) when removing 3
@@ -403,8 +424,28 @@ def fibonacci_avl_tree(N):
     tree.root = fibonacci_avl(N)
     return tree
 
+def fibonacci_avl_tree_up_to_2k(N):
+    """
+    Return AVL tree for Fibonacci AVL Binary Tree that was extended to add 
+    nodes up to 2*height-1, which simulates, in a way, an attempt to structurally
+    recreate a complete tree. Resulting heights are just one greater than what
+    you would have in a completed tree, with |Left| + |Right-Grandchild| = |left-child-of-Right|
+    """
+    from ch05.challenge import fib
+    tree = BinaryTree()
+    tree.root = fibonacci_avl(N)
+
+    for i in range(fib(N+1), 2**(tree.root.height+1)):     # up to a complete tree...
+        tree.insert(i)
+
+    check_avl_property(tree.root)
+    return tree
+
 #######################################################################
 if __name__ == '__main__':
+    
+    tn = fibonacci_avl_tree_up_to_2k(6)
+    print(tree_structure(tn.root))
     n = fibonacci_avl(7)
     bt = BinaryTree()
     bt.root = n
@@ -422,4 +463,3 @@ if __name__ == '__main__':
     speaking_tree()
 
     speaking_tree()
-    worst_heights()

@@ -30,7 +30,7 @@ def bad_timing(words):
     print(stats_linked_lists(words, good_ht))
     print(stats_linked_lists(words, bad_ht))
 
-def prime_number_difference(words):
+def prime_number_difference(words, output=True, decimals=2):
     """Identify sensitivity of M to being prime or not."""
 
     from ch03.hashtable_linked import Hashtable as Linked_Hashtable, stats_linked_lists
@@ -45,7 +45,7 @@ def prime_number_difference(words):
 
     keys = [base26(w) for w in words]
     tbl = DataTable([12,6,8,8,8,8], ['M', 'Prime', 'Avg. LL', 'Max LL', 'Avg. OA', 'Max OA'],
-                    decimals=2)
+                    output=output, decimals=decimals)
     tbl.format('Prime', 's')
     tbl.format('Max LL', 'd')
     tbl.format('Max OA', 'd')
@@ -64,16 +64,19 @@ def prime_number_difference(words):
         tbl.row([m, is_p, avg_length_linked, max_length_linked, avg_length_open, max_length_open])
 
     # Now try to find any more that exceed this maximum amount
-    print('Worst was {} for M={}'.format(worst, worst_m))
-    for m in range(worst_m, worst_m + 10000, 13):
-        ht_linked = Linked_Hashtable(m)
-
-        (avg_length_linked, max_length_linked) = stats_linked_lists(keys, ht_linked, False)
-        if max_length_linked > worst:
-            worst_m = m
-            worst = max_length_linked
-            print('Worst of {} for M={}'.format(worst, worst_m))
-    print('Done')
+    if output:
+        print('Worst was {} for M={}'.format(worst, worst_m))
+        for m in range(worst_m, worst_m + 10000, 13):
+            ht_linked = Linked_Hashtable(m)
+    
+            (avg_length_linked, max_length_linked) = stats_linked_lists(keys, ht_linked, False)
+            if max_length_linked > worst:
+                worst_m = m
+                worst = max_length_linked
+                print('Worst of {} for M={}'.format(worst, worst_m))
+        print('Done')
+    
+    return tbl
 
 def measure_performance_resize():
     """Generate table of statistics for table resizing."""
@@ -281,30 +284,6 @@ class DynamicHashtableIncrementalResizing:
             prev, entry = entry, entry.next
 
         return None                 # Nothing was removed
-
-def most_duplicated(A):
-    """
-    Return element most duplicated in A. In the case of a tie,
-    any value that is repeated that many times can be returned.
-
-    most_duplicated([1,2,3,4]) can return 1, 2, 3, or 4
-    most_duplicated([1,2,1,3]) must return 1
-    """
-    counts = {}
-    most = None
-    count = 0
-
-    for v in A:
-        if v in counts:
-            counts[v] += 1
-        else:
-            counts[v] = 1
-
-        if counts[v] > count:
-            count = counts[v]
-            most = v
-
-    return most
 
 #######################################################################
 if __name__ == '__main__':

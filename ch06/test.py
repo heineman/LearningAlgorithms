@@ -487,6 +487,17 @@ class TestChapter06(unittest.TestCase):
                 check_avl_property(tree.root)
             self.assertTrue(abs(tree.root.height - orig) <= 1)
 
+    def test_max_heights(self):
+        from ch06.challenge import worst_heights
+        tbl = worst_heights(max_n=15, output=False)
+        self.assertEqual(3, tbl.entry(7, 'WorstHeight'))
+        
+    def test_produce_table(self):
+        from ch06.challenge import produce_table
+        
+        tbl = produce_table(max_k=5, output=False)
+        self.assertTrue(tbl.entry(5, 'Height') > 3)   # with 5 nodes, can at least get to 3 or maybe more...
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

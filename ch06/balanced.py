@@ -35,6 +35,13 @@ class BinaryNode:
         right_height = self.right.height if self.right else -1
         self.height = 1 + max(left_height, right_height)
 
+    def size(self):
+        """Return number of nodes in subtree rooted at node."""
+        ct = 1
+        if self.left:  ct += self.left.size() 
+        if self.right: ct += self.right.size() 
+        return ct
+
 class BinaryTree:
     """
     A Binary tree contains the root node, and methods to manipulate the tree.

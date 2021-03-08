@@ -17,6 +17,13 @@ class BinaryNode:
         self.left  = None
         self.right = None
 
+    def size(self):
+        """Return number of nodes in subtree rooted at node."""
+        ct = 1
+        if self.left:  ct += self.left.size() 
+        if self.right: ct += self.right.size() 
+        return ct
+
 class BinaryTree:
     """
     A Binary tree contains the root node, and methods to manipulate the tree.
