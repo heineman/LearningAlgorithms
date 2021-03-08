@@ -1,6 +1,5 @@
 import random
 
-
 def to_networkx(maze):
     """Return a NetworkX Graph representing maze."""
     try:
@@ -27,22 +26,80 @@ def to_networkx(maze):
                 G.add_edge( (r,c), (r,c+1))
     return G
 
+def solution_graph(G, path):
+    """
+    Return a NetworkX Graph representing solution in maze.
+    Remove all vertices that are not in the path
+    """
+    try:
+        import networkx as nx
+    except ModuleNotFoundError:
+        print('Python networkx library is not installed.')
+        return
+
+    # Bring over positional information from G
+    H = nx.DiGraph()
+    pos = nx.get_node_attributes(G, 'pos') 
+    
+    for n in G.nodes():
+        H.add_node(n, pos=pos.get(n))
+    
+    for idx in range(len(path)-1):
+        H.add_edge(path[idx], path[idx+1])
+    
+    return H
+
+def vertex_from_field(G, vertex_from):
+    """
+    Return a directed NetworkX Graph representing structure
+    of the vertex_from dictionary.
+    """
+    try:
+        import networkx as nx
+    except ModuleNotFoundError:
+        print('Python networkx library is not installed.')
+        return
+    # Bring over positional information from G
+    pos = nx.get_node_attributes(G, 'pos') 
+    H = nx.DiGraph()
+    for n in G.nodes():
+        H.add_node(n, pos=pos.get(n))
+
+    # show the former edges.
+    for v in vertex_from:
+        H.add_edge(v, vertex_from[v])
+
+    return H
+
 class Maze:
     """
     Construct a random maze whose entrance is at the middle of the top row
     of the rectangular maze, and the exit is at the middle of the bottom 
     row.
+    
+    The basic technique is to assemble a maze where every cell has intact walls, 
+    and then conduct a depth-first-search through the maze, tearing down walls
+    when heading into a new, unvisited cell.
+    
+    To add a bit of variety, a salt parameter randomly clears additional walls,
+    with a default setting of 0.05. If you pass in 0, then the maze will likely
+    have a long and winding solution to the maze.
     """
-    def __init__(self, num_rows, num_cols):
+    def __init__(self, num_rows, num_cols, salt=0.05):
         """initialize maze"""
+
+        if salt < 0 or salt > 1:
+            raise ValueError('salt parameter must be a floating point between 0 and 1 inclusive.')
+
         self.num_rows = num_rows
         self.num_cols = num_cols
+        self.salt = salt
         self.construct()
-        
+
     def start(self):
         """Starting cell for maze."""
         return (0, self.num_cols//2)
-    
+
     def end(self):
         """Ending cell for maze."""
         return (self.num_rows-1, self.num_cols//2)
@@ -53,6 +110,18 @@ class Maze:
             self.south_wall[min(from_cell[0],to_cell[0]),from_cell[1]] = False
         else:
             self.east_wall[from_cell[0], min(from_cell[1], to_cell[1])] = False
+
+    def clear_all_walls(self, in_cell):
+        """Clear all walls for cell as part of attempt to open more solutions."""
+        if 0 < in_cell[0] < self.num_rows-1:
+            self.south_wall[in_cell[0], in_cell[1]] = False
+        if 0 < in_cell[1] < self.num_cols-1:
+            self.east_wall[in_cell[0], in_cell[1]] = False
+
+        if 0 < in_cell[1] < self.num_cols-1:
+            self.east_wall[in_cell[0], in_cell[1]-1] = False
+        if 0 < in_cell[0] < self.num_rows-1:
+            self.south_wall[in_cell[0]-1, in_cell[1]] = False
 
     def dfs_visit(self, sq):
         """conduct DFS search to build maze"""
@@ -80,6 +149,8 @@ class Maze:
                 self.neighbors[sq].remove(cell)
                 if not self.marked[cell]:
                     self.clear_wall(sq, cell)
+                    if random.random() < self.salt:
+                        self.clear_all_walls(sq)
                     path.insert(0, cell)
                     self.marked[cell] = True
             else:
@@ -87,11 +158,11 @@ class Maze:
                 del path[0]
 
     def construct(self):
-        """construct maze of given height/width and size"""
-        self.marked = dict( ((r,c),False) for r in range(self.num_rows) for c in range(self.num_cols) )
-        self.east_wall = dict( ((r,c),False) for r in range(self.num_rows) for c in range(self.num_cols) )
-        self.south_wall = dict( ((r,c),False) for r in range(self.num_rows) for c in range(self.num_cols) )
-        self.neighbors = dict( ((r,c),[]) for r in range(self.num_rows) for c in range(self.num_cols) )
+        """construct maze of given height/width and size."""
+        self.marked     = dict( ((r,c), False) for r in range(self.num_rows) for c in range(self.num_cols) )
+        self.east_wall  = dict( ((r,c), False) for r in range(self.num_rows) for c in range(self.num_cols) )
+        self.south_wall = dict( ((r,c), False) for r in range(self.num_rows) for c in range(self.num_cols) )
+        self.neighbors  = dict( ((r,c), [])    for r in range(self.num_rows) for c in range(self.num_cols) )
 
         for r in range(self.num_rows):
             for c in range(self.num_cols):
@@ -110,17 +181,15 @@ class Maze:
 
         sq = self.start()
         self.dfs_visit_nr(sq)
-        self.south_wall[self.end()] = False    # self.num_rows-1,self.num_cols//2
+        self.south_wall[self.end()] = False
 
+#######################################################################
 if __name__ == "__main__":
-    random.seed(11)
+    random.seed(13)
     m = Maze(7,7)
     g = to_networkx(m)
     import matplotlib.pyplot as plt
     import networkx as nx
-
-    T = nx.dfs_tree(g, source=(0,3))
-    print(list(T.edges()))
 
     pos = nx.get_node_attributes(g, 'pos') 
     nx.draw(g, pos, with_labels = True, node_color="w", font_size=8) 

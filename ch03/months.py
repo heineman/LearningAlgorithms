@@ -117,20 +117,11 @@ def search_for_data():
                 if best is None:
                     best = data
                     best_tuple = (p1, p2)
-                    print(best_tuple, len(data), data)
                 elif len(data) < len(best):
                     best = data
                     best_tuple = (p1, p2)
-                    print(best_tuple, len(data), data)
 
-    print(best_tuple, best)
-
-    # As you can see there is a match
-    for idx,data in enumerate(s_data):
-        print(data, s_num[idx], best[month_index(data, best_tuple[0], best_tuple[1])])
-
-    print('Two constants in monthIndex should be p1=', best_tuple[0], 'and p2=', best_tuple[1])
-    print(best)
+    return (best_tuple, best)
 
 def search_for_hashes():
     """What is smallest array that stores unique values for months using default hash."""
@@ -158,12 +149,10 @@ def craft_table():
         try:
             for idx,key in enumerate(key_array):
                 ht.put(key, month_length[idx])
-            print('Successfully constructed hashtable of size', ht.M)
-            return ht.table
+            return ht
         except RuntimeError:
             pass
         
-    print('Tried',last,'but could not find non-clashing hashtable.')
     return None
 
 #######################################################################
@@ -174,8 +163,12 @@ if __name__ == '__main__':
     print_month('February', 2024)
     print()
 
-    search_for_data()
+    (best_tuple, best) = search_for_data()
+    print('Two constants in monthIndex should be p1 =', best_tuple[0], 'and p2 =', best_tuple[1])
+
     result = search_for_hashes()
     print('Need hashtable of size', len(result), 'to store months uniquely.')
     print(result)
-    craft_table()
+    ht = craft_table()
+    
+    print('created hashtable of size', ht.M)

@@ -13,7 +13,7 @@ class DepthFirstSearchSolver():
         self.master = master
         self.viewer = Viewer(maze, size)
         self.marked = {}
-        self.edge_to = {}
+        self.vertex_from = {}
 
         self.g = to_networkx(maze)
         self.start = maze.start()
@@ -33,7 +33,7 @@ class DepthFirstSearchSolver():
         pos = self.end
         while pos != self.start:
             self.viewer.color_cell(pos, 'lightgray')
-            pos = self.edge_to[pos]
+            pos = self.vertex_from[pos]
         self.master.update()
 
     def dfs_visit_nr(self, pos):
@@ -77,7 +77,7 @@ class DepthFirstSearchSolver():
 
         for cell in self.g.neighbors(pos):
             if not cell in self.marked:
-                self.edge_to[cell] = pos
+                self.vertex_from[cell] = pos
                 if self.dfs_visit(cell):
                     return True
 
@@ -87,8 +87,8 @@ class DepthFirstSearchSolver():
 
 #######################################################################
 if __name__ == "__main__":
-    random.seed(11)
-    m = Maze(40,60)
+    random.seed(13)
+    m = Maze(7,7)
     root = tkinter.Tk()
     dfs = DepthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
     root.mainloop()

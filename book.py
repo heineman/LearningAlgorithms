@@ -9,6 +9,12 @@ import timeit
 import itertools
 from enum import Enum
 
+import numpy as np
+from scipy.optimize import curve_fit
+from scipy.stats.stats import pearsonr
+from scipy.special import factorial
+import networkx as nx
+
 from ch01.book import generate_ch01
 from ch02.book import generate_ch02
 from ch03.book import generate_ch03

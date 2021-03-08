@@ -13,7 +13,7 @@ class BreadthFirstSearchSolver():
         self.master = master
         self.viewer = Viewer(maze, size)
         self.marked = {}
-        self.edge_to = {}
+        self.vertex_from = {}
 
         self.g = to_networkx(maze)
         self.start = maze.start()
@@ -33,7 +33,7 @@ class BreadthFirstSearchSolver():
         pos = self.end
         while pos != self.start:
             self.viewer.color_cell(pos, 'lightgray')
-            pos = self.edge_to[pos]
+            pos = self.vertex_from[pos]
         self.master.update()
 
     def bfs_visit(self, pos):
@@ -52,7 +52,7 @@ class BreadthFirstSearchSolver():
 
             for next_cell in self.g.neighbors(cell):
                 if not next_cell in self.marked:
-                    self.edge_to[next_cell] = cell
+                    self.vertex_from[next_cell] = cell
                     self.marked[next_cell] = True
                     self.viewer.color_cell(next_cell, 'blue')
                     if self.stop_end and next_cell == self.end:
@@ -63,8 +63,8 @@ class BreadthFirstSearchSolver():
 
 #######################################################################
 if __name__ == "__main__":
-    random.seed(11)
-    m = Maze(50,50)
+    random.seed(13)
+    m = Maze(7,7)
     root = tkinter.Tk()
     dfs = BreadthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
     root.mainloop()
