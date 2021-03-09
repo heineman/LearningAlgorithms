@@ -2,7 +2,6 @@
 
 import timeit
 import math
-import random
 from algs.table import DataTable, captionx, FigureNum, TableNum, process
 from ch02.bas import binary_array_search
 
@@ -46,7 +45,7 @@ one_run(PQ(), {N}, {factor})'''
     return min(timeit.repeat(stmt=stmt, setup = 'from ch04.timing import one_run',
                              repeat=5, number=10))/10
 
-def average_performance():
+def average_performance(max_n=32768, output=True, decimals=2):
     """
     Generate table of average performance for different PQ implementations.
 
@@ -67,9 +66,9 @@ def average_performance():
     twice as efficient).
     """
     T = 3
-    high = 32768
+    high = max_n
 
-    tbl = DataTable([8,8,8], ['N','Heap','BinaryTree'], decimals=2)
+    tbl = DataTable([8,8,8], ['N','Heap','BinaryTree'], output=output, decimals=2)
     N = 128
     while N <= high:
         binary = 1000000*run_trials_pq('ch06.pq', N, T)/(T*N)
@@ -77,8 +76,11 @@ def average_performance():
         tbl.row([N, heap, binary])
         N *= 2
 
-    print ('Heap', tbl.best_model('Heap'))
-    print ('BinaryTree', tbl.best_model('BinaryTree'))
+    if output:
+        print ('Heap', tbl.best_model('Heap'))
+        print ('BinaryTree', tbl.best_model('BinaryTree'))
+
+    return tbl
 
 def generate_ch06_old():
     """Generate tables/figures for chapter 06."""
@@ -97,8 +99,7 @@ def expression_tree():
     sub6 = Expression(sub, mult4, mult5)
     mult7 = Expression(mult, div2, sub6)
 
-    print(mult7,'=',mult7.eval())
-    print('in postfix:', ' '.join(str(k) for k in mult7.postfix()))
+    return mult7
 
 def debug_expression():
     """Request evaluation of simple expression."""
@@ -107,7 +108,7 @@ def debug_expression():
     # Sample Recursive Expression
     add1 = Expression(add, Value(1), Value(5))
     mult2 = Expression(mult, add1, Value(9))
-    print(mult2,'=',mult2.eval())
+    return mult2
 
 def run_trials_prepend(N, num):
     """Run a single trial."""
@@ -137,11 +138,15 @@ bt = BinaryTree()
 for i in range({N}):
     bt.insert(i)''', repeat=5, number=1))/10
 
-def generate_list_table():
-    """Generate table showing O(N) behavior of Python 'list' structure on insert."""
-    tbl = DataTable([8,8,8,8,8], ['N','Prepend','Remove', 'Append', 'Tree'], decimals=3)
+def generate_list_table(max_k=21, output=True, decimals=3):
+    """
+    Generate table showing O(N) behavior of Python 'list' structure on insert for 
+    lists up to (but not including) 2**max_k
+    """
+    tbl = DataTable([8,8,8,8,8], ['N','Prepend','Remove', 'Append', 'Tree'],
+                    output=output, decimals=decimals)
 
-    for n in [2**k for k in range(10, 21)]:
+    for n in [2**k for k in range(10, max_k)]:
         tbl.row([n,run_trials_prepend(n, 1000),
                  run_trials_remove(n, 1000),
                  run_trials_append(n, 1000),
@@ -189,14 +194,13 @@ for w in words:
 
     print('Build-time =', t_build,', Access-time = ', t_access)
 
-def compare_avl_pq_with_heap_pq():
+def compare_avl_pq_with_heap_pq(max_k=16, output=True, decimals=2):
     """Generate times for comparing values."""
-    
-    tbl = DataTable([8,10,10], ['N','Heap-pq', 'AVL-pq'], decimals=2)
+    tbl = DataTable([8,10,10], ['N','Heap-pq', 'AVL-pq'], output=output, decimals=decimals)
     repeat = 25
     num = 10
 
-    for n in [2**k for k in range(10, 16)]:
+    for n in [2**k for k in range(10, max_k)]:
         t_heap_pq = min(timeit.repeat(stmt=f'''
 random.seed(11)
 pq = PQ({n})
@@ -220,6 +224,8 @@ from ch06.pq import PQ
 import random''', repeat=repeat, number=num))/num
 
         tbl.row([n, t_heap_pq, t_avl_pq])
+        
+    return tbl
 
 def generate_ch06():
     """Generate Tables and Figures for chapter 06."""
@@ -228,14 +234,17 @@ def generate_ch06():
     with FigureNum(1) as figure_number:
         description  = 'Representing mathematical expressions using expression trees'
         label = captionx(chapter, figure_number)
-        expression_tree()
+        mult7 = expression_tree()
+        print(mult7,'=',mult7.eval())
+        print('in postfix:', ' '.join(str(k) for k in mult7.postfix()))
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(2) as figure_number:
         description  = 'Visualizing recursive evaluation of ((1+5)*9)'
         label = captionx(chapter, figure_number)
-        debug_expression()
+        mult2 = debug_expression()
+        print(mult2,'=',mult2.eval())
         print('{}. {}'.format(label, description))
         print()
 

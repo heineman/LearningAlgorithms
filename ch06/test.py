@@ -6,6 +6,17 @@ from ch06.recursive_lists import iterate_list
 
 class TestChapter06(unittest.TestCase):
 
+    def test_expression(self):
+        from ch06.book import expression_tree, debug_expression
+        
+        mult7 = expression_tree()
+        self.assertEqual(42.0, mult7.eval())
+        self.assertEquals('(((3 + 1) / 4) * (((1 + 5) * 9) - (2 * 6)))', str(mult7))
+        
+        mult2 = debug_expression()
+        self.assertEquals(54, mult2.eval())
+        self.assertEquals('((1 + 5) * 9)', str(mult2))
+
     def test_sum_list(self):
         self.assertEqual(0, sum_list(create_linked_list([])))
         self.assertEqual(1, sum_list(create_linked_list([1])))
@@ -413,6 +424,9 @@ class TestChapter06(unittest.TestCase):
         expected = [2,4,7,8,10]
         new1 = remove_value(sample, 6)
         self.assertEqual(expected, new1)
+        
+        new2 = remove_value(expected,99)    # wasn't there...
+        self.assertEqual([2,4,7,8,10], new2)
 
     def test_count_rotations_avl(self):
         from ch06.balanced import BinaryTree
@@ -499,6 +513,25 @@ class TestChapter06(unittest.TestCase):
 
         tbl = produce_table(max_k=5, output=False)
         self.assertTrue(tbl.entry(3, 'N') >= 3)   # with 3 nodes, can at least get to 3 or maybe more...
+
+    def test_average_performance(self):
+        from ch06.book import average_performance
+        
+        tbl = average_performance(max_n = 512, output=False)
+        self.assertTrue(tbl.entry(512,'Heap') < tbl.entry(512, 'BinaryTree'))
+        
+    def test_generate_list_table(self):
+        from ch06.book import generate_list_table
+        
+        tbl = generate_list_table(max_k=12, output=False)
+        self.assertTrue(tbl.entry(1024,'Remove') < tbl.entry(1024, 'Prepend'))
+        
+    def test_compare_avl_pq_with_heap_pq(self):
+        from ch06.book import compare_avl_pq_with_heap_pq
+        
+        tbl = compare_avl_pq_with_heap_pq(max_k=12, output=False)
+        self.assertTrue(tbl.entry(2048,'Heap-pq') <= tbl.entry(2048, 'AVL-pq'))
+        
 
 #######################################################################
 if __name__ == '__main__':

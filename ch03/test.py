@@ -260,10 +260,10 @@ class Test_Ch03(unittest.TestCase):
         self.assertEqual('a', ht.table[0].key)
         self.assertEqual('zyzzyvas', ht.table[321164].key)
 
-        self.assertEquals(99, ht.get('a'))
-        self.assertEquals(101, ht.get('zyzzyvas'))
+        self.assertEqual(99, ht.get('a'))
+        self.assertEqual(101, ht.get('zyzzyvas'))
 
-        self.assertEquals([('a',99), ('zyzzyvas',101)], list(ht))
+        self.assertEqual([('a',99), ('zyzzyvas',101)], list(ht))
 
     def test_resize_hash_small_open_addressing(self):
         from ch03.hashtable_open import DynamicHashtable
