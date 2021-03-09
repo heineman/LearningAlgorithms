@@ -22,7 +22,7 @@ def bad_timing(words, size=50000, output=True):
     """Statistics on hashtables."""
     from ch03.hashtable_linked import Hashtable, stats_linked_lists
 
-    tbl = DataTable([8,10,10], ['Type', 'Avg. Len', 'Max Len'])
+    tbl = DataTable([8,10,10], ['Type', 'Avg. Len', 'Max Len'], output=output)
     tbl.format('Type', 's')
     tbl.format('Max Len', 'd')
     good_ht = Hashtable(size)
@@ -32,9 +32,9 @@ def bad_timing(words, size=50000, output=True):
         good_ht.put(w, True)
         bad_ht.put(ValueBadHash(w), True)
 
-    good = stats_linked_lists(words, good_ht)
+    good = stats_linked_lists(good_ht)
     tbl.row(['Good', good[0], good[1]])
-    bad = stats_linked_lists(words, bad_ht)
+    bad = stats_linked_lists(bad_ht)
     tbl.row(['Bad', bad[0], bad[1]])
     return tbl
 
@@ -89,12 +89,21 @@ def prime_number_difference(words, output=True, decimals=2):
     
     return tbl
 
-def measure_performance_resize():
-    """Generate table of statistics for table resizing."""
+def measure_performance_resize(max_d=50, output=True):
+    """Generate table of statistics for table resizing up to (but not including maxd=50)."""
     from ch03.hashtable_linked import DynamicHashtable
     from time import time_ns
+    from resources.english import english_words
 
-    print('Dynamic Resizing Hashtable')
+    if output:
+        print('Dynamic Resizing Hashtable')
+    tbl = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'], output=output)
+    tbl.format('idx', 'd')
+    tbl.format('word', 's')
+    tbl.format('time', 'd')
+    tbl.format('old-size', ',d')
+    tbl.format('new-size', ',d')
+    
     ht = DynamicHashtable(1023)
     idx = 1
     last = None
@@ -110,16 +119,23 @@ def measure_performance_resize():
         if last:
             if after - before > last:
                 last = after-before
-                print(idx,w,last,"old-size:",old_size,"new-size:",new_size)
+                tbl.row([idx,w,last,old_size,new_size])
         else:
             last = after-before
         idx += 1
 
     average /= len(words)
-    print('Average was ', average)
     ht = None
+    if output:
+        print('Average was ', average)
+        print('Incremental Resizing Hashtable')
 
-    print('Incremental Resizing Hashtable')
+    tbl_ir = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'], output=output)
+    tbl_ir.format('idx', 'd')
+    tbl_ir.format('word', 's')
+    tbl_ir.format('time', 'd')
+    tbl_ir.format('old-size', ',d')
+    tbl_ir.format('new-size', ',d')
     ht = DynamicHashtableIncrementalResizing(1023,10)
     idx = 1
     last = None
@@ -135,17 +151,22 @@ def measure_performance_resize():
         if last:
             if after - before > last:
                 last = after-before
-                print (idx,w,last,"old-size:",old_size,"new-size:",new_size)
+                tbl_ir.row([idx,w,last,old_size,new_size])
         else:
             last = after-before
         idx += 1
 
-    average /= len(words)
-    print('Average was ', average)
     ht = None
 
-    print('Incremental Resizing dependent on Delta')
-    for delta in range(1,50):
+    average /= len(words)
+    if output:
+        print('Average was ', average)
+        print('Incremental Resizing dependent on Delta')
+        print()
+    
+    tbl_d = DataTable([8,10],['Delta', 'Average'], output=output)
+    tbl_d.format('Delta', 'd')
+    for delta in range(1, max_d):
         ht = DynamicHashtableIncrementalResizing(1023, delta)
         average = 0
         words = english_words()
@@ -156,7 +177,10 @@ def measure_performance_resize():
             average += (after-before)
 
         average /= len(words)
-        print (delta,'Average is', average)
+        #print (delta,'Average is', average)
+        tbl_d.row([delta, average])
+
+    return (tbl, tbl_ir, tbl_d)
 
 class DynamicHashtableIncrementalResizing:
     """
@@ -295,15 +319,3 @@ class DynamicHashtableIncrementalResizing:
             prev, entry = entry, entry.next
 
         return None                 # Nothing was removed
-
-#######################################################################
-if __name__ == '__main__':
-    from resources.english import english_words
-    bad_timing(english_words()[:10000])
-    measure_performance_resize()
-
-    prime_number_difference(english_words())
-
-    # This takes quite a while to execute because of poor
-    # hashing. Be patient!
-    bad_timing(english_words()[:20000])

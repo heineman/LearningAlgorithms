@@ -389,6 +389,24 @@ class Test_Ch03(unittest.TestCase):
         K = ["a", "rose", "by", "any", "other", "name", "would", "smell", "as", "sweet"]
         tbl = prime_number_difference(words=K, output=False)
         self.assertTrue('Prime', tbl.entry(428977, 'Prime'))
+        
+    def test_bad_timing(self):
+        from resources.english import english_words
+        from ch03.challenge import bad_timing
+        
+        tbl = bad_timing(english_words()[:100], output=False)
+        self.assertTrue(tbl.entry('Good', 'Max Len') > 0)
+        
+    def test_measure_performance_resize(self):
+        from ch03.challenge import measure_performance_resize
+        
+        (tbl, tbl_ir, tbl_d) = measure_performance_resize(max_d=5, output=False)
+      
+    def test_count_hash(self):
+        from ch03.book import count_hash
+
+        tbl = count_hash()
+        self.assertEqual(321165, tbl.entry('zyzzyvas', 'N'))
 
 if __name__ == '__main__':
     unittest.main()

@@ -301,7 +301,7 @@ for w in words:
     tbl.row(['Fixed', ll_build, ll_access, oa_build, oa_access])
     return tbl
 
-def count_hash():
+def count_hash(output=True, decimals=2):
     """
     For all English words, starting with a hashtable of size 1,024 and
     a load factor of 0.75, count how many times the hash code (i.e., %)
@@ -310,7 +310,7 @@ def count_hash():
     from ch03.growth_test import DynamicHashtableLinkedCounting
 
     ht = DynamicHashtableLinkedCounting(1023)
-    tbl = DataTable([20,10,10,10],['Word', 'N', '#insert', 'average'], decimals=2)
+    tbl = DataTable([20,10,10,10],['Word', 'N', '#insert', 'average'], output=output, decimals=decimals)
     tbl.format('Word', 's')
     tbl.format('N', ',d')
     tbl.format('#insert', ',d')
@@ -330,11 +330,9 @@ def count_hash():
         last = ht.hash_count
         ht.put(last_word + str(i), last_word)
         if ht.hash_count != last + 1:
-            print()
-            print('next resize would happen after', i, 'more keys when N=', ht.N)
-            print('The total number of insertions would be', comma(ht.hash_count),
-                  'for an average of {:.2f}'.format(ht.hash_count/ht.N))
+            tbl.row([last_word + str(i), ht.N, ht.hash_count, ht.hash_count/ht.N])
             break
+
     return tbl
 
 def avoid_digit(n, d):
