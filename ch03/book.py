@@ -142,7 +142,7 @@ def count_collisions_dynamic():
         for w in all_words:
             dhl.put(w, 1)
             odhl.put(w, 1)
-        
+
         avg_size_linked_dynamic = stats_linked_lists(dhl)
         avg_size_open_dynamic = ('-','-')
         avg_size_open_dynamic = stats_open_addressing(odhl)
@@ -162,7 +162,7 @@ def count_collisions():
     all_words = english_words()
     # start twice as big as the number of words, and reduce steadily, counting collisions
     N = len(all_words)
-    
+
     from ch03.hashtable_linked import Hashtable as HL
     from ch03.hashtable_linked import stats_linked_lists
     from ch03.hashtable_open import Hashtable as OHL
@@ -171,7 +171,7 @@ def count_collisions():
     tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'], decimals=1)
     tbl.format('Max LL', 'd')
     tbl.format('Max OA', 'd')
-    
+
     M = 20*N
     hl = HL(M)
     ohl = OHL(M)
@@ -396,7 +396,7 @@ def generate_ch03():
 
     with TableNum(1) as table_number:
         process(generate_hash(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Example hash() and hash code expressions for a table of size 15', create_image=False)
 
     with FigureNum(2) as figure_number:

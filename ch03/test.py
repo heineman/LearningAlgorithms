@@ -1,6 +1,7 @@
 """Test cases for chapter 3."""
 import random
 import unittest
+from algs.table import SKIP
 
 def key(i):
     """Helper method to generate a meaningful key."""
@@ -400,13 +401,25 @@ class Test_Ch03(unittest.TestCase):
     def test_measure_performance_resize(self):
         from ch03.challenge import measure_performance_resize
         
-        (tbl, tbl_ir, tbl_d) = measure_performance_resize(max_d=5, output=False)
+        measure_performance_resize(max_d=5, output=False)
       
     def test_count_hash(self):
         from ch03.book import count_hash
 
-        tbl = count_hash()
+        tbl = count_hash(output=False)
         self.assertEqual(321165, tbl.entry('zyzzyvas', 'N'))
+
+    def test_run_access_trials(self):
+        from ch03.growth_test import run_access_trials
+        
+        run_access_trials(max_trials=100, output=False)
+
+    def test_time_results_open(self):
+        from ch03.growth_test import time_results_open
+        
+        words = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+        tbl = time_results_open(words, output=True)
+        self.assertEqual(SKIP, tbl.entry(16384, 8192))
 
 if __name__ == '__main__':
     unittest.main()

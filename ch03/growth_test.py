@@ -2,14 +2,10 @@
 Linked hashtable that also can grow or shrink.
 
 Count how many times hashcode is computed (i.e., when % is invoked) on PUT.
-
->> TODO: Redo time_results_open using DataTable
->> >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 """
-
 import timeit
 from ch03.entry import LinkedEntry
+from algs.table import DataTable, SKIP
 
 class DynamicHashtableLinkedCounting:
     """
@@ -113,50 +109,46 @@ def probability_of_failure():
 
     print('Out of', (high - low), 'attempts there were', failures, 'failures')
 
-def run_trials():
-    print('\nDict\tRaw\tBAS')
+def run_access_trials(max_trials=100000, output=True, decimals=5):
+    """Generate performance table for up to max_trials number of runs."""
+    tbl = DataTable([10,10,10], ['Dict', 'Raw', 'BAS'])
+    tbl.format('Dict', 'f')
+
     m1 = min(timeit.repeat(stmt='days_in_month[s_data[2]]',
-           setup='from ch03.months import s_data, days_in_month', repeat=10, number=100000))
+           setup='from ch03.months import s_data, days_in_month', repeat=10, number=max_trials))
 
     m2 = min(timeit.repeat(stmt='days_mixed(s_data[2])',
-            setup='from ch03.months import s_data, days_mixed', repeat=10, number=100000))
+            setup='from ch03.months import s_data, days_mixed', repeat=10, number=max_trials))
 
     m3 = min(timeit.repeat(stmt='days_bas(s_data[2])',
-            setup='from ch03.months import s_data, days_bas', repeat=10, number=100000))
+            setup='from ch03.months import s_data, days_bas', repeat=10, number=max_trials))
+    tbl.row([m1,m2,m3])
+    return tbl
 
-    print('{0:.5f}\t{1:.5f}\t{2:.5f}'.format(m1, m2, m3))
-
-def time_results_open(file):
+def time_results_open(words, output=True, decimals=4):
     """Average time to find a key in growing hashtable_open."""
-    print('open', end='')
     sizes = [8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576]
-    for s in sizes:
-        print('\t' + str(s), end='')
-    print()
+    widths = [8] + [10] * len(sizes)
+    headers = ['N'] + sizes
+    tbl = DataTable(widths, headers, output=output, decimals=decimals)
 
-    # Now start with M words to be added into a table of size N.
+    # Now start with N words to be added into a table of size M.
     # Start at 1000 and work up to 2000
     for num_to_add in [32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384]:
-        all_words = []
-        with open(file) as fp:
-            for line in fp:
-                line = line[:-1]  # eliminate final \n
-                all_words.append(line)
-                if len(all_words) >= num_to_add:
-                    break
+        all_words = words[:num_to_add]
 
-        line = str(len(all_words))
+        arow = [num_to_add]
         for size in sizes:
             if num_to_add < size:
                 m1 = min(timeit.repeat(stmt=f'''
 table = Hashtable({size})
 for word in {all_words}:
-    table.put(word, 99)''', setup='from ch03.hashtable_open import Hashtable',repeat=1,number=100))
-                line = line + "\t" + '{0:.4f}'.format((100000.0 * m1) / size)
+    table.put(word, 99)''', setup='from ch03.hashtable_open import Hashtable', repeat=1, number=100))
+                arow.append((100000.0 * m1) / size)
             else:
-                line = line + "\t*"
-        print(line)
+                arow.append(SKIP)
+        tbl.row(arow)
+    return tbl
 
 if __name__ == '__main__':
     probability_of_failure()
-    run_trials()

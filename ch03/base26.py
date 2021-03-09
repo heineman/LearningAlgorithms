@@ -8,7 +8,6 @@ Functions to work with base26 hash scheme.
 
 """
 from algs.sorting import unique
-from resources.english import english_words
 from ch03.months import s_data, s_num, days_in_month, days_bas, days_mixed
 
 def base26(m):

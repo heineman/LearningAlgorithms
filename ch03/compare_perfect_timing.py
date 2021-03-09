@@ -13,9 +13,9 @@ def simple_stats(words):
     for i in words:
         print(i, perfect_hash(i))
 
-def compare_time(words):
+def compare_time(words, output=True, decimals=4):
     """Generate table of performance differences with linked hashtable and perfect hashing."""
-    tbl = DataTable([8,8,8],['N', 'Linked', 'Perfect'], decimals=4)
+    tbl = DataTable([8,8,8],['N', 'Linked', 'Perfect'], output=output, decimals=decimals)
 
     t_perfect = min(timeit.repeat(stmt=f'''
 ht = HL()
