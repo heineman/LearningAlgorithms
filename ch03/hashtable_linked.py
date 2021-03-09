@@ -10,14 +10,14 @@
 
 from ch03.entry import LinkedEntry
 
-def stats_linked_lists(words, table, output=False):
+def stats_linked_lists(ht, output=False):
     """
     Produce statistics on the linked-list implemented table. Returns
     (average chain length for non-empty buckets, max chain length)
     """
-    for w in words:
-        table.put(w, 1)
-    size = len(table.table)
+#     for w in words:
+#         table.put(w, 1)
+    size = len(ht.table)
     sizes = {}                      # record how many chains of given size exist
     total_search = 0
     max_length = 0
@@ -25,7 +25,7 @@ def stats_linked_lists(words, table, output=False):
     for i in range(size):
         num = 0
         idx = i
-        entry = table.table[idx]
+        entry = ht.table[idx]
         total_non_empty += 1 if entry else 0
         
         while entry:                # count how many are in this entry
@@ -40,14 +40,14 @@ def stats_linked_lists(words, table, output=False):
             max_length = num
 
     if output:
-        print('nLinked List ({} total entries in base size of {})'.format(words, size))
+        print('nLinked List ({} total entries in base size of {})'.format(ht.N, size))
         for i in range(size):
             if i in sizes:
                 print('{} linked lists have size of {}'.format(sizes[i], i))
 
     if total_non_empty == 0:
         return (0, 0)
-    return (len(words)/total_non_empty, max_length)
+    return (ht.N/total_non_empty, max_length)
 
 class Hashtable:
     """Hashtable using array of M linked lists."""

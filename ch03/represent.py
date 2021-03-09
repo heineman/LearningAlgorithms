@@ -256,9 +256,14 @@ def stats_just_1024():
         for _ in range(threshold):
             words_to_use.append(random.choice(all_words))
 
-        avg_max_ll = stats_linked_lists(words_to_use, HL(M), False)
-
-        avg_max_oa = stats_open_addressing(words_to_use, OHL(M), False)
+        hl = HL(M)
+        ohl = OHL(M)
+        for w in words_to_use:
+            hl.put(w, 1)
+            ohl.put(w, 1)
+        avg_max_ll = stats_linked_lists(hl)
+        avg_max_oa = stats_open_addressing(ohl)
+        
         ll_stats_avg.append(avg_max_ll[0])
         ll_stats_max.append(avg_max_ll[1])
         oa_stats_avg.append(avg_max_oa[0])
@@ -276,9 +281,18 @@ def stats_just_1024():
 
 #######################################################################
 if __name__ == '__main__':
-    print (stats_open_addressing(random_word_list, OHL(1023)))
+    ohl1 = OHL(1023)
+    for aw1 in random_word_list:
+        ohl1.put(aw1, 1)
+    print (stats_open_addressing(ohl1))
 
-    print (stats_linked_lists(random_word_list, 1023, HL(1023)))
+    hl1 = HL(1023)
+    for aw1 in random_word_list:
+        hl1.put(aw1, 1)
+    print (stats_linked_lists(hl1))
 
     from ch03.hashtable_linked import DynamicHashtable as DHL
-    print (stats_linked_lists(random_word_list, 1023, DHL(1023)))
+    dl1 = DHL(1023)
+    for aw1 in random_word_list:
+        dl1.put(aw1, 1)
+    print (stats_linked_lists(dl1))

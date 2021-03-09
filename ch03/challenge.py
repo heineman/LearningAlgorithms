@@ -1,4 +1,7 @@
 """Challenge questions for Chapter 03."""
+
+from algs.table import DataTable
+
 class ValueBadHash:
     """Class with horrendous hash() method to ensure clashes."""
     def __init__(self, v):
@@ -15,11 +18,13 @@ class ValueBadHash:
         return (self.__class__ == other.__class__ and
                 self.v == other.v)
 
-def bad_timing(words):
+def bad_timing(words, size=50000, output=True):
     """Statistics on hashtables."""
     from ch03.hashtable_linked import Hashtable, stats_linked_lists
 
-    size = 50000
+    tbl = DataTable([8,10,10], ['Type', 'Avg. Len', 'Max Len'])
+    tbl.format('Type', 's')
+    tbl.format('Max Len', 'd')
     good_ht = Hashtable(size)
     bad_ht = Hashtable(size)
 
@@ -27,8 +32,11 @@ def bad_timing(words):
         good_ht.put(w, True)
         bad_ht.put(ValueBadHash(w), True)
 
-    print(stats_linked_lists(words, good_ht))
-    print(stats_linked_lists(words, bad_ht))
+    good = stats_linked_lists(words, good_ht)
+    tbl.row(['Good', good[0], good[1]])
+    bad = stats_linked_lists(words, bad_ht)
+    tbl.row(['Bad', bad[0], bad[1]])
+    return tbl
 
 def prime_number_difference(words, output=True, decimals=2):
     """Identify sensitivity of M to being prime or not."""
@@ -36,7 +44,6 @@ def prime_number_difference(words, output=True, decimals=2):
     from ch03.hashtable_linked import Hashtable as Linked_Hashtable, stats_linked_lists
     from ch03.hashtable_open import Hashtable as Open_Hashtable, stats_open_addressing
     from ch03.base26 import base26
-    from algs.table import DataTable
 
     # these are prime numbers between 428880 and 428980
     lo = 428880
@@ -56,11 +63,15 @@ def prime_number_difference(words, output=True, decimals=2):
         ht_linked = Linked_Hashtable(m)
         ht_open = Open_Hashtable(m)
 
-        (avg_length_linked, max_length_linked) = stats_linked_lists(keys, ht_linked, False)
+        for k in keys:
+            ht_linked.put(k, 1)
+            ht_open.put(k, 1)
+
+        (avg_length_linked, max_length_linked) = stats_linked_lists(ht_linked)
         if max_length_linked > worst:
             worst_m = m
             worst = max_length_linked
-        (avg_length_open, max_length_open) = stats_open_addressing(keys, ht_open, False)
+        (avg_length_open, max_length_open) = stats_open_addressing(ht_open)
         tbl.row([m, is_p, avg_length_linked, max_length_linked, avg_length_open, max_length_open])
 
     # Now try to find any more that exceed this maximum amount
@@ -288,6 +299,7 @@ class DynamicHashtableIncrementalResizing:
 #######################################################################
 if __name__ == '__main__':
     from resources.english import english_words
+    bad_timing(english_words()[:10000])
     measure_performance_resize()
 
     prime_number_difference(english_words())

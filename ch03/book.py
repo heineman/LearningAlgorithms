@@ -137,9 +137,15 @@ def count_collisions_dynamic():
     tbl.format('Max LL', 'd')
     tbl.format('Max OA', 'd')
     while M > N/16:
-        avg_size_linked_dynamic = stats_linked_lists(all_words, DHL(M), False)
+        dhl = DHL(M)
+        odhl = ODHL(M)
+        for w in all_words:
+            dhl.put(w, 1)
+            odhl.put(w, 1)
+        
+        avg_size_linked_dynamic = stats_linked_lists(dhl)
         avg_size_open_dynamic = ('-','-')
-        avg_size_open_dynamic = stats_open_addressing(all_words, ODHL(M), False)
+        avg_size_open_dynamic = stats_open_addressing(odhl)
 
         tbl.row([M, avg_size_linked_dynamic[0], avg_size_linked_dynamic[1],
                  avg_size_open_dynamic[0], avg_size_open_dynamic[1]])
@@ -167,15 +173,25 @@ def count_collisions():
     tbl.format('Max OA', 'd')
     
     M = 20*N
-    avg_size_linked = stats_linked_lists(all_words, HL(M), False)
-    avg_size_open = stats_open_addressing(all_words, OHL(M), False)
+    hl = HL(M)
+    ohl = OHL(M)
+    for w in all_words:
+        hl.put(w, 1)
+        ohl.put(w, 1)
+    avg_size_linked = stats_linked_lists(hl)
+    avg_size_open = stats_open_addressing(ohl)
     tbl.row([M, avg_size_linked[0], avg_size_linked[1], avg_size_open[0], avg_size_open[1]])
 
     M = 2*N
     while M > N/16:
-        avg_size_linked = stats_linked_lists(all_words, HL(M), False)
+        hl = HL(M)
+        ohl = OHL(M)
+        for w in all_words:
+            hl.put(w, 1)
+            ohl.put(w, 1)
+        avg_size_linked = stats_linked_lists(hl)
         if N < M:
-            avg_size_open = stats_open_addressing(all_words, OHL(M), False)
+            avg_size_open = stats_open_addressing(ohl)
         else:
             tbl.format('Avg OA', 's')
             tbl.format('Max OA', 's')

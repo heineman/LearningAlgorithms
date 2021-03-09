@@ -214,26 +214,39 @@ class Test_Ch03(unittest.TestCase):
     def test_linked_list_stats(self):
         from ch03.hashtable_linked import Hashtable, stats_linked_lists
         M = 13
-        (avg_len, max_len) = stats_linked_lists([0,1*M,2*M,3*M,4*M], Hashtable(M))
+        ht = Hashtable(M)
+        for w in [0,1*M,2*M,3*M,4*M]:
+            ht.put(w, 1)
+        (avg_len, max_len) = stats_linked_lists(ht)
         
         # Only one bucket is non-empty! Average is max
         self.assertEqual(5, max_len)
         self.assertEqual(5, avg_len)
         
-        (avg_len, max_len) = stats_linked_lists([0,1*M,2*M,3*M,4*M,2,M+2], Hashtable(M))
+        ht = Hashtable(M)
+        for w in  [0,1*M,2*M,3*M,4*M,2,M+2]:
+            ht.put(w, 1)
+        (avg_len, max_len) = stats_linked_lists(ht)
+        
         self.assertEqual(5, max_len)
         self.assertEqual(3.5, avg_len)
 
     def test_open_addressing_stats(self):
         from ch03.hashtable_open import Hashtable, stats_open_addressing
         M = 13
-        (avg_len, max_len) = stats_open_addressing([0,1*M,2*M,3*M,4*M], Hashtable(M))
+        ht = Hashtable(M)
+        for w in [0,1*M,2*M,3*M,4*M]:
+            ht.put(w, 1)
+        (avg_len, max_len) = stats_open_addressing(ht)
         
         # single bucket spills over, with 5 / 4 / 3 / 2 / 1 for avg. of 3
         self.assertEqual(5, max_len)
         self.assertEqual(3, avg_len)
         
-        (avg_len, max_len) = stats_open_addressing([0,1*M,2*M,3*M,4*M, M-2, M-3], Hashtable(M))
+        ht = Hashtable(M)
+        for w in [0,1*M,2*M,3*M,4*M, M-2, M-3]:
+            ht.put(w, 1)
+        (avg_len, max_len) = stats_open_addressing(ht)
         self.assertEqual(5, max_len)
         self.assertEqual(18/7, avg_len)
 
@@ -370,6 +383,12 @@ class Test_Ch03(unittest.TestCase):
         # now remove them one at a time
         for w in english_words():
             self.assertEqual(w, ht.remove(w))
+            
+    def test_prime_number_difference(self):
+        from ch03.challenge import prime_number_difference
+        K = ["a", "rose", "by", "any", "other", "name", "would", "smell", "as", "sweet"]
+        tbl = prime_number_difference(words=K, output=False)
+        self.assertTrue('Prime', tbl.entry(428977, 'Prime'))
 
 if __name__ == '__main__':
     unittest.main()

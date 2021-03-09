@@ -207,27 +207,26 @@ class DynamicHashtablePlusRemove:
             if not entry is None and not entry.is_marked():
                 yield (entry.key, entry.value)
 
-def stats_open_addressing(words, table, output=False):
+def stats_open_addressing(ht, output=False):
     """
     Produce statistics on the open addressing implemented table IF POSSIBLE.
-    It may be that the table is not large enough for the provided words. 
     Returns (average chain length for non-empty buckets, max chain length)
     """
-    original_size = len(table.table)
-    for w in words:
-        table.put(w, 1)
+    original_size = len(ht.table)
+#     for w in words:
+#         table.put(w, 1)
 
-    size = len(table.table)
+    size = len(ht.table)
     sizes = {}                      # record how many chains of given size exist
     max_length = 0
 
     for idx in range(size):
-        if table.table[idx]:
+        if ht.table[idx]:
 
             # count to next empty entry. ASSUMES there will be one....
             i = idx
             num = 0
-            while table.table[i]:
+            while ht.table[i]:
                 i = (i + 1) % size
                 num += 1
             
@@ -241,7 +240,7 @@ def stats_open_addressing(words, table, output=False):
                 max_length = num
 
     if output:
-        print('Open Addressing ({} total entries in base size of {})'.format(words, original_size))
+        print('Open Addressing ({} total entries in base size of {})'.format(ht.N, original_size))
         for i in range(size):
             if i in sizes:
                 print('{} entries have size of {}'.format(sizes[i], i))
@@ -250,4 +249,4 @@ def stats_open_addressing(words, table, output=False):
     for i in sizes:
         weighted_total += i*sizes[i]
 
-    return (weighted_total/len(words), max_length)
+    return (weighted_total/ht.N, max_length)
