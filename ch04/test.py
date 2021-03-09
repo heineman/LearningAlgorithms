@@ -183,6 +183,11 @@ class Test_Ch04(unittest.TestCase):
         e = Entry('99', 101)
         self.assertEqual('[99 p=101]', str(e))
         
+    def test_trial_factorial_heap(self):
+        from ch04.timing import trial_factorial_heap
+        
+        tbl = trial_factorial_heap(max_n=2048, output=False)
+        self.assertTrue(tbl.entry(1024, 'Heap') <= tbl.entry(1024, 'FactHeap'))
 
 #######################################################################
 if __name__ == '__main__':

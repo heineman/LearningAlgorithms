@@ -226,7 +226,7 @@ def produce_height_stats_balanced_integers(max_k=13, output=True):
     in height, up to (but not including) max_k.
     """
     from ch06.balanced import BinaryTree
-    
+
     tbl = DataTable([8,10,10],['N', 'height', 'rootValue'], output=output)
     tbl.format('height', 'd')
     tbl.format('rootValue', ',d')
@@ -237,7 +237,7 @@ def produce_height_stats_balanced_integers(max_k=13, output=True):
             bt.insert(idx)
             idx += 1
         tbl.row([idx, k, bt.root.value])
-        
+
     return tbl
 
 def produce_table(max_k=15, output=True):
@@ -246,7 +246,7 @@ def produce_table(max_k=15, output=True):
     has a height that exceeds k, up to (but not including) heights of max_k.
     """
     from ch06.tree import BinaryTree
-    
+
     tbl = DataTable([8,10,10], ['Height', 'RootValue', 'N'], output=output, decimals=4)
     tbl.format('N', 'd')
     for k in range(max_k):
@@ -396,21 +396,21 @@ def speaking_tree():
     bt.insert(1)
     bt.insert(3)
     print(tree_structure(bt.root))
-    
+
 def fibonacci_avl(N, lo=1):
     """
-    Return root node of an AVL tree corresponding to Fibonacci AVL using Fn as root. 
+    Return root node of an AVL tree corresponding to Fibonacci AVL using Fn as root.
     Use challenge AVL tree to be able to count # rotations after inserting 0, which
-    should force most rotations. Note that this node must be hacked into a BinaryTree.    
+    should force most rotations. Note that this node must be hacked into a BinaryTree.
     """
     from ch05.challenge import fib
-    
+
     if N < 2:
         return None
-    
+
     if N == 2:
         return BinaryNode(lo)
-    
+
     val = fib(N)
     n = BinaryNode(lo+val-1)
     n.left = fibonacci_avl(N-1, lo)
@@ -426,7 +426,7 @@ def fibonacci_avl_tree(N):
 
 def fibonacci_avl_tree_up_to_2k(N):
     """
-    Return AVL tree for Fibonacci AVL Binary Tree that was extended to add 
+    Return AVL tree for Fibonacci AVL Binary Tree that was extended to add
     nodes up to 2*height-1, which simulates, in a way, an attempt to structurally
     recreate a complete tree. Resulting heights are just one greater than what
     you would have in a completed tree, with |Left| + |Right-Grandchild| = |left-child-of-Right|
@@ -443,18 +443,7 @@ def fibonacci_avl_tree_up_to_2k(N):
 
 #######################################################################
 if __name__ == '__main__':
-    produce_table()
-    tn = fibonacci_avl_tree_up_to_2k(6)
-    print(tree_structure(tn.root))
-    n = fibonacci_avl(7)
-    bt = BinaryTree()
-    bt.root = n
-    print('rotations=',rotations[0])
-    print(tree_structure(n))
-    bt.insert(0)
-    print('rotations=',rotations[0])
-    print(tree_structure(n))
-    
+
     #find_multiple_rotations()
 
     bt2 = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')

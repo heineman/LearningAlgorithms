@@ -49,20 +49,23 @@ def one_run(pq, N, factor):
     build_up(pq, N//2)       # back to 3/4 full
     drain(pq, 0)            # empty out...
 
-def trial_factorial_heap():
-    """Generate trial using factorial heap compared with regular heap."""
+def trial_factorial_heap(max_n=2097152, output=True, decimals=2):
+    """
+    Generate trial using factorial heap compared with regular heap up to but not including max_n
+    """
     factor = 3
     base = 256
-    high = 65536*16
+    high = max_n
 
-    tbl = DataTable([10,8,8], ['N', 'Heap', 'FactHeap'], decimals=2)
+    tbl = DataTable([10,8,8], ['N', 'Heap', 'FactHeap'], output=output, decimals=decimals)
     N = base
-    while N <= high:
+    while N < high:
         heap  = 1000000*run_trials('ch04.heap', N, factor)/(factor*N)
         fheap = 1000000*run_trials('ch04.factorial_heap', N, factor)/(factor*N)
         tbl.row([N, heap, fheap])
 
         N *= 2
+    return tbl
 
 def dynamic_comparison():
     """Generate table for comparing resizable hashtable performance."""

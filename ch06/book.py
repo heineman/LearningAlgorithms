@@ -68,7 +68,7 @@ def average_performance(max_n=32768, output=True, decimals=2):
     T = 3
     high = max_n
 
-    tbl = DataTable([8,8,8], ['N','Heap','BinaryTree'], output=output, decimals=2)
+    tbl = DataTable([8,8,8], ['N','Heap','BinaryTree'], output=output, decimals=decimals)
     N = 128
     while N <= high:
         binary = 1000000*run_trials_pq('ch06.pq', N, T)/(T*N)
@@ -140,7 +140,7 @@ for i in range({N}):
 
 def generate_list_table(max_k=21, output=True, decimals=3):
     """
-    Generate table showing O(N) behavior of Python 'list' structure on insert for 
+    Generate table showing O(N) behavior of Python 'list' structure on insert for
     lists up to (but not including) 2**max_k
     """
     tbl = DataTable([8,8,8,8,8], ['N','Prepend','Remove', 'Append', 'Tree'],
@@ -164,7 +164,7 @@ def compare_dynamic_build_and_access_time():
     for w in english_words():
         bt.put(w,w)
     total = len(english_words())
-    
+
     print('This will take several minutes...')
     print('total number of words =', total)
     print('height of AVL tree for all English words =',bt.root.height)
@@ -224,7 +224,7 @@ from ch06.pq import PQ
 import random''', repeat=repeat, number=num))/num
 
         tbl.row([n, t_heap_pq, t_avl_pq])
-        
+
     return tbl
 
 def generate_ch06():
@@ -309,6 +309,4 @@ def generate_ch06():
 
 #######################################################################
 if __name__ == '__main__':
-    compare_avl_pq_with_heap_pq()
-    #compare_dynamic_build_and_access_time()
-    #generate_ch06()
+    pass

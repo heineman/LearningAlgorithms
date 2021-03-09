@@ -11,11 +11,11 @@ class TestChapter06(unittest.TestCase):
         
         mult7 = expression_tree()
         self.assertEqual(42.0, mult7.eval())
-        self.assertEquals('(((3 + 1) / 4) * (((1 + 5) * 9) - (2 * 6)))', str(mult7))
+        self.assertEqual('(((3 + 1) / 4) * (((1 + 5) * 9) - (2 * 6)))', str(mult7))
         
         mult2 = debug_expression()
-        self.assertEquals(54, mult2.eval())
-        self.assertEquals('((1 + 5) * 9)', str(mult2))
+        self.assertEqual(54, mult2.eval())
+        self.assertEqual('((1 + 5) * 9)', str(mult2))
 
     def test_sum_list(self):
         self.assertEqual(0, sum_list(create_linked_list([])))
@@ -490,8 +490,8 @@ class TestChapter06(unittest.TestCase):
         self.assertTrue(abs(tree.root.height - orig) <= 1)
 
         # Number of rotations continue to increase. Hope to find some formula
-        # to account for these all! 
-        #    [0, 0, 1, 5, 16, 39, 90, 196, 418, 874, 1809, 3712, 7575, 15389 
+        # to account for these all!
+        #    [0, 0, 1, 5, 16, 39, 90, 196, 418, 874, 1809, 3712, 7575, 15389
         for n in range(2, 12):
             rotations[0] = 0
 
@@ -516,19 +516,19 @@ class TestChapter06(unittest.TestCase):
 
     def test_average_performance(self):
         from ch06.book import average_performance
-        
+
         tbl = average_performance(max_n = 512, output=False)
         self.assertTrue(tbl.entry(512,'Heap') < tbl.entry(512, 'BinaryTree'))
         
     def test_generate_list_table(self):
         from ch06.book import generate_list_table
-        
+
         tbl = generate_list_table(max_k=12, output=False)
         self.assertTrue(tbl.entry(1024,'Remove') < tbl.entry(1024, 'Prepend'))
-        
+
     def test_compare_avl_pq_with_heap_pq(self):
         from ch06.book import compare_avl_pq_with_heap_pq
-        
+
         tbl = compare_avl_pq_with_heap_pq(max_k=12, output=False)
         self.assertTrue(tbl.entry(2048,'Heap-pq') <= tbl.entry(2048, 'AVL-pq'))
         
