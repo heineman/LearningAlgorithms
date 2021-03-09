@@ -177,6 +177,12 @@ class Test_Ch04(unittest.TestCase):
         self.assertEqual(2, pq.dequeue())
         self.assertEqual(1, pq.dequeue())
         self.assertEqual(0, pq.dequeue())
+        
+    def test_entry(self):
+        from ch04.entry import Entry
+        e = Entry('99', 101)
+        self.assertEqual('[99 p=101]', str(e))
+        
 
 #######################################################################
 if __name__ == '__main__':

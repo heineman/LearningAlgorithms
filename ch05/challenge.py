@@ -160,13 +160,13 @@ def lucas_with_fib(n):
 
     return fib_with_lucas(n-1) + fib_with_lucas(n+1)
 
-def fib_table():
+def fib_table(output=True, decimals=3):
     """Generate table showing reduced recursive invocations of fibonacci."""
     from algs.table import DataTable
     import numpy as np
     from scipy.optimize import curve_fit
 
-    tbl = DataTable([8,12,12],['N', 'FiRec', 'Model'])
+    tbl = DataTable([8,12,12],['N', 'FiRec', 'Model'], output=output, decimals=decimals)
 
     def exp_model(n, a, b):
         """Formula for A*N^B ."""
@@ -181,10 +181,13 @@ def fib_table():
     x_arr = np.array(tbl.column(tbl.labels[0]))
     y_arr = np.array(tbl.column(tbl.labels[1]))
 
-    [exp_coeffs, _]        = curve_fit(exp_model, x_arr, y_arr)
-    print (exp_coeffs)
+    if output:
+        [exp_coeffs, _]        = curve_fit(exp_model, x_arr, y_arr)
+        print (exp_coeffs)
+
+    return tbl
     
-def rediscover_heap():
+def rediscover_heap(num_trials=10000000):
     """
     Given a partial heap, rediscover original input probabilistically.
     
@@ -196,14 +199,20 @@ def rediscover_heap():
     [8, 2, 15, 5, 1, 14, 11, 4, 12, 12, 10, 13, 6, 9, 7, 14, 9, 8]  found in 2,380,433 tries
     
     [13, 14, 12, 5, 10, 6, 14, 11, 9, 1, 12, 8, 15, 9, 7, 4, 8, 2]
+    
+    [9, 10, 6, 13, 15, 8, 9, 4, 2, 1, 11, 14, 14, 12, 7, 8, 5, 12] found in 8394544 attempts.
+    
+    [5, 9, 6, 14, 10, 13, 12, 11, 15, 1, 12, 8, 14, 9, 7, 4, 8, 2] found in 3234220 attempts
+       with seed 14
 
     """
     from ch05.heapsort import HeapSort
-    from random import shuffle
+    from random import shuffle, seed
     A = [15, 13, 14, 12, 11, 12, 14, 8, 9, 1, 10, 8, 6, 9, 7, 4, 5, 2]
     N = len(A)
     more = 2
-    for i in range(10000000):
+    seed(14) 
+    for i in range(num_trials):
         copy = list(A)
         shuffle(copy)
         copy1 = list(copy)
@@ -211,8 +220,7 @@ def rediscover_heap():
         one = hs.A[N//2 - more:]
         two = A[N//2 - more:]
         if one == two:
-            print(copy1)
-            return i
+            return '{} found in {} attempts.'.format(copy1, i)
     
     return 'none found in {} attempts'.format(i)
 

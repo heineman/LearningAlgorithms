@@ -105,7 +105,7 @@ class Stack:
     def pop(self):
         """Remove and return top item from stack."""
         if self.is_empty():
-            raise Exception('Stack is empty')
+            raise RuntimeError('Stack is empty')
 
         val = self.top.value
         self.top = self.top.next

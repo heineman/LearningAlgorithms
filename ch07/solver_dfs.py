@@ -13,7 +13,7 @@ class DepthFirstSearchSolver():
         self.master = master
         self.viewer = Viewer(maze, size)
         self.marked = {}
-        self.vertex_from = {}
+        self.node_from = {}
 
         self.g = to_networkx(maze)
         self.start = maze.start()
@@ -27,20 +27,20 @@ class DepthFirstSearchSolver():
 
     def animate(self):
         """Start animation by initiating DFS."""
-        self.dfs_visit(self.start)
+        self.dfs_visit_nr(self.start)
 
         # draw BACK edges to solution
         pos = self.end
         while pos != self.start:
             self.viewer.color_cell(pos, 'lightgray')
-            pos = self.vertex_from[pos]
+            pos = self.node_from[pos]
         self.master.update()
 
     def dfs_visit_nr(self, pos):
         """Non-recursive depth-first search investigating given position."""
-        from ch07.stack import Stack
+        from ch07.list_stack import Stack
         stack = Stack()
-        self.color_cell(pos, 'blue')
+        self.viewer.color_cell(pos, 'blue')
         stack.push(pos)
 
         while not stack.is_empty():
@@ -51,15 +51,15 @@ class DepthFirstSearchSolver():
 
             if self.stop_end and cell == self.end:
                 self.marked[cell] = True
-                self.color_cell(cell, 'blue')
+                self.viewer.color_cell(cell, 'blue')
                 return True
 
             for next_cell in self.g.neighbors(cell):
                 if not next_cell in self.marked:
-                    self.edge_to[next_cell] = cell
+                    self.node_from[next_cell] = cell
                     stack.push(next_cell)
                     self.marked[next_cell] = True
-                    self.color_cell(next_cell, 'blue')
+                    self.viewer.color_cell(next_cell, 'blue')
 
         return False
 
@@ -77,7 +77,7 @@ class DepthFirstSearchSolver():
 
         for cell in self.g.neighbors(pos):
             if not cell in self.marked:
-                self.vertex_from[cell] = pos
+                self.node_from[cell] = pos
                 if self.dfs_visit(cell):
                     return True
 

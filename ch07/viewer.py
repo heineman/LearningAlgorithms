@@ -64,7 +64,7 @@ class Viewer:
 #######################################################################
 if __name__ == "__main__":
     random.seed(13)
-    m = Maze(80,80)
+    m = Maze(7,7)
     root = tkinter.Tk()
     Viewer(m, 6).view(root)
     root.mainloop()

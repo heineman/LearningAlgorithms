@@ -23,9 +23,6 @@ def merged_arrays(heap1, heap2):
                 result[idx] = heap2.dequeue()
         idx -= 1
 
-    #Only here during development
-    #if not check_sorted(result):
-    #    raise Exception('Not sorted. Failure!')
     return result
 
 # Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N

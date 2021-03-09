@@ -114,7 +114,7 @@ class DataTable:
         """Change the format of this entry from 'f' into the given format."""
         idx = self.labels.index(field)
         if idx < 0:
-            raise Exception ('{} is not a valid field'.format(field))
+            raise ValueError('{} is not a valid field'.format(field))
 
         # {0[IDX]:>FORMAT}
         target = '{{0[{}]:>'.format(idx)

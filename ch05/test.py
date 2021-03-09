@@ -22,7 +22,12 @@ class Test_ch05(unittest.TestCase):
         
     def test_slice_merge_sort_counting(self):
         from ch05.challenge import slice_merge_sort
-        sample = [1, 2, 3, 4, 5, 6, 7, 8]               # standard example in chapter
+        sample = [1, 2, 3, 4, 5, 6, 7, 8]               # drain left
+        expected = sorted(sample)
+        slice_merge_sort(sample)
+        self.assertEqual(expected, sample)
+
+        sample = [5, 6, 7, 8, 1, 2, 3, 4]               # drain right
         expected = sorted(sample)
         slice_merge_sort(sample)
         self.assertEqual(expected, sample)
@@ -173,6 +178,11 @@ class Test_ch05(unittest.TestCase):
         my_copy = list(my_list)
         self.assertEqual(recursive_two(my_list), (9, 8))
         self.assertEqual(my_list, my_copy)
+        
+        my_list = [9, 1, 8, 2, 3]     # odd-length-list
+        my_copy = list(my_list)
+        self.assertEqual(recursive_two(my_list), (9, 8))
+        self.assertEqual(my_list, my_copy)
 
     def test_recursive_counting(self):
         from algs.counting import RecordedItem
@@ -206,6 +216,17 @@ class Test_ch05(unittest.TestCase):
         random.shuffle(A)
         tim_sort(A)
         self.assertEqual(list(range(100)), A)
+        
+    def test_rediscover_heap(self):
+        from ch05.challenge import rediscover_heap
+        
+        result = rediscover_heap(10)
+        if 'none found' in result:
+            pass
+        elif 'found in' in result:
+            pass
+        else:
+            self.fail('should have found a result or not.')
 
 #######################################################################
 if __name__ == '__main__':

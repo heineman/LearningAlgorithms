@@ -13,7 +13,7 @@ class BreadthFirstSearchSolver():
         self.master = master
         self.viewer = Viewer(maze, size)
         self.marked = {}
-        self.vertex_from = {}
+        self.node_from = {}
 
         self.g = to_networkx(maze)
         self.start = maze.start()
@@ -33,7 +33,7 @@ class BreadthFirstSearchSolver():
         pos = self.end
         while pos != self.start:
             self.viewer.color_cell(pos, 'lightgray')
-            pos = self.vertex_from[pos]
+            pos = self.node_from[pos]
         self.master.update()
 
     def bfs_visit(self, pos):
@@ -52,7 +52,7 @@ class BreadthFirstSearchSolver():
 
             for next_cell in self.g.neighbors(cell):
                 if not next_cell in self.marked:
-                    self.vertex_from[next_cell] = cell
+                    self.node_from[next_cell] = cell
                     self.marked[next_cell] = True
                     self.viewer.color_cell(next_cell, 'blue')
                     if self.stop_end and next_cell == self.end:

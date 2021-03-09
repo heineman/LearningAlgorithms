@@ -2,52 +2,72 @@
 Code to blindly search through a Graph in Depth First and Breadth First strategies.
 """
 import random
-from ch07.maze import Maze, to_networkx, solution_graph, vertex_from_field
+from ch07.maze import Maze, to_networkx, solution_graph, node_from_field
 from ch04.list_queue import Queue
 
-def path_to(vertex_from, src, target):
+def path_to(node_from, src, target):
     """
     Given a dictionary that results from a search, reproduce path from original src
-    to target. Have to follow the vertex_from in reverse order, which is why the
-    vertices discovered are all inserted at index position 0 in the path.
+    to target. Have to follow the node_from in reverse order, which is why the
+    nodes discovered are all inserted at index position 0 in the path.
     """
     path = []
     v = target
     while v != src:
         path.append(v)
-        v = vertex_from[v]
+        v = node_from[v]
     # last one to push is the source, which makes it
     # the first one to be retrieved
     path.append(src)
     path.reverse()
     return path
 
-def dfs_search(G, src):
+def dfs_search_recursive(G, src):
     """
-    Apply Depth First Search to a graph from a starting vertex. Return 
-    dictionary of explored trail.
+    Apply Depth First Search to a graph from a starting node. Return 
+    dictionary of explored trail. Fails if recursion is too deep.
     """
     marked = {}
-    vertex_from = {}
+    node_from = {}
 
     def dfs(v):
         marked[v] = True
 
         for w in G[v]:
             if not w in marked:
-                vertex_from[w] = v
+                node_from[w] = v
                 dfs(w)
 
     dfs(src)
-    return vertex_from
+    return node_from
+
+def dfs_search(G, src):
+    """Conduct non-recursive Depth First Search on G starting from s."""
+    from ch07.list_stack import Stack
+    marked = {}
+    node_from = {}
+    
+    stack = Stack()
+    stack.push(src)
+    marked[src] = True
+    
+    while not stack.is_empty():
+        v = stack.pop()
+        for w in G[v]:
+            if not w in marked:
+                node_from[w] = v
+                marked[w] = True
+                stack.push(w)
+
+    return node_from
 
 def bfs_search(G, src):
     """
-    Apply Depth First Search to a graph from a starting vertex. Return 
+    Apply Depth First Search to a graph from a starting node. Return 
     dictionary of explored trail.
     """
     marked = {}
-    vertex_from = {}
+    node_from = {}
     dist_to = {}
     
     for v in G.nodes():
@@ -62,25 +82,23 @@ def bfs_search(G, src):
         v = q.dequeue()
         for w in G[v]:
             if not w in marked:
-                vertex_from[w] = v
+                node_from[w] = v
                 dist_to[w] = dist_to[v] + 1
                 marked[w] = True
                 q.enqueue(w)
 
-    return vertex_from            
+    return node_from            
     
 #######################################################################
 if __name__ == '__main__':
     random.seed(13)
     m = Maze(7,7)
     G = to_networkx(m)
-
-    #print(path_to(dfs_search(G, m.start()), m.start(), m.end()))
-    #print(path_to(bfs_search(G, m.start()), m.start(), m.end()))
     
+    # dfs_search_nr and dfs_search() produce different results
     field = dfs_search(G, m.start())
     H = solution_graph(G, path_to(field, m.start(), m.end()))
-    F = vertex_from_field(G, field)
+    F = node_from_field(G, field)
      
     import matplotlib.pyplot as plt
     import networkx as nx

@@ -3,7 +3,7 @@
 def is_sorted(a):
     """Determines if list is sorted, throwing exception if not."""
     if not check_sorted(a):
-        raise Exception('Not sorted!')
+        raise ValueError('Not sorted!')
 
 def check_sorted(a):
     """Determines if list is sorted."""

@@ -273,8 +273,10 @@ class TestChapter06(unittest.TestCase):
         bt1.insert(10)
         bt1.insert(8)
         self.assertEqual(2, bt1.root.height)
+        self.assertEqual(4, bt1.root.size())
         check_avl_property(bt1.root)
         bt1.remove(7)
+        self.assertEqual(3, bt1.root.size())
         self.assertEqual(1, bt1.root.height)
         check_avl_property(bt1.root)
 
@@ -440,16 +442,16 @@ class TestChapter06(unittest.TestCase):
         from ch06.challenge import fibonacci_avl_tree, rotations
         from ch05.challenge import fib
         from ch06.avl import check_avl_property
-        
+
         tree = fibonacci_avl_tree(8)
         check_avl_property(tree.root)
         self.assertEqual(fib(8), tree.root.value)
-        
+
         # multiple rotations detect when remove lARGEST VALUE
         self.assertTrue(fib(9)-1 in tree)
         tree.remove(fib(9)-1)
         self.assertEqual(3, rotations[0])   # three rotations
-        
+
         # Number of rotations continue to increase, every other one
         for n in range(5, 20):
             rotations[0] = 0
@@ -464,7 +466,7 @@ class TestChapter06(unittest.TestCase):
         from ch06.challenge import fibonacci_avl_tree, rotations
         from ch05.challenge import fib
         from ch06.avl import check_avl_property
-                
+
         tree = fibonacci_avl_tree(6)
         check_avl_property(tree.root)
         orig = tree.root.height
@@ -478,7 +480,7 @@ class TestChapter06(unittest.TestCase):
         #    [0, 0, 1, 5, 16, 39, 90, 196, 418, 874, 1809, 3712, 7575, 15389 
         for n in range(2, 12):
             rotations[0] = 0
-            
+
             tree = fibonacci_avl_tree(n)
             check_avl_property(tree.root)
             orig = tree.root.height
@@ -491,12 +493,12 @@ class TestChapter06(unittest.TestCase):
         from ch06.challenge import worst_heights
         tbl = worst_heights(max_n=15, output=False)
         self.assertEqual(3, tbl.entry(7, 'WorstHeight'))
-        
+
     def test_produce_table(self):
         from ch06.challenge import produce_table
-        
+
         tbl = produce_table(max_k=5, output=False)
-        self.assertTrue(tbl.entry(5, 'Height') > 3)   # with 5 nodes, can at least get to 3 or maybe more...
+        self.assertTrue(tbl.entry(3, 'N') >= 3)   # with 3 nodes, can at least get to 3 or maybe more...
 
 #######################################################################
 if __name__ == '__main__':

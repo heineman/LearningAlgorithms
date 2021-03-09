@@ -153,26 +153,27 @@ class Test_Ch03(unittest.TestCase):
         for m in s_data:
             if days_in_month[m] != days_mixed(m) or days_mixed(m) != days_bas(m):
                 self.fail('Error in {}'.format(m))
-                
+
         self.assertEqual(0, days_bas('bad_month'))
+        self.assertEqual(0, days_mixed('bad_month'))
 
     def test_search_for_data(self):
         # As you can see there is a match
         from ch03.months import search_for_data, s_data, s_num, month_index
-        
+
         (best_tuple, best) = search_for_data()
         for idx,data in enumerate(s_data):
             self.assertEqual(s_num[idx], best[month_index(data, best_tuple[0], best_tuple[1])])
 
     def test_search_for_hashes(self):
         from ch03.months import search_for_hashes
-        
+
         result = search_for_hashes()
         self.assertTrue(not result is None)
 
     def test_craft_table(self):
         from ch03.months import craft_table
-        
+
         ht = craft_table()
         self.assertTrue(ht.M > 0)
 
@@ -255,9 +256,14 @@ class Test_Ch03(unittest.TestCase):
         from ch03.hashtable_open_perfect import Hashtable
         ht = Hashtable()
         ht.put('a', 99)
-        ht.put('zyzzyvas', 99)
+        ht.put('zyzzyvas', 101)
         self.assertEqual('a', ht.table[0].key)
         self.assertEqual('zyzzyvas', ht.table[321164].key)
+
+        self.assertEquals(99, ht.get('a'))
+        self.assertEquals(101, ht.get('zyzzyvas'))
+
+        self.assertEquals([('a',99), ('zyzzyvas',101)], list(ht))
 
     def test_resize_hash_small_open_addressing(self):
         from ch03.hashtable_open import DynamicHashtable

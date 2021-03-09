@@ -242,16 +242,16 @@ def produce_height_stats_balanced_integers(max_k=13, output=True):
 
 def produce_table(max_k=15, output=True):
     """
-    Generate table showing heights of random non-balancing binary trees up 
-    to (but including) heights of max_k.
+    Generate table with values of k for which a random binary tree with n nodes
+    has a height that exceeds k, up to (but not including) heights of max_k.
     """
     from ch06.tree import BinaryTree
     
-    tbl = DataTable([8,10,10], ['N', 'RootValue', 'Height'], output=output, decimals=4)
-    tbl.format('Height', 'd')
+    tbl = DataTable([8,10,10], ['Height', 'RootValue', 'N'], output=output, decimals=4)
+    tbl.format('N', 'd')
     for k in range(max_k):
         (run, n) = one_run(k, BinaryTree())
-        tbl.row([n, run, k])
+        tbl.row([k, run, n])
     return tbl
 
 def worst_heights(max_n=50, output=True):
@@ -443,7 +443,7 @@ def fibonacci_avl_tree_up_to_2k(N):
 
 #######################################################################
 if __name__ == '__main__':
-    
+    produce_table()
     tn = fibonacci_avl_tree_up_to_2k(6)
     print(tree_structure(tn.root))
     n = fibonacci_avl(7)

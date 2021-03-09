@@ -27,7 +27,7 @@ class Queue:
     def dequeue(self):
         """Remove and return first item from queue."""
         if self.is_empty():
-            raise Exception('Queue is empty')
+            raise RuntimeError('Queue is empty')
 
         val = self.first.value
         self.first = self.first.next

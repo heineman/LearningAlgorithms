@@ -24,12 +24,12 @@ class PQ:
     def enqueue(self, v, p):
         """Enqueue (v, p) entry into priority queue."""
         if self.N == self.size:
-            raise Exception ('Priority Queue is Full!')
+            raise RuntimeError('Priority Queue is Full!')
         self.N += 1
         to_add = LinkedEntry(v, p)
 
         if self.first:
-            # find first vertex SMALLER than key, and keep track of
+            # find first node SMALLER than key, and keep track of
             # prev so we can insert properly
             n = self.first
             prev = None

@@ -49,10 +49,10 @@ def solution_graph(G, path):
     
     return H
 
-def vertex_from_field(G, vertex_from):
+def node_from_field(G, node_from):
     """
     Return a directed NetworkX Graph representing structure
-    of the vertex_from dictionary.
+    of the node_from dictionary.
     """
     try:
         import networkx as nx
@@ -66,8 +66,8 @@ def vertex_from_field(G, vertex_from):
         H.add_node(n, pos=pos.get(n))
 
     # show the former edges.
-    for v in vertex_from:
-        H.add_edge(v, vertex_from[v])
+    for v in node_from:
+        H.add_edge(v, node_from[v])
 
     return H
 
@@ -84,6 +84,9 @@ class Maze:
     To add a bit of variety, a salt parameter randomly clears additional walls,
     with a default setting of 0.05. If you pass in 0, then the maze will likely
     have a long and winding solution to the maze.
+    
+    This implementation uses stack-based Depth First Search to handle cases
+    with large mazes.
     """
     def __init__(self, num_rows, num_cols, salt=0.05):
         """initialize maze"""
@@ -122,19 +125,6 @@ class Maze:
             self.east_wall[in_cell[0], in_cell[1]-1] = False
         if 0 < in_cell[0] < self.num_rows-1:
             self.south_wall[in_cell[0]-1, in_cell[1]] = False
-
-    def dfs_visit(self, sq):
-        """conduct DFS search to build maze"""
-        self.marked[sq] = True
-
-        while len(self.neighbors[sq]) > 0:
-            cell = random.choice(self.neighbors[sq])
-            self.neighbors[sq].remove(cell)
-            if not self.marked[cell]:
-                self.clear_wall(sq, cell)
-                self.dfs_visit(cell)
-
-        self.marked[sq] = True
 
     def dfs_visit_nr(self, sq):
         """conduct non-recursive DFS search to build maze"""
