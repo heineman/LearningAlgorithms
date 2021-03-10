@@ -249,4 +249,6 @@ def stats_open_addressing(ht, output=False):
     for i in sizes:
         weighted_total += i*sizes[i]
 
+    if ht.N == 0:
+        return (0, max_length)
     return (weighted_total/ht.N, max_length)

@@ -21,6 +21,8 @@ def actual_table(output=True):
     if numpy_error:
         a,b = 0,0
     else:
+        import numpy as np
+        from scipy.optimize import curve_fit
         [(a,b), _] = curve_fit(linear_model, np.array(xvals), np.array(yvals))
         if output:
             print('Linear = {}*N + {}'.format(a, b))
@@ -59,6 +61,8 @@ random.shuffle(x)'''.format(n), repeat=100, number=100))
     if numpy_error:
         nlog_n_coeffs = linear_coeffs = quadratic_coeffs = [0,0]
     else:
+        import numpy as np
+        from scipy.optimize import curve_fit
         [nlog_n_coeffs, _] = curve_fit(n_log_n_model, np.array(nvals), np.array(yvals))
         [linear_coeffs, _] = curve_fit(linear_model, np.array(nvals), np.array(yvals))
         [quadratic_coeffs, _] = curve_fit(quad_model, np.array(nvals), np.array(yvals))
@@ -134,6 +138,8 @@ x=create_pair({})'''.format(n), number=num)
         pass
         linear_coeffs = quadratic_coeffs = karatsuba_coeffs = tkn_coeffs = [0,0]
     else:
+        import numpy as np
+        from scipy.optimize import curve_fit
         [linear_coeffs, _] = curve_fit(linear_model, np.array(x), np.array(y))
         [quadratic_coeffs, _] = curve_fit(quadratic_model, np.array(x), np.array(y))
         [karatsuba_coeffs, _] = curve_fit(karatsuba, np.array(x), np.array(y))
@@ -193,7 +199,7 @@ def growth_table():
     
     def fact(n):
         try:
-            return int(factorial(n))
+            return int(math.factorial(n))
         except (Exception):
             return float('inf')
     
@@ -231,15 +237,15 @@ def generate_ch02():
                 chapter, table_number, 
                 'Prototype run-time performance')
 
-#    with TableNum(2) as table_number:
-#        process(prototype_table(),
-#                chapter, table_number, 
-#                'Comparing different mathematical models with actual performance')
+    with TableNum(2) as table_number:
+        process(prototype_table(),
+                chapter, table_number, 
+                'Comparing different mathematical models with actual performance')
         
-#    with TableNum(3) as table_number:
-#        process(large_multiplication(),
-#                chapter, table_number, 
-#                'Multiplying two n-digit integers')
+    with TableNum(3) as table_number:
+        process(large_multiplication(),
+                chapter, table_number, 
+                'Multiplying two n-digit integers')
 
     with FigureNum(1) as figure_number:
         print (captionx(chapter, figure_number),

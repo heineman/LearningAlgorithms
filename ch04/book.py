@@ -8,9 +8,9 @@ from algs.table import DataTable, TableNum, process
 # Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N
 def run_trials(clazz, N, factor):
     """Run a single trial."""
-    stmt = f'''
-from {clazz} import PQ 
-one_run(PQ({N}), {N}, {factor})'''
+    stmt = '''
+from {} import PQ 
+one_run(PQ({}), {}, {})'''.format(clazz,N,N,factor)
     return min(timeit.repeat(stmt=stmt, setup = 'from ch04.timing import one_run',
                              repeat=5, number=10))/10
 

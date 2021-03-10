@@ -147,7 +147,6 @@ def count_collisions_dynamic():
             odhl.put(w, 1)
 
         avg_size_linked_dynamic = stats_linked_lists(dhl)
-        avg_size_open_dynamic = ('-','-')
         avg_size_open_dynamic = stats_open_addressing(odhl)
 
         tbl.row([M, avg_size_linked_dynamic[0], avg_size_linked_dynamic[1],
@@ -160,7 +159,7 @@ def count_collisions_dynamic():
             M = (M * 6) // 10
     return tbl
 
-def count_collisions():
+def count_collisions(output=True, decimals=1):
     """Generate table counting collisions."""
     all_words = english_words()
     # start twice as big as the number of words, and reduce steadily, counting collisions
@@ -171,7 +170,8 @@ def count_collisions():
     from ch03.hashtable_open import Hashtable as OHL
     from ch03.hashtable_open import stats_open_addressing
 
-    tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'], decimals=1)
+    tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'],
+                    output=output, decimals=decimals)
     tbl.format('Max LL', 'd')
     tbl.format('Max OA', 'd')
 
@@ -191,14 +191,16 @@ def count_collisions():
         ohl = OHL(M)
         for w in all_words:
             hl.put(w, 1)
-            ohl.put(w, 1)
+            if M > N:               # otherwise, will fail...
+                ohl.put(w, 1)
         avg_size_linked = stats_linked_lists(hl)
+        
         if N < M:
             avg_size_open = stats_open_addressing(ohl)
         else:
             tbl.format('Avg OA', 's')
             tbl.format('Max OA', 's')
-            avg_size_open = ['N/A', 'N/A']
+            avg_size_open = [SKIP, SKIP]
 
         tbl.row([M, avg_size_linked[0], avg_size_linked[1], avg_size_open[0], avg_size_open[1]])
 
@@ -485,14 +487,4 @@ def generate_ch03():
 
 #######################################################################
 if __name__ == '__main__':
-    from ch03.hashtable_open import Hashtable as OHL
-    M = 313243
-    ohl = OHL(M)
-    idx = 0
-    for w in english_words():
-        idx += 1
-        if idx % 100 == 0:
-            print(w)
-        ohl.put(w,1)
-    
-    #generate_ch03()
+    generate_ch03()

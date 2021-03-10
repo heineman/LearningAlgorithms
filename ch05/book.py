@@ -36,7 +36,7 @@ from scipy.optimize import curve_fit
 from algs.table import captionx, FigureNum
 
 from algs.table import DataTable
-from algs.modeling import n_log_n_model, log_linear_model, linear_model, quadratic_model 
+from algs.modeling import n_log_n_model, log_linear_model, linear_model, quadratic_model, numpy_error
 
 def fact(N):
     """Inefficient recursive implementation to introduce recursion."""
@@ -142,7 +142,7 @@ def modeling_insertion_selection():
                   quadratic_model(n, quadratic_swap_is[0], quadratic_swap_is[1]),
                   ])
 
-def modeling_merge_heap():
+def modeling_merge_heap(output=True, decimals=1):
     """Generate table for Merge Sort vs. Heap Sort."""
     from ch05.merge import merge_sort_counting
     from ch05.heapsort import HeapSortCounting
@@ -179,22 +179,25 @@ def modeling_merge_heap():
         y_comp_hs.append(total_compares_hs/trials)
         y_swap_hs.append(total_swaps_hs/trials)
 
-    [log_comp_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_comp_ms))
-    [log_swap_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_swap_ms))
+    if numpy_error:
+        log_comp_ms = log_swap_ms, log_comp_hs, log_swap_hs = [0, 0]
+    else:
+        [log_comp_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_comp_ms))
+        [log_swap_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_swap_ms))
+        [log_comp_hs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_comp_hs))
+        [log_swap_hs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_swap_hs))
 
-    [log_comp_hs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_comp_hs))
-    [log_swap_hs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_swap_hs))
-
-    print('Comp MS N*Log N = {}*N*Log(N) + {}*N'.format(log_comp_ms[0], log_comp_ms[1]))
-    print('Swap MS N*Log N = {}*N*Log(N) + {}*N'.format(log_swap_ms[0], log_swap_ms[1]))
-
-    print('Comp HS N*Log N = {}*N*Log(N) + {}*N'.format(log_comp_hs[0], log_comp_hs[1]))
-    print('Swap HS N*Log N = {}*N*Log(N) + {}*N'.format(log_swap_hs[0], log_swap_hs[1]))
-    print()
+    if output:
+        print('Comp MS N*Log N = {}*N*Log(N) + {}*N'.format(log_comp_ms[0], log_comp_ms[1]))
+        print('Swap MS N*Log N = {}*N*Log(N) + {}*N'.format(log_swap_ms[0], log_swap_ms[1]))
+    
+        print('Comp HS N*Log N = {}*N*Log(N) + {}*N'.format(log_comp_hs[0], log_comp_hs[1]))
+        print('Swap HS N*Log N = {}*N*Log(N) + {}*N'.format(log_swap_hs[0], log_swap_hs[1]))
+        print()
 
     tbl = DataTable([12,10,10,10,10,10,10,10,10],
             ['N','AvgCompMS','MCMS', 'AvgSwapMS', 'MSSS', 'AvgCompHS', 'MCHS', 'AvgSwapHS', 'MSHS'],
-            output=True, decimals=1)
+            output=output, decimals=decimals)
 
     for n in [2**k for k in range(4, 15)]:
         total_compares_ms = 0
@@ -227,6 +230,7 @@ def modeling_merge_heap():
                   total_swaps_hs/trials,
                   log_linear_model(n, log_swap_hs[0], log_swap_hs[1])
                   ])
+    return tbl
 
 def prototype_table():
     """Generate Table for Insertion Sort."""
@@ -234,11 +238,11 @@ def prototype_table():
     x = []
     y = []
     for n in [2**k for k in range(8, 12)]:
-        m_insert_bas = 1000*min(timeit.repeat(stmt='insertion_sort_bas(A)', setup=f'''
+        m_insert_bas = 1000*min(timeit.repeat(stmt='insertion_sort_bas(A)', setup='''
 import random
 from ch05.sorting import insertion_sort_bas
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=10))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=10))
         x.append(n)
         y.append(m_insert_bas)
 
@@ -256,11 +260,11 @@ random.shuffle(A)''', repeat=10, number=10))
                 quadratic_coeffs[0], quadratic_coeffs[1]), n_log_n_model(n, log_coeffs[0])])
 
     for n in [2**k for k in range(12, 18)]:
-        m_insert_bas = 1000*min(timeit.repeat(stmt='insertion_sort_bas(A)', setup=f'''
+        m_insert_bas = 1000*min(timeit.repeat(stmt='insertion_sort_bas(A)', setup='''
 import random
 from ch05.sorting import insertion_sort_bas
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=10))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=10))
         tbl.row([n, m_insert_bas,
             quadratic_model(n, quadratic_coeffs[0], quadratic_coeffs[1]),
             n_log_n_model(n, log_coeffs[0])])
@@ -278,11 +282,11 @@ def timing_selection_insertion():
     for n in [2**k for k in range(8, 13)]:
         # Not much need to repeat since Selection Sort behaves the same
         # every time. I'll do it five times.
-        t_ss = timeit.timeit(stmt='selection_sort(A)', setup=f'''
+        t_ss = timeit.timeit(stmt='selection_sort(A)', setup='''
 import random
 from ch05.sorting import selection_sort
-A=list(range({n}))
-random.shuffle(A)''', number=1)
+A=list(range({}))
+random.shuffle(A)'''.format(n), number=1)
 
         # Insertion Sort is highly dependent upon its input, so execute
         # far more repetitions, and take average. This is the only time
@@ -290,11 +294,11 @@ random.shuffle(A)''', number=1)
         # since it could happen that a given data set has long runs of
         # ascending data, which would significantly reduce the execution
         # time. Instead, I total all 100 runs and provide an average.
-        t_is = sum(timeit.repeat(stmt='insertion_sort(A)', setup=f'''
+        t_is = sum(timeit.repeat(stmt='insertion_sort(A)', setup='''
 import random
 from ch05.sorting import insertion_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=100, number=1))/100   # since seeking average from sum
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=100, number=1))/100   # since seeking average from sum
 
         x.append(n)
         y_ss.append(t_ss)
@@ -315,19 +319,19 @@ random.shuffle(A)''', repeat=100, number=1))/100   # since seeking average from 
 
     for n in [2**k for k in range(13, 18)]:
         # selection is stable, so just run once
-        t_ss = timeit.timeit(stmt='selection_sort(A)', setup=f'''
+        t_ss = timeit.timeit(stmt='selection_sort(A)', setup='''
 import random
 from ch05.sorting import selection_sort
-A=list(range({n}))
-random.shuffle(A)''', number=1)
+A=list(range({}))
+random.shuffle(A)'''.format(n), number=1)
 
         # Once again, take average for Insertion Sort, this time
         # for 50 runs. But also compute min and max for graphing
-        all_times = timeit.repeat(stmt='insertion_sort(A)', setup=f'''
+        all_times = timeit.repeat(stmt='insertion_sort(A)', setup='''
 import random
 from ch05.sorting import insertion_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=5, number=1)
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=5, number=1)
         t_is = sum(all_times)/5
         t_min = min(all_times)
         t_max = max(all_times)
@@ -349,34 +353,34 @@ def timing_nlogn_sorting():
     y_ts = []
     y_ps = []
     for n in [2**k for k in range(8, 16)]:
-        t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup=f'''
+        t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup='''
 import random
 from ch05.merge import merge_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))
 
-        t_qs = min(timeit.repeat(stmt='quick_sort(A)', setup=f'''
+        t_qs = min(timeit.repeat(stmt='quick_sort(A)', setup='''
 import random
 from ch05.sorting import quick_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))
         
-        t_hs = min(timeit.repeat(stmt='heap_sort(A)', setup=f'''
+        t_hs = min(timeit.repeat(stmt='heap_sort(A)', setup='''
 import random
 from ch05.heapsort import heap_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))
         
-        t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup=f'''
+        t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup='''
 import random
 from ch05.timsort import tim_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))        
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))        
 
-        t_ps = min(timeit.repeat(stmt='A.sort()', setup=f'''
+        t_ps = min(timeit.repeat(stmt='A.sort()', setup='''
 import random
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))
 
         x.append(n)
         y_ms.append(t_ms)
@@ -397,34 +401,34 @@ random.shuffle(A)''', repeat=10, number=1))
 
     for n in [2**k for k in range(16, 21)]:
         # selection is stable, so just run once
-        t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup=f'''
+        t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup='''
 import random
 from ch05.merge import merge_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))
 
-        t_qs = min(timeit.repeat(stmt='quick_sort(A)', setup=f'''
+        t_qs = min(timeit.repeat(stmt='quick_sort(A)', setup='''
 import random
 from ch05.sorting import quick_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))
 
-        t_hs = min(timeit.repeat(stmt='heap_sort(A)', setup=f'''
+        t_hs = min(timeit.repeat(stmt='heap_sort(A)', setup='''
 import random
 from ch05.heapsort import heap_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))
 
-        t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup=f'''
+        t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup='''
 import random
 from ch05.timsort import tim_sort
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))        
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))        
 
-        t_ps = min(timeit.repeat(stmt='A.sort()', setup=f'''
+        t_ps = min(timeit.repeat(stmt='A.sort()', setup='''
 import random
-A=list(range({n}))
-random.shuffle(A)''', repeat=10, number=1))
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=1))
 
         tbl.row([n, t_ms, t_qs, t_hs, t_ts, t_ps])
 
