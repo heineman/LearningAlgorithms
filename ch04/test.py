@@ -40,6 +40,14 @@ class Test_Ch04(unittest.TestCase):
 
         return (first, last)
     
+    def test_dynamic_heap_pq_status(self):
+        from ch04.dynamic_heap import PQ
+        pq = PQ(5)
+        self.assertTrue(pq.is_empty())
+        for v,p in [('a',1), ('b',2), ('c', 3), ('d',4), ('e',5)]:
+            pq.enqueue(v, p)
+        self.assertTrue(pq.is_full())
+
     def test_heap_pq(self):
         from ch04.heap import PQ
         from resources.english import english_words
@@ -141,12 +149,55 @@ class Test_Ch04(unittest.TestCase):
         from ch04.circular_queue import Queue
         q = Queue(20)
         self.validate(q)
+        with self.assertRaises(RuntimeError):
+            q.dequeue()
+
+    def test_queue_ordered_list(self):
+        from ch04.ordered_list import PQ
+        pq = PQ(5)
+        self.assertFalse(pq.is_full())
+        for v,p in [(1,1), (2,2), (3, 3), (4,4), (5,5)]:
+            pq.enqueue(v, p)
+        val = 5
+        while pq:
+            self.assertEqual(val, pq.dequeue())
+            val -= 1
+        with self.assertRaises(RuntimeError):
+            pq.dequeue()
+            
+    def test_queue_ordered(self):
+        from ch04.ordered import PQ
+        pq = PQ(5)
+        self.assertFalse(pq.is_full())
+        for v,p in [(1,1), (2,2), (3, 3), (4,4), (5,5)]:
+            pq.enqueue(v, p)
+        val = 5
+        while pq:
+            self.assertEqual(val, pq.dequeue())
+            val -= 1
+        with self.assertRaises(RuntimeError):
+            pq.dequeue()
+
+    def test_queue_array(self):
+        from ch04.array import PQ
+        pq = PQ(5)
+        self.assertFalse(pq.is_full())
+        for v,p in [(1,1), (2,2), (3, 3), (4,4), (5,5)]:
+            pq.enqueue(v, p)
+        val = 5
+        while pq:
+            self.assertEqual(val, pq.dequeue())
+            val -= 1
+        with self.assertRaises(RuntimeError):
+            pq.dequeue()
 
     def test_queue_stress_normal(self):
         from ch04.list_queue import Queue
         queue = Queue()
         result = self.stress(queue, 50)
         self.assertEqual(list(range(50)), result)
+        with self.assertRaises(RuntimeError):
+            queue.dequeue()
 
     def test_queue_stress_circular(self):
         from ch04.circular_queue import Queue

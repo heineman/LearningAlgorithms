@@ -39,7 +39,7 @@ def search_for_base():
     """
     for m in s_data:
         if days_in_month[m] != days_mixed(m) or days_bas(m) != days_mixed(m):
-            print('Inconsistent access for ', m)
+            raise RuntimeError('Inconsistent access for {}'.format(m))
 
     # search for a range of potential bases, starting from 12 which is
     # the lowest it could be
@@ -49,4 +49,4 @@ def search_for_base():
             return (m, data)
 
     # failed...
-    return (None, None)
+    raise RuntimeError('search_for_base() failed')

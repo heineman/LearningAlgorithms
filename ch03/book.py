@@ -206,14 +206,12 @@ def count_collisions():
             M = (M * 6) // 10
     return tbl
 
-def compare_dynamic_build_and_access_time():
-    """Generate tables for build and access times."""
-    repeat = 25
+def compare_dynamic_build_and_access_time(repeat=25, max_m = 640000, output=True):
+    """Generate tables for build and access times for M up to (but not equal to) 640,000."""
     num = 10
 
     # When 'ht = HTLL(...) is inside the STMT, it measures BUILD TIME.
     # When it is included in the setup, we are measuring ACCESS TIME.
-    print('build LL')
     ll_build = min(timeit.repeat(stmt='''
 ht = HTLL(428221)
 for w in words:
@@ -222,7 +220,6 @@ from ch03.hashtable_linked import Hashtable as HTLL
 from resources.english import english_words
 words = english_words()''', repeat=repeat, number=num))/num
 
-    print('Access LL')
     ll_access = min(timeit.repeat(stmt='''
 for w in words:
     ht.get(w)''', setup='''
@@ -233,17 +230,14 @@ words = english_words()
 for w in words:
     ht.put(w,w)''', repeat=repeat, number=num))/num
 
-    print('build OA')
     oa_build = min(timeit.repeat(stmt='''
 ht = HTOA(428221)
 for w in words:
     ht.put(w,w)''', setup='''
 from ch03.hashtable_open import Hashtable as HTOA
 from resources.english import english_words
-words = english_words()
-''', repeat=repeat, number=num))/num
+words = english_words()''', repeat=repeat, number=num))/num
 
-    print('Access OA')
     oa_access = min(timeit.repeat(stmt='''
 for w in words:
     ht.get(w)''', setup='''
@@ -257,7 +251,7 @@ for w in words:
     tbl = DataTable([8,10,10,10,10],['M', 'BuildLL', 'AccessLL', 'BuildOA', 'AccessOA'], decimals=3)
 
     M = 625
-    while M <= 640000:
+    while M <= max_m:
         t1_build = min(timeit.repeat(stmt=f'''
 ht = DHL({M})
 for w in words:
@@ -342,7 +336,7 @@ def avoid_digit(n, d):
         if not sd in str(i):
             yield i
 
-def iteration_order():
+def iteration_order(output=True):
     """Generate iteration orders for multiple hashtable types."""
 
     s = 'a rose by any other name would smell as sweet'
@@ -358,12 +352,13 @@ def iteration_order():
         ht_ll.put(w, w)
         ht_ph.put(w, w)
 
-    tbl = DataTable([8,8,8], ['Open Addressing', 'Separate Chaining', 'Perfect Hash'])
+    tbl = DataTable([8,8,8], ['Open Addressing', 'Separate Chaining', 'Perfect Hash'], output=output)
     tbl.format('Open Addressing', 's')
     tbl.format('Separate Chaining', 's')
     tbl.format('Perfect Hash', 's')
     for p1,p2,p3 in zip(ht_oa, ht_ll, ht_ph):
         tbl.row([p1[0], p2[0], p3[0]])
+    return tbl
 
 def perfect_trial(key):
     from ch03.perfect.generated_dictionary import G, S1, S2, hash_f

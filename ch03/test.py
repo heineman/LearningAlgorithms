@@ -20,7 +20,14 @@ class Test_Ch03(unittest.TestCase):
         n = ord('n') - ord('a')
         e = ord('e') - ord('a')
         self.assertEqual(17576*j + 676*u + 26*n + e, base26('june'))
-        
+
+    def test_builtin(self):
+        from ch04.builtin import PQ
+        pq = PQ(5)
+        for v,p in [('a',1), ('b',2), ('c', 3), ('d',4), ('e',5)]:
+            pq.enqueue(v, p)
+        self.assertTrue(pq.is_full())
+
     def test_search_for_base(self):
         from ch03.base26 import search_for_base, base26
         (m, data) = search_for_base()
@@ -364,7 +371,7 @@ class Test_Ch03(unittest.TestCase):
         ht = Hashtable(7, 5)
         for w in values:
             ht.put(w, w)
-        
+
         # make sure all still present
         print ('-----')
         for w in values:
@@ -380,29 +387,29 @@ class Test_Ch03(unittest.TestCase):
         # make sure all still present
         for w in english_words():
             self.assertEqual(w, ht.get(w))
-            
+
         # now remove them one at a time
         for w in english_words():
             self.assertEqual(w, ht.remove(w))
-            
+
     def test_prime_number_difference(self):
         from ch03.challenge import prime_number_difference
         K = ["a", "rose", "by", "any", "other", "name", "would", "smell", "as", "sweet"]
         tbl = prime_number_difference(words=K, output=False)
         self.assertTrue('Prime', tbl.entry(428977, 'Prime'))
-        
+
     def test_bad_timing(self):
         from resources.english import english_words
         from ch03.challenge import bad_timing
-        
+
         tbl = bad_timing(english_words()[:100], output=False)
         self.assertTrue(tbl.entry('Good', 'Max Len') > 0)
         
     def test_measure_performance_resize(self):
         from ch03.challenge import measure_performance_resize
-        
+
         measure_performance_resize(max_d=5, output=False)
-      
+
     def test_count_hash(self):
         from ch03.book import count_hash
 
@@ -411,15 +418,32 @@ class Test_Ch03(unittest.TestCase):
 
     def test_run_access_trials(self):
         from ch03.growth_test import run_access_trials
-        
+
         run_access_trials(max_trials=100, output=False)
 
     def test_time_results_open(self):
         from ch03.growth_test import time_results_open
-        
+
         words = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
-        tbl = time_results_open(words, output=True)
+        tbl = time_results_open(words, output=False)
         self.assertEqual(SKIP, tbl.entry(16384, 8192))
+
+    def test_iteration_order(self):
+        from ch03.book import iteration_order
+        from algs.sorting import check_sorted
+        tbl = iteration_order(output=False)    # these are in ascending order with perfect hash
+        self.assertTrue(check_sorted(tbl.column('Perfect Hash')))
+
+    def test_avoid_digit(self):
+        from ch03.book import avoid_digit
+        alist = avoid_digit(22,1)
+        self.assertEqual([0, 2, 3, 4, 5, 6, 7, 8, 9, 20], list(alist))
+
+    def test_compare_dynamic_build_and_access_time(self):
+        from ch03.book import compare_dynamic_build_and_access_time
+
+        tbl = compare_dynamic_build_and_access_time(repeat=1, max_m=1250, output=True)
+        self.assertTrue(tbl.entry('Fixed', 'BuildLL') <= tbl.entry(1250, 'BuildLL'))
 
 if __name__ == '__main__':
     unittest.main()
