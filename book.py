@@ -9,11 +9,22 @@ import timeit
 import itertools
 from enum import Enum
 
-import numpy as np
-from scipy.optimize import curve_fit
-from scipy.stats.stats import pearsonr
-from scipy.special import factorial
-import networkx as nx
+try:
+    import numpy as np
+except ImportError:
+    print('numpy is not installed. Consider installing with pip install --user numpy')
+    
+try:
+    from scipy.optimize import curve_fit
+    from scipy.stats.stats import pearsonr
+    from scipy.special import factorial
+except ImportError:
+    print('scipy is not installed. Consider installing with pip install --user scipy')
+
+try:
+    import networkx as nx
+except ImportError:
+    print('networkx is not installed. Consider installing with pip install --user networkx')
 
 from ch01.book import generate_ch01
 from ch02.book import generate_ch02
