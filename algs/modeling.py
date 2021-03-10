@@ -4,13 +4,20 @@ to install these packages.
 """
 from enum import Enum
 
-import numpy as np
-from scipy.optimize import curve_fit
-from scipy.stats.stats import pearsonr
-from scipy.special import factorial
+numpy_error = []
+try:
+    import numpy as np
+    from scipy.optimize import curve_fit
+    from scipy.stats.stats import pearsonr
+    from scipy.special import factorial
+except ImportError:
+    if numpy_error == []:
+        print('trying to continue without numpy or scipy')
+    numpy_error.append(1)
 
 class Model(Enum):
     """Default models used extensively in algorithmic analysis."""
+    ERROR = 0
     LOG = 1
     LINEAR = 2
     N_LOG_N = 3
@@ -56,6 +63,9 @@ def best_models(nval, yval, preselected = None):
     Safest approach is to pass in a preselected model to restrict to just one
     and select this model in advance.
     """
+    if numpy_error:
+        return [(Model.ERROR,0,0,0)]
+
     npx = np.array(nval)
     npy = np.array(yval)
 
