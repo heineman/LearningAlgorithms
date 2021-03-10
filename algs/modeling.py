@@ -3,6 +3,7 @@ Contains all numpy/scipy-dependent code, in case user is unable
 to install these packages.
 """
 from enum import Enum
+import math
 
 numpy_error = []
 try:
@@ -10,10 +11,59 @@ try:
     from scipy.optimize import curve_fit
     from scipy.stats.stats import pearsonr
     from scipy.special import factorial
+
+    def log_model(n, a):
+        """Formula for A*Log_2(N) with single coefficient."""
+        return a*np.log(n)/np.log(2)
+       
+    def linear_model(n, a, b):
+        """Formula for A*N + B linear model with two coefficients."""
+        return a*n + b
+            
+    def n_log_n_model(n, a):
+        """Formula for A*N*Log_2(N) with single coefficient."""
+        return a*n*np.log(n)/np.log(2)
+               
+    def log_linear_model(n, a, b):
+        """Formula for A*N*Log_2(N) + B*N with two coefficients."""
+        return a*n*np.log(n)/np.log(2) + b*n
+                    
+    def quadratic_model(n, a, b):
+        """Formula for A*N*N + B*N quadratic model with three coefficients."""
+        return a*n*n + b*n
+                        
+    def factorial_model(n, a):
+        """Models N! or N factorial."""
+        return a * factorial(n)
+
 except ImportError:
     if numpy_error == []:
         print('trying to continue without numpy or scipy')
     numpy_error.append(1)
+
+    def log_model(n, a):
+        """Formula for A*Log_2(N) with single coefficient."""
+        return a*math.log(n)/math.log(2)
+       
+    def linear_model(n, a, b):
+        """Formula for A*N + B linear model with two coefficients."""
+        return a*n + b
+            
+    def n_log_n_model(n, a):
+        """Formula for A*N*Log_2(N) with single coefficient."""
+        return a*n*math.log(n)/math.log(2)
+               
+    def log_linear_model(n, a, b):
+        """Formula for A*N*Log_2(N) + B*N with two coefficients."""
+        return a*n*math.log(n)/math.log(2) + b*n
+                    
+    def quadratic_model(n, a, b):
+        """Formula for A*N*N + B*N quadratic model with three coefficients."""
+        return a*n*n + b*n
+                        
+    def factorial_model(n, a):
+        """Models N! or N factorial."""
+        return a * math.factorial(n)
 
 class Model(Enum):
     """Default models used extensively in algorithmic analysis."""
@@ -23,30 +73,6 @@ class Model(Enum):
     N_LOG_N = 3
     LOG_LINEAR = 4
     QUADRATIC = 5
-
-def log_model(n, a):
-    """Formula for A*Log_2(N) with single coefficient."""
-    return a*np.log(n)/np.log(2)
-
-def linear_model(n, a, b):
-    """Formula for A*N + B linear model with two coefficients."""
-    return a*n + b
-
-def n_log_n_model(n, a):
-    """Formula for A*N*Log_2(N) with single coefficient."""
-    return a*n*np.log(n)/np.log(2)
-
-def log_linear_model(n, a, b):
-    """Formula for A*N*Log_2(N) + B*N with two coefficients."""
-    return a*n*np.log(n)/np.log(2) + b*n
-
-def quadratic_model(n, a, b):
-    """Formula for A*N*N + B*N quadratic model with three coefficients."""
-    return a*n*n + b*n
-
-def factorial_model(n, a):
-    """Models N! or N factorial."""
-    return a * factorial(n)
 
 def best_models(nval, yval, preselected = None):
     """
@@ -151,4 +177,6 @@ def best_models(nval, yval, preselected = None):
     return models
 
 def pearson_correlation(y_act, y_fit):
+    if numpy_error:
+        return 0.0
     return pearsonr(y_act, y_fit)

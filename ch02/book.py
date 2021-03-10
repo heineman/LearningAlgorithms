@@ -7,12 +7,9 @@ Python environment you are running this script in.
 
 import timeit
 import math
-import numpy as np
-from scipy.optimize import curve_fit
-from scipy.special import factorial
 
 from algs.table import DataTable, TableNum, FigureNum, captionx, process, SKIP
-from algs.modeling import n_log_n_model, quadratic_model, linear_model
+from algs.modeling import n_log_n_model, quadratic_model, linear_model, numpy_error
 
 def actual_table(output=True):
     """Produce sample table to use for curve fitting."""
@@ -21,8 +18,12 @@ def actual_table(output=True):
     yvals = [0.063, 0.565, 5.946]
 
     # Coefficients are returned as first argument
-    [(a,b), _] = curve_fit(linear_model, np.array(xvals), np.array(yvals))
-    print('Linear = {}*N + {}'.format(a, b))
+    if numpy_error:
+        a,b = 0,0
+    else:
+        [(a,b), _] = curve_fit(linear_model, np.array(xvals), np.array(yvals))
+        if output:
+            print('Linear = {}*N + {}'.format(a, b))
 
     tbl = DataTable([8,8,8], ['N', 'Actual', 'Model'], output=output)
 
@@ -55,9 +56,12 @@ random.shuffle(x)'''.format(n), repeat=100, number=100))
             return 1e10
         return a*n*n + b*n
     # Coefficients are returned as first argument
-    [nlog_n_coeffs, _] = curve_fit(n_log_n_model, np.array(nvals), np.array(yvals))
-    [linear_coeffs, _] = curve_fit(linear_model, np.array(nvals), np.array(yvals))
-    [quadratic_coeffs, _] = curve_fit(quad_model, np.array(nvals), np.array(yvals))
+    if numpy_error:
+        nlog_n_coeffs = linear_coeffs = quadratic_coeffs = [0,0]
+    else:
+        [nlog_n_coeffs, _] = curve_fit(n_log_n_model, np.array(nvals), np.array(yvals))
+        [linear_coeffs, _] = curve_fit(linear_model, np.array(nvals), np.array(yvals))
+        [quadratic_coeffs, _] = curve_fit(quad_model, np.array(nvals), np.array(yvals))
 
     if output:
         print('Linear    = {:f}*N + {:f}'.format(linear_coeffs[0], linear_coeffs[1]))
@@ -97,10 +101,10 @@ def incremental_multiplication():
     """
     num = 1000
     for n in range(10, 2048):
-        all_times = timeit.repeat(stmt='idx += 1\nmult_pair(pairs[idx])', setup=f'''
+        all_times = timeit.repeat(stmt='idx += 1\nmult_pair(pairs[idx])', setup='''
 from ch02.mult import create_random_pair, mult_pair
 idx = -1 
-pairs = [create_random_pair({n}) for _ in range({num})]''', repeat=20, number=num)
+pairs = [create_random_pair({}) for _ in range({})]'''.format(n,num), repeat=20, number=num)
 
         print(n,min(all_times), max(all_times))
 
@@ -126,10 +130,14 @@ x=create_pair({})'''.format(n), number=num)
         return a * (n ** log2_3) + b*n
 
     # Coefficients are returned as first argument
-    [linear_coeffs, _] = curve_fit(linear_model, np.array(x), np.array(y))
-    [quadratic_coeffs, _] = curve_fit(quadratic_model, np.array(x), np.array(y))
-    [karatsuba_coeffs, _] = curve_fit(karatsuba, np.array(x), np.array(y))
-    [tkn_coeffs, _] = curve_fit(tkn, np.array(x), np.array(y))
+    if numpy_error:
+        pass
+        linear_coeffs = quadratic_coeffs = karatsuba_coeffs = tkn_coeffs = [0,0]
+    else:
+        [linear_coeffs, _] = curve_fit(linear_model, np.array(x), np.array(y))
+        [quadratic_coeffs, _] = curve_fit(quadratic_model, np.array(x), np.array(y))
+        [karatsuba_coeffs, _] = curve_fit(karatsuba, np.array(x), np.array(y))
+        [tkn_coeffs, _] = curve_fit(tkn, np.array(x), np.array(y))
 
     print('Karatsuba={}*N^1.585'.format(karatsuba_coeffs[0]))
     print('TK={}*N^1.585+{}*N'.format(tkn_coeffs[0], tkn_coeffs[1]))
@@ -223,15 +231,15 @@ def generate_ch02():
                 chapter, table_number, 
                 'Prototype run-time performance')
 
-    with TableNum(2) as table_number:
-        process(prototype_table(),
-                chapter, table_number, 
-                'Comparing different mathematical models with actual performance')
+#    with TableNum(2) as table_number:
+#        process(prototype_table(),
+#                chapter, table_number, 
+#                'Comparing different mathematical models with actual performance')
         
-    with TableNum(3) as table_number:
-        process(large_multiplication(),
-                chapter, table_number, 
-                'Multiplying two n-digit integers')
+#    with TableNum(3) as table_number:
+#        process(large_multiplication(),
+#                chapter, table_number, 
+#                'Multiplying two n-digit integers')
 
     with FigureNum(1) as figure_number:
         print (captionx(chapter, figure_number),
@@ -254,3 +262,7 @@ def generate_ch02():
     with FigureNum(8) as figure_number:
         print (captionx(chapter, figure_number),
                'Plot runtime performance against problem instance size for complexity classes')
+
+#######################################################################
+if __name__ == '__main__':
+    generate_ch02()
