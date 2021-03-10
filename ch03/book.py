@@ -109,10 +109,13 @@ def time_results_open_addressing():
         for size in sizes:
             try:
                 tbl.format(comma(size), '.3f')
-                t1 = min(timeit.repeat(stmt=f'''
-table = Hashtable({size})
-for word in {all_words}:
-    table.put(word, 99)''', setup='from ch03.hashtable_open import Hashtable',repeat=1,number=100))
+                t1 = min(timeit.repeat(stmt='''
+table = Hashtable({})
+for word in all_words:
+    table.put(word, 99)'''.format(size), setup='''
+from ch03.hashtable_open import Hashtable
+from resources.english import english_words
+all_words=english_words()[:{}]'''.format(num_to_add),repeat=1,number=100))
                 t1 = (100000.0 * t1) / size
             except RuntimeError:
                 t1 = SKIP
@@ -252,41 +255,41 @@ for w in words:
 
     M = 625
     while M <= max_m:
-        t1_build = min(timeit.repeat(stmt=f'''
-ht = DHL({M})
+        t1_build = min(timeit.repeat(stmt='''
+ht = DHL({})
 for w in words:
-    ht.put(w,w)''', setup='''
+    ht.put(w,w)'''.format(M), setup='''
 from ch03.hashtable_linked import DynamicHashtable as DHL
 from resources.english import english_words
 words = english_words()''', repeat=repeat, number=num))/num
 
         t1_access = min(timeit.repeat(stmt='''
 for w in words:
-    ht.get(w)''', setup=f'''
+    ht.get(w)''', setup='''
 from ch03.hashtable_linked import DynamicHashtable as DHL
 from resources.english import english_words
-ht = DHL({M})
+ht = DHL({})
 words = english_words()
 for w in words:
-    ht.put(w,w)''', repeat=repeat, number=num))/num
+    ht.put(w,w)'''.format(M), repeat=repeat, number=num))/num
 
-        t2_build = min(timeit.repeat(stmt=f'''
-ht = DHL({M})
+        t2_build = min(timeit.repeat(stmt='''
+ht = DHL({})
 for w in words:
-    ht.put(w,w)''', setup='''
+    ht.put(w,w)'''.format(M), setup='''
 from ch03.hashtable_open import DynamicHashtable as DHL
 from resources.english import english_words
 words = english_words()''', repeat=repeat, number=num))/num
 
         t2_access = min(timeit.repeat(stmt='''
 for w in words:
-    ht.get(w)''', setup=f'''
+    ht.get(w)''', setup='''
 from ch03.hashtable_open import DynamicHashtable as DHL
 from resources.english import english_words
-ht = DHL({M})
+ht = DHL({})
 words = english_words()
 for w in words:
-    ht.put(w,w)''', repeat=repeat, number=num))/num
+    ht.put(w,w)'''.format(M), repeat=repeat, number=num))/num
 
         tbl.row([M, t1_build, t1_access, t2_build, t2_access])
         M = M * 2
@@ -479,3 +482,17 @@ def generate_ch03():
                 chapter, table_number,
                 'Order of words returned by hashtable iterators',
                 create_image = False)
+
+#######################################################################
+if __name__ == '__main__':
+    from ch03.hashtable_open import Hashtable as OHL
+    M = 313243
+    ohl = OHL(M)
+    idx = 0
+    for w in english_words():
+        idx += 1
+        if idx % 100 == 0:
+            print(w)
+        ohl.put(w,1)
+    
+    #generate_ch03()

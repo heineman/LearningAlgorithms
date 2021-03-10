@@ -22,10 +22,12 @@ def english_words():
     # Try to load up...
     try:
         import importlib.resources as pkg_resources
+        file = pkg_resources.read_text('resources', 'words.english.txt')
+        _english_words.extend(file.splitlines())
+        return _english_words
     except ImportError:
-        # Try backported to PY<37 `importlib_resources`.
-        import importlib_resources as pkg_resources
+        import pkg_resources
 
-    file = pkg_resources.read_text('resources', 'words.english.txt')
-    _english_words.extend(file.splitlines())
-    return _english_words
+        file = pkg_resources.resource_string('resources', 'words.english.txt').decode('utf-8')
+        _english_words.extend(file.splitlines())
+        return _english_words
