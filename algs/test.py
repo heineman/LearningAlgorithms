@@ -3,7 +3,8 @@ import unittest
 
 from algs.counting import RecordedItem
 from algs.node import Node
-from algs.table import DataTable, Model
+from algs.table import DataTable
+from algs.modeling import Model
 
 class TestHashing(unittest.TestCase):
     """Test cases for book package."""

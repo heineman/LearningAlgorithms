@@ -35,7 +35,8 @@ import numpy as np
 from scipy.optimize import curve_fit
 from algs.table import captionx, FigureNum
 
-from algs.table import DataTable, n_log_n_model, log_linear_model, linear_model, quadratic_model
+from algs.table import DataTable
+from algs.modeling import n_log_n_model, log_linear_model, linear_model, quadratic_model 
 
 def fact(N):
     """Inefficient recursive implementation to introduce recursion."""

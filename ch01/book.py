@@ -6,7 +6,8 @@ Sample output for this execution.
 import timeit
 import itertools
 from enum import Enum
-from algs.table import DataTable, Model, TableNum, FigureNum, process, captionx
+from algs.table import DataTable, TableNum, FigureNum, process, captionx
+from algs.modeling import Model
 from algs.counting import RecordedItem
 from ch01.largest import largest, alternate
 
@@ -23,33 +24,33 @@ def run_init_trial():
 
     while n <= 1000000:
         # 1 up to but not including N
-        m_up = 1000*min(timeit.repeat(stmt='native_largest(up)', setup=f'''
+        m_up = 1000*min(timeit.repeat(stmt='native_largest(up)', setup='''
 from ch01.largest import native_largest
-up = list(range(1,{n}+1))''', repeat=10, number=50))/50
+up = list(range(1,{}+1))'''.format(n), repeat=10, number=50))/50
 
         # N down to but not including 0
-        m_down = 1000*min(timeit.repeat(stmt='native_largest(down)', setup=f'''
+        m_down = 1000*min(timeit.repeat(stmt='native_largest(down)', setup='''
 from ch01.largest import native_largest
-down = list(range({n}, 0, -1))''', repeat=10, number=50))/50
+down = list(range({}, 0, -1))'''.format(n), repeat=10, number=50))/50
 
         tbl.row([n, m_up, m_down])
         n *= 10
     return tbl
 
-def run_largest_alternate():
+def run_largest_alternate(output=True, decimals=3):
     """Generate tables for largest and alternate."""
     n = 8
     tbl = DataTable([8,10,15,10,10],
-                    ['N', '#Less', '#LessA', 'largest', 'alternate'], decimals=3)
+                   ['N', '#Less', '#LessA', 'largest', 'alternate'], output=output, decimals=decimals)
     tbl.format('#Less', ',d')
     tbl.format('#LessA', ',d')
 
     while n <= 2048:
         ascending = list(range(n))
 
-        largest_up = 1000*min(timeit.repeat(stmt=f'largest({ascending})',
+        largest_up = 1000*min(timeit.repeat(stmt='largest({})'.format(ascending),
             setup='from ch01.largest import largest', repeat=10, number=50))/50
-        alternate_up = 1000*min(timeit.repeat(stmt=f'alternate({ascending})',
+        alternate_up = 1000*min(timeit.repeat(stmt='alternate({})'.format(ascending),
             setup='from ch01.largest import alternate', repeat=10, number=50))/50
 
         up_count = [RecordedItem(i) for i in range(n)]
@@ -67,43 +68,46 @@ def run_largest_alternate():
         tbl.row([n, sum(largest_counts), sum(alternate_counts), largest_up, alternate_up])
 
         n *= 2
-    print()
-    print('largest', tbl.best_model('largest', Model.LINEAR))
-    print('Alternate', tbl.best_model('alternate', Model.QUADRATIC))
+    
+    if output:
+        print()
+        print('largest', tbl.best_model('largest', Model.LINEAR))
+        print('Alternate', tbl.best_model('alternate', Model.QUADRATIC))
     return tbl
 
-def just_compare_sort_tournament_two():
+def just_compare_sort_tournament_two(output=True, decimals=2):
     """Very large data sets to investigate whether crossover occurs (no)."""
     tbl = DataTable([15,10,15],
         ['N','sorting_two','tournament_two'],
-        decimals=2)
+        output=output, decimals=decimals)
 
     trials = [2**k for k in range(10,25)]
     num = 5
     for n in trials:
 
-        m_tt = timeit.timeit(stmt='random.shuffle(x)\ntournament_two(x)', setup=f'''
+        m_tt = timeit.timeit(stmt='random.shuffle(x)\ntournament_two(x)', setup='''
 import random
 from ch01.largest_two import tournament_two
-x=list(range({n}))''', number=num)
+x=list(range({))'''.format(n), number=num)
 
-        m_st = timeit.timeit(stmt='random.shuffle(x)\nsorting_two(x)', setup=f'''
+        m_st = timeit.timeit(stmt='random.shuffle(x)\nsorting_two(x)', setup='''
 import random
 from ch01.largest_two import sorting_two
-x=list(range({n}))''', number=num)
+x=list(range({}))'''.format(n), number=num)
 
         tbl.row([n, m_st, m_tt])
 
-    print()
-    for header in tbl.labels[1:]:
-        print(header, tbl.best_model(header))
+    if output:
+        print()
+        for header in tbl.labels[1:]:
+            print(header, tbl.best_model(header))
     return tbl
 
-def run_largest_two_trials(mode):
+def run_largest_two_trials(mode, output=True, decimals=2):
     """Mode is either REVERSED or SHUFFLED."""
     tbl = DataTable([10,15,15,10,10,15],
         ['N','double_two','mutable_two','largest_two','sorting_two','tournament_two'],
-        decimals=2)
+        output=output, decimals=decimals)
 
     if mode is Order.REVERSED:
         prepare = 'list(reversed(x))'
@@ -114,43 +118,43 @@ def run_largest_two_trials(mode):
     num = 100
     for n in trials:
         if mode is Order.ALTERNATING:
-            prepare = f'''
-up_down = zip(range(0,{n},2),range({n}-1,0,-2))
+            prepare = '''
+up_down = zip(range(0,{},2),range({}-1,0,-2))
 x=[i for i in itertools.chain(*up_down)]
-'''
-        m_dt = timeit.timeit(stmt='double_two(x)', setup=f'''
+'''.format(n,n)
+        m_dt = timeit.timeit(stmt='double_two(x)', setup='''
 import random
 from ch01.largest_two import double_two
-x=list(range({n}))
-{prepare}''', number=num)
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
 
-        m_mt = timeit.timeit(stmt='mutable_two(x)', setup=f'''
+        m_mt = timeit.timeit(stmt='mutable_two(x)', setup='''
 import random
 from ch01.largest_two import mutable_two
-x=list(range({n}))
-{prepare}''', number=num)
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
 
-        m_lt = timeit.timeit(stmt='largest_two(x)', setup=f'''
+        m_lt = timeit.timeit(stmt='largest_two(x)', setup='''
 import random
 from ch01.largest_two import largest_two
-x=list(range({n}))
-{prepare}''', number=num)
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
 
         # hard-code these values since take too long to compute...
         if n > 1048576:
             m_tt = None
         else:
-            m_tt = timeit.timeit(stmt='tournament_two(x)', setup=f'''
+            m_tt = timeit.timeit(stmt='tournament_two(x)', setup='''
 import random
 from ch01.largest_two import tournament_two
-x=list(range({n}))
-{prepare}''', number=num)
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
 
-        m_st = timeit.timeit(stmt='sorting_two(x)', setup=f'''
+        m_st = timeit.timeit(stmt='sorting_two(x)', setup='''
 import random
 from ch01.largest_two import sorting_two
-x=list(range({n}))
-{prepare}''', number=num)
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
 
         # Skip runs that are going to be too expensive
         if m_tt:
@@ -158,26 +162,26 @@ x=list(range({n}))
         else:
             tbl.row([n, m_dt, m_mt, m_lt, m_st ])
 
-    print()
     return tbl
 
-def run_best_worst():
+def run_best_worst(output=True, decimals=2):
     """Perform best and worst case analysis for largest."""
     n = 4096
-    tbl = DataTable([8,10,10,10,10],['N', 'LargestW', 'MaxW', 'LargestB', 'MaxB'], decimals=2)
+    tbl = DataTable([8,10,10,10,10],['N', 'LargestW', 'MaxW', 'LargestB', 'MaxB'], 
+                    output=output, decimals=decimals)
 
     while n <= 32768:    ###  524288:
         ups = list(range(1,n+1))         # 1 up to n
         downs = list(range(n, 0, -1))    # n down to 1
 
-        m_up = 1000*min(timeit.repeat(stmt=f'largest({ups})',
+        m_up = 1000*min(timeit.repeat(stmt='largest({})'.format(ups),
             setup='from ch01.largest import largest', repeat=10, number=50))/50
-        max_up = 1000*min(timeit.repeat(stmt=f'max({ups})',
+        max_up = 1000*min(timeit.repeat(stmt='max({})'.format(ups),
             setup='from ch01.largest import largest', repeat=10, number=50))/50
 
-        m_down = 1000*min(timeit.repeat(stmt=f'largest({downs})',
+        m_down = 1000*min(timeit.repeat(stmt='largest({})'.format(downs),
             setup='from ch01.largest import largest', repeat=10, number=50))/50
-        max_down = 1000*min(timeit.repeat(stmt=f'max({downs})',
+        max_down = 1000*min(timeit.repeat(stmt='max({})'.format(downs),
             setup='from ch01.largest import largest', repeat=10, number=50))/50
 
         tbl.row([n, m_up, max_up, m_down, max_down])
@@ -185,13 +189,12 @@ def run_best_worst():
 
     return tbl
 
-def performance_different_approaches():
+def performance_different_approaches(output=True):
     """Produce results on # less-than for different algorithms and data sets."""
     headers = ['Algorithm', 'Ascending', 'Descending', 'Alternating']
-
     n = 524288
 
-    tbl = DataTable([15,10,10,10], headers)
+    tbl = DataTable([15,10,10,10], headers, output=output)
     for hdr in headers:
         tbl.format(hdr, ',d')
     tbl.format('Algorithm', 's')
@@ -216,9 +219,9 @@ def performance_different_approaches():
         weave_count = sum(RecordedItem.report())
 
         tbl.row([label, up_count, down_count, weave_count])
+    return tbl
 
-
-def count_operations():
+def count_operations(output=True):
     """Generate statistics on some functions."""
     def f0(_):
         ct = 0
@@ -252,7 +255,7 @@ def count_operations():
         return ct
 
     n = 512
-    tbl = DataTable([8,4,10,10,10], ['N', 'f0', 'f1', 'f2', 'f3'])
+    tbl = DataTable([8,4,10,10,10], ['N', 'f0', 'f1', 'f2', 'f3'], output=output)
     for func in ['f0', 'f1', 'f2', 'f3']:
         tbl.format(func, ',d')
 
@@ -335,3 +338,7 @@ def generate_ch01():
                 chapter, table_number, 
                 'Counting operations in four different functions',
                 yaxis = "Number of times ct is incremented")
+
+#######################################################################
+if __name__ == '__main__':
+    generate_ch01()

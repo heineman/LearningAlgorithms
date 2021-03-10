@@ -442,7 +442,7 @@ class Test_Ch03(unittest.TestCase):
     def test_compare_dynamic_build_and_access_time(self):
         from ch03.book import compare_dynamic_build_and_access_time
 
-        tbl = compare_dynamic_build_and_access_time(repeat=1, max_m=1250, output=True)
+        tbl = compare_dynamic_build_and_access_time(repeat=1, max_m=1250, output=False)
         self.assertTrue(tbl.entry('Fixed', 'BuildLL') <= tbl.entry(1250, 'BuildLL'))
 
 if __name__ == '__main__':

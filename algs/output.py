@@ -2,7 +2,6 @@
 Provide access to where images are output.
 """
 import os
-import numpy as np
 
 IMAGE_DIR = "images"
 
@@ -12,8 +11,9 @@ def visualize(tbl, description, label, xaxis='Problem instance size', yaxis='Tim
     silently ignores this request.
     """
     try:
+        import numpy as np
         import matplotlib.pyplot as plt
-    except ModuleNotFoundError:
+    except ImportError:
         return
 
     # make sure interactive is off....

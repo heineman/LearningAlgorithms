@@ -41,8 +41,10 @@ class TestChapter06(unittest.TestCase):
 
         self.assertEqual((2000*1999)/2, sum_iterative(first))
 
-        # This raises an exception
-        with self.assertRaises(RecursionError):
+        # This raises an exception. With Python 3.5 and higher, this is
+        # RecursionError, but to remain compatible with earlier 3.x I've 
+        # left as a RuntimeError
+        with self.assertRaises(RuntimeError):
             sum_list(first)
 
     def test_reverse(self):

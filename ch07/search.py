@@ -91,7 +91,7 @@ def bfs_search(G, src):
     
 #######################################################################
 if __name__ == '__main__':
-    random.seed(13)
+    random.seed(28)
     m = Maze(7,7)
     G = to_networkx(m)
     

@@ -12,9 +12,9 @@ from scipy.optimize import curve_fit
 from scipy.special import factorial
 
 from algs.table import DataTable, TableNum, FigureNum, captionx, process, SKIP
-from algs.table import n_log_n_model, quadratic_model, linear_model
+from algs.modeling import n_log_n_model, quadratic_model, linear_model
 
-def actual_table():
+def actual_table(output=True):
     """Produce sample table to use for curve fitting."""
     # Sample data
     xvals = [100, 1000, 10000]
@@ -24,7 +24,7 @@ def actual_table():
     [(a,b), _] = curve_fit(linear_model, np.array(xvals), np.array(yvals))
     print('Linear = {}*N + {}'.format(a, b))
 
-    tbl = DataTable([8,8,8], ['N', 'Actual', 'Model'])
+    tbl = DataTable([8,8,8], ['N', 'Actual', 'Model'], output=output)
 
     tbl.row([100, 0.063, linear_model(100,a,b)])
     tbl.row([1000, 0.565, linear_model(1000,a,b)])
@@ -33,7 +33,7 @@ def actual_table():
     print (tbl.pearsonr('Actual', 'Model'))
     return tbl
 
-def prototype_table():
+def prototype_table(output=True, decimals=3):
     """
     Generate table of results for prototype application.
 
@@ -43,10 +43,10 @@ def prototype_table():
     nvals = []
     yvals = []
     for n in trials:
-        sort_time = 1000*min(timeit.repeat(stmt='x.sort()', setup=f'''
+        sort_time = 1000*min(timeit.repeat(stmt='x.sort()', setup='''
 import random
-x=list(range({n}))
-random.shuffle(x)''', repeat=100, number=100))
+x=list(range({}))
+random.shuffle(x)'''.format(n), repeat=100, number=100))
         nvals.append(n)
         yvals.append(sort_time)
 
@@ -59,12 +59,13 @@ random.shuffle(x)''', repeat=100, number=100))
     [linear_coeffs, _] = curve_fit(linear_model, np.array(nvals), np.array(yvals))
     [quadratic_coeffs, _] = curve_fit(quad_model, np.array(nvals), np.array(yvals))
 
-    print('Linear    = {:f}*N + {:f}'.format(linear_coeffs[0], linear_coeffs[1]))
-    print('Quadratic = {}*N*N + {}*N'.format(quadratic_coeffs[0], quadratic_coeffs[1]))
-    print('N Log N   = {:.12f}*N*log2(N)'.format(nlog_n_coeffs[0]))
-    print()
+    if output:
+        print('Linear    = {:f}*N + {:f}'.format(linear_coeffs[0], linear_coeffs[1]))
+        print('Quadratic = {}*N*N + {}*N'.format(quadratic_coeffs[0], quadratic_coeffs[1]))
+        print('N Log N   = {:.12f}*N*log2(N)'.format(nlog_n_coeffs[0]))
+        print()
 
-    tbl = DataTable([12,10,10,10,10],['N','Time','Linear','Quad','NLogN'], decimals=3)
+    tbl = DataTable([12,10,10,10,10],['N','Time','Linear','Quad','NLogN'], output=output, decimals=decimals)
 
     for n,p in zip(nvals,yvals):
         tbl.row([n, p,
@@ -73,19 +74,20 @@ random.shuffle(x)''', repeat=100, number=100))
             n_log_n_model(n, nlog_n_coeffs[0])])
 
     for n in [100000, 1000000, 10000000]:
-        sort_time = 1000*min(timeit.repeat(stmt='x.sort()', setup=f'''
+        sort_time = 1000*min(timeit.repeat(stmt='x.sort()', setup='''
 import random
-x=list(range({n}))
-random.shuffle(x)''', repeat=100, number=100))
+x=list(range({}))
+random.shuffle(x)'''.format(n), repeat=100, number=100))
         tbl.row([n, sort_time,
             linear_model(n, linear_coeffs[0], linear_coeffs[1]),
             quadratic_model(n, quadratic_coeffs[0], quadratic_coeffs[1]),
             n_log_n_model(n, nlog_n_coeffs[0])])
 
-    print ('Linear', tbl.pearsonr('Time', 'Linear'))
-    print ('Quad', tbl.pearsonr('Time', 'Quad'))
-    print ('NLogN', tbl.pearsonr('Time', 'NLogN'))
-    print (tbl.best_model('Time'))
+    if output:
+        print ('Linear', tbl.pearsonr('Time', 'Linear'))
+        print ('Quad', tbl.pearsonr('Time', 'Quad'))
+        print ('NLogN', tbl.pearsonr('Time', 'NLogN'))
+        print (tbl.best_model('Time'))
     return tbl
 
 def incremental_multiplication():
@@ -109,9 +111,9 @@ def large_multiplication():
     y = []
     log2_3 = math.log2(3)
     for n in [2**k for k in range(8,13)]:
-        mult_time = timeit.timeit(stmt='mult_pair(x)', setup=f'''
+        mult_time = timeit.timeit(stmt='mult_pair(x)', setup='''
 from ch02.mult import create_pair, mult_pair 
-x=create_pair({n})''', number=num)
+x=create_pair({})'''.format(n), number=num)
         x.append(n)
         y.append(mult_time)
 
@@ -144,9 +146,9 @@ x=create_pair({n})''', number=num)
               tkn(n, tkn_coeffs[0], tkn_coeffs[1])])
 
     for n in [2**k for k in range(13,20)]:
-        mult_time = timeit.timeit(stmt='mult_pair(x)', setup=f'''
+        mult_time = timeit.timeit(stmt='mult_pair(x)', setup='''
 from ch02.mult import create_pair, mult_pair 
-x=create_pair({n})''', number=num)
+x=create_pair({})'''.format(n), number=num)
 
         tbl.row([n, mult_time,
               linear_model(n, linear_coeffs[0], linear_coeffs[1]),

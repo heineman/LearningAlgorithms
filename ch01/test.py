@@ -178,7 +178,7 @@ class Test_Ch01(unittest.TestCase):
     def test_run_counting_sort_trials(self):
         from ch01.challenge import run_counting_sort_trials
         
-        tbl = run_counting_sort_trials(max_k=12)
+        tbl = run_counting_sort_trials(max_k=12, output=False)
         self.assertTrue(tbl.entry(2048,'counting_sort_improved') <= tbl.entry(2048,'counting_sort'))
 
 #######################################################################

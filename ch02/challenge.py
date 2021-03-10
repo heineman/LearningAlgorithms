@@ -4,7 +4,8 @@ import timeit
 
 import numpy as np
 from scipy.optimize import curve_fit
-from algs.table import quadratic_model, log_model, DataTable
+from algs.table import DataTable
+from algs.modeling import quadratic_model, log_model
 
 def log_log_model(n, a):
     """Formula for A*Log_2(N) with single coefficient."""

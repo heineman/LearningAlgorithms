@@ -5,7 +5,8 @@ import timeit
 import numpy as np
 from scipy.optimize import curve_fit
 from scipy.stats.stats import pearsonr
-from algs.table import DataTable, comma, n_log_n_model, best_models
+from algs.table import DataTable, comma, best_models
+from algs.modeling import n_log_n_model
 
 def merged_arrays(heap1, heap2):
     """Return combined array with sorted values."""

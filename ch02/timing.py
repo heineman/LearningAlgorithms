@@ -39,7 +39,8 @@ import timeit
 import numpy as np
 from scipy.optimize import curve_fit
 
-from algs.table import DataTable, factorial_model
+from algs.table import DataTable
+from algs.modeling import factorial_model
 
 def run_permutation_sort_worst_case(top):
     """Generate table for permutation sort from 1 up to and including top."""
