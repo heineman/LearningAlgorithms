@@ -92,11 +92,15 @@ def modeling_insertion_selection():
         y_comp_is.append(total_compares_is/trials)
         y_swap_is.append(total_swaps_is/trials)
 
-    [quadratic_comp_ss, _] = curve_fit(quadratic_model, np.array(x), np.array(y_comp_ss))
-    [linear_swap_ss, _] = curve_fit(linear_model, np.array(x), np.array(y_swap_ss))
-
-    [quadratic_comp_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_comp_is))
-    [quadratic_swap_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_swap_is))
+    if numpy_error:
+        quadratic_comp_ss = linear_swap_ss = quadratic_comp_is = quadratic_swap_is = [0,0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+        [quadratic_comp_ss, _] = curve_fit(quadratic_model, np.array(x), np.array(y_comp_ss))
+        [linear_swap_ss, _] = curve_fit(linear_model, np.array(x), np.array(y_swap_ss))
+        [quadratic_comp_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_comp_is))
+        [quadratic_swap_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_swap_is))
 
     print('Swap SS Linear    = {:f}*N + {:f}'.format(linear_swap_ss[0], linear_swap_ss[1]))
     print('Comp SS Quadratic = {}*N*N + {}*N'.format(quadratic_comp_ss[0], quadratic_comp_ss[1]))
@@ -180,6 +184,8 @@ def modeling_merge_heap(output=True, decimals=1):
     if numpy_error:
         log_comp_ms = log_swap_ms, log_comp_hs, log_swap_hs = [0, 0]
     else:
+        import numpy as np
+        from scipy.optimize import curve_fit
         [log_comp_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_comp_ms))
         [log_swap_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_swap_ms))
         [log_comp_hs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_comp_hs))
@@ -245,8 +251,13 @@ random.shuffle(A)'''.format(n), repeat=10, number=10))
         y.append(m_insert_bas)
 
     # Coefficients are returned as first argument
-    [log_coeffs, _] = curve_fit(n_log_n_model, np.array(x), np.array(y))
-    [quadratic_coeffs, _] = curve_fit(quadratic_model, np.array(x), np.array(y))
+    if numpy_error:
+        log_coeffs = quadratic_coeffs = [0, 0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+        [log_coeffs, _] = curve_fit(n_log_n_model, np.array(x), np.array(y))
+        [quadratic_coeffs, _] = curve_fit(quadratic_model, np.array(x), np.array(y))
 
     print('Quadratic = {}*N*N + {}*N'.format(quadratic_coeffs[0], quadratic_coeffs[1]))
     print('Log       = {:.12f}*N*log2(N)'.format(log_coeffs[0]))
@@ -303,8 +314,13 @@ random.shuffle(A)'''.format(n), repeat=100, number=1))/100   # since seeking ave
         y_is.append(t_is)
 
     # Coefficients are returned as first argument
-    [quadratric_ss, _] = curve_fit(quadratic_model, np.array(x), np.array(y_ss))
-    [quadratric_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_is))
+    if numpy_error:
+        quadratric_ss = quadratric_is = [0, 0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+        [quadratric_ss, _] = curve_fit(quadratic_model, np.array(x), np.array(y_ss))
+        [quadratric_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_is))
 
     print('Quadratic SS = {}*N*N + {}*N'.format(quadratric_ss[0], quadratric_ss[1]))
     print('Quadratic IS = {}*N*N + {}*N'.format(quadratric_is[0], quadratric_is[1]))
@@ -388,11 +404,16 @@ random.shuffle(A)'''.format(n), repeat=10, number=1))
         y_ps.append(t_ps)
 
     # Coefficients are returned as first argument
-    [nlogn_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ms))
-    [nlogn_qs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_qs))
-    [nlogn_hs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_hs))
-    [nlogn_ts, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ts))
-    [nlogn_ps, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ps))
+    if numpy_error:
+        nlogn_ms = nlogn_qs = nlogn_hs = nlogn_ts = nlogn_ps = [0, 0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+        [nlogn_ms, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ms))
+        [nlogn_qs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_qs))
+        [nlogn_hs, _] = curve_fit(log_linear_model, np.array(x), np.array(y_hs))
+        [nlogn_ts, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ts))
+        [nlogn_ps, _] = curve_fit(log_linear_model, np.array(x), np.array(y_ps))
 
     for n,t_ms,t_qs,t_hs,t_ts,t_ps in zip(x,y_ms,y_qs,y_hs,y_ts,y_ps):
         tbl.row([n, t_ms, t_qs, t_hs, t_ts, t_ps])
@@ -471,7 +492,6 @@ def tim_sort_figure():
         print('lo={:2d}\t'.format(lo) + '|'.join([' {:>2} '.format(k) for k in A]))
         insertion_sort(A, lo, min(lo+size-1, N-1))
 
-    
     aux = [None]*N
     while size < N:
         print('size={:2d}\t'.format(size) + '|'.join([' {:>2} '.format(k) for k in A]))
@@ -485,7 +505,7 @@ def tim_sort_figure():
         size = 2 * size
 
     print('size={:2d}\t'.format(size) + '|'.join([' {:>2} '.format(k) for k in A]))
-    
+
 def generate_ch05():
     """Generate Tables and Figures for chapter 05."""
     chapter = 5

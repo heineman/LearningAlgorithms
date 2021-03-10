@@ -14,12 +14,12 @@ one_run(PQ({}), {}, {})'''.format(clazz,N,N,factor)
     return min(timeit.repeat(stmt=stmt, setup = 'from ch04.timing import one_run',
                              repeat=5, number=10))/10
 
-def average_performance():
+def average_performance(max_n=65536, output=True, decimals=2):
     """Generate table of average performance for different PQ implementations."""
     T = 3
     base = 256
     cutoff = 16384
-    high = 65536
+    high = max_n
 
     heap = {}
     order_ar = {}
@@ -35,7 +35,6 @@ def average_performance():
     linked = {}
     builtin = {}
     while N <= cutoff:
-        print(N,'...')
         order_ar[N]  = 1000000*run_trials('ch04.ordered', N, T)/(T*N)
         linked[N]    = 1000000*run_trials('ch04.linked', N, T)/(T*N)
         array[N]     = 1000000*run_trials('ch04.array', N, T)/(T*N)
@@ -46,7 +45,7 @@ def average_performance():
     N = base
     tbl = DataTable([8,8,8,8,8,8,8],
                     ['N','Heap','OrderL','Linked','OrderA','Built-in','Array'],
-                    decimals=2)
+                    output=output, decimals=decimals)
     while N <= high:
         if N <= cutoff:
             tbl.row([N, heap[N], order_ll[N], linked[N], order_ar[N], builtin[N], array[N]])
@@ -54,14 +53,15 @@ def average_performance():
             #tbl.set_output(False)
             tbl.row([N, heap[N], order_ll[N]])
         N *= 2
-    print()
 
-    print ('Heap', tbl.best_model('Heap'))
-    print ('OrderL', tbl.best_model('OrderL'))
-    print ('Linked', tbl.best_model('Linked'))
-    print ('OrderA', tbl.best_model('OrderA'))
-    print ('Built-in', tbl.best_model('Built-in'))
-    print ('Array', tbl.best_model('Array'))
+    if output:        
+        print()
+        print('Heap', tbl.best_model('Heap'))
+        print('OrderL', tbl.best_model('OrderL'))
+        print('Linked', tbl.best_model('Linked'))
+        print('OrderA', tbl.best_model('OrderA'))
+        print('Built-in', tbl.best_model('Built-in'))
+        print('Array', tbl.best_model('Array'))
     return tbl
 
 def generate_ch04():
