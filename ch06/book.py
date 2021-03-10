@@ -31,17 +31,17 @@ def remove_value(A, val):
 # Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N
 def run_trials_pq_n(clazz, N, factor):
     """Run a single trial."""
-    stmt = f'''
-from {clazz} import PQ 
-one_run(PQ({N}), {N}, {factor})'''
+    stmt = '''
+from {} import PQ 
+one_run(PQ({}), {}, {})'''.format(clazz,N,N,factor)
     return min(timeit.repeat(stmt=stmt, setup = 'from ch04.timing import one_run',
                              repeat=5, number=10))/10
 
 def run_trials_pq(clazz, N, factor):
     """Run a single trial."""
-    stmt = f'''
-from {clazz} import PQ 
-one_run(PQ(), {N}, {factor})'''
+    stmt = '''
+from {} import PQ 
+one_run(PQ(), {}, {})'''.format(clazz,N,factor)
     return min(timeit.repeat(stmt=stmt, setup = 'from ch04.timing import one_run',
                              repeat=5, number=10))/10
 
@@ -112,31 +112,31 @@ def debug_expression():
 
 def run_trials_prepend(N, num):
     """Run a single trial."""
-    return 1000*min(timeit.repeat(stmt=f'''
-for i in range({num}):
-    alist.insert(0,i)''', setup = f'alist=list(range({N}))', repeat=5, number=1))/10
+    return 1000*min(timeit.repeat(stmt='''
+for i in range({}):
+    alist.insert(0,i)'''.format(num), setup = 'alist=list(range({}))'.format(N), repeat=5, number=1))/10
 
 def run_trials_append(N, num):
     """Run a single trial."""
-    return 1000*min(timeit.repeat(stmt=f'''
-for i in range({num}):
-    alist.append(i)''', setup = f'alist=list(range({N}))', repeat=5, number=1))/10
+    return 1000*min(timeit.repeat(stmt='''
+for i in range({}):
+    alist.append(i)'''.format(num), setup = 'alist=list(range({}))'.format(N), repeat=5, number=1))/10
 
 def run_trials_remove(N, num):
     """Run a single trial."""
-    return 1000*min(timeit.repeat(stmt=f'''
-for i in range({num}):
-    alist.pop(0)''', setup = f'alist=list(range({N}))', repeat=5, number=1))/10
+    return 1000*min(timeit.repeat(stmt='''
+for i in range({}):
+    alist.pop(0)'''.format(num), setup = 'alist=list(range({}))'.format(N), repeat=5, number=1))/10
 
 def run_trials_tree(N, num):
     """Run a single trial."""
-    return 1000*min(timeit.repeat(stmt=f'''
-for i in range(-1, -{num}, -1):
-    bt.remove(i)''', setup = f'''
+    return 1000*min(timeit.repeat(stmt='''
+for i in range(-1, -{}, -1):
+    bt.remove(i)'''.format(num), setup = '''
 from ch06.balanced import BinaryTree
 bt = BinaryTree()
-for i in range({N}):
-    bt.insert(i)''', repeat=5, number=1))/10
+for i in range({}):
+    bt.insert(i)'''.format(N), repeat=5, number=1))/10
 
 def generate_list_table(max_k=21, output=True, decimals=3):
     """
@@ -201,25 +201,25 @@ def compare_avl_pq_with_heap_pq(max_k=16, output=True, decimals=2):
     num = 10
 
     for n in [2**k for k in range(10, max_k)]:
-        t_heap_pq = min(timeit.repeat(stmt=f'''
+        t_heap_pq = min(timeit.repeat(stmt='''
 random.seed(11)
-pq = PQ({n})
-for _ in range({n}):
+pq = PQ({})
+for _ in range({}):
     r = random.random()
     pq.enqueue(r,r)
 while pq:
-    pq.dequeue()''', setup='''
+    pq.dequeue()'''.format(n,n), setup='''
 from ch04.heap import PQ
 import random''', repeat=repeat, number=num))/num
 
-        t_avl_pq = min(timeit.repeat(stmt=f'''
+        t_avl_pq = min(timeit.repeat(stmt='''
 random.seed(11)
 pq = PQ()
-for _ in range({n}):
+for _ in range({}):
     r = random.random()
     pq.enqueue(r,r)
 while pq:
-    pq.dequeue()''', setup='''
+    pq.dequeue()'''.format(n), setup='''
 from ch06.pq import PQ
 import random''', repeat=repeat, number=num))/num
 
@@ -309,4 +309,4 @@ def generate_ch06():
 
 #######################################################################
 if __name__ == '__main__':
-    pass
+    generate_ch06()
