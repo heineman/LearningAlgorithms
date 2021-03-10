@@ -87,13 +87,13 @@ def counting_sort_improved(A,M):
             pos += counts[val]
         val += 1
 
-def run_counting_sort_trials():
-    """Generate table for counting sort."""
+def run_counting_sort_trials(max_k=21, output=True):
+    """Generate table for counting sort up to (but not including) max_k=21."""
     tbl = DataTable([8,15,15],
-                    ['N', 'counting_sort', 'counting_sort_improved'])
+                    ['N', 'counting_sort', 'counting_sort_improved'], output=output)
 
     M = 20 # arbitrary value, and results are dependent on this value.
-    trials = [2**k for k in range(8,21)]
+    trials = [2**k for k in range(8, max_k)]
     for n in trials:
         t_cs = min(timeit.repeat(stmt=f'counting_sort(a,{M})\nis_sorted(a)', setup=f'''
 import random
@@ -113,6 +113,7 @@ a = list(range({M})) * {n}
 random.shuffle(a)''', repeat=100, number=1))
 
         tbl.row([n, t_cs, t_csi])
+    return tbl
 
 def run_median_trial():
     """Generate table for Median Trial."""
@@ -136,13 +137,13 @@ random.shuffle(a)
 
         tbl.row([n, t_med, t_sort])
 
-def run_median_less_than_trial():
-    """Use RecordedItem to count # of times Less-than invoked."""
-    tbl = DataTable([10,15,15],['N', 'median_time', 'sort_median'])
+def run_median_less_than_trial(max_k=20, output=True):
+    """Use RecordedItem to count # of times Less-than invoked up to (but not including) max_k=20."""
+    tbl = DataTable([10,15,15],['N', 'median_time', 'sort_median'], output=output)
     tbl.format('median_time', ',d')
     tbl.format('sort_median', ',d')
 
-    trials = [2**k+1 for k in range(8,20)]
+    trials = [2**k+1 for k in range(8, max_k)]
     for n in trials:
         A = list([RecordedItem(i) for i in range(n)])
         random.shuffle(A)
@@ -159,6 +160,7 @@ def run_median_less_than_trial():
         assert med1 == med2
 
         tbl.row([n, lin_lt, sort_lt])
+    return tbl
 
 def is_palindrome1(s):
     """Create slice with negative step and confirm equality with s."""

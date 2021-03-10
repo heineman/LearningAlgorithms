@@ -155,6 +155,8 @@ class Test_Ch01(unittest.TestCase):
         for pal in ['aba', 'abba', 'a']:
             self.assertTrue(is_palindrome1(pal))
             self.assertTrue(is_palindrome2(pal))
+            self.assertFalse(is_palindrome1(pal+'x'))
+            self.assertFalse(is_palindrome2(pal+'x'))
         
         palindromes = [
             'Able was I ere I saw Elba',
@@ -166,6 +168,18 @@ class Test_Ch01(unittest.TestCase):
         ]
         for pal in palindromes:
             self.assertTrue(is_palindrome_letters_only(pal))
+
+    def test_run_median_less_than_trial(self):
+        from ch01.challenge import run_median_less_than_trial
+        
+        tbl = run_median_less_than_trial(max_k=10, output=False)
+        self.assertTrue(tbl.entry(513,'median_time') < tbl.entry(513,'sort_median'))
+        
+    def test_run_counting_sort_trials(self):
+        from ch01.challenge import run_counting_sort_trials
+        
+        tbl = run_counting_sort_trials(max_k=12)
+        self.assertTrue(tbl.entry(2048,'counting_sort_improved') <= tbl.entry(2048,'counting_sort'))
 
 #######################################################################
 if __name__ == '__main__':
