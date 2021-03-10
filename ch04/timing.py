@@ -23,17 +23,17 @@ def drain(pq, n):
 
 # Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N
 def run_trials(clazz, N, factor):
-    stmt = f'''
-from {clazz} import PQ 
-one_run(PQ({N}), {N}, {factor})'''
+    stmt = '''
+from {} import PQ 
+one_run(PQ({}), {}, {})'''.format(clazz,N,N,factor)
     return min(timeit.repeat(stmt=stmt,
                 setup='from ch04.timing import one_run', repeat=5, number=10))/10
 
 # Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N
 def run_dynamic_trials(clazz, N, factor):
-    stmt = f'''
-from {clazz} import PQ 
-one_run(PQ(256), {N}, {factor})'''
+    stmt = '''
+from {} import PQ 
+one_run(PQ(256), {}, {})'''.format(clazz,N,factor)
     return min(timeit.repeat(stmt=stmt, setup='from ch04.timing import one_run', repeat=5, number=10))/10
 
 def one_run(pq, N, factor):
@@ -41,13 +41,13 @@ def one_run(pq, N, factor):
     Conduct a run that exercised priority queue without causing a failure.
     Assume N divisible by 4 and factor > 2. Total of factor*N operations."""
     build_up(pq, N//2)       # Fill halfway
-    drain(pq, N//4)         # Now go back to 1/4 full
+    drain(pq, N//4)          # Now go back to 1/4 full
     for _ in range(factor-2):
         build_up(pq, N//2)   # bring up to 3/4 full
-        drain(pq, N//2)     # now back to 1/4 full
+        drain(pq, N//2)      # now back to 1/4 full
 
     build_up(pq, N//2)       # back to 3/4 full
-    drain(pq, 0)            # empty out...
+    drain(pq, 0)             # empty out...
 
 def trial_factorial_heap(max_n=2097152, output=True, decimals=2):
     """

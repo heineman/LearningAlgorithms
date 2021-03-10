@@ -73,3 +73,7 @@ def generate_ch04():
                 chapter, table_number,
                 'Average operation performance (time in ns) on problem instances of size N',
                 yaxis='Time (in nanoseconds)')
+
+#######################################################################
+if __name__ == '__main__':
+    generate_ch04()

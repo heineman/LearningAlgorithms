@@ -31,8 +31,6 @@ Quadratic IS = 4.504032979491163e-09*N*N + 1.8245472574666622e-07*N
 """
 import timeit
 import random
-import numpy as np
-from scipy.optimize import curve_fit
 from algs.table import captionx, FigureNum
 
 from algs.table import DataTable
@@ -577,3 +575,7 @@ def generate_ch05():
         label = captionx(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
+
+#######################################################################
+if __name__ == '__main__':
+    generate_ch05()

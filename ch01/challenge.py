@@ -95,22 +95,22 @@ def run_counting_sort_trials(max_k=21, output=True):
     M = 20 # arbitrary value, and results are dependent on this value.
     trials = [2**k for k in range(8, max_k)]
     for n in trials:
-        t_cs = min(timeit.repeat(stmt=f'counting_sort(a,{M})\nis_sorted(a)', setup=f'''
+        t_cs = min(timeit.repeat(stmt='counting_sort(a,{})\nis_sorted(a)'.format(M), setup='''
 import random
 from ch01.challenge import counting_sort
 from algs.sorting import is_sorted
-w = [{M}-1] * {n}
-b = [0] * {n} 
-a = list(range({M})) * {n}
-random.shuffle(a)''', repeat=100, number=1))
-        t_csi = min(timeit.repeat(stmt=f'counting_sort_improved(a,{M})\nis_sorted(a)', setup=f'''
+w = [{0}-1] * {1}
+b = [0] * {1} 
+a = list(range({0})) * {1}
+random.shuffle(a)'''.format(M,n), repeat=100, number=1))
+        t_csi = min(timeit.repeat(stmt='counting_sort_improved(a,{})\nis_sorted(a)'.format(M), setup='''
 import random
 from ch01.challenge import counting_sort_improved
 from algs.sorting import is_sorted
-w = [{M}-1] * {n}
-b = [0] * {n} 
-a = list(range({M})) * {n}
-random.shuffle(a)''', repeat=100, number=1))
+w = [{0}-1] * {1}
+b = [0] * {1} 
+a = list(range({0})) * {1}
+random.shuffle(a)'''.format(M,n), repeat=100, number=1))
 
         tbl.row([n, t_cs, t_csi])
     return tbl
@@ -121,19 +121,19 @@ def run_median_trial():
 
     trials = [2**k+1 for k in range(8,20)]
     for n in trials:
-        t_med = 1000*min(timeit.repeat(stmt=f'assert(linear_median(a) == {n}//2)', setup=f'''
+        t_med = 1000*min(timeit.repeat(stmt='assert(linear_median(a) == {}//2)'.format(n), setup='''
 import random
 from ch01.challenge import linear_median
-a = list(range({n}))
+a = list(range({}))
 random.shuffle(a)
-''', repeat=10, number=5))/5
+'''.format(n), repeat=10, number=5))/5
 
-        t_sort = 1000*min(timeit.repeat(stmt=f'assert(sorted(a)[{n}//2] == {n}//2)', setup=f'''
+        t_sort = 1000*min(timeit.repeat(stmt='assert(sorted(a)[{}//2] == {}//2)'.format(n,n), setup='''
 import random
 from ch01.challenge import linear_median
-a = list(range({n}))
+a = list(range({}))
 random.shuffle(a)
-''', repeat=10, number=5))/5
+'''.format(n), repeat=10, number=5))/5
 
         tbl.row([n, t_med, t_sort])
 
