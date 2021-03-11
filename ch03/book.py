@@ -211,9 +211,8 @@ def count_collisions(output=True, decimals=1):
             M = (M * 6) // 10
     return tbl
 
-def compare_dynamic_build_and_access_time(repeat=25, max_m = 640000, output=True):
+def compare_dynamic_build_and_access_time(repeat=10, num=5, max_m=640000, output=True):
     """Generate tables for build and access times for M up to (but not equal to) 640,000."""
-    num = 10
 
     # When 'ht = HTLL(...) is inside the STMT, it measures BUILD TIME.
     # When it is included in the setup, we are measuring ACCESS TIME.
@@ -441,7 +440,7 @@ def generate_ch03():
     with FigureNum(6) as figure_number:
         description  = 'For a fixed number of elements, N, the average and maximum chain length follow predictable paths'
         label = captionx(chapter, figure_number)
-        print('Figure 3-6 comes from plotting results of Table 3-3')
+        print('The result of plotting Table 3-3')
         print('{}. {}'.format(label, description))
         print()
 
@@ -455,7 +454,7 @@ def generate_ch03():
         print()
 
     with FigureNum(8) as figure_number:
-        description  = 'Resulting Hsahtable storage after successful resizing'
+        description  = 'Resulting Hashtable storage after successful resizing'
         label = captionx(chapter, figure_number)
         sample_hashtable_resize()
         sample_separate_chaining_hashtable_resize()
@@ -463,6 +462,7 @@ def generate_ch03():
         print('{}. {}'.format(label, description))
         print()
 
+    print('The following table takes hours to generate.')
     with TableNum(4) as table_number:
         process(compare_dynamic_build_and_access_time(),
                 chapter, table_number,

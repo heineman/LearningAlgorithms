@@ -24,6 +24,7 @@ try:
     import networkx as nx
 except ImportError:
     print('networkx is not installed. Consider installing with pip install --user networkx')
+    print('will attempt to use stub implementation to complete tables and figures.')
 
 from ch01.book import generate_ch01
 from ch02.book import generate_ch02
