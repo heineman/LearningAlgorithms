@@ -43,5 +43,5 @@ def english_words():
     import os
     file = open(os.path.join('resources', 'words.english.txt'))
     for line in file.readlines():
-        _english_words.extend(line[:-1])    # chomp '\n'
+        _english_words.append(line[:-1])    # chomp '\n'
     return _english_words

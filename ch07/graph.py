@@ -21,6 +21,11 @@ class UndirectedGraph:
         self.adjacency[u] = []
         self.positions[u] = pos
 
+    def add_nodes_from(self, nodes):
+        """Add nodes to graph, if not already there."""
+        for n in nodes:
+            self.add_node(n)
+
     def __getitem__(self, u):
         """Get neighboring nodes to this node."""
         for node in self.adjacency[u]:
@@ -29,7 +34,25 @@ class UndirectedGraph:
     def nodes(self):
         """Return all nodes."""
         return self.adjacency.keys()
-    
+
+    def edges(self, u=None):
+        """Return all edges. Make sure not to double count..."""
+        all_nodes = list(self.nodes())
+        all_edges = []
+        if u:
+            for j in range(len(all_nodes)):
+                vj = all_nodes[j]
+                if vj in self.adjacency[u]:
+                    all_edges.append( (u, vj) )
+        else:
+            for i in range(len(all_nodes)-1):
+                vi = all_nodes[i]
+                for j in range(i+1, len(all_nodes)):
+                    vj = all_nodes[j]
+                    if vj in self.adjacency[vi]:
+                        all_edges.append( (vi, vj) )
+        return all_edges
+
     def neighbors(self, u):
         """Return neighboring nodes."""
         for node in self.adjacency[u]:
@@ -40,13 +63,18 @@ class UndirectedGraph:
             self.adjacency[u] = []
             
         if not v in self.adjacency:
-            self.adjacency[u] = []
+            self.adjacency[v] = []
 
         # already there
         if v in self.adjacency[u]:
             return
         self.adjacency[u].append(v)
         self.adjacency[v].append(u)
+
+    def add_edges_from(self, edges):
+        """Add edges to graph, if not already there."""
+        for u,v in edges:
+            self.add_edge(u,v)
 
 class DirectedGraph:
     """
@@ -86,6 +114,7 @@ class DirectedGraph:
         self.adjacency[u].append(v)
 
 class Replacement:
+    """Provides an object which can fill the role of 'nx' in the graph chapter code."""
     def __init__(self):
         pass
     
@@ -97,7 +126,7 @@ class Replacement:
         """Create directed graph."""
         return DirectedGraph()
     
-    def get_node_attributes(self, graph, label):
+    def get_node_attributes(self, graph):
         """I am not going to provide this capability."""
         return graph.positions
     

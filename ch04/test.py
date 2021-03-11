@@ -4,6 +4,7 @@ import unittest
 class Test_Ch04(unittest.TestCase):
 
     def validate(self, queue):
+        """For a queue validates a few simple operations."""
         self.assertTrue(queue.is_empty())
         queue.enqueue(10)
         self.assertFalse(queue.is_empty())
@@ -15,11 +16,11 @@ class Test_Ch04(unittest.TestCase):
         self.assertEqual(20, queue.dequeue())
         self.assertEqual(30, queue.dequeue())
         self.assertEqual(40, queue.dequeue())
-        
+
     def priority_queue_stress_test(self, pq, max_length=None):
         """
         Given an empty Priority queue, add words from English dictionary where
-        priority is length of word. Because some PQ implementations are so 
+        priority is length of word. Because some PQ implementations are so
         inefficient, allow a caller to restrict
         """
         from resources.english import english_words
@@ -28,7 +29,7 @@ class Test_Ch04(unittest.TestCase):
             words = words[:max_length]
         for w in words:
             pq.enqueue(w, len(w))
-            
+
         # First word out is longest... / Last one out is smallest
         first = pq.dequeue()
         while pq:
@@ -39,7 +40,7 @@ class Test_Ch04(unittest.TestCase):
             pq.dequeue()
 
         return (first, last)
-    
+
     def test_dynamic_heap_pq_status(self):
         from ch04.dynamic_heap import PQ
         pq = PQ(5)
@@ -56,7 +57,7 @@ class Test_Ch04(unittest.TestCase):
 
         # Note: we cannot guarantee individual words BUT we can guarantee length
         self.assertEqual((len('abdominohysterectomy'), len('a')), (len(pair[0]), len(pair[1])))
-        
+
     def test_array_pq(self):
         from ch04.array import PQ
         from resources.english import english_words
@@ -88,7 +89,7 @@ class Test_Ch04(unittest.TestCase):
         pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
         # Note: we cannot guarantee individual words BUT we can guarantee length
         self.assertEqual((len('abdominohysterectomy'), len('a')), (len(pair[0]), len(pair[1])))
-        
+
     def test_builtin_heap_pq(self):
         from ch04.builtin import PQ
         from resources.english import english_words
@@ -96,21 +97,21 @@ class Test_Ch04(unittest.TestCase):
         pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
         # Note: we cannot guarantee individual words BUT we can guarantee length
         self.assertEqual((len('abdominohysterectomy'), len('a')), (len(pair[0]), len(pair[1])))
-        
+
     def test_dynamic_heap_pq(self):
         from ch04.dynamic_heap import PQ
         pair = self.priority_queue_stress_test(PQ(625))
         # Note: we cannot guarantee individual words BUT we can guarantee length
         self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
-        
+
     def test_binary_tree_from_chapter_06(self):
         from ch06.pq import PQ
         from resources.english import english_words
         words = english_words()
         pair = self.priority_queue_stress_test(PQ(), len(words))
         # Note: we cannot guarantee individual words BUT we can guarantee length
-        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))        
-        
+        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
+
     def stress(self, queue, ct):
         """Stress test queue with valid sequence of operations."""
         result = []
@@ -164,7 +165,7 @@ class Test_Ch04(unittest.TestCase):
             val -= 1
         with self.assertRaises(RuntimeError):
             pq.dequeue()
-            
+
     def test_queue_ordered(self):
         from ch04.ordered import PQ
         pq = PQ(5)
@@ -228,15 +229,15 @@ class Test_Ch04(unittest.TestCase):
         self.assertEqual(2, pq.dequeue())
         self.assertEqual(1, pq.dequeue())
         self.assertEqual(0, pq.dequeue())
-        
+
     def test_entry(self):
         from ch04.entry import Entry
         e = Entry('99', 101)
         self.assertEqual('[99 p=101]', str(e))
-        
+
     def test_trial_factorial_heap(self):
         from ch04.timing import trial_factorial_heap
-        
+
         tbl = trial_factorial_heap(max_n=2048, output=False)
         self.assertTrue(tbl.entry(1024, 'Heap') <= tbl.entry(1024, 'FactHeap'))
 

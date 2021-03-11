@@ -252,7 +252,7 @@ words = english_words()
 for w in words:
     ht.put(w,w)''', repeat=repeat, number=num))/num
 
-    tbl = DataTable([8,10,10,10,10],['M', 'BuildLL', 'AccessLL', 'BuildOA', 'AccessOA'], decimals=3)
+    tbl = DataTable([8,10,10,10,10],['M', 'BuildLL', 'AccessLL', 'BuildOA', 'AccessOA'], output=output, decimals=3)
 
     M = 625
     while M <= max_m:

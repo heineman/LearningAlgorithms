@@ -1,3 +1,4 @@
+"""Test Preface code (if any)."""
 import unittest
 
 class TestHashing(unittest.TestCase):

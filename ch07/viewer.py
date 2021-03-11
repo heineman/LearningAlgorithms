@@ -63,8 +63,8 @@ class Viewer:
 
 #######################################################################
 if __name__ == "__main__":
-    random.seed(13)   # 28 is also good(24 is long solution)
-    m = Maze(7,7)
+    random.seed(15)   # 28 is also good(24 is long solution)
+    m = Maze(3,5)
     root = tkinter.Tk()
     Viewer(m, 50).view(root)
     root.mainloop()

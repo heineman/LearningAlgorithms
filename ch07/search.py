@@ -52,11 +52,11 @@ def dfs_search(G, src):
     from ch07.list_stack import Stack
     marked = {}
     node_from = {}
-    
+
     stack = Stack()
     stack.push(src)
     marked[src] = True
-    
+
     while not stack.is_empty():
         v = stack.pop()
         for w in G[v]:
@@ -75,15 +75,15 @@ def bfs_search(G, src):
     marked = {}
     node_from = {}
     dist_to = {}
-    
+
     for v in G.nodes():
         dist_to[v] = float('inf')
-    
+
     q = Queue()
     q.enqueue(src)
     dist_to[src] = 0
     marked[src] = True
-    
+
     while not q.is_empty():
         v = q.dequeue()
         for w in G[v]:
@@ -94,11 +94,11 @@ def bfs_search(G, src):
                 q.enqueue(w)
 
     return node_from            
-    
+
 #######################################################################
 if __name__ == '__main__':
-    random.seed(28)
-    m = Maze(7,7)
+    random.seed(15)
+    m = Maze(3,5)
     G = to_networkx(m)
     
     # dfs_search_nr and dfs_search() produce different results
@@ -117,5 +117,4 @@ if __name__ == '__main__':
     pos_f = nx.get_node_attributes(F, 'pos')
     nx.draw(F, pos_f, with_labels = True, node_color="w", font_size=8, ax=ax[1])  
     
-
     plt.show()

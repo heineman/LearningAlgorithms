@@ -11,14 +11,14 @@ def make_sample_graph():
     G.add_nodes_from(['A3', 'A4', 'A5'])
     G.add_edge('A2', 'A3')
     G.add_edges_from([('A3', 'A4'), ('A4', 'A5')])
-    
+
     for i in range(2, 6):
         G.add_edge('B{}'.format(i), 'C{}'.format(i))
         if 2 < i < 5:
             G.add_edge('B{}'.format(i), 'B{}'.format(i+1))
         if i < 5:
             G.add_edge('C{}'.format(i), 'C{}'.format(i+1))
-    
+
     print(len(G.nodes()), 'nodes and ', len(G.edges()), 'edges.')
     print('neighbors of C3:', list(G['C3']))
     print('edges adjacent to C3:', list(G.edges('C3')))

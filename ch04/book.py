@@ -9,8 +9,8 @@ from algs.table import DataTable, TableNum, process
 def run_trials(clazz, N, factor):
     """Run a single trial."""
     stmt = '''
-from {} import PQ 
-one_run(PQ({}), {}, {})'''.format(clazz,N,N,factor)
+from {0} import PQ 
+one_run(PQ({1}), {1}, {2})'''.format(clazz,N,factor)
     return min(timeit.repeat(stmt=stmt, setup = 'from ch04.timing import one_run',
                              repeat=5, number=10))/10
 
@@ -54,7 +54,7 @@ def average_performance(max_n=65536, output=True, decimals=2):
             tbl.row([N, heap[N], order_ll[N]])
         N *= 2
 
-    if output:        
+    if output:
         print()
         print('Heap', tbl.best_model('Heap'))
         print('OrderL', tbl.best_model('OrderL'))

@@ -104,46 +104,45 @@ def k_smallest(A, k):
 def iterator(pq):
     """
     Provides a Python-generator over a PQ, using a PQ to do it!
-    
+
     Each entry in the pqit iterator has (value, priority) where value is
     an index position into the original pq, while its priority is the
     priority if the entry.
-    
+
     You can add capability for fail-fast iterators IF the heap actively
     increments a count in its pq.storage[0] which is unused anyway.
     """
     from ch04.heap import PQ
     N = len(pq)
-    
+
     # This works with INDEX positions into the heap
     pqit = PQ(N)
     pqit.enqueue(1, pq.peek().priority)
     while pqit:
         idx = pqit.dequeue()
         yield (pq.storage[idx].value, pq.storage[idx].priority)
-        
+
         child = 2*idx
         if child < pq.N:
             pqit.enqueue(child, pq.storage[child].priority)
         child += 1
         if child < pq.N:
             pqit.enqueue(child, pq.storage[child].priority)
-    
+
 def iterator_trial():
     """Generate a sample Priority Queue and show develop iterator."""
     from ch04.heap import PQ
     import random
-    
+
     # populate
     pq = PQ(20)
-    for k in range(20):
+    for _ in range(20):
         prior = random.randint(0, 100)
         pq.enqueue(prior, prior)
-        
+
     while pq:
         print([k for k in iterator(pq)])
         print(pq.dequeue())
-    
 
 #######################################################################
 if __name__ == '__main__':

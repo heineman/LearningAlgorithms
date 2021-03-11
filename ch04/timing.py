@@ -24,8 +24,8 @@ def drain(pq, n):
 # Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N
 def run_trials(clazz, N, factor):
     stmt = '''
-from {} import PQ 
-one_run(PQ({}), {}, {})'''.format(clazz,N,N,factor)
+from {0} import PQ 
+one_run(PQ({1}), {1}, {2})'''.format(clazz,N,factor)
     return min(timeit.repeat(stmt=stmt,
                 setup='from ch04.timing import one_run', repeat=5, number=10))/10
 
