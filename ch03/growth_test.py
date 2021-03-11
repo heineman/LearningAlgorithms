@@ -140,15 +140,18 @@ def time_results_open(words, output=True, decimals=4):
         arow = [num_to_add]
         for size in sizes:
             if num_to_add < size:
-                m1 = min(timeit.repeat(stmt=f'''
-table = Hashtable({size})
-for word in {all_words}:
-    table.put(word, 99)''', setup='from ch03.hashtable_open import Hashtable', repeat=1, number=100))
+                m1 = min(timeit.repeat(stmt='''
+table = Hashtable({})
+for word in words:
+    table.put(word, 99)'''.format(size), setup='''
+from ch03.hashtable_open import Hashtable
+words={}'''.format(all_words), repeat=1, number=100))
                 arow.append((100000.0 * m1) / size)
             else:
                 arow.append(SKIP)
         tbl.row(arow)
     return tbl
 
+#######################################################################
 if __name__ == '__main__':
     probability_of_failure()

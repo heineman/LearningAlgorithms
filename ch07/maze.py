@@ -1,12 +1,13 @@
 import random
 
+try:
+    import networkx as nx
+except ImportError:
+    from ch07.graph import Replacement
+    nx = Replacement()
+
 def to_networkx(maze):
     """Return a NetworkX Graph representing maze."""
-    try:
-        import networkx as nx
-    except ModuleNotFoundError:
-        print('Python networkx library is not installed.')
-        return
 
     # Undirected graph can represent a maze.
     G = nx.Graph()
@@ -31,12 +32,7 @@ def solution_graph(G, path):
     Return a NetworkX Graph representing solution in maze.
     Remove all vertices that are not in the path
     """
-    try:
-        import networkx as nx
-    except ModuleNotFoundError:
-        print('Python networkx library is not installed.')
-        return
-
+    
     # Bring over positional information from G
     H = nx.DiGraph()
     pos = nx.get_node_attributes(G, 'pos') 
@@ -54,11 +50,7 @@ def node_from_field(G, node_from):
     Return a directed NetworkX Graph representing structure
     of the node_from dictionary.
     """
-    try:
-        import networkx as nx
-    except ModuleNotFoundError:
-        print('Python networkx library is not installed.')
-        return
+
     # Bring over positional information from G
     pos = nx.get_node_attributes(G, 'pos') 
     H = nx.DiGraph()
@@ -179,7 +171,6 @@ if __name__ == "__main__":
     m = Maze(7,7)
     g = to_networkx(m)
     import matplotlib.pyplot as plt
-    import networkx as nx
 
     pos = nx.get_node_attributes(g, 'pos') 
     nx.draw(g, pos, with_labels = True, node_color="w", font_size=8) 

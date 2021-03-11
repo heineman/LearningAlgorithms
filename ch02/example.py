@@ -21,9 +21,9 @@ def run_trial():
     print('N\tTime')
     trials = [100, 1000]
     for n in trials:
-        sort_time = timeit.timeit(stmt='insertion_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='insertion_sort(x)', setup='''
 from ch02.example import dataset1, insertion_sort
-x=dataset1({n})''', number=100)
+x=dataset1({})'''.format(n), number=100)
 
         print('{0:d}\t{1:.4f}'.format(n, sort_time))
 

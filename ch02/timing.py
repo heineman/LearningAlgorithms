@@ -49,9 +49,9 @@ def run_permutation_sort_worst_case(top):
     x = []
     y = []
     for n in range(1,10):
-        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup='''
 from ch02.random_sort import permutation_sort
-x=list(range({n},0,-1))''', number=1)
+x=list(range({},0,-1))'''.format(n), number=1)
         x.append(n)
         y.append(sort_time)
 
@@ -62,9 +62,9 @@ x=list(range({n},0,-1))''', number=1)
     tbl = DataTable([8,8,8], ['N', 'TimeToSort', 'Model'], decimals=4)
 
     for n in range(1,top+1):
-        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup='''
 from ch02.random_sort import permutation_sort
-x=list(range({n},0,-1))''', number=1)
+x=list(range({},0,-1))'''.format(n), number=1)
         tbl.row([n, sort_time, factorial_model(n, factorial_coeffs[0])])
 
 def run_random_sort(top):
@@ -74,11 +74,11 @@ def run_random_sort(top):
     x = []
     y = []
     for n in range(1,10):
-        sort_time = timeit.timeit(stmt='random_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='random_sort(x)', setup='''
 import random
 from ch02.random_sort import random_sort
-x=list(range({n}))
-random.shuffle(x)''', number=1)
+x=list(range({}))
+random.shuffle(x)'''.format(n), number=1)
         x.append(n)
         y.append(sort_time)
 
@@ -89,11 +89,11 @@ random.shuffle(x)''', number=1)
     tbl = DataTable([8,8,8], ['N', 'TimeToSort', 'Model'], decimals=4)
 
     for n in range(1,top+1):
-        sort_time = timeit.timeit(stmt='random_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='random_sort(x)', setup='''
 import random
 from ch02.random_sort import random_sort
-x=list(range({n}))
-random.shuffle(x)''', number=1)
+x=list(range({}))
+random.shuffle(x)'''.format(n), number=1)
         tbl.row([n, sort_time, factorial_model(n, factorial_coeffs[0])])
 
 #######################################################################

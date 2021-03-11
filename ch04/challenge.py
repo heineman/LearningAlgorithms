@@ -29,20 +29,20 @@ def merged_arrays(heap1, heap2):
 # Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N
 def run_merge_trial(m, n):
     """Generate data for Merge Sort results."""
-    return min(timeit.repeat(stmt='merged_arrays(heap1, heap2)', setup = f'''
+    return min(timeit.repeat(stmt='merged_arrays(heap1, heap2)', setup = '''
 import random
 from ch04.heap import PQ
 from ch04.challenge import merged_arrays
-heap1 = PQ({m})
-heap2 = PQ({n})
-random.seed({m})
-for _ in range({m}):
+heap1 = PQ({0})
+heap2 = PQ({1})
+random.seed({0})
+for _ in range({0}):
     r1 = random.randint(0,16777216)
     heap1.enqueue(r1,r1)
-random.seed({n})
-for _ in range({n}):
+random.seed({1})
+for _ in range({1}):
     r2 = random.randint(0,16777216)
-    heap2.enqueue(r2,r2)''', repeat=5, number=1))
+    heap2.enqueue(r2,r2)'''.format(m,n), repeat=5, number=1))
 
 def combined_sorted():
     """Generate results for different sorting trials."""

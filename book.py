@@ -7,7 +7,6 @@ see now whether there are any surprises, and not later!
 """
 import timeit
 import itertools
-from enum import Enum
 
 try:
     import numpy as np

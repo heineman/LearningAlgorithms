@@ -24,10 +24,10 @@ class Test_Ch01(unittest.TestCase):
         # default case
         with self.assertRaises(ValueError):
             largest_two([])
-            
+
         with self.assertRaises(ValueError):
             largest_two([5])
-    
+
         # six possible
         self.assertEqual((3,2), largest_two([1,2,3]))
         self.assertEqual((3,2), largest_two([1,3,2]))
@@ -35,35 +35,35 @@ class Test_Ch01(unittest.TestCase):
         self.assertEqual((3,2), largest_two([2,3,1]))
         self.assertEqual((3,2), largest_two([3,1,2]))
         self.assertEqual((3,2), largest_two([3,2,1]))
-    
+
     def test_sorting_two(self):
         with self.assertRaises(ValueError):
             sorting_two([])
-            
+
         with self.assertRaises(ValueError):
             sorting_two([5])
-            
+
         self.assertEqual((3,2), sorting_two([1,2,3]))
         self.assertEqual((3,2), sorting_two([1,3,2]))
         self.assertEqual((3,2), sorting_two([2,1,3]))
         self.assertEqual((3,2), sorting_two([2,3,1]))
         self.assertEqual((3,2), sorting_two([3,1,2]))
         self.assertEqual((3,2), sorting_two([3,2,1]))
-        
+
     def test_double_two(self):
         with self.assertRaises(ValueError):
             double_two([])
-            
+
         with self.assertRaises(ValueError):
             double_two([5])
-            
+
         self.assertEqual((3,2), double_two([1,2,3]))
         self.assertEqual((3,2), double_two([1,3,2]))
         self.assertEqual((3,2), double_two([2,1,3]))
         self.assertEqual((3,2), double_two([2,3,1]))
         self.assertEqual((3,2), double_two([3,1,2]))
-        self.assertEqual((3,2), double_two([3,2,1]))        
-        
+        self.assertEqual((3,2), double_two([3,2,1]))
+
     def test_largest_alternate(self):
         self.assertEqual(largest(BEST_CASE), max(BEST_CASE))
         self.assertEqual(largest(WORST_CASE), max(WORST_CASE))
@@ -86,7 +86,7 @@ class Test_Ch01(unittest.TestCase):
         # mutable
         my_list = [3, 1, 4, 1, 5, 9, 2, 6]
         self.assertEqual(tournament_two(my_list), (9, 6))
-        
+
         my_list = [1, 3, 1, 4, 9, 5, 6, 2]
         self.assertEqual(tournament_two(my_list), (9, 6))
 
@@ -102,7 +102,7 @@ class Test_Ch01(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             mutable_two([])
-        
+
     def test_tournament_two_objects(self):
         self.assertEqual(tournament_two_object([1,2]), (2,1))
 
@@ -114,7 +114,7 @@ class Test_Ch01(unittest.TestCase):
         # mutable
         my_list = [3, 1, 4, 1, 5, 9, 2, 6]
         self.assertEqual(tournament_two_object(my_list), (9, 6))
-        
+
         my_list = [1, 3, 1, 4, 9, 5, 6, 2]
         self.assertEqual(tournament_two_object(my_list), (9, 6))
 
@@ -157,7 +157,7 @@ class Test_Ch01(unittest.TestCase):
             self.assertTrue(is_palindrome2(pal))
             self.assertFalse(is_palindrome1(pal+'x'))
             self.assertFalse(is_palindrome2(pal+'x'))
-        
+
         palindromes = [
             'Able was I ere I saw Elba',
             'A man, a plan, a canal - Panama',
@@ -171,15 +171,24 @@ class Test_Ch01(unittest.TestCase):
 
     def test_run_median_less_than_trial(self):
         from ch01.challenge import run_median_less_than_trial
-        
+
         tbl = run_median_less_than_trial(max_k=10, output=False)
         self.assertTrue(tbl.entry(513,'median_time') < tbl.entry(513,'sort_median'))
-        
+
     def test_run_counting_sort_trials(self):
         from ch01.challenge import run_counting_sort_trials
-        
+
         tbl = run_counting_sort_trials(max_k=12, output=False)
         self.assertTrue(tbl.entry(2048,'counting_sort_improved') <= tbl.entry(2048,'counting_sort'))
+
+    def test_linear_median(self):
+        self.assertEqual(5, linear_median([5]))
+        self.assertEqual(3, linear_median([3,5]))    # median is ill-defined for EVEN lists, so arbitrarily choose low-end
+        self.assertEqual(5, linear_median([3,5,7]))
+        self.assertEqual(5, linear_median([3,5,6,7]))
+
+        with self.assertRaises(ValueError):
+            linear_median([])
 
 #######################################################################
 if __name__ == '__main__':

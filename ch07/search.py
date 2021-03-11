@@ -5,6 +5,12 @@ import random
 from ch07.maze import Maze, to_networkx, solution_graph, node_from_field
 from ch04.list_queue import Queue
 
+try:
+    import networkx as nx
+except ImportError:
+    from ch07.graph import Replacement
+    nx = Replacement()
+
 def path_to(node_from, src, target):
     """
     Given a dictionary that results from a search, reproduce path from original src
@@ -101,7 +107,6 @@ if __name__ == '__main__':
     F = node_from_field(G, field)
      
     import matplotlib.pyplot as plt
-    import networkx as nx
 
     fig, axes = plt.subplots(nrows=1, ncols=2)
     ax = axes.flatten()

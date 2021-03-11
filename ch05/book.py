@@ -16,17 +16,16 @@ Building models for Insertion Sort. This may take awhile...
 Quadratic SS = 4.586897358514126e-09*N*N + 1.406849880773368e-07*N
 Quadratic IS = 4.504032979491163e-09*N*N + 1.8245472574666622e-07*N
 
-           N        TimeSS       ModelSS        TimeIS       ModelIS    
-         256         0.000         0.000         0.000         0.000    
-         512         0.001         0.001         0.001         0.001    
-       1,024         0.005         0.005         0.005         0.005    
-       2,048         0.020         0.020         0.019         0.019    
-       4,096         0.078         0.078         0.076         0.076    
-       8,192         0.307         0.309         0.304         0.304    
-      16,384         1.238         1.234         1.221         1.212    
-      32,768         4.881         4.930         4.754         4.842    
-      65,536        19.585        19.710        19.716        19.357    
-
+           N        TimeSS       ModelSS        TimeIS       ModelIS
+         256         0.000         0.000         0.000         0.000
+         512         0.001         0.001         0.001         0.001
+       1,024         0.005         0.005         0.005         0.005
+       2,048         0.020         0.020         0.019         0.019
+       4,096         0.078         0.078         0.076         0.076
+       8,192         0.307         0.309         0.304         0.304
+      16,384         1.238         1.234         1.221         1.212
+      32,768         4.881         4.930         4.754         4.842
+      65,536        19.585        19.710        19.716        19.357
 
 """
 import timeit
@@ -34,7 +33,8 @@ import random
 from algs.table import captionx, FigureNum
 
 from algs.table import DataTable
-from algs.modeling import n_log_n_model, log_linear_model, linear_model, quadratic_model, numpy_error
+from algs.modeling import n_log_n_model, log_linear_model, linear_model, quadratic_model
+from algs.modeling import numpy_error
 
 def fact(N):
     """Inefficient recursive implementation to introduce recursion."""
@@ -194,7 +194,7 @@ def modeling_merge_heap(output=True, decimals=1):
     if output:
         print('Comp MS N*Log N = {}*N*Log(N) + {}*N'.format(log_comp_ms[0], log_comp_ms[1]))
         print('Swap MS N*Log N = {}*N*Log(N) + {}*N'.format(log_swap_ms[0], log_swap_ms[1]))
-    
+
         print('Comp HS N*Log N = {}*N*Log(N) + {}*N'.format(log_comp_hs[0], log_comp_hs[1]))
         print('Swap HS N*Log N = {}*N*Log(N) + {}*N'.format(log_swap_hs[0], log_swap_hs[1]))
         print()
@@ -326,7 +326,8 @@ random.shuffle(A)'''.format(n), repeat=100, number=1))/100   # since seeking ave
     print('Quadratic IS = {}*N*N + {}*N'.format(quadratric_is[0], quadratric_is[1]))
     print()
 
-    tbl = DataTable([12,10,10,10,10,10,10],['N','TimeSS','ModelSS','MinIS', 'TimeIS', 'MaxIs', 'ModelIS'])
+    tbl = DataTable([12,10,10,10,10,10,10],
+                    ['N','TimeSS','ModelSS','MinIS', 'TimeIS', 'MaxIs', 'ModelIS'])
     for n,t_ss,t_is in zip(x,y_ss,y_is):
         tbl.row([n, t_ss, quadratic_model(n, quadratric_ss[0], quadratric_ss[1]),
                     t_is, t_is, t_is, quadratic_model(n, quadratric_is[0], quadratric_is[1])])
@@ -358,8 +359,9 @@ def timing_nlogn_sorting():
     Confirm N Log N performance of Merge Sort, Heap Sort, Quicksort and Python's built-in sort.
     """
     # Build model from Generate 5 data points
-    tbl = DataTable([12,10,10,10,10,10],['N','MergeSort', 'QuickSort', 'HeapSort', 'TimSort', 'PythonSort'])
-    
+    tbl = DataTable([12,10,10,10,10,10],
+                    ['N','MergeSort', 'QuickSort', 'HeapSort', 'TimSort', 'PythonSort'])
+
     x = []
     y_ms = []
     y_qs = []
@@ -378,18 +380,18 @@ import random
 from ch05.sorting import quick_sort
 A=list(range({}))
 random.shuffle(A)'''.format(n), repeat=10, number=1))
-        
+
         t_hs = min(timeit.repeat(stmt='heap_sort(A)', setup='''
 import random
 from ch05.heapsort import heap_sort
 A=list(range({}))
 random.shuffle(A)'''.format(n), repeat=10, number=1))
-        
+
         t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup='''
 import random
 from ch05.timsort import tim_sort
 A=list(range({}))
-random.shuffle(A)'''.format(n), repeat=10, number=1))        
+random.shuffle(A)'''.format(n), repeat=10, number=1))
 
         t_ps = min(timeit.repeat(stmt='A.sort()', setup='''
 import random
@@ -442,7 +444,7 @@ random.shuffle(A)'''.format(n), repeat=10, number=1))
 import random
 from ch05.timsort import tim_sort
 A=list(range({}))
-random.shuffle(A)'''.format(n), repeat=10, number=1))        
+random.shuffle(A)'''.format(n), repeat=10, number=1))
 
         t_ps = min(timeit.repeat(stmt='A.sort()', setup='''
 import random
@@ -463,19 +465,19 @@ def show_partition():
     from ch01.challenge import partition
     A = [15, 21, 20, 2, 15, 24, 5, 19]
     print('|'.join([' {:>2} '.format(k) for k in A]))
-    
+
     idx = partition(A, 0, len(A)-1, 0)
     print('|'.join([' {:>2} '.format(k) for k in A]))
     print('pivot=A[{}]={}'.format(idx, A[idx]))
-    
+
 def show_heapify():
     """Show how array is turned into a heap, step by step."""
     from ch05.heapsort import HeapSortCounting
-    
+
     # After a few minutes of tweaking (based on partial results from the challenge
-    # problem area), I found this input that produces the Heap. nice! 
+    # problem area), I found this input that produces the Heap. nice!
     A = [14, 13, 12, 5, 10, 6, 14, 12, 9, 1, 11, 8, 15, 9, 7, 4, 8, 2]
-    heap = HeapSortCounting(A, output=True) 
+    heap = HeapSortCounting(A, output=True)
 
 def tim_sort_figure():
     """Recreate data for timsort figure."""
@@ -483,9 +485,9 @@ def tim_sort_figure():
     # Small arrays are sorted using insertion sort
     A=[14, 13, 12, 5, 10, 6, 14, 12, 9, 1, 11, 8, 15, 9, 7, 4, 8, 2]
     print('\t' +'|'.join([' {:>2} '.format(k) for k in A]))
-    
+
     N = len(A)
-    
+
     # Insertion sort in strips of 'size'
     size = 4
     for lo in range(0, N, size):
@@ -513,28 +515,28 @@ def generate_ch05():
     with FigureNum(1) as figure_number:
         description  = 'Sample array, A, to sort'
         label = captionx(chapter, figure_number)
-        ar = [15, 21, 20, 2, 15, 24, 5, 19]
-        print('|'.join([' {:>2} '.format(k) for k in ar]))
+        A = [15, 21, 20, 2, 15, 24, 5, 19]
+        print('|'.join([' {:>2} '.format(k) for k in A]))
         moves = [(0,3),(5,7),(1,6),None,(2,4),None,(4,5)]
         for m in moves:
             if m:
-                ar[m[0]],ar[m[1]] = ar[m[1]],ar[m[0]]
-            print('|'.join([' {:>2} '.format(k) for k in ar]))
-        
+                A[m[0]],A[m[1]] = A[m[1]],A[m[0]]
+            print('|'.join([' {:>2} '.format(k) for k in A]))
+
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(2) as figure_number:
         description  = 'Sorting sample array using Selection Sort'
         label = captionx(chapter, figure_number)
-        ar = [15, 21, 20, 2, 15, 24, 5, 19]
-        print('|'.join([' {:>2} '.format(k) for k in ar]))
+        A = [15, 21, 20, 2, 15, 24, 5, 19]
+        print('|'.join([' {:>2} '.format(k) for k in A]))
         moves = [(0,3),(1,6),(2,3),(3,4),(4,7),(5,7),(6,6)]
         for m in moves:
             if m:
-                ar[m[0]],ar[m[1]] = ar[m[1]],ar[m[0]]
-            print('|'.join([' {:>2} '.format(k) for k in ar]))
-        
+                A[m[0]],A[m[1]] = A[m[1]],A[m[0]]
+            print('|'.join([' {:>2} '.format(k) for k in A]))
+
         print('{}. {}'.format(label, description))
         print()
 
@@ -547,15 +549,16 @@ def generate_ch05():
     with FigureNum(4) as figure_number:
         description  = 'Sorting sample array using Insertion Sort'
         label = captionx(chapter, figure_number)
-        ar = [15, 21, 20, 2, 15, 24, 5, 19]
-        print('|'.join([' {:>2} '.format(k) for k in ar]))
-        moves = [None,[(2,1)], [(3,2),(2,1),(1,0)], [(4,3),(3,2)], None, [(6,5),(5,4),(4,3),(3,2),(2,1)],[(7,6),(6,5),(5,4)]]
+        A = [15, 21, 20, 2, 15, 24, 5, 19]
+        print('|'.join([' {:>2} '.format(k) for k in A]))
+        moves = [None,[(2,1)], [(3,2),(2,1),(1,0)], [(4,3),(3,2)],
+                 None, [(6,5),(5,4),(4,3),(3,2),(2,1)],[(7,6),(6,5),(5,4)]]
         for p in moves:
             if p:
                 for m in p:
-                    ar[m[0]],ar[m[1]] = ar[m[1]],ar[m[0]]
-            print('|'.join([' {:>2} '.format(k) for k in ar]))
-        
+                    A[m[0]],A[m[1]] = A[m[1]],A[m[0]]
+            print('|'.join([' {:>2} '.format(k) for k in A]))
+
         print('{}. {}'.format(label, description))
         print()
 
@@ -570,19 +573,19 @@ def generate_ch05():
         label = captionx(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
-        
+
     with FigureNum(7) as figure_number:
         description  = 'Complete recursive invocation of rmax'
         label = captionx(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
-        
+
     with FigureNum(8) as figure_number:
         description  = 'Merging two stacks into one'
         label = captionx(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
-        
+
     with FigureNum(9) as figure_number:
         description  = 'Step by step merge sort of two sorted sub-arrays of size 4'
         label = captionx(chapter, figure_number)

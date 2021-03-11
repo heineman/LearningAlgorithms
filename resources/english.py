@@ -26,8 +26,22 @@ def english_words():
         _english_words.extend(file.splitlines())
         return _english_words
     except ImportError:
+        pass
+
+    try:
         import pkg_resources
 
         file = pkg_resources.resource_string('resources', 'words.english.txt').decode('utf-8')
         _english_words.extend(file.splitlines())
         return _english_words
+    except ImportError:
+        pass
+
+    # if still cannot access, then you will have to hard-code to
+    # change the following path name to the location of the
+    # "words.english.txt" file
+    import os
+    file = open(os.path.join('resources', 'words.english.txt'))
+    for line in file.readlines():
+        _english_words.extend(line[:-1])    # chomp '\n'
+    return _english_words

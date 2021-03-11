@@ -22,7 +22,7 @@ def insertion_sort(A):
                 break
 
             A[j],A[j-1] = A[j-1],A[j]
-            
+
 def insertion_sort_cmp(A, cmp=lambda one,two: one < two):
     """Sort A using Insertion Sort."""
     N = len(A)
@@ -37,7 +37,7 @@ def quick_sort(A):
     """Quicksort using a random pivot select."""
     from ch01.challenge import partition
     from random import randint
-    
+
     def qsort(lo, hi):
         if hi <= lo:
             return
@@ -47,7 +47,7 @@ def quick_sort(A):
 
         qsort(lo, location-1)
         qsort(location+1, hi)
-        
+
     qsort(0, len(A)-1)
 
 def insertion_sort_bas(A):

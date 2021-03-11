@@ -62,11 +62,11 @@ def run_max_sort_worst_case(max_k=15, output=True, decimals=4):
     xvals = []
     yvals = []
     for n in [2 ** k for k in range(5, 12)]:
-        sort_time = timeit.timeit(stmt='max_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='max_sort(x)', setup='''
 from ch02.challenge import max_sort
 import random
-x=list(range({n},0,-1))
-random.shuffle(x)''', number=10)
+x=list(range({},0,-1))
+random.shuffle(x)'''.format(n), number=10)
         xvals.append(n)
         yvals.append(sort_time)
 
@@ -77,11 +77,11 @@ random.shuffle(x)''', number=10)
     tbl = DataTable([8,8,8], ['N', 'MaxSort', 'Model'], output=output, decimals=decimals)
 
     for n in [2 ** k for k in range(5, max_k)]:
-        sort_time = timeit.timeit(stmt='max_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='max_sort(x)', setup='''
 from ch02.challenge import max_sort
 import random
-x=list(range({n},0,-1))
-random.shuffle(x)''', number=10)
+x=list(range({},0,-1))
+random.shuffle(x)'''.format(n), number=10)
         tbl.row([n, sort_time, quadratic_model(n, quadratic_coeff[0], quadratic_coeff[1])])
 
     return tbl
@@ -96,9 +96,9 @@ def run_permutation_sort(max_n=13, output=True, decimals=4):
     xvals = []
     yvals = []
     for n in range(1,6):
-        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup='''
 from ch02.random_sort import permutation_sort
-x=list(range({n},0,-1))''', number=10)
+x=list(range({},0,-1))'''.format(n), number=10)
         xvals.append(n)
         yvals.append(sort_time)
 
@@ -112,9 +112,9 @@ x=list(range({n},0,-1))''', number=10)
                     output=output, decimals=decimals)
 
     for n in range(max_n):
-        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup=f'''
+        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup='''
 from ch02.random_sort import permutation_sort
-x=list(range({n},0,-1))''', number=10)
+x=list(range({},0,-1))'''.format(n), number=10)
         tbl.row([n, sort_time, factorial_model(n, factorial_coeff[0])])
 
     return tbl
@@ -130,11 +130,11 @@ def performance_bas(max_k=22, output=True, decimals=3):
     yvals = []
     num = 50000
     for n in trials:
-        search_time = timeit.timeit(stmt=f'binary_array_search(x, random.randint(0,{n}*4))',
-                                    setup=f'''
+        search_time = timeit.timeit(stmt='binary_array_search(x, random.randint(0,{}*4))'.format(n),
+                                    setup='''
 import random
 from ch02.bas import binary_array_search        
-x=sorted(random.sample(range({n}*4), {n}))''', number=num)
+x=sorted(random.sample(range({}*4), {}))'''.format(n,n), number=num)
         xvals.append(n)
         yvals.append(search_time)
 
@@ -145,11 +145,11 @@ x=sorted(random.sample(range({n}*4), {n}))''', number=num)
     tbl = DataTable([15, 10, 10], ['N', 'T(N)', 'Model'], output=output, decimals=decimals)
     trials = [2**k for k in range(5,max_k)]
     for n in trials:
-        search_time = timeit.timeit(stmt=f'binary_array_search(x, random.randint(0,{n}*2))', 
-                                    setup=f'''
+        search_time = timeit.timeit(stmt='binary_array_search(x, random.randint(0,{}*2))'.format(n), 
+                                    setup='''
 import random
 from ch02.bas import binary_array_search        
-x=sorted(random.sample(range({n}*4), {n}))''', number=num)
+x=sorted(random.sample(range({}*4), {}))'''.format(n,n), number=num)
 
         tbl.row([n, search_time, log_model(n, log_coeff[0])])
 

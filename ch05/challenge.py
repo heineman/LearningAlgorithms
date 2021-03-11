@@ -186,32 +186,31 @@ def fib_table(output=True, decimals=3):
         print (exp_coeffs)
 
     return tbl
-    
+
 def rediscover_heap(num_trials=10000000):
     """
     Given a partial heap, rediscover original input probabilistically.
-    
+
     This might not work the first time, but after repeated attempts, the following
     possible starting points were found:
-    
+
     [15, 12, 7, 4, 13, 8, 11, 14, 2, 1, 10, 9, 6, 9, 12, 8, 5, 14]
-    
+
     [8, 2, 15, 5, 1, 14, 11, 4, 12, 12, 10, 13, 6, 9, 7, 14, 9, 8]  found in 2,380,433 tries
-    
+
     [13, 14, 12, 5, 10, 6, 14, 11, 9, 1, 12, 8, 15, 9, 7, 4, 8, 2]
-    
+
     [9, 10, 6, 13, 15, 8, 9, 4, 2, 1, 11, 14, 14, 12, 7, 8, 5, 12] found in 8394544 attempts.
-    
+
     [5, 9, 6, 14, 10, 13, 12, 11, 15, 1, 12, 8, 14, 9, 7, 4, 8, 2] found in 3234220 attempts
        with seed 14
-
     """
     from ch05.heapsort import HeapSort
     from random import shuffle, seed
     A = [15, 13, 14, 12, 11, 12, 14, 8, 9, 1, 10, 8, 6, 9, 7, 4, 5, 2]
     N = len(A)
     more = 2
-    seed(14) 
+    seed(14)
     for i in range(num_trials):
         copy = list(A)
         shuffle(copy)
@@ -221,15 +220,15 @@ def rediscover_heap(num_trials=10000000):
         two = A[N//2 - more:]
         if one == two:
             return '{} found in {} attempts.'.format(copy1, i)
-    
+
     return 'none found in {} attempts'.format(i)
 
 #######################################################################
 if __name__ == '__main__':
     print(rediscover_heap())
-    
+
     print(fib_with_lucas(12))
-    
+
     print(num_swaps_hashable(['15', '21', '20', '2', '15', '24', '5', '19']))
 
     # Construct an array with UP-DOWN-UP structure.

@@ -6,8 +6,8 @@ This code is designed to show how TimSort uses Insertion Sort and Merge Sort
 as its constituent building blocks. It is not the actual sorting algorithm,
 because of extra complexities that optimize this base algorithm even further.
 
-Full details on the sorting algorithm are in the actual CPython code base, 
-but Tim Peters has provided documentation explaining reasons behind many 
+Full details on the sorting algorithm are in the actual CPython code base,
+but Tim Peters has provided documentation explaining reasons behind many
 of the choices in Tim Sort.
 
 https://hg.python.org/cpython/file/tip/Objects/listsort.txt
@@ -19,9 +19,9 @@ def merge(A, lo, mid, hi, aux):
     """Merge two (consecutive) runs together."""
     aux[lo:hi+1] = A[lo:hi+1]
 
-    left = lo             
-    right = mid + 1 
-    for i in range(lo, hi+1): 
+    left = lo
+    right = mid + 1
+    for i in range(lo, hi+1):
         if left > mid:
             A[i] = aux[right]
             right += 1
@@ -46,10 +46,10 @@ def merge(A, lo, mid, hi, aux):
 def compute_min_run(n):
     """Compute min_run to use when sorting n total values."""
     # Used to add 1 if any remaining bits are set
-    r = 0 
+    r = 0
     while n >= 64:
-        r |= n & 1;
-        n >>= 1;
+        r |= n & 1
+        n >>= 1
     return n + r
 
 def insertion_sort(A, lo, hi):
@@ -91,36 +91,36 @@ def timing_nlogn_sorting():
     tbl = DataTable([12,10,10,10,10],['N','MergeSort', 'QuickSort', 'TimSort', 'PythonSort'])
 
     for n in [2**k for k in range(8, 18)]:
-        t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup=f'''
+        t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup='''
 import random
 from ch05.merge import merge_sort
-A=list(range(int({n}*.8)))
-B=list(range({n}-len(A)))
+A=list(range(int({0}*.8)))
+B=list(range({0}-len(A)))
 random.shuffle(B)
-A.extend(B)''', repeat=10, number=1))
+A.extend(B)'''.format(n), repeat=10, number=1))
 
-        t_qs = min(timeit.repeat(stmt='quick_sort(A)', setup=f'''
+        t_qs = min(timeit.repeat(stmt='quick_sort(A)', setup='''
 import random
 from ch05.sorting import quick_sort
-A=list(range(int({n}*.8)))
-B=list(range({n}-len(A)))
+A=list(range(int({0}*.8)))
+B=list(range({0}-len(A)))
 random.shuffle(B)
-A.extend(B)''', repeat=10, number=1))
+A.extend(B)'''.format(n), repeat=10, number=1))
 
-        t_ps = min(timeit.repeat(stmt='A.sort()', setup=f'''
+        t_ps = min(timeit.repeat(stmt='A.sort()', setup='''
 import random
-A=list(range(int({n}*.8)))
-B=list(range({n}-len(A)))
+A=list(range(int({0}*.8)))
+B=list(range({0}-len(A)))
 random.shuffle(B)
-A.extend(B)''', repeat=10, number=1))
+A.extend(B)'''.format(n), repeat=10, number=1))
 
-        t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup=f'''
+        t_ts = min(timeit.repeat(stmt='tim_sort(A)', setup='''
 import random
 from ch05.timsort import tim_sort
-A=list(range(int({n}*.8)))
-B=list(range({n}-len(A)))
+A=list(range(int({0}*.8)))
+B=list(range({0}-len(A)))
 random.shuffle(B)
-A.extend(B)''', repeat=10, number=1))
+A.extend(B)'''.format(n), repeat=10, number=1))
 
         tbl.row([n, t_ms, t_qs, t_ts, t_ps])
 
@@ -130,8 +130,8 @@ if __name__ == '__main__':
 
     from random import shuffle
     from algs.sorting import is_sorted
-    A=list(range(22))
-    shuffle(A)
-    tim_sort(A)
-    print(A[:100])
-    is_sorted(A)
+    arr=list(range(22))
+    shuffle(arr)
+    tim_sort(arr)
+    print(arr[:100])
+    is_sorted(arr)

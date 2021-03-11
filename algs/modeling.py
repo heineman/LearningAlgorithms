@@ -11,7 +11,6 @@ be detected by the coad that imports this file as follows:
         here is code that needs numpy or scipy
 
 """
-from enum import Enum
 import math
 
 numpy_error = []
@@ -74,7 +73,7 @@ except ImportError:
         """Models N! or N factorial."""
         return a * math.factorial(n)
 
-class Model(Enum):
+class Model:
     """Default models used extensively in algorithmic analysis."""
     ERROR = 0
     LOG = 1

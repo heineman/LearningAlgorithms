@@ -3,29 +3,33 @@
 import random
 import timeit
 
-from algs.table import DataTable
+from algs.table import DataTable, ExerciseNum, captionx
 from algs.counting import RecordedItem
 
 def partition(A, lo, hi, idx):
     """
     Partition using A[idx] as value. Note lo and hi are INCLUSIVE on both
-    ends and idx must be valid index.
+    ends and idx must be valid index. Count the number of comparisons
+    by populating A with RecordedItem instances
     """
+    if lo == hi:
+        return 0
+
     A[idx],A[lo] = A[lo],A[idx]    # swap into position
     i = lo
     j = hi + 1
-
     while True:
         while True:
             i += 1
-            if A[lo] < A[i]: break
             if i == hi: break
+            if A[lo] < A[i]: break
 
         while True:
             j -= 1
-            if A[j] < A[lo]: break
             if j == lo: break
+            if A[j] < A[lo]: break
 
+        # doesn't count as comparing two values
         if i >= j: break
 
         A[i],A[j] = A[j],A[i]
@@ -43,8 +47,8 @@ def linear_median(A):
     hi = len(A) - 1
     mid = hi // 2
     while lo <= hi:
-        #idx = random.randrange(hi-lo+1)     # select valid index randomly
-        j = partition(A, lo, hi, lo)  #  +idx)
+        idx = random.randrange(hi-lo+1)     # select valid index randomly
+        j = partition(A, lo, hi, lo+idx)
 
         if j == mid:
             return A[j]
@@ -52,6 +56,7 @@ def linear_median(A):
             lo = j+1
         else:
             hi = j-1
+    raise ValueError('A must contain at least 1 value.')
 
 def counting_sort(A, M):
     """
@@ -95,7 +100,8 @@ def run_counting_sort_trials(max_k=21, output=True):
     M = 20 # arbitrary value, and results are dependent on this value.
     trials = [2**k for k in range(8, max_k)]
     for n in trials:
-        t_cs = min(timeit.repeat(stmt='counting_sort(a,{})\nis_sorted(a)'.format(M), setup='''
+        t_cs = min(timeit.repeat(stmt='counting_sort(a,{})\nis_sorted(a)'.format(M),
+                                 setup='''
 import random
 from ch01.challenge import counting_sort
 from algs.sorting import is_sorted
@@ -103,7 +109,8 @@ w = [{0}-1] * {1}
 b = [0] * {1} 
 a = list(range({0})) * {1}
 random.shuffle(a)'''.format(M,n), repeat=100, number=1))
-        t_csi = min(timeit.repeat(stmt='counting_sort_improved(a,{})\nis_sorted(a)'.format(M), setup='''
+        t_csi = min(timeit.repeat(stmt='counting_sort_improved(a,{})\nis_sorted(a)'.format(M),
+                                  setup='''
 import random
 from ch01.challenge import counting_sort_improved
 from algs.sorting import is_sorted
@@ -121,14 +128,16 @@ def run_median_trial():
 
     trials = [2**k+1 for k in range(8,20)]
     for n in trials:
-        t_med = 1000*min(timeit.repeat(stmt='assert(linear_median(a) == {}//2)'.format(n), setup='''
+        t_med = 1000*min(timeit.repeat(stmt='assert(linear_median(a) == {}//2)'.format(n),
+                                       setup='''
 import random
 from ch01.challenge import linear_median
 a = list(range({}))
 random.shuffle(a)
 '''.format(n), repeat=10, number=5))/5
 
-        t_sort = 1000*min(timeit.repeat(stmt='assert(sorted(a)[{}//2] == {}//2)'.format(n,n), setup='''
+        t_sort = 1000*min(timeit.repeat(stmt='assert(sorted(a)[{0}//2] == {0}//2)'.format(n),
+                                        setup='''
 import random
 from ch01.challenge import linear_median
 a = list(range({}))
@@ -201,8 +210,11 @@ def is_palindrome_letters_only(s):
 
 #######################################################################
 if __name__ == '__main__':
-    print('is Palindrome should be True: ',
-          is_palindrome_letters_only('A man, a plan, a canal... Panama!'))
+    chapter = 1
+    with ExerciseNum(1) as exercise_number:
+        print('is_palindrome_letters_only(w)')
+        print(captionx(chapter, exercise_number),
+              'Palindrome Detector')
 
     print('Median Counting\n')
     run_median_less_than_trial()

@@ -25,14 +25,14 @@ def sorting_two(A):
     """Sorts A in descending order and retrieve first two values."""
     if len(A) < 2:
         raise ValueError('Must have at least two values')
-    
+
     return tuple(sorted(A, reverse=True)[:2])
 
 def double_two(A):
     """Uses built-in max() method and duplicated list."""
     if len(A) < 2:
         raise ValueError('Must have at least two values')
-    
+
     my_max = max(A)
     copy = list(A)
     copy.remove(my_max)
@@ -42,7 +42,7 @@ def mutable_two(A):
     """Uses built-in max() method and extra storage."""
     if len(A) < 2:
         raise ValueError('Must have at least two values')
-    
+
     index_max = max(range(len(A)), key=A.__getitem__)
     my_max = A[index_max]
     del A[index_max]

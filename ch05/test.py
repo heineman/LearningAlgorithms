@@ -19,7 +19,7 @@ class Test_ch05(unittest.TestCase):
         expected = sorted(sample)
         merge_sort_counting(sample)
         self.assertEqual(expected, sample)
-        
+
     def test_slice_merge_sort_counting(self):
         from ch05.challenge import slice_merge_sort
         sample = [1, 2, 3, 4, 5, 6, 7, 8]               # drain left
@@ -31,7 +31,7 @@ class Test_ch05(unittest.TestCase):
         expected = sorted(sample)
         slice_merge_sort(sample)
         self.assertEqual(expected, sample)
-        
+
     def test_quick_sort(self):
         from ch05.sorting import quick_sort
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
@@ -59,14 +59,14 @@ class Test_ch05(unittest.TestCase):
         expected = sorted(sample)
         insertion_sort(sample)
         self.assertEqual(expected, sample)
-        
+
     def test_insertion_sort_counting(self):
         from ch05.sorting import insertion_sort_counting
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
         expected = sorted(sample)
         insertion_sort_counting(sample)
         self.assertEqual(expected, sample)
-        
+
     def test_insertion_sort_cmp(self):
         from ch05.sorting import insertion_sort_cmp
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
@@ -103,14 +103,14 @@ class Test_ch05(unittest.TestCase):
             shuffle(A)
             HeapSort(A).sort()
             self.assertEqual(list(range(size)), A)
-            
+
         size = 16
         for _ in range(1000):
             A = list(range(size))
             shuffle(A)
             HeapSortCounting(A).sort()
             self.assertEqual(list(range(size)), A)
-            
+
         size = 16
         for _ in range(50):
             A = list(range(size))
@@ -178,7 +178,7 @@ class Test_ch05(unittest.TestCase):
         my_copy = list(my_list)
         self.assertEqual(recursive_two(my_list), (9, 8))
         self.assertEqual(my_list, my_copy)
-        
+
         my_list = [9, 1, 8, 2, 3]     # odd-length-list
         my_copy = list(my_list)
         self.assertEqual(recursive_two(my_list), (9, 8))
@@ -219,7 +219,7 @@ class Test_ch05(unittest.TestCase):
         
     def test_rediscover_heap(self):
         from ch05.challenge import rediscover_heap
-        
+
         result = rediscover_heap(10)
         if 'none found' in result:
             pass

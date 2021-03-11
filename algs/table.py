@@ -20,9 +20,6 @@ from contextlib import contextmanager
 from algs.output import visualize
 from algs.modeling import best_models, pearson_correlation
 
-TABLE = "Table"
-FIGURE = "Figure"
-
 # When a table wants to skip a value, select this one.
 SKIP = '*'
 
@@ -267,6 +264,24 @@ class TableNum:
 
     def element(self):
         return "Table"
+
+    @contextmanager
+    def __enter__(self):
+        return '{}'.format(self.number)
+
+    def __exit__(self, arg1, arg2, arg):
+        self.number = -1
+
+    def __str__(self):
+        return '{}'.format(self.number)
+
+class ExerciseNum:
+    """Represents an exercise number in a chapter."""
+    def __init__(self, num):
+        self.number = num
+
+    def element(self):
+        return "Exercise"
 
     @contextmanager
     def __enter__(self):

@@ -5,13 +5,12 @@ Sample output for this execution.
 """
 import timeit
 import itertools
-from enum import Enum
 from algs.table import DataTable, TableNum, FigureNum, process, captionx
 from algs.modeling import Model
 from algs.counting import RecordedItem
 from ch01.largest import largest, alternate
 
-class Order(Enum):
+class Order:
     """Default models used extensively in algorithmic analysis."""
     REVERSED = 1
     SHUFFLED = 2
@@ -41,7 +40,8 @@ def run_largest_alternate(output=True, decimals=3):
     """Generate tables for largest and alternate."""
     n = 8
     tbl = DataTable([8,10,15,10,10],
-                   ['N', '#Less', '#LessA', 'largest', 'alternate'], output=output, decimals=decimals)
+                   ['N', '#Less', '#LessA', 'largest', 'alternate'],
+                   output=output, decimals=decimals)
     tbl.format('#Less', ',d')
     tbl.format('#LessA', ',d')
 
@@ -68,7 +68,7 @@ def run_largest_alternate(output=True, decimals=3):
         tbl.row([n, sum(largest_counts), sum(alternate_counts), largest_up, alternate_up])
 
         n *= 2
-    
+
     if output:
         print()
         print('largest', tbl.best_model('largest', Model.LINEAR))
@@ -119,9 +119,9 @@ def run_largest_two_trials(mode, output=True, decimals=2):
     for n in trials:
         if mode is Order.ALTERNATING:
             prepare = '''
-up_down = zip(range(0,{},2),range({}-1,0,-2))
+up_down = zip(range(0,{0},2),range({0}-1,0,-2))
 x=[i for i in itertools.chain(*up_down)]
-'''.format(n,n)
+'''.format(n)
         m_dt = timeit.timeit(stmt='double_two(x)', setup='''
 import random
 from ch01.largest_two import double_two
@@ -167,7 +167,7 @@ x=list(range({}))
 def run_best_worst(output=True, decimals=2):
     """Perform best and worst case analysis for largest."""
     n = 4096
-    tbl = DataTable([8,10,10,10,10],['N', 'LargestW', 'MaxW', 'LargestB', 'MaxB'], 
+    tbl = DataTable([8,10,10,10,10],['N', 'LargestW', 'MaxW', 'LargestB', 'MaxB'],
                     output=output, decimals=decimals)
 
     while n <= 32768:    ###  524288:
@@ -276,10 +276,10 @@ def generate_ch01():
         print(pi1, '->', max(pi1))
         print(pi2, '->', max(pi2))
         print(pi3[:5]+['...'] + pi3[-3:], '->', max(pi3))
-        print(captionx(chapter, figure_number), 
+        print(captionx(chapter, figure_number),
               'Three different problem instances processed by an algorithm')
         print()
-        
+
     with FigureNum(2) as figure_number:
         import dis
 
@@ -291,51 +291,51 @@ def generate_ch01():
             return max(A)
         dis.dis(f)
         print()
-        print(captionx(chapter, figure_number), 
+        print(captionx(chapter, figure_number),
               'Counting operations or instructions is complicated.')
 
     with TableNum(1) as table_number:
         process(run_init_trial(),
-                chapter, table_number, 
-                'Executing max() on two kinds of problem instances of size N (time in ms)', 
+                chapter, table_number,
+                'Executing max() on two kinds of problem instances of size N (time in ms)',
                 yaxis = 'Time (in ms)')
 
     # TODO: Option for secondary axis specification
     with TableNum(2) as table_number:
         process(run_largest_alternate(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Comparing largest() with alternate() on worst case problem instances')
 
     # Take results and plot #LessA on left-axis as line, and TimesA on right axis as column
     with FigureNum(6) as figure_number:
-        print(captionx(chapter, figure_number), 
+        print(captionx(chapter, figure_number),
               'Visualizing relationship between #Less-Than and runtime performance')
 
     with TableNum(3) as table_number:
         process(run_best_worst(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Performance of largest() and max() on best and worst cases')
 
     with TableNum(4) as table_number:
         process(performance_different_approaches(),
-                chapter, table_number, 
-                'Performance of different approached on 525,288 values in different orders', 
+                chapter, table_number,
+                'Performance of different approached on 525,288 values in different orders',
                 create_image = False)
 
     with TableNum(5) as table_number:
         process(run_best_worst(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Comparing runtime performance (in ms) of all four algorithms',
                 yaxis = "Time (in ms)")
 
     # Taken from table
     with FigureNum(10) as figure_number:
-        print(captionx(chapter, figure_number), 
+        print(captionx(chapter, figure_number),
               'Runtime performance comparison')
 
     with TableNum(6) as table_number:
         process(count_operations(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Counting operations in four different functions',
                 yaxis = "Number of times ct is incremented")
 

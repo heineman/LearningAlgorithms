@@ -37,10 +37,12 @@ def timeResults_linked(words):
         line = str(len(all_words))
         for size in sizes:
 
-            m1 = min(timeit.repeat(stmt=f'''
-table = Hashtable({size})
-for word in {all_words}:
-    table.put(word, 99)''', setup='from ch03.hashtable_linked import Hashtable',
+            m1 = min(timeit.repeat(stmt='''
+table = Hashtable({})
+for word in words:
+    table.put(word, 99)'''.format(size), setup='''
+from ch03.hashtable_linked import Hashtable
+words={}'''.format(all_words),
                             repeat=1, number=100))
             line = line + "\t" + '{0:.4f}'.format((100000.0*m1)/size)
         print(line)
