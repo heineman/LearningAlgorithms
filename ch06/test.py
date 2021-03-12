@@ -424,7 +424,7 @@ class TestChapter06(unittest.TestCase):
         # remove in random order
         random.shuffle(keys)
         count = sy1.root.size()
-        for k in reversed(keys):
+        for k in keys:
             sy1.remove(k)
             count -= 1
             if sy1.root:

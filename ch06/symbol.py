@@ -105,6 +105,7 @@ class BinaryTree:
 
         node.left = self._remove_min(node.left)
         node.compute_height()
+        node = resolve_right_leaning(node)
         return node
 
     def _remove(self, node, key):

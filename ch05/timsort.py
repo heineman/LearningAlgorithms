@@ -83,10 +83,13 @@ def tim_sort(A):
 
         size = 2 * size
 
-def timing_nlogn_sorting(max_k=18, output=True):
+def timing_nlogn_sorting_real_world(max_k=18, output=True):
     """
     Confirm N Log N performance of Merge Sort, Heap Sort and Python's built-in sort
     for n in 2**k for k up to (but not including) max_k=18.
+    
+    Represents real-world case where Tim Sort shines, namely, where you are
+    adding random data to an already sorted set.
     """
     # Build model
     tbl = DataTable([12,10,10,10,10],['N','MergeSort', 'QuickSort', 'TimSort', 'PythonSort'], output=output)
@@ -128,8 +131,6 @@ A.extend(B)'''.format(n), repeat=10, number=1))
 
 #######################################################################
 if __name__ == '__main__':
-    timing_nlogn_sorting()
-
     from random import shuffle
     from algs.sorting import is_sorted
     arr=list(range(22))

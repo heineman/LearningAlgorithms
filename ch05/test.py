@@ -235,10 +235,10 @@ class Test_ch05(unittest.TestCase):
         self.assertEqual(137, tbl.entry(11, 'FiRec'))
 
     def test_timing_nlogn_sorting(self):
-        from ch05.timsort import timing_nlogn_sorting
+        from ch05.book import timing_nlogn_sorting
         
-        tbl = timing_nlogn_sorting(max_k=15, output=True)
-        self.assertTrue(tbl.entry(16384, 'MergeSort') > tbl.entry(16384, 'TimSort'))
+        tbl = timing_nlogn_sorting(max_k=16, output=False)
+        self.assertTrue(tbl.entry(16384, 'MergeSort') < tbl.entry(32768, 'MergeSort'))
 
 #######################################################################
 if __name__ == '__main__':

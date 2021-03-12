@@ -354,13 +354,14 @@ random.shuffle(A)'''.format(n), repeat=5, number=1)
         tbl.row([n, t_ss, quadratic_model(n, quadratric_ss[0], quadratric_ss[1]),
                     t_min, t_is, t_max, quadratic_model(n, quadratric_is[0], quadratric_is[1])])
 
-def timing_nlogn_sorting():
+def timing_nlogn_sorting(max_k=21, output=True, decimals=3):
     """
     Confirm N Log N performance of Merge Sort, Heap Sort, Quicksort and Python's built-in sort.
     """
     # Build model from Generate 5 data points
     tbl = DataTable([12,10,10,10,10,10],
-                    ['N','MergeSort', 'QuickSort', 'HeapSort', 'TimSort', 'PythonSort'])
+                    ['N','MergeSort', 'QuickSort', 'HeapSort', 'TimSort', 'PythonSort'],
+                    output=output, decimals=decimals)
 
     x = []
     y_ms = []
@@ -420,7 +421,7 @@ random.shuffle(A)'''.format(n), repeat=10, number=1))
     for n,t_ms,t_qs,t_hs,t_ts,t_ps in zip(x,y_ms,y_qs,y_hs,y_ts,y_ps):
         tbl.row([n, t_ms, t_qs, t_hs, t_ts, t_ps])
 
-    for n in [2**k for k in range(16, 21)]:
+    for n in [2**k for k in range(16, max_k)]:
         # selection is stable, so just run once
         t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup='''
 import random
@@ -453,12 +454,14 @@ random.shuffle(A)'''.format(n), repeat=10, number=1))
 
         tbl.row([n, t_ms, t_qs, t_hs, t_ts, t_ps])
 
-    print('NLOGN MS = {}*N*N + {}*N'.format(nlogn_ms[0], nlogn_ms[1]))
-    print('NLOGN QS = {}*N*N + {}*N'.format(nlogn_qs[0], nlogn_qs[1]))
-    print('NLOGN HS = {}*N*N + {}*N'.format(nlogn_hs[0], nlogn_hs[1]))
-    print('NLOGN TS = {}*N*N + {}*N'.format(nlogn_ts[0], nlogn_ts[1]))
-    print('NLOGN PS = {}*N*N + {}*N'.format(nlogn_ps[0], nlogn_ps[1]))
-    print()
+    if output:
+        print('NLOGN MS = {}*N*N + {}*N'.format(nlogn_ms[0], nlogn_ms[1]))
+        print('NLOGN QS = {}*N*N + {}*N'.format(nlogn_qs[0], nlogn_qs[1]))
+        print('NLOGN HS = {}*N*N + {}*N'.format(nlogn_hs[0], nlogn_hs[1]))
+        print('NLOGN TS = {}*N*N + {}*N'.format(nlogn_ts[0], nlogn_ts[1]))
+        print('NLOGN PS = {}*N*N + {}*N'.format(nlogn_ps[0], nlogn_ps[1]))
+        print()
+    return tbl
 
 def show_partition():
     """Show how Quicksort partitions an array."""
