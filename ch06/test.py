@@ -571,6 +571,28 @@ class TestChapter06(unittest.TestCase):
         self.assertTrue(build > 0)
         self.assertTrue(access > 0)
 
+    def test_recreate_tree(self):
+        from ch06.challenge import recreate_tree#         
+
+        root = recreate_tree('(19,,)')
+        self.assertEqual('19', root.value)
+         
+        root = recreate_tree('(19,3,22)')
+        self.assertEqual('3', root.left.value)
+        self.assertEqual('22', root.right.value)
+        root = recreate_tree('(19,3,(22,21,24))')
+        self.assertEqual('3', root.left.value)
+        self.assertEqual('22', root.right.value)
+        self.assertEqual('21', root.right.left.value)
+        self.assertEqual('24', root.right.right.value)
+         
+        root = recreate_tree('(26,,(29,,)')
+        self.assertEqual('26', root.value)
+
+        root = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
+        self.assertEqual('19', root.value)
+        self.assertEqual(8, root.size())
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

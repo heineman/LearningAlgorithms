@@ -124,7 +124,7 @@ all_words=english_words()[:{}]'''.format(num_to_add),repeat=1,number=100))
         tbl.row(line)
     return tbl
 
-def count_collisions_dynamic():
+def count_collisions_dynamic(num_rows=0, output=True, decimals=2):
     """Generate data counting collisions for dynamic hashtables. Not used in book."""
     all_words = english_words()
     # start twice as big as the number of words, and reduce steadily, counting collisions
@@ -136,7 +136,7 @@ def count_collisions_dynamic():
     from ch03.hashtable_open import DynamicHashtable as ODHL
     from ch03.hashtable_open import stats_open_addressing
 
-    tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'], decimals=2)
+    tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'], output=output, decimals=decimals)
     tbl.format('Max LL', 'd')
     tbl.format('Max OA', 'd')
     while M > N/16:
@@ -149,6 +149,7 @@ def count_collisions_dynamic():
         avg_size_linked_dynamic = stats_linked_lists(dhl)
         avg_size_open_dynamic = stats_open_addressing(odhl)
 
+        num_rows -= 1
         tbl.row([M, avg_size_linked_dynamic[0], avg_size_linked_dynamic[1],
                  avg_size_open_dynamic[0], avg_size_open_dynamic[1]])
 
@@ -157,6 +158,10 @@ def count_collisions_dynamic():
             M = (M * 95) // 100
         else:
             M = (M * 6) // 10
+            
+        # tTo allow for testing, simple way to break out after a number of rows are generated.
+        if num_rows == 0:
+            break
     return tbl
 
 def count_collisions(output=True, decimals=1):

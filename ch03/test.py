@@ -444,6 +444,12 @@ class Test_Ch03(unittest.TestCase):
 
         tbl = compare_dynamic_build_and_access_time(repeat=1, max_m=1250, output=False)
         self.assertTrue(tbl.entry('Fixed', 'BuildLL') <= tbl.entry(1250, 'BuildLL'))
+        
+    def test_count_collisions_dynamic(self):
+        from ch03.book import count_collisions_dynamic
+        
+        tbl = count_collisions_dynamic(num_rows=4, output=False)
+        self.assertTrue(tbl.entry(642330, 'Max LL') > 0)
 
 if __name__ == '__main__':
     unittest.main()
