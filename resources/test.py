@@ -7,7 +7,7 @@ class TestHashing(unittest.TestCase):
         from resources.english import english_words
         
         # Dictionary used
-        self.assertEquals(321165,len(english_words()))
+        self.assertEqual(321165,len(english_words()))
        
 if __name__ == '__main__':
     unittest.main()

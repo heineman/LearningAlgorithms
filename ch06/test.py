@@ -30,7 +30,7 @@ class TestChapter06(unittest.TestCase):
         add_operator('%', mod)
         expr = build_expression('((9 % 2) * 5)')
         self.assertEqual(5.0, expr.eval())
-        self.assertEquals([9.0, 2.0, '%', 5.0, '*'], list(expr.postfix()))
+        self.assertEqual([9.0, 2.0, '%', 5.0, '*'], list(expr.postfix()))
 
     def test_sum_list(self):
         self.assertEqual(0, sum_list(create_linked_list([])))
@@ -395,11 +395,11 @@ class TestChapter06(unittest.TestCase):
         from ch06.symbol import BinaryTree
         from ch06.avl import check_avl_property
         sy1 = BinaryTree()
-        N = 31
+        N = 127
         keys = list(range(N))
         for k in keys:
             sy1.put(k, k+1)
-            self.assertEquals(k+1, sy1.root.size())
+            self.assertEqual(k+1, sy1.root.size())
             self.assertEqual(list(range(k+1)), [key for key,_ in list(sy1)])
             check_avl_property(sy1.root)
             sy1.put(k,k+2)
@@ -412,7 +412,7 @@ class TestChapter06(unittest.TestCase):
             count -= 1
             if sy1.root:
                 check_avl_property(sy1.root)
-                self.assertEquals(count, sy1.root.size())
+                self.assertEqual(count, sy1.root.size())
             self.assertEqual(list(range(k+1,N)), [key for key,_ in list(sy1)])
 
         for k in keys:
@@ -429,7 +429,7 @@ class TestChapter06(unittest.TestCase):
             count -= 1
             if sy1.root:
                 check_avl_property(sy1.root)
-                self.assertEquals(count, sy1.root.size())
+                self.assertEqual(count, sy1.root.size())
 
     def test_insert(self):
         from ch06.book import insert_value
