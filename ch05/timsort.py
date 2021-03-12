@@ -83,14 +83,15 @@ def tim_sort(A):
 
         size = 2 * size
 
-def timing_nlogn_sorting():
+def timing_nlogn_sorting(max_k=18, output=True):
     """
-    Confirm N Log N performance of Merge Sort, Heap Sort and Python's built-in sort.
+    Confirm N Log N performance of Merge Sort, Heap Sort and Python's built-in sort
+    for n in 2**k for k up to (but not including) max_k=18.
     """
     # Build model
-    tbl = DataTable([12,10,10,10,10],['N','MergeSort', 'QuickSort', 'TimSort', 'PythonSort'])
+    tbl = DataTable([12,10,10,10,10],['N','MergeSort', 'QuickSort', 'TimSort', 'PythonSort'], output=output)
 
-    for n in [2**k for k in range(8, 18)]:
+    for n in [2**k for k in range(8, max_k)]:
         t_ms = min(timeit.repeat(stmt='merge_sort(A)', setup='''
 import random
 from ch05.merge import merge_sort
@@ -123,6 +124,7 @@ random.shuffle(B)
 A.extend(B)'''.format(n), repeat=10, number=1))
 
         tbl.row([n, t_ms, t_qs, t_ts, t_ps])
+    return tbl
 
 #######################################################################
 if __name__ == '__main__':

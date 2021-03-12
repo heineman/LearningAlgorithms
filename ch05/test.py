@@ -227,6 +227,18 @@ class Test_ch05(unittest.TestCase):
             pass
         else:
             self.fail('should have found a result or not.')
+            
+    def test_fib_table(self):
+        from ch05.challenge import fib_table
+        
+        tbl = fib_table(output=False)
+        self.assertEqual(137, tbl.entry(11, 'FiRec'))
+
+    def test_timing_nlogn_sorting(self):
+        from ch05.timsort import timing_nlogn_sorting
+        
+        tbl = timing_nlogn_sorting(max_k=15, output=True)
+        self.assertTrue(tbl.entry(16384, 'MergeSort') > tbl.entry(16384, 'TimSort'))
 
 #######################################################################
 if __name__ == '__main__':

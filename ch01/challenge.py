@@ -43,6 +43,8 @@ def linear_median(A):
     assuming A has an odd number of values. Note this algorithm will
     rearrange values in A.
     """
+    if len(A) % 2 == 0:
+        raise ValueError('linear_median() only coded to work with odd number of values.')
     lo = 0
     hi = len(A) - 1
     mid = hi // 2

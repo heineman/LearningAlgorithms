@@ -73,19 +73,6 @@ class BinaryTree:
         node.compute_height()
         return node
 
-    def __contains__(self, target):
-        """Check whether BST contains target value."""
-        node = self.root
-        while node:
-            if target == node.value:
-                return True
-            if target < node.value:
-                node = node.left
-            else:
-                node = node.right
-
-        return False
-
     def __iter__(self):
         """In order traversal of elements in the tree."""
         for p in self._inorder(self.root):
@@ -170,18 +157,3 @@ class PQ:
         if self.tree:
             for pair in self.tree:
                 yield pair
-
-#######################################################################
-if __name__ == '__main__':
-    pq = PQ()
-
-    pq.enqueue('apple', 5)
-    pq.enqueue('ball', 8)
-    print(pq.dequeue())
-    pq.enqueue('alternate', 5)
-    pq.enqueue('car', 11)
-    pq.enqueue('desk', 7)
-    print(pq.dequeue())
-    print(pq.dequeue())
-    print(pq.dequeue())
-    print(pq.dequeue())

@@ -167,8 +167,8 @@ class Maze:
 
 #######################################################################
 if __name__ == "__main__":
-    random.seed(13)     # 28 is also good
-    m = Maze(7,7)
+    random.seed(15)     # 28 is also good
+    m = Maze(3,5)
     g = to_networkx(m)
     import matplotlib.pyplot as plt
 

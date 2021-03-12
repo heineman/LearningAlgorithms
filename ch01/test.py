@@ -183,9 +183,10 @@ class Test_Ch01(unittest.TestCase):
 
     def test_linear_median(self):
         self.assertEqual(5, linear_median([5]))
-        self.assertEqual(3, linear_median([3,5]))    # median is ill-defined for EVEN lists, so arbitrarily choose low-end
         self.assertEqual(5, linear_median([3,5,7]))
-        self.assertEqual(5, linear_median([3,5,6,7]))
+        
+        with self.assertRaises(ValueError):
+            self.assertEqual(5, linear_median([3,5,6,7]))
 
         with self.assertRaises(ValueError):
             linear_median([])

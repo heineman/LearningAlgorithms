@@ -125,7 +125,6 @@ def fib(n):
 fib_profile_count = [0]
 def fib_profile(n):
     """Inefficient Fibonacci recurive implementation."""
-    print (fib_profile_count[0],'\t',n)
     fib_profile_count[0] += 1
     if n <= 0: return 0
     if n <= 1: return 1
@@ -138,7 +137,6 @@ def fib_with_lucas(n):
 
     Improved efficiency using Lucas numbers.
     """
-    print(numRecursiveImproved[0],'\t',n)
     numRecursiveImproved[0] += 1
     if n == 0: return 0
     if n <= 2: return 1
@@ -153,7 +151,6 @@ def lucas_with_fib(n):
 
     Ln = Fn-1 + Fn+1 for n > 1
     """
-    print(numRecursiveImproved[0],'\t',-n)
     numRecursiveImproved[0] += 1
     if n == 0: return 2
     if n == 1: return 1
@@ -167,7 +164,7 @@ def fib_table(output=True, decimals=3):
     from scipy.optimize import curve_fit
 
     tbl = DataTable([8,12,12],['N', 'FiRec', 'Model'], output=output, decimals=decimals)
-
+    tbl.format('FiRec', 'd')
     def exp_model(n, a, b):
         """Formula for A*N^B ."""
         return a*np.power(n, b)
@@ -183,7 +180,7 @@ def fib_table(output=True, decimals=3):
 
     if output:
         [exp_coeffs, _]        = curve_fit(exp_model, x_arr, y_arr)
-        print (exp_coeffs)
+        print('A*N^B  = {:.12f}*N^{:f} '.format(exp_coeffs[0], exp_coeffs[1]))
 
     return tbl
 

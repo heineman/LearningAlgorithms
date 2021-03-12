@@ -153,11 +153,8 @@ def generate_list_table(max_k=21, output=True, decimals=3):
                  run_trials_tree(n,1000)])
     return tbl
 
-def compare_dynamic_build_and_access_time():
+def compare_dynamic_build_and_access_time(repeat=25, num=10, output=True):
     """Generate tables for build and access for AVL trees."""
-    repeat = 25
-    num = 10
-
     from ch06.symbol import BinaryTree
     from resources.english import english_words
     bt = BinaryTree()
@@ -165,14 +162,14 @@ def compare_dynamic_build_and_access_time():
         bt.put(w,w)
     total = len(english_words())
 
-    print('This will take several minutes...')
-    print('total number of words =', total)
-    print('height of AVL tree for all English words =',bt.root.height)
-    print('has to at least be =', math.log(total+1)/math.log(2) - 1)
+    if output:
+        print('This will take several minutes...')
+        print('total number of words =', total)
+        print('height of AVL tree for all English words =',bt.root.height)
+        print('has to at least be =', math.log(total+1)/math.log(2) - 1)
 
     # When 'ht = HTLL(...) is inside the STMT, it measures BUILD TIME.
     # When it is included in the setup, we are measuring ACCESS TIME.
-    print('build T')
     t_build = min(timeit.repeat(stmt='''
 ht = BinaryTree()
 for w in words:
@@ -181,7 +178,6 @@ from ch06.symbol import BinaryTree
 from resources.english import english_words
 words = english_words()''', repeat=repeat, number=num))/num
 
-    print('Access T')
     t_access = min(timeit.repeat(stmt='''
 for w in words:
     ht.get(w)''', setup='''
@@ -192,7 +188,9 @@ words = english_words()
 for w in words:
     ht.put(w,w)''', repeat=repeat, number=num))/num
 
-    print('Build-time =', t_build,', Access-time = ', t_access)
+    if output:
+        print('Build-time =', t_build,', Access-time = ', t_access)
+    return (t_build, t_access)
 
 def compare_avl_pq_with_heap_pq(max_k=16, output=True, decimals=2):
     """Generate times for comparing values."""

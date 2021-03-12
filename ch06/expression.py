@@ -86,31 +86,6 @@ def add_operator(op, func):
 
     _operators[op] = func
 
-from algs.node import Node
-class Stack:
-    """
-    Implementation of a Stack using linked lists.
-    """
-    def __init__(self):
-        self.top = None
-
-    def is_empty(self):
-        """Determine if stack is empty."""
-        return self.top is None
-
-    def push(self, val):
-        """Push new value to top of stack."""
-        self.top = Node(val, self.top)
-
-    def pop(self):
-        """Remove and return top item from stack."""
-        if self.is_empty():
-            raise RuntimeError('Stack is empty')
-
-        val = self.top.value
-        self.top = self.top.next
-        return val
-
 def build_expression(s):
     """
     Given a string consisting of numeric values, parentheses and
@@ -123,6 +98,7 @@ def build_expression(s):
     # but still quite nice...
     pattern = re.compile('(\(|\)|\d+|[{}])'.format('\\'.join(_operators.keys())))
 
+    from ch07.list_stack import Stack
     ops = Stack()
     expressions = Stack()
 

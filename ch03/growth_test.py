@@ -111,7 +111,7 @@ def probability_of_failure():
 
 def run_access_trials(max_trials=100000, output=True, decimals=5):
     """Generate performance table for up to max_trials number of runs."""
-    tbl = DataTable([10,10,10], ['Dict', 'Raw', 'BAS'])
+    tbl = DataTable([10,10,10], ['Dict', 'Raw', 'BAS'], output=output, decimals=decimals)
     tbl.format('Dict', 'f')
 
     m1 = min(timeit.repeat(stmt='days_in_month[s_data[2]]',

@@ -88,7 +88,7 @@ class DepthFirstSearchSolver():
 #######################################################################
 if __name__ == "__main__":
     random.seed(15)
-    m = Maze(5,5)
+    m = Maze(3,5)
     root = tkinter.Tk()
     dfs = DepthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=False)
     root.mainloop()

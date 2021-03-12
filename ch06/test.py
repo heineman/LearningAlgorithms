@@ -8,14 +8,29 @@ class TestChapter06(unittest.TestCase):
 
     def test_expression(self):
         from ch06.book import expression_tree, debug_expression
+        from ch06.expression import build_expression, add_operator
         
         mult7 = expression_tree()
         self.assertEqual(42.0, mult7.eval())
         self.assertEqual('(((3 + 1) / 4) * (((1 + 5) * 9) - (2 * 6)))', str(mult7))
-        
+
+        # Build expression uses floats
+        expr = build_expression('(((3 + 1) / 4) * (((1 + 5) * 9) - (2 * 6)))')
+        self.assertEqual(42.0, expr.eval())
+        self.assertEqual('(((3.0 + 1.0) / 4.0) * (((1.0 + 5.0) * 9.0) - (2.0 * 6.0)))', str(expr))
+
         mult2 = debug_expression()
         self.assertEqual(54, mult2.eval())
         self.assertEqual('((1 + 5) * 9)', str(mult2))
+        
+        def mod(a,b):
+            """%"""
+            return a % b
+        
+        add_operator('%', mod)
+        expr = build_expression('((9 % 2) * 5)')
+        self.assertEqual(5.0, expr.eval())
+        self.assertEquals([9.0, 2.0, '%', 5.0, '*'], list(expr.postfix()))
 
     def test_sum_list(self):
         self.assertEqual(0, sum_list(create_linked_list([])))
@@ -346,6 +361,8 @@ class TestChapter06(unittest.TestCase):
         from ch06.avl import check_avl_property
         
         pq1 = PQ()
+        self.assertTrue(pq1.is_empty())
+        self.assertFalse(9 in pq1)
         N = 31
         keys = list(range(N))
         n = 0
@@ -376,18 +393,26 @@ class TestChapter06(unittest.TestCase):
 
     def test_symbol_stress(self):
         from ch06.symbol import BinaryTree
+        from ch06.avl import check_avl_property
         sy1 = BinaryTree()
         N = 31
         keys = list(range(N))
         for k in keys:
             sy1.put(k, k+1)
+            self.assertEquals(k+1, sy1.root.size())
             self.assertEqual(list(range(k+1)), [key for key,_ in list(sy1)])
+            check_avl_property(sy1.root)
             sy1.put(k,k+2)
         self.assertEqual(list(range(N)), [key for key,_ in list(sy1)])
 
         # remove keys
+        count = sy1.root.size()
         for k in keys:
             sy1.remove(k)
+            count -= 1
+            if sy1.root:
+                check_avl_property(sy1.root)
+                self.assertEquals(count, sy1.root.size())
             self.assertEqual(list(range(k+1,N)), [key for key,_ in list(sy1)])
 
         for k in keys:
@@ -396,10 +421,15 @@ class TestChapter06(unittest.TestCase):
 
         self.assertEqual(list(range(N)), [key for key,_ in list(sy1)])
 
-        # remove in reverse order
+        # remove in random order
+        random.shuffle(keys)
+        count = sy1.root.size()
         for k in reversed(keys):
             sy1.remove(k)
-            self.assertEqual(list(range(k)), [key for key,_ in list(sy1)])
+            count -= 1
+            if sy1.root:
+                check_avl_property(sy1.root)
+                self.assertEquals(count, sy1.root.size())
 
     def test_insert(self):
         from ch06.book import insert_value
@@ -533,7 +563,13 @@ class TestChapter06(unittest.TestCase):
 
         tbl = compare_avl_pq_with_heap_pq(max_k=12, output=False)
         self.assertTrue(tbl.entry(2048,'Heap-pq') <= tbl.entry(2048, 'AVL-pq'))
+
+    def test_compare_dynamic_build_and_access_time(self):
+        from ch06.book import compare_dynamic_build_and_access_time
         
+        (build,access) = compare_dynamic_build_and_access_time(repeat=1, num=1, output=False)
+        self.assertTrue(build > 0)
+        self.assertTrue(access > 0)
 
 #######################################################################
 if __name__ == '__main__':

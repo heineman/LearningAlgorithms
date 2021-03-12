@@ -69,6 +69,12 @@ class Test_Ch02(unittest.TestCase):
         tbl = run_max_sort_worst_case(max_k=10, output=False)
         self.assertTrue(tbl.entry(128, 'MaxSort') > 0)
         self.assertTrue(tbl.entry(128, 'Model') > 0)
+        
+    def test_performance_bas(self):
+        from ch02.challenge import performance_bas
+        
+        tbl = performance_bas(max_k=10, output=False)
+        self.assertTrue(tbl.entry(32,'T(N)') < tbl.entry(512,'T(N)'))
 
 #######################################################################
 if __name__ == '__main__':
