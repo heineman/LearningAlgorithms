@@ -227,18 +227,38 @@ class Test_ch05(unittest.TestCase):
             pass
         else:
             self.fail('should have found a result or not.')
-            
+
     def test_fib_table(self):
         from ch05.challenge import fib_table
-        
+
         tbl = fib_table(output=False)
         self.assertEqual(137, tbl.entry(11, 'FiRec'))
-
     def test_timing_nlogn_sorting(self):
+
         from ch05.book import timing_nlogn_sorting
-        
+
         tbl = timing_nlogn_sorting(max_k=16, output=False)
         self.assertTrue(tbl.entry(16384, 'MergeSort') < tbl.entry(32768, 'MergeSort'))
+
+    def test_modeling_insertion_selection(self):
+        from ch05.book import modeling_insertion_selection
+
+        tbl = modeling_insertion_selection(output=False)
+        self.assertEqual(120, tbl.entry(16, 'MCSS'))
+
+    def test_modeling_merge_heap(self):
+        from ch05.book import modeling_merge_heap
+
+        tbl = modeling_merge_heap(max_k=10, output=False)
+        self.assertTrue(tbl.entry(16, 'MCMS') < tbl.entry(32, 'MCMS'))
+        
+    def test_timing_selection_insertion(self):
+        from ch05.book import timing_selection_insertion
+        
+        tbl = timing_selection_insertion(min_k=3, max_k=11, output=False)
+        self.assertTrue(tbl.entry(8, 'MinIS') < tbl.entry(1024, 'MinIS'))
+
+        
 
 #######################################################################
 if __name__ == '__main__':

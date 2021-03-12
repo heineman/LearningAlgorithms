@@ -58,7 +58,7 @@ def modeling_insertion_worst_case():
 
         tbl.row([n, num_swaps, num_compares])
 
-def modeling_insertion_selection():
+def modeling_insertion_selection(output=True, decimals=1):
     """Generate table for Insertion Sort."""
     from ch05.sorting import selection_sort_counting, insertion_sort_counting
     trials = 100
@@ -102,16 +102,17 @@ def modeling_insertion_selection():
         [quadratic_comp_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_comp_is))
         [quadratic_swap_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_swap_is))
 
-    print('Swap SS Linear    = {:f}*N + {:f}'.format(linear_swap_ss[0], linear_swap_ss[1]))
-    print('Comp SS Quadratic = {}*N*N + {}*N'.format(quadratic_comp_ss[0], quadratic_comp_ss[1]))
-
-    print('Swap IS Quadratic = {}*N*N + {}*N'.format(quadratic_swap_is[0], quadratic_swap_is[1]))
-    print('Comp IS Quadratic = {}*N*N + {}*N'.format(quadratic_comp_is[0], quadratic_comp_is[1]))
-    print()
+    if output:
+        print('Swap SS Linear    = {:f}*N + {:f}'.format(linear_swap_ss[0], linear_swap_ss[1]))
+        print('Comp SS Quadratic = {}*N*N + {}*N'.format(quadratic_comp_ss[0], quadratic_comp_ss[1]))
+    
+        print('Swap IS Quadratic = {}*N*N + {}*N'.format(quadratic_swap_is[0], quadratic_swap_is[1]))
+        print('Comp IS Quadratic = {}*N*N + {}*N'.format(quadratic_comp_is[0], quadratic_comp_is[1]))
+        print()
 
     tbl = DataTable([12,10,10,10,10,10,10,10,10],
             ['N','AvgCompSS','MCSS', 'AvgSwapSS', 'MSSS', 'AvgCompIS', 'MCIS', 'AvgSwapIS', 'MSIS'],
-            output=True, decimals=1)
+            output=output, decimals=decimals)
 
     for n in [2**k for k in range(4, 10)]:
         total_compares_ss = 0
@@ -143,8 +144,9 @@ def modeling_insertion_selection():
                   total_swaps_is/trials,
                   quadratic_model(n, quadratic_swap_is[0], quadratic_swap_is[1]),
                   ])
+    return tbl
 
-def modeling_merge_heap(output=True, decimals=1):
+def modeling_merge_heap(max_k=5, output=True, decimals=1):
     """Generate table for Merge Sort vs. Heap Sort."""
     from ch05.merge import merge_sort_counting
     from ch05.heapsort import HeapSortCounting
@@ -203,7 +205,7 @@ def modeling_merge_heap(output=True, decimals=1):
             ['N','AvgCompMS','MCMS', 'AvgSwapMS', 'MSSS', 'AvgCompHS', 'MCHS', 'AvgSwapHS', 'MSHS'],
             output=output, decimals=decimals)
 
-    for n in [2**k for k in range(4, 15)]:
+    for n in [2**k for k in range(4, max_k)]:
         total_compares_ms = 0
         total_swaps_ms = 0
         total_compares_hs = 0
@@ -278,17 +280,19 @@ random.shuffle(A)'''.format(n), repeat=10, number=10))
             quadratic_model(n, quadratic_coeffs[0], quadratic_coeffs[1]),
             n_log_n_model(n, log_coeffs[0])])
 
-def timing_selection_insertion():
+def timing_selection_insertion(min_k=8, max_k=13, output=True, decimals=3):
     """
     Because Insertion Sort is so sensitive to its inputs, we take average time
-    over all of its runs.
+    over all of its runs. Models first using 5 rows from [min_k .. min_k+5]
+    and then presents information up to (but not including) max_k.
     """
-    print('Building models for Insertion Sort. This may take awhile...')
+    if output:
+        print('Building models for Insertion Sort. This may take awhile...')
     # Build model from Generate 5 data points
     x = []
     y_is = []
     y_ss = []
-    for n in [2**k for k in range(8, 13)]:
+    for n in [2**k for k in range(min_k, min_k+5)]:
         # Not much need to repeat since Selection Sort behaves the same
         # every time. I'll do it five times.
         t_ss = timeit.timeit(stmt='selection_sort(A)', setup='''
@@ -322,17 +326,19 @@ random.shuffle(A)'''.format(n), repeat=100, number=1))/100   # since seeking ave
         [quadratric_ss, _] = curve_fit(quadratic_model, np.array(x), np.array(y_ss))
         [quadratric_is, _] = curve_fit(quadratic_model, np.array(x), np.array(y_is))
 
-    print('Quadratic SS = {}*N*N + {}*N'.format(quadratric_ss[0], quadratric_ss[1]))
-    print('Quadratic IS = {}*N*N + {}*N'.format(quadratric_is[0], quadratric_is[1]))
-    print()
+    if output:
+        print('Quadratic SS = {}*N*N + {}*N'.format(quadratric_ss[0], quadratric_ss[1]))
+        print('Quadratic IS = {}*N*N + {}*N'.format(quadratric_is[0], quadratric_is[1]))
+        print()
 
     tbl = DataTable([12,10,10,10,10,10,10],
-                    ['N','TimeSS','ModelSS','MinIS', 'TimeIS', 'MaxIs', 'ModelIS'])
+                    ['N','TimeSS','ModelSS','MinIS', 'TimeIS', 'MaxIs', 'ModelIS'],
+                    output=output, decimals=decimals)
     for n,t_ss,t_is in zip(x,y_ss,y_is):
         tbl.row([n, t_ss, quadratic_model(n, quadratric_ss[0], quadratric_ss[1]),
                     t_is, t_is, t_is, quadratic_model(n, quadratric_is[0], quadratric_is[1])])
 
-    for n in [2**k for k in range(13, 18)]:
+    for n in [2**k for k in range(min_k+5, max_k)]:
         # selection is stable, so just run once
         t_ss = timeit.timeit(stmt='selection_sort(A)', setup='''
 import random
@@ -353,6 +359,7 @@ random.shuffle(A)'''.format(n), repeat=5, number=1)
 
         tbl.row([n, t_ss, quadratic_model(n, quadratric_ss[0], quadratric_ss[1]),
                     t_min, t_is, t_max, quadratic_model(n, quadratric_is[0], quadratric_is[1])])
+    return tbl
 
 def timing_nlogn_sorting(max_k=21, output=True, decimals=3):
     """
