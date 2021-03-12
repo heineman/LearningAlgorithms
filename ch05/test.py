@@ -258,7 +258,12 @@ class Test_ch05(unittest.TestCase):
         tbl = timing_selection_insertion(min_k=3, max_k=11, output=False)
         self.assertTrue(tbl.entry(8, 'MinIS') < tbl.entry(1024, 'MinIS'))
 
+    def test_insertion_sort_bas_table(self):
+        from ch05.challenge import insertion_sort_bas
         
+        tbl = insertion_sort_bas(max_k=14, output=False)
+        self.assertTrue(tbl.entry(8192, 'Time') >= tbl.entry(8192, 'Log'))
+        self.assertTrue(tbl.entry(8192, 'Time') <= tbl.entry(8192, 'Quad'))
 
 #######################################################################
 if __name__ == '__main__':

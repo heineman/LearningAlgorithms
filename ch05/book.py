@@ -238,48 +238,6 @@ def modeling_merge_heap(max_k=5, output=True, decimals=1):
                   ])
     return tbl
 
-def prototype_table():
-    """Generate Table for Insertion Sort."""
-    # Evaluate prototype execution
-    x = []
-    y = []
-    for n in [2**k for k in range(8, 12)]:
-        m_insert_bas = 1000*min(timeit.repeat(stmt='insertion_sort_bas(A)', setup='''
-import random
-from ch05.sorting import insertion_sort_bas
-A=list(range({}))
-random.shuffle(A)'''.format(n), repeat=10, number=10))
-        x.append(n)
-        y.append(m_insert_bas)
-
-    # Coefficients are returned as first argument
-    if numpy_error:
-        log_coeffs = quadratic_coeffs = [0, 0]
-    else:
-        import numpy as np
-        from scipy.optimize import curve_fit
-        [log_coeffs, _] = curve_fit(n_log_n_model, np.array(x), np.array(y))
-        [quadratic_coeffs, _] = curve_fit(quadratic_model, np.array(x), np.array(y))
-
-    print('Quadratic = {}*N*N + {}*N'.format(quadratic_coeffs[0], quadratic_coeffs[1]))
-    print('Log       = {:.12f}*N*log2(N)'.format(log_coeffs[0]))
-    print()
-
-    tbl = DataTable([12,10,10,10],['N','Time','Quad','Log'], output=True)
-    for n,p in zip(x,y):
-        tbl.row([n, p, quadratic_model(n,
-                quadratic_coeffs[0], quadratic_coeffs[1]), n_log_n_model(n, log_coeffs[0])])
-
-    for n in [2**k for k in range(12, 18)]:
-        m_insert_bas = 1000*min(timeit.repeat(stmt='insertion_sort_bas(A)', setup='''
-import random
-from ch05.sorting import insertion_sort_bas
-A=list(range({}))
-random.shuffle(A)'''.format(n), repeat=10, number=10))
-        tbl.row([n, m_insert_bas,
-            quadratic_model(n, quadratic_coeffs[0], quadratic_coeffs[1]),
-            n_log_n_model(n, log_coeffs[0])])
-
 def timing_selection_insertion(min_k=8, max_k=13, output=True, decimals=3):
     """
     Because Insertion Sort is so sensitive to its inputs, we take average time

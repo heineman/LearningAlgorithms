@@ -159,15 +159,14 @@ def count_collisions_dynamic(num_rows=0, output=True, decimals=2):
         else:
             M = (M * 6) // 10
             
-        # tTo allow for testing, simple way to break out after a number of rows are generated.
+        # To allow for testing, simple way to break out after a number of rows are generated.
         if num_rows == 0:
             break
     return tbl
 
-def count_collisions(output=True, decimals=1):
+def count_collisions(num_rows=0, output=True, decimals=1):
     """Generate table counting collisions."""
     all_words = english_words()
-    # start twice as big as the number of words, and reduce steadily, counting collisions
     N = len(all_words)
 
     from ch03.hashtable_linked import Hashtable as HL
@@ -207,6 +206,7 @@ def count_collisions(output=True, decimals=1):
             tbl.format('Max OA', 's')
             avg_size_open = [SKIP, SKIP]
 
+        num_rows -= 1
         tbl.row([M, avg_size_linked[0], avg_size_linked[1], avg_size_open[0], avg_size_open[1]])
 
         # Once below threshold, go down at 60% clip
@@ -214,6 +214,10 @@ def count_collisions(output=True, decimals=1):
             M = (M * 95) // 100
         else:
             M = (M * 6) // 10
+            
+        # To allow for testing, simple way to break out after a number of rows are generated.
+        if num_rows == 0:
+            break
     return tbl
 
 def compare_dynamic_build_and_access_time(repeat=10, num=5, max_m=640000, output=True):
