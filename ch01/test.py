@@ -130,14 +130,15 @@ class Test_Ch01(unittest.TestCase):
             just_three([])
 
     def test_median(self):
+        random.seed(10)
         a = [2, 3, 1]
         self.assertEqual(2, linear_median(a))
 
-        # Computing median only for Lists of odd length
-        for m in range(5, 100, 2):
+        # For even numbered, lists, choose the value just to the left of middle.
+        for m in range(5, 100, 1):
             a = list(range(m))
             random.shuffle(a)
-            self.assertEqual(m//2, linear_median(a))
+            self.assertEqual((m-1)//2, linear_median(a))
 
     def test_counting_sort(self):
         original = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3]

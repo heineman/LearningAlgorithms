@@ -43,14 +43,14 @@ def linear_median(A):
     assuming A has an odd number of values. Note this algorithm will
     rearrange values in A.
     """
-    if len(A) % 2 == 0:
-        raise ValueError('linear_median() only coded to work with odd number of values.')
+#     if len(A) % 2 == 0:
+#         raise ValueError('linear_median() only coded to work with odd number of values.')
     lo = 0
     hi = len(A) - 1
     mid = hi // 2
-    while lo <= hi:
-        idx = random.randrange(hi-lo+1)     # select valid index randomly
-        j = partition(A, lo, hi, lo+idx)
+    while lo < hi:
+        idx = random.randint(lo, hi)     # select valid index randomly
+        j = partition(A, lo, hi, idx)
 
         if j == mid:
             return A[j]
@@ -58,7 +58,7 @@ def linear_median(A):
             lo = j+1
         else:
             hi = j-1
-    raise ValueError('A must contain at least 1 value.')
+    return A[lo]
 
 def counting_sort(A, M):
     """
