@@ -263,7 +263,7 @@ def stats_just_1024():
             ohl.put(w, 1)
         avg_max_ll = stats_linked_lists(hl)
         avg_max_oa = stats_open_addressing(ohl)
-        
+
         ll_stats_avg.append(avg_max_ll[0])
         ll_stats_max.append(avg_max_ll[1])
         oa_stats_avg.append(avg_max_oa[0])

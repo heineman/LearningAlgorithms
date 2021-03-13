@@ -592,6 +592,12 @@ class TestChapter06(unittest.TestCase):
         root = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
         self.assertEqual('19', root.value)
         self.assertEqual(8, root.size())
+        
+    def test_produce_height_stats_balanced_integers(self):
+        from ch06.challenge import produce_height_stats_balanced_integers
+        
+        tbl = produce_height_stats_balanced_integers(max_k=10, output=True)
+        self.assertEqual(7, tbl.entry(128, 'height'))
 
 #######################################################################
 if __name__ == '__main__':

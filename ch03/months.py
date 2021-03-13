@@ -130,8 +130,8 @@ def search_for_hashes():
         hashes = [hash(k) % N for k in key_array]
         if len(hashes) == len(set(hashes)):
             tbl = [None] * N
-            for idx in range(len(key_array)):
-                tbl[hash(key_array[idx]) % N] = month_length[idx]
+            for idx,key in enumerate(key_array):
+                tbl[hash(key) % N] = month_length[idx]
             return tbl
         N += 1
 
@@ -140,7 +140,7 @@ def search_for_hashes():
 def craft_table():
     """
     Create a Hashtable from months. Changes each time you run because of
-    salted hash strings. 
+    salted hash strings.
     """
     from ch03.hashtable import Hashtable
     last = 1000
@@ -152,7 +152,7 @@ def craft_table():
             return ht
         except RuntimeError:
             pass
-        
+
     return None
 
 #######################################################################
@@ -170,5 +170,5 @@ if __name__ == '__main__':
     print('Need hashtable of size', len(result), 'to store months uniquely.')
     print(result)
     ht = craft_table()
-    
+
     print('created hashtable of size', ht.M)

@@ -79,14 +79,14 @@ def prime_number_difference(words, output=True, decimals=2):
         print('Worst was {} for M={}'.format(worst, worst_m))
         for m in range(worst_m, worst_m + 10000, 13):
             ht_linked = Linked_Hashtable(m)
-    
-            (avg_length_linked, max_length_linked) = stats_linked_lists(keys, ht_linked, False)
+
+            (avg_length_linked, max_length_linked) = stats_linked_lists(ht_linked, False)
             if max_length_linked > worst:
                 worst_m = m
                 worst = max_length_linked
                 print('Worst of {} for M={}'.format(worst, worst_m))
         print('Done')
-    
+
     return tbl
 
 def measure_performance_resize(max_d=50, output=True):
@@ -103,7 +103,7 @@ def measure_performance_resize(max_d=50, output=True):
     tbl.format('time', 'd')
     tbl.format('old-size', ',d')
     tbl.format('new-size', ',d')
-    
+
     ht = DynamicHashtable(1023)
     idx = 1
     last = None
@@ -130,7 +130,8 @@ def measure_performance_resize(max_d=50, output=True):
         print('Average was ', average)
         print('Incremental Resizing Hashtable')
 
-    tbl_ir = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'], output=output)
+    tbl_ir = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'], 
+                       output=output)
     tbl_ir.format('idx', 'd')
     tbl_ir.format('word', 's')
     tbl_ir.format('time', 'd')
@@ -163,7 +164,7 @@ def measure_performance_resize(max_d=50, output=True):
         print('Average was ', average)
         print('Incremental Resizing dependent on Delta')
         print()
-    
+
     tbl_d = DataTable([8,10],['Delta', 'Average'], output=output)
     tbl_d.format('Delta', 'd')
     for delta in range(1, max_d):

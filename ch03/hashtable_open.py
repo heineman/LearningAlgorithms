@@ -3,7 +3,7 @@
     This table can replace values associated with a given key.  When two keys attempt to use
     the same location, OPEN ADDRESSING resolves the conflict.
 
-    Always leaves at least ONE empty spot so code is simpler, which means that an 
+    Always leaves at least ONE empty spot so code is simpler, which means that an
     open addressing hashtable must have M >= 2.
 """
 
@@ -229,13 +229,13 @@ def stats_open_addressing(ht, output=False):
             while ht.table[i]:
                 i = (i + 1) % size
                 num += 1
-            
+
             if num in sizes:
                 total = sizes[num] + 1
                 sizes[num] = total
             else:
                 sizes[num] = 1
-                
+
             if num > max_length:
                 max_length = num
 

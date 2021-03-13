@@ -25,9 +25,9 @@ def readable_table(ht):
 def readable_linked_list_table(ht):
     """Return string representing keys in linked list hashtable."""
     s = ' '.join([' --' if s is None else '[x]' for s in ht.table]) + '\n'
-    
+
     for ct in range(0, ht.N):
-        t = '                      '
+        indent = '                      '
         found = False
         for idx in range(ht.M):
             mct = ct
@@ -38,12 +38,12 @@ def readable_linked_list_table(ht):
                 node = node.next
                 last = node
             if last:
-                t += '{:2d}  '.format(last.key)
+                indent += '{:2d}  '.format(last.key)
                 found = True
             else:
-                t += '    '
+                indent += '    '
 
-        s += t + '\n'
+        s += indent + '\n'
         if not found:
             break
     return s
@@ -65,7 +65,7 @@ def sample_separate_chaining_hashtable():
     vals = [20, 15, 5, 26, 19]
     for i,v in enumerate(vals):
         ht.put(v, 'e{}'.format(i))
-        print('        {:2d} % {:2d} = {:2d}'.format(vals[i], ht.M, vals[i] % ht.M), 
+        print('        {:2d} % {:2d} = {:2d}'.format(vals[i], ht.M, vals[i] % ht.M),
               readable_linked_list_table(ht))
 
 def sample_separate_chaining_hashtable_resize():
@@ -75,7 +75,7 @@ def sample_separate_chaining_hashtable_resize():
     vals = [20, 15, 5, 26, 19]
     for i,v in enumerate(vals):
         ht.put(v, 'e{}'.format(i))
-        print('        {:2d} % {:2d} = {:2d}'.format(vals[i], ht.M, vals[i] % ht.M), 
+        print('        {:2d} % {:2d} = {:2d}'.format(vals[i], ht.M, vals[i] % ht.M),
               readable_linked_list_table(ht))
     ht.resize(2*ht.M+1)
     print('                     ', readable_linked_list_table(ht))
@@ -93,12 +93,12 @@ def sample_hashtable_resize():
     print()
     print(readable_table(ht))
 
-def time_results_open_addressing():
+def time_results_open_addressing(num_rows=0, output=True, decimals=3):
     """Average time to insert a key in growing hashtable_open (in microseconds)."""
     sizes = [8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576]
     headers = [comma(s) for s in sizes]
     headers.insert(0,'N')
-    tbl = DataTable([8,8,8,8,8,8,8,8,10], headers, decimals=3)
+    tbl = DataTable([8,8,8,8,8,8,8,8,10], headers, output=output, decimals=decimals)
 
     # Now start with M words to be added into a table of size N.
     # Start at 1000 and work up to 2000
@@ -109,19 +109,25 @@ def time_results_open_addressing():
         for size in sizes:
             try:
                 tbl.format(comma(size), '.3f')
-                t1 = min(timeit.repeat(stmt='''
+                timing = min(timeit.repeat(stmt='''
 table = Hashtable({})
 for word in all_words:
     table.put(word, 99)'''.format(size), setup='''
 from ch03.hashtable_open import Hashtable
 from resources.english import english_words
 all_words=english_words()[:{}]'''.format(num_to_add),repeat=1,number=100))
-                t1 = (100000.0 * t1) / size
+                timing = (100000.0 * timing) / size
             except RuntimeError:
-                t1 = SKIP
+                timing = SKIP
 
-            line.append(t1)
+            line.append(timing)
+        num_rows -= 1
         tbl.row(line)
+        
+        # Provide effective way to terminate early for testing.
+        if num_rows == 0:
+            break
+        
     return tbl
 
 def count_collisions_dynamic(num_rows=0, output=True, decimals=2):
@@ -136,7 +142,8 @@ def count_collisions_dynamic(num_rows=0, output=True, decimals=2):
     from ch03.hashtable_open import DynamicHashtable as ODHL
     from ch03.hashtable_open import stats_open_addressing
 
-    tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'], output=output, decimals=decimals)
+    tbl = DataTable([10,8,8,8,8], ['M', 'Avg LL', 'Max LL', 'Avg OA', 'Max OA'],
+                    output=output, decimals=decimals)
     tbl.format('Max LL', 'd')
     tbl.format('Max OA', 'd')
     while M > N/16:
@@ -158,7 +165,7 @@ def count_collisions_dynamic(num_rows=0, output=True, decimals=2):
             M = (M * 95) // 100
         else:
             M = (M * 6) // 10
-            
+
         # To allow for testing, simple way to break out after a number of rows are generated.
         if num_rows == 0:
             break
@@ -198,7 +205,7 @@ def count_collisions(num_rows=0, output=True, decimals=1):
             if M > N:               # otherwise, will fail...
                 ohl.put(w, 1)
         avg_size_linked = stats_linked_lists(hl)
-        
+
         if N < M:
             avg_size_open = stats_open_addressing(ohl)
         else:
@@ -214,7 +221,7 @@ def count_collisions(num_rows=0, output=True, decimals=1):
             M = (M * 95) // 100
         else:
             M = (M * 6) // 10
-            
+
         # To allow for testing, simple way to break out after a number of rows are generated.
         if num_rows == 0:
             break
@@ -344,9 +351,9 @@ def count_hash(output=True, decimals=2):
 
 def avoid_digit(n, d):
     """Sample Python generator to yield all integers from 1 to n that do not involve d."""
-    sd = str(d)
+    strd = str(d)
     for i in range(n):
-        if not sd in str(i):
+        if strd not in str(i):
             yield i
 
 def iteration_order(output=True):
@@ -369,8 +376,8 @@ def iteration_order(output=True):
     tbl.format('Open Addressing', 's')
     tbl.format('Separate Chaining', 's')
     tbl.format('Perfect Hash', 's')
-    for p1,p2,p3 in zip(ht_oa, ht_ll, ht_ph):
-        tbl.row([p1[0], p2[0], p3[0]])
+    for p_oa,p_ll,p_ph in zip(ht_oa, ht_ll, ht_ph):
+        tbl.row([p_oa[0], p_ll[0], p_ph[0]])
     return tbl
 
 def perfect_trial(key):

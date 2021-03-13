@@ -27,7 +27,7 @@ def stats_linked_lists(ht, output=False):
         idx = i
         entry = ht.table[idx]
         total_non_empty += 1 if entry else 0
-        
+
         while entry:                # count how many are in this entry
             entry = entry.next
             num += 1

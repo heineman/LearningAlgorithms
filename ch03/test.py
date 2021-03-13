@@ -32,11 +32,11 @@ class Test_Ch03(unittest.TestCase):
         from ch03.base26 import search_for_base, base26
         (m, data) = search_for_base()
         self.assertEqual(34, m)
-        
+
         # this is good
         self.assertEqual(31, data[base26('August') % m])
         self.assertEqual(28, data[base26('February') % m])
-        
+
         # this is not good
         self.assertEqual(31, data[base26('abbreviated') % m])
 
@@ -47,7 +47,7 @@ class Test_Ch03(unittest.TestCase):
 
         le = LinkedEntry('key1', 'val1')
         self.assertEqual('key1 -> val1', str(le))
-        
+
         me = MarkedEntry('key1', 'val1')
         self.assertEqual('key1 -> val1', str(me))
         me.mark()
@@ -98,7 +98,7 @@ class Test_Ch03(unittest.TestCase):
         for i in range(S-1):
             self.assertEqual(sample(i), ht.get(key(i)))
         self.assertEqual(S-1, ht.N)
-        self.assertTrue(ht.get(key(-999)) == None)
+        self.assertTrue(ht.get(key(-999)) is None)
 
         self.assertTrue(ht.is_full())
         with self.assertRaises(RuntimeError):
@@ -187,7 +187,7 @@ class Test_Ch03(unittest.TestCase):
 
     def test_iterate_open_addressing(self):
         from ch03.hashtable_open import Hashtable
-        ht = Hashtable(11) 
+        ht = Hashtable(11)
         ht.put(13,sample(13))
         ht.put(7,sample(7))
         ht.put(24,sample(24))
@@ -206,10 +206,10 @@ class Test_Ch03(unittest.TestCase):
         ht.put(13,sample(13))
         ht.put(13,sample(17))
         self.assertEqual(sample(17), ht.get(13))
-        self.assertTrue(ht.get(99) == None)
-        self.assertTrue(ht.remove(99) == None)
+        self.assertTrue(ht.get(99) is None)
+        self.assertTrue(ht.remove(99) is None)
         self.assertTrue(ht.remove(13) == sample(17))
-        
+
         # add to same bucket
         ht.put(0, sample(0))
         ht.put(11, sample(11))
@@ -226,16 +226,16 @@ class Test_Ch03(unittest.TestCase):
         for w in [0,1*M,2*M,3*M,4*M]:
             ht.put(w, 1)
         (avg_len, max_len) = stats_linked_lists(ht)
-        
+
         # Only one bucket is non-empty! Average is max
         self.assertEqual(5, max_len)
         self.assertEqual(5, avg_len)
-        
+
         ht = Hashtable(M)
         for w in  [0,1*M,2*M,3*M,4*M,2,M+2]:
             ht.put(w, 1)
         (avg_len, max_len) = stats_linked_lists(ht)
-        
+
         self.assertEqual(5, max_len)
         self.assertEqual(3.5, avg_len)
 
@@ -246,11 +246,11 @@ class Test_Ch03(unittest.TestCase):
         for w in [0,1*M,2*M,3*M,4*M]:
             ht.put(w, 1)
         (avg_len, max_len) = stats_open_addressing(ht)
-        
+
         # single bucket spills over, with 5 / 4 / 3 / 2 / 1 for avg. of 3
         self.assertEqual(5, max_len)
         self.assertEqual(3, avg_len)
-        
+
         ht = Hashtable(M)
         for w in [0,1*M,2*M,3*M,4*M, M-2, M-3]:
             ht.put(w, 1)
@@ -291,7 +291,7 @@ class Test_Ch03(unittest.TestCase):
         
         with self.assertRaises(ValueError):
             DynamicHashtable(0)
-        
+
         for size in range(1,10):
             ht = DynamicHashtable(size)
             for val in range(1,10):
@@ -302,7 +302,7 @@ class Test_Ch03(unittest.TestCase):
 
     def test_resize_hash_small_open_addressing_remove(self):
         from ch03.hashtable_open import DynamicHashtablePlusRemove
-        
+
         # Intricate test that uncovered some subtle defects when
         # reusing MarkedEntry objects...
         for size in range(2,20):
@@ -395,7 +395,7 @@ class Test_Ch03(unittest.TestCase):
     def test_prime_number_difference(self):
         from ch03.challenge import prime_number_difference
         K = ["a", "rose", "by", "any", "other", "name", "would", "smell", "as", "sweet"]
-        tbl = prime_number_difference(words=K, output=False)
+        tbl = prime_number_difference(words=K, output=True)
         self.assertTrue('Prime', tbl.entry(428977, 'Prime'))
 
     def test_bad_timing(self):
@@ -404,7 +404,7 @@ class Test_Ch03(unittest.TestCase):
 
         tbl = bad_timing(english_words()[:100], output=False)
         self.assertTrue(tbl.entry('Good', 'Max Len') > 0)
-        
+
     def test_measure_performance_resize(self):
         from ch03.challenge import measure_performance_resize
 
@@ -447,15 +447,21 @@ class Test_Ch03(unittest.TestCase):
 
     def test_count_collisions(self):
         from ch03.book import count_collisions
-        
+
         tbl = count_collisions(num_rows=4, output=False)
         self.assertTrue(tbl.entry(642330, 'Max LL') > 0)        
-        
+
     def test_count_collisions_dynamic(self):
         from ch03.book import count_collisions_dynamic
-        
+
         tbl = count_collisions_dynamic(num_rows=4, output=False)
         self.assertTrue(tbl.entry(642330, 'Max LL') > 0)
+        
+    def test_time_results_open_addressing(self):
+        from ch03.book import time_results_open_addressing
+        
+        tbl = time_results_open_addressing(num_rows=2)
+        self.assertTrue(tbl.entry(32,'8,192') < tbl.entry(64,'8,192'))
 
 if __name__ == '__main__':
     unittest.main()
