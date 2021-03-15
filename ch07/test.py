@@ -51,11 +51,11 @@ class Test_Ch07(unittest.TestCase):
         self.small_example(MatrixUndirectedGraph())
         
     def test_cycle_detection(self):
-        from ch07.spreadsheet import Spreadsheet
         from ch07.fibonacci_example import fibonacci_example
         
         try:
             import tkinter
+            from ch07.spreadsheet import Spreadsheet
         except(ImportError):
             print('unable to access tkinter.')
             return

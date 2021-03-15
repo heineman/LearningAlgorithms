@@ -251,7 +251,9 @@ class Test_ch05(unittest.TestCase):
         from ch05.book import modeling_merge_heap
 
         tbl = modeling_merge_heap(max_k=10, output=False)
-        self.assertTrue(tbl.entry(16, 'MCMS') < tbl.entry(32, 'MCMS'))
+
+        # More than doubles...
+        self.assertTrue(tbl.entry(16, 'AvgSwapMS')*2 < tbl.entry(32, 'AvgSwapMS'))
         
     def test_timing_selection_insertion(self):
         from ch05.book import timing_selection_insertion
