@@ -519,7 +519,6 @@ class TestChapter06(unittest.TestCase):
             for _ in range(5):
                 bt1.remove(bt1.max_value())
                 check_avl_property(bt1.root)
-        
 
     def test_fibonacci_avl_trees(self):
         from ch06.challenge import fibonacci_avl_tree, rotations
@@ -531,9 +530,10 @@ class TestChapter06(unittest.TestCase):
         self.assertEqual(fib(8), tree.root.value)
 
         # multiple rotations detect when remove lARGEST VALUE
+        last_rotations = rotations[0]
         self.assertTrue(fib(9)-1 in tree)
         tree.remove(fib(9)-1)
-        self.assertEqual(3, rotations[0])   # three rotations
+        self.assertEqual(3, rotations[0]-last_rotations)   # three rotations
 
         # Number of rotations continue to increase, every other one
         for n in range(5, 20):
@@ -548,7 +548,6 @@ class TestChapter06(unittest.TestCase):
     def test_fill_fibonacci_avl_trees(self):
         from ch06.challenge import fibonacci_avl_tree, rotations
         from ch05.challenge import fib
-        from ch06.avl import check_avl_property
 
         tree = fibonacci_avl_tree(6)
         check_avl_property(tree.root)
@@ -588,7 +587,7 @@ class TestChapter06(unittest.TestCase):
 
         tbl = average_performance(max_n = 512, output=False)
         self.assertTrue(tbl.entry(512,'Heap') < tbl.entry(512, 'BinaryTree'))
-        
+
     def test_generate_list_table(self):
         from ch06.book import generate_list_table
 
@@ -603,7 +602,7 @@ class TestChapter06(unittest.TestCase):
 
     def test_compare_dynamic_build_and_access_time(self):
         from ch06.book import compare_dynamic_build_and_access_time
-        
+
         (build,access) = compare_dynamic_build_and_access_time(repeat=1, num=1, output=False)
         self.assertTrue(build > 0)
         self.assertTrue(access > 0)
@@ -613,7 +612,7 @@ class TestChapter06(unittest.TestCase):
 
         root = recreate_tree('(19,,)')
         self.assertEqual('19', root.value)
-         
+
         root = recreate_tree('(19,3,22)')
         self.assertEqual('3', root.left.value)
         self.assertEqual('22', root.right.value)
@@ -622,14 +621,14 @@ class TestChapter06(unittest.TestCase):
         self.assertEqual('22', root.right.value)
         self.assertEqual('21', root.right.left.value)
         self.assertEqual('24', root.right.right.value)
-         
+
         root = recreate_tree('(26,,(29,,)')
         self.assertEqual('26', root.value)
 
         root = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
         self.assertEqual('19', root.value)
         self.assertEqual(8, root.size())
-        
+
     def test_produce_height_stats_balanced_integers(self):
         from ch06.challenge import produce_height_stats_balanced_integers
         
