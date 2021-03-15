@@ -3,6 +3,11 @@ import unittest
 import random
 from ch06.recursive_lists import create_linked_list, reverse, sum_list, sum_iterative
 from ch06.recursive_lists import iterate_list
+from ch06.avl import check_avl_property
+
+
+def to_int(x):
+    return int(x)
 
 class TestChapter06(unittest.TestCase):
 
@@ -494,6 +499,28 @@ class TestChapter06(unittest.TestCase):
         # Prefix representation, with value first, then left and then right
         self.assertEqual('(5,(4,(2,(1,,),(3,,)),),(6,,(7,,)))', tree_structure(bt1.root))
 
+    def test_all_rotations_challenge(self):
+        from ch06.challenge import BinaryTree
+        bt1 = BinaryTree()
+        vals = list(range(201))
+        random.shuffle(vals)
+        for v in vals:
+            bt1.insert(v)
+            check_avl_property(bt1.root)
+        for _ in range(10):
+            for _ in range(5):
+                vx = bt1.min_value()
+                bt1.remove(vx)
+                check_avl_property(bt1.root)
+                self.assertFalse(vx in bt1)
+            for _ in range(10):
+                bt1.remove(bt1.root.value)
+                check_avl_property(bt1.root)
+            for _ in range(5):
+                bt1.remove(bt1.max_value())
+                check_avl_property(bt1.root)
+        
+
     def test_fibonacci_avl_trees(self):
         from ch06.challenge import fibonacci_avl_tree, rotations
         from ch05.challenge import fib
@@ -608,6 +635,18 @@ class TestChapter06(unittest.TestCase):
         
         tbl = produce_height_stats_balanced_integers(max_k=10, output=False)
         self.assertEqual(7, tbl.entry(128, 'height'))
+
+    def test_max_rotations(self):
+        from ch06.challenge import find_multiple_rotations, recreate_tree, rotations, BinaryTree
+        extra = 1
+        (tree_rep, to_delete) = find_multiple_rotations(extra=extra, lo=9, hi=30, num_attempts=10000, output=False)
+        bt3 = recreate_tree(tree_rep, convert=to_int)
+        tree = BinaryTree()
+        tree.root = bt3
+        num_rotations = rotations[0]
+        tree.remove(to_delete)
+        check_avl_property(tree.root)
+        self.assertEqual(num_rotations + extra + 1, rotations[0])  # This exceeds #rotations
 
 #######################################################################
 if __name__ == '__main__':
