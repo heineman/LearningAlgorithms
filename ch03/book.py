@@ -230,12 +230,15 @@ def count_collisions(num_rows=0, output=True, decimals=1):
 def compare_dynamic_build_and_access_time(repeat=10, num=5, max_m=640000, output=True):
     """Generate tables for build and access times for M up to (but not equal to) 640,000."""
 
+    # sufficient to allow 321,129 and to spare (divide by 0.75 to get 428,172).
+    SUFF=428172
+    
     # When 'ht = HTLL(...) is inside the STMT, it measures BUILD TIME.
     # When it is included in the setup, we are measuring ACCESS TIME.
     ll_build = min(timeit.repeat(stmt='''
-ht = HTLL(428221)
+ht = HTLL({})
 for w in words:
-    ht.put(w,w)''', setup='''
+    ht.put(w,w)'''.format(SUFF), setup='''
 from ch03.hashtable_linked import Hashtable as HTLL
 from resources.english import english_words
 words = english_words()''', repeat=repeat, number=num))/num
@@ -245,15 +248,15 @@ for w in words:
     ht.get(w)''', setup='''
 from ch03.hashtable_linked import Hashtable as HTLL
 from resources.english import english_words
-ht = HTLL(428221)
+ht = HTLL({})
 words = english_words()
 for w in words:
-    ht.put(w,w)''', repeat=repeat, number=num))/num
+    ht.put(w,w)'''.format(SUFF), repeat=repeat, number=num))/num
 
     oa_build = min(timeit.repeat(stmt='''
-ht = HTOA(428221)
+ht = HTOA({})
 for w in words:
-    ht.put(w,w)''', setup='''
+    ht.put(w,w)'''.format(SUFF), setup='''
 from ch03.hashtable_open import Hashtable as HTOA
 from resources.english import english_words
 words = english_words()''', repeat=repeat, number=num))/num
@@ -263,10 +266,10 @@ for w in words:
     ht.get(w)''', setup='''
 from ch03.hashtable_open import Hashtable as HTOA
 from resources.english import english_words
-ht = HTOA(428221)
+ht = HTOA({})
 words = english_words()
 for w in words:
-    ht.put(w,w)''', repeat=repeat, number=num))/num
+    ht.put(w,w)'''.format(SUFF), repeat=repeat, number=num))/num
 
     tbl = DataTable([8,10,10,10,10],['M', 'BuildLL', 'AccessLL', 'BuildOA', 'AccessOA'], output=output, decimals=3)
 
@@ -383,11 +386,28 @@ def iteration_order(output=True):
 def perfect_trial(key):
     from ch03.perfect.generated_dictionary import G, S1, S2, hash_f
     hk1 = hash_f(key, S1)
-    print('hash_f(',key,'S1)=',hk1)
+    print('hash_f(\'{}\', S1)={}'.format(key, hk1))
+    
+    total = 0
+    for idx,ch in enumerate(key):
+        print(comma(S1[idx]),'*',ord(ch),end='')
+        total += S1[idx]*ord(ch)
+        if idx < len(key)-1: print (' + ', end='')
+    print(' % {0} = {1} % {0} = {2}'.format(comma(len(G)), comma(total), comma(total % len(G))))
+    print()
+    
     hk2 = hash_f(key, S2)
-    print('hash_f(',key,'S2)=',hk2)
-    print('G[',hk1,'] = ',G[hk1])
-    print('G[',hk2,'] = ',G[hk2])
+    print('hash_f(\'{}\', S2)={}'.format(key, hk2))
+    total = 0
+    for idx,ch in enumerate(key):
+        print(comma(S2[idx]),'*',ord(ch),end='')
+        total += S2[idx]*ord(ch)
+        if idx < len(key)-1: print (' + ', end='')
+    print(' % {0} = {1} % {0} = {2}'.format(comma(len(G)), comma(total), comma(total % len(G))))
+
+    print('G[{}] = {}'.format(comma(hk1),G[hk1]))
+    print('G[{}] = {}'.format(comma(hk2),G[hk2]))
+    print()
     from ch03.hashtable_open_perfect import Hashtable
     ht1 = Hashtable()
     ht1.put(key,key)
@@ -451,7 +471,7 @@ def generate_ch03():
     with TableNum(3) as table_number:
         process(count_collisions(),
                 chapter, table_number,
-                'Average Performance when inserting N=321,129 keys into a Hashtable of size M as M decreases in size')
+                'Average performance when inserting N=321,129 keys into a Hashtable of size M as M decreases in size')
 
     with FigureNum(6) as figure_number:
         description  = 'For a fixed number of elements, N, the average and maximum chain length follow predictable paths'
@@ -492,8 +512,8 @@ def generate_ch03():
 
     print('Additional computations for perfect hashing')
     perfect_trial('by')
-    perfect_trial('etching')
-    perfect_trial('zzzaaa')
+    perfect_trial('foregift')
+    perfect_trial('invalid-word')
 
     with TableNum(6) as table_number:
         process(iteration_order(),

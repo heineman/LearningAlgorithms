@@ -13,7 +13,7 @@ def partition(A, lo, hi, idx):
     by populating A with RecordedItem instances
     """
     if lo == hi:
-        return 0
+        return lo
 
     A[idx],A[lo] = A[lo],A[idx]    # swap into position
     i = lo

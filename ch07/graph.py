@@ -61,6 +61,7 @@ class UndirectedGraph:
             yield node
     
     def add_edge(self, u, v):
+        """Add edge (u,v) to a graph."""
         if not u in self.adjacency:
             self.adjacency[u] = None
             
@@ -144,6 +145,7 @@ class MatrixUndirectedGraph:
                 yield self.labels[j]
 
     def add_edge(self, u, v):
+        """Add edge (u,v) to a graph."""
         if not u in self.labels:
             self.add_node(u)
 
@@ -178,14 +180,30 @@ class DirectedGraph:
         self.adjacency[u] = []
         self.positions[u] = pos
 
+    def add_nodes_from(self, nodes):
+        """Add nodes to graph, if not already there."""
+        for n in nodes:
+            self.add_node(n)
+
     def __getitem__(self, u):
         """Get neighboring nodes to this node."""
-        for node in self.adjacency[u]:
-            yield node
+        if u in self.adjacency:
+            for node in self.adjacency[u]:
+                yield node
 
     def nodes(self):
         """Return all nodes."""
         return self.adjacency.keys()
+
+    def edges(self, u=None):
+        """Return all edges."""
+        if u:
+            for v in self.adjacency[u]:
+                yield (u, v)
+        else:
+            for u in self.nodes():
+                for v in self.adjacency[u]:
+                    yield (u, v)
 
     def add_edge(self, u, v):
         """Add edge from u => v."""
@@ -200,6 +218,11 @@ class DirectedGraph:
             return
         self.adjacency[u].append(v)
 
+    def add_edges_from(self, edges):
+        """Add edges to graph, if not already there."""
+        for u,v in edges:
+            self.add_edge(u,v)
+
 class Replacement:
     """Provides an object which can fill the role of 'nx' in the graph chapter code."""
     def __init__(self):
@@ -212,6 +235,11 @@ class Replacement:
     def DiGraph(self):
         """Create directed graph."""
         return DirectedGraph()
+
+    def topological_sort(self, digraph):
+        """Link in with Topological sort."""
+        from ch07.digraph_search import topological_sort
+        return topological_sort(digraph)
 
     def get_node_attributes(self, graph):
         """I am not going to provide this capability."""

@@ -1,7 +1,12 @@
 """Code for chapter 07."""
 
 import timeit
-import networkx as nx
+try:
+    import networkx as nx
+except ImportError:
+    from ch07.graph import Replacement
+    nx = Replacement()
+
 from algs.table import DataTable, captionx, FigureNum, TableNum, process
 
 def make_sample_graph():
@@ -41,7 +46,7 @@ def make_sample_directed_graph():
         if i < 5:
             DG.add_edge('C{}'.format(i+1), 'C{}'.format(i))
 
-    print(len(DG.nodes()), 'nodes and ', len(DG.edges()), 'edges.')
+    print(len(list(DG.nodes())), 'nodes and ', len(list(DG.edges())), 'edges.')
     print('neighbors of C3:', list(DG['C3']))
     print('edges adjacent to C3:', list(DG.edges('C3')))
     return DG
@@ -112,7 +117,7 @@ DG = nx.DiGraph()
 topological_example(DG,{})'''.format(N), repeat=5, number=3))
         DG = nx.DiGraph()    
         topological_example(DG, N)
-        tbl.row([len(DG.nodes()), len(DG.edges()), built_in, mtime])
+        tbl.row([len(list(DG.nodes())), len(list(DG.edges())), built_in, mtime])
     return tbl
 
 def generate_ch06():
