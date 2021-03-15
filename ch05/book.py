@@ -184,7 +184,7 @@ def modeling_merge_heap(max_k=5, output=True, decimals=1):
         y_swap_hs.append(total_swaps_hs/trials)
 
     if numpy_error:
-        log_comp_ms = log_swap_ms, log_comp_hs, log_swap_hs = [0, 0]
+        log_comp_ms = log_swap_ms = log_comp_hs = log_swap_hs = [0, 0]
     else:
         import numpy as np
         from scipy.optimize import curve_fit

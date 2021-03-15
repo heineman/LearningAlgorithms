@@ -112,7 +112,7 @@ pairs = [create_random_pair({}) for _ in range({})]'''.format(n,num), repeat=20,
 
         print(n,min(all_times), max(all_times))
 
-def large_multiplication():
+def large_multiplication(output=True, decimals=4):
     """Compute results for multiplying large numbers."""
     num = 1000
     x = []
@@ -135,7 +135,6 @@ x=create_pair({})'''.format(n), number=num)
 
     # Coefficients are returned as first argument
     if numpy_error:
-        pass
         linear_coeffs = quadratic_coeffs = karatsuba_coeffs = tkn_coeffs = [0,0]
     else:
         import numpy as np
@@ -144,13 +143,13 @@ x=create_pair({})'''.format(n), number=num)
         [quadratic_coeffs, _] = curve_fit(quadratic_model, np.array(x), np.array(y))
         [karatsuba_coeffs, _] = curve_fit(karatsuba, np.array(x), np.array(y))
         [tkn_coeffs, _] = curve_fit(tkn, np.array(x), np.array(y))
-
-    print('Karatsuba={}*N^1.585'.format(karatsuba_coeffs[0]))
-    print('TK={}*N^1.585+{}*N'.format(tkn_coeffs[0], tkn_coeffs[1]))
-    print()
+        if output:
+            print('Karatsuba={}*N^1.585'.format(karatsuba_coeffs[0]))
+            print('TK={}*N^1.585+{}*N'.format(tkn_coeffs[0], tkn_coeffs[1]))
+            print()
 
     tbl = DataTable([8,12,12,12,12,12],['N', 'Time', 'Linear', 'Quad', 'Karatsuba', 'TKN'],
-                    decimals=4)
+                    output=output, decimals=decimals)
 
     for n,mult_time in zip(x,y):
         tbl.row([n, mult_time,
@@ -169,7 +168,6 @@ x=create_pair({})'''.format(n), number=num)
               quadratic_model(n, quadratic_coeffs[0], quadratic_coeffs[1]),
               karatsuba(n, karatsuba_coeffs[0]),
               tkn(n, tkn_coeffs[0], tkn_coeffs[1])])
-
     return tbl
 
 def algorithms_a_b():
@@ -196,16 +194,13 @@ def growth_table(output=True):
     tbl = DataTable([15,15,15,15,15,15,15,15], labels, output=output)
     for hdr in labels:
         tbl.format(hdr, ',d')
-    
+
     def fact(n):
         try:
             return int(math.factorial(n))
-        except (Exception):
+        except (ValueError):
             return float('inf')
-    
-    def exp(n):
-        pass
-    
+
     for n in [2**k for k in range(2, 12)]:
         fact_value = fact(n)
         if fact_value == float('inf'):
@@ -214,24 +209,24 @@ def growth_table(output=True):
             fact_value = SKIP
         elif fact_value > 1e8:
             tbl.format('N!', '.2e')
-            
+
         exp_value = pow(2, n)
         if exp_value > 1e8:
             tbl.format('2^N', '.2e')
         if exp_value > 1e100:
             exp_value = SKIP
-            
+
         cubic_value = n*n*n
         if cubic_value > 1e8:
             tbl.format('N^3', '.2e')
-                       
+
         tbl.row([n, int(math.log(n)/math.log(2)), n, int(n*math.log(n)/math.log(2)), n*n, cubic_value, exp_value, fact_value])
     return tbl
 
 def generate_ch02():
     """Generate tables/figures for chapter 02."""
     chapter = 2
-    
+
     with TableNum(1) as table_number:
         process(actual_table(),
                 chapter, table_number, 
@@ -241,7 +236,7 @@ def generate_ch02():
         process(prototype_table(),
                 chapter, table_number, 
                 'Comparing different mathematical models with actual performance')
-        
+
     with TableNum(3) as table_number:
         process(large_multiplication(),
                 chapter, table_number, 
@@ -250,7 +245,7 @@ def generate_ch02():
     with FigureNum(1) as figure_number:
         print (captionx(chapter, figure_number),
                'Compare models against performance')
-        
+
     with FigureNum(2) as figure_number:
         algorithms_a_b()
         print (captionx(chapter, figure_number),
@@ -259,12 +254,12 @@ def generate_ch02():
     with FigureNum(3) as figure_number:
         print (captionx(chapter, figure_number),
                'Visualizing the numbers from Figure 2-2')
-        
+
     with TableNum(4) as table_number:
         process(growth_table(),
                 chapter, table_number, 
                 'Growth of different computations')
-        
+
     with FigureNum(8) as figure_number:
         print (captionx(chapter, figure_number),
                'Plot runtime performance against problem instance size for complexity classes')

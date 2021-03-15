@@ -233,6 +233,7 @@ class Test_ch05(unittest.TestCase):
 
         tbl = fib_table(output=False)
         self.assertEqual(137, tbl.entry(11, 'FiRec'))
+
     def test_timing_nlogn_sorting(self):
 
         from ch05.book import timing_nlogn_sorting
@@ -244,7 +245,7 @@ class Test_ch05(unittest.TestCase):
         from ch05.book import modeling_insertion_selection
 
         tbl = modeling_insertion_selection(output=False)
-        self.assertEqual(120, tbl.entry(16, 'MCSS'))
+        self.assertEqual(120, tbl.entry(16, 'AvgCompSS'))
 
     def test_modeling_merge_heap(self):
         from ch05.book import modeling_merge_heap
@@ -261,9 +262,8 @@ class Test_ch05(unittest.TestCase):
     def test_insertion_sort_bas_table(self):
         from ch05.challenge import insertion_sort_bas
         
-        tbl = insertion_sort_bas(max_k=14, output=False)
-        self.assertTrue(tbl.entry(8192, 'Time') >= tbl.entry(8192, 'Log'))
-        self.assertTrue(tbl.entry(8192, 'Time') <= tbl.entry(8192, 'Quad'))
+        tbl = insertion_sort_bas(max_k=14, output=True)
+        self.assertTrue(tbl.entry(4096, 'Time') <= tbl.entry(8192, 'Time'))
 
 #######################################################################
 if __name__ == '__main__':

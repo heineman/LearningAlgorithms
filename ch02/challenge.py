@@ -2,15 +2,19 @@
 
 import timeit
 
-import numpy as np
-from scipy.optimize import curve_fit
 from algs.table import DataTable
-from algs.modeling import quadratic_model, log_model
+from algs.modeling import quadratic_model, log_model, numpy_error
 
 def log_log_model(n, a):
     """Formula for A*Log_2(N) with single coefficient."""
-    logn = np.log(n)/np.log(2)
-    return a*np.log(logn)/np.log(2)
+    if numpy_error:
+        import math
+        logn = math.log(n)/math.log(2)
+        return a*logn
+    else:
+        import numpy as np
+        logn = np.log(n)/np.log(2)
+        return a*logn
 
 def log_log_table(max_k=55, output=True, decimals=3):
     """
@@ -30,9 +34,15 @@ def log_log_table(max_k=55, output=True, decimals=3):
         xvals.append(n)
         yvals.append(num_sqrts)
 
-    [log_log_coeff, _] = curve_fit(log_log_model, np.array(xvals), np.array(yvals))
-    if output:
-        print('Log Log N  = {:.12f}*log2((log2(N))'.format(log_log_coeff[0]))
+    if numpy_error:
+        log_log_coeff = [0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+
+        [log_log_coeff, _] = curve_fit(log_log_model, np.array(xvals), np.array(yvals))
+        if output:
+            print('Log Log N  = {:.12f}*log2((log2(N))'.format(log_log_coeff[0]))
 
     tbl = DataTable([30, 10, 10], ['N', 'NumSqrt', 'Model'], decimals=decimals, output=output)
     tbl.format('NumSqrt', 'd')
@@ -70,9 +80,14 @@ random.shuffle(x)'''.format(n), number=10)
         xvals.append(n)
         yvals.append(sort_time)
 
-    [quadratic_coeff, _] = curve_fit(quadratic_model, np.array(xvals), np.array(yvals))
-    if output:
-        print('Quadratic N  = {:.12f}*N*N + {:.12f}*N'.format(quadratic_coeff[0], quadratic_coeff[1]))
+    if numpy_error:
+        quadratic_coeff = [0, 0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+        [quadratic_coeff, _] = curve_fit(quadratic_model, np.array(xvals), np.array(yvals))
+        if output:
+            print('Quadratic N  = {:.12f}*N*N + {:.12f}*N'.format(quadratic_coeff[0], quadratic_coeff[1]))
 
     tbl = DataTable([8,8,8], ['N', 'MaxSort', 'Model'], output=output, decimals=decimals)
 
@@ -102,13 +117,18 @@ x=list(range({},0,-1))'''.format(n), number=10)
         xvals.append(n)
         yvals.append(sort_time)
 
-    [factorial_coeff, _] = curve_fit(factorial_model, np.array(xvals), np.array(yvals))
-    if output:
-        print('Factorial N  = {:.12f}*N! '.format(factorial_coeff[0]))
-        print('Estimated time to sort 20 values is {:,.2f} years'.format(
-              factorial_model(20, factorial_coeff[0])/(60*60*24*365)))
+    if numpy_error:
+        factorial_coeff = [0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+        [factorial_coeff, _] = curve_fit(factorial_model, np.array(xvals), np.array(yvals))
+        if output:
+            print('Factorial N  = {:.12f}*N! '.format(factorial_coeff[0]))
+            print('Estimated time to sort 20 values is {:,.2f} years'.format(
+                  factorial_model(20, factorial_coeff[0])/(60*60*24*365)))
 
-    tbl = DataTable([8,8,8], ['N', 'PermutationSort', 'Model'], 
+    tbl = DataTable([8,8,8], ['N', 'PermutationSort', 'Model'],
                     output=output, decimals=decimals)
 
     for n in range(max_n):
@@ -121,7 +141,7 @@ x=list(range({},0,-1))'''.format(n), number=10)
 
 def performance_bas(max_k=22, output=True, decimals=3):
     """
-    Generate performance tables for binary array search up to (but not including) 
+    Generate performance tables for binary array search up to (but not including)
     2**max_k.
     """
     # Train on five values...
@@ -134,22 +154,27 @@ def performance_bas(max_k=22, output=True, decimals=3):
                                     setup='''
 import random
 from ch02.bas import binary_array_search        
-x=sorted(random.sample(range({}*4), {}))'''.format(n,n), number=num)
+x=sorted(random.sample(range({0}*4), {0}))'''.format(n), number=num)
         xvals.append(n)
         yvals.append(search_time)
 
-    [log_coeff, _] = curve_fit(log_model, np.array(xvals), np.array(yvals))
-    if output:
-        print('Log N   = {:.12f}*log2(N)'.format(log_coeff[0]))
+    if numpy_error:
+        log_coeff = [0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+        [log_coeff, _] = curve_fit(log_model, np.array(xvals), np.array(yvals))
+        if output:
+            print('Log N   = {:.12f}*log2(N)'.format(log_coeff[0]))
 
     tbl = DataTable([15, 10, 10], ['N', 'T(N)', 'Model'], output=output, decimals=decimals)
     trials = [2**k for k in range(5,max_k)]
     for n in trials:
-        search_time = timeit.timeit(stmt='binary_array_search(x, random.randint(0,{}*2))'.format(n), 
+        search_time = timeit.timeit(stmt='binary_array_search(x, random.randint(0,{}*2))'.format(n),
                                     setup='''
 import random
 from ch02.bas import binary_array_search        
-x=sorted(random.sample(range({}*4), {}))'''.format(n,n), number=num)
+x=sorted(random.sample(range({0}*4), {0}))'''.format(n), number=num)
 
         tbl.row([n, search_time, log_model(n, log_coeff[0])])
 
@@ -157,12 +182,10 @@ x=sorted(random.sample(range({}*4), {}))'''.format(n,n), number=num)
 
 #######################################################################
 if __name__ == '__main__':
+    print('log log results')
+    log_log_table()
     run_permutation_sort()
     print()
 
     run_max_sort_worst_case()
-    print()
-
-    print('log log results')
-    log_log_table()
     print()

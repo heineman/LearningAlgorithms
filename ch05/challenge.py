@@ -163,14 +163,13 @@ def lucas_with_fib(n):
 
 def fib_table(output=True, decimals=3):
     """Generate table showing reduced recursive invocations of fibonacci."""
-    import numpy as np
-    from scipy.optimize import curve_fit
-
+    import math
+    
     tbl = DataTable([8,12,12],['N', 'FiRec', 'Model'], output=output, decimals=decimals)
     tbl.format('FiRec', 'd')
     def exp_model(n, a, b):
         """Formula for A*N^B ."""
-        return a*np.power(n, b)
+        return a*math.pow(n, b)
 
     for n in range(3, 100):
         old = numRecursiveImproved[0]
@@ -178,12 +177,18 @@ def fib_table(output=True, decimals=3):
         model = exp_model(n, 0.28711343, 2.58031481)
         tbl.row([n, (numRecursiveImproved[0] - old), model])
 
-    x_arr = np.array(tbl.column(tbl.labels[0]))
-    y_arr = np.array(tbl.column(tbl.labels[1]))
+    if numpy_error:
+        pass
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
 
-    if output:
-        [exp_coeffs, _]        = curve_fit(exp_model, x_arr, y_arr)
-        print('A*N^B  = {:.12f}*N^{:f} '.format(exp_coeffs[0], exp_coeffs[1]))
+        x_arr = np.array(tbl.column(tbl.labels[0]))
+        y_arr = np.array(tbl.column(tbl.labels[1]))
+
+        if output:
+            [exp_coeffs, _]        = curve_fit(exp_model, x_arr, y_arr)
+            print('A*N^B  = {:.12f}*N^{:f} '.format(exp_coeffs[0], exp_coeffs[1]))
 
     return tbl
 

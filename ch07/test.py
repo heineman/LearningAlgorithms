@@ -2,10 +2,15 @@
 
 import unittest
 
+try:
+    import networkx as nx
+except ImportError:
+    from ch07.graph import Replacement
+    nx = Replacement()
+
 class Test_Ch07(unittest.TestCase):
 
     def test_topological_example(self):
-        import networkx as nx
         from ch07.book import topological_example
         DG = nx.DiGraph()
         topological_example(DG, 5)
@@ -31,7 +36,6 @@ class Test_Ch07(unittest.TestCase):
         self.assertEqual(sorted([('C3', 'C2'), ('C3', 'B3'), ('C3', 'C4')]), sorted(list(G.edges('C3'))))
 
     def test_small_example(self):
-        import networkx as nx
         G = nx.Graph()
         self.small_example(G)
         
@@ -49,11 +53,17 @@ class Test_Ch07(unittest.TestCase):
     def test_cycle_detection(self):
         from ch07.spreadsheet import Spreadsheet
         from ch07.fibonacci_example import fibonacci_example
-        import tkinter
-        import networkx.algorithms.cycles
+        
+        try:
+            import tkinter
+        except(ImportError):
+            print('unable to access tkinter.')
+            return
+        
         ss = Spreadsheet(tkinter.Tk())
         fibonacci_example(ss)
         try:
+            import networkx.algorithms.cycles
             networkx.algorithms.cycles.find_cycle(ss.digraph)
             self.fail('no cycle yet...')
         except:
@@ -67,7 +77,7 @@ class Test_Ch07(unittest.TestCase):
         
         # just grab the graph and hack it together
         ss.digraph.add_edge('C5', 'B2')
-        print(networkx.algorithms.cycles.find_cycle(ss.digraph))
+        #print(networkx.algorithms.cycles.find_cycle(ss.digraph))
 
 if __name__ == '__main__':
     unittest.main()
