@@ -451,7 +451,7 @@ def generate_ch03():
     with TableNum(3) as table_number:
         process(count_collisions(),
                 chapter, table_number,
-                'Average Performance when inserting N=321,165 keys into a Hashtable of size M as M decreases in size')
+                'Average Performance when inserting N=321,129 keys into a Hashtable of size M as M decreases in size')
 
     with FigureNum(6) as figure_number:
         description  = 'For a fixed number of elements, N, the average and maximum chain length follow predictable paths'

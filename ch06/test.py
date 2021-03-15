@@ -31,6 +31,16 @@ class TestChapter06(unittest.TestCase):
         expr = build_expression('((9 % 2) * 5)')
         self.assertEqual(5.0, expr.eval())
         self.assertEqual([9.0, 2.0, '%', 5.0, '*'], list(expr.postfix()))
+        
+        expr = build_expression('(1.9 + 18.232)')
+        self.assertEqual(1.9+18.232, expr.eval())
+        
+        expr = build_expression('(A1 + 4)')
+        self.assertEqual('A1', expr.left.reference)
+        self.assertEqual(4.0, expr.right.value)
+        
+        expr = build_expression('3')
+        self.assertEquals(3.0, expr.value)
 
     def test_sum_list(self):
         self.assertEqual(0, sum_list(create_linked_list([])))
@@ -596,7 +606,7 @@ class TestChapter06(unittest.TestCase):
     def test_produce_height_stats_balanced_integers(self):
         from ch06.challenge import produce_height_stats_balanced_integers
         
-        tbl = produce_height_stats_balanced_integers(max_k=10, output=True)
+        tbl = produce_height_stats_balanced_integers(max_k=10, output=False)
         self.assertEqual(7, tbl.entry(128, 'height'))
 
 #######################################################################

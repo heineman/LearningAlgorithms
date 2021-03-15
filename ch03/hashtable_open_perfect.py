@@ -11,7 +11,7 @@ from ch03.entry import Entry
 from ch03.perfect.generated_dictionary import perfect_hash
 
 class Hashtable:
-    """Hashtable using perfect hashing from 321,165 English word dictionary."""
+    """Hashtable using perfect hashing from 321,129 English word dictionary."""
     def __init__(self):
         self.table = [None] * 321165
         self.N = 0

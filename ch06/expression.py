@@ -5,7 +5,7 @@ import re
 
 class Value:
     """
-    Represents a Value in an Expression treee, containing a numeric value.
+    Represents a Value in an Expression tree, containing a numeric value.
 
     Has default eval, __str_() methods and supports converting into postfix.
     """
@@ -19,9 +19,41 @@ class Value:
         """To evaluate a value, report its value."""
         return self.value
 
+    def references(self):
+        """A Value has no references."""
+        yield None
+
     def postfix(self):
         """A value as postfix is itself."""
         yield self.value
+
+class Reference:
+    """
+    Represents a Value in an Expression tree, containing a reference to a value.
+
+    Has default eval, __str_() methods and supports converting into postfix.
+    """
+    def __init__(self, e, environment={}):
+        self.reference = e
+        self.environment = environment
+
+    def __str__(self):
+        return str(self.reference)
+
+    def eval(self):
+        """To evaluate a reference, report its value from the environment (or 0 if not found)."""
+        try:
+            return self.environment[self.reference]
+        except KeyError:
+            return 0
+
+    def references(self):
+        """Yield this reference."""
+        yield self.reference
+
+    def postfix(self):
+        """A reference as postfix is itself."""
+        yield self.reference
 
 class Expression:
     """
@@ -48,6 +80,16 @@ class Expression:
         """Evaluate expression."""
         return self.func(self.left.eval(),
                          self.right.eval())
+
+    def references(self):
+        """Return generator for all references, if any exist."""
+        for v in self.left.references():
+            if v:
+                yield v
+
+        for v in self.right.references():
+            if v:
+                yield v
 
     def postfix(self):
         """Return generator containing postfix representation of expression."""
@@ -86,7 +128,7 @@ def add_operator(op, func):
 
     _operators[op] = func
 
-def build_expression(s):
+def build_expression(s, environment={}):
     """
     Given a string consisting of numeric values, parentheses and
     mathematical operators, return Expression tree using a stack-based
@@ -96,7 +138,7 @@ def build_expression(s):
     # Match open- and close- parens, any sequence of digits, and
     # known operators, using backslash notation. Limited to only special characters
     # but still quite nice...
-    pattern = re.compile('(\(|\)|\d+|[{}])'.format('\\'.join(_operators.keys())))
+    pattern = re.compile('(\(|\)|[a-zA-Z.0-9_]+|[{}])'.format('\\'.join(_operators.keys())))
 
     from ch07.list_stack import Stack
     ops = Stack()
@@ -113,7 +155,11 @@ def build_expression(s):
             left = expressions.pop()   # And store it for future
             expressions.push(Expression(op, left, right))
         else:                          # If just a numeric value, push it for later
-            expressions.push(Value(float(token)))
+            try:
+                expressions.push(Value(float(token)))
+            except:
+                # If it cannot be evaluated, leave untouched for post processing, perhaps?
+                expressions.push(Reference(token, environment))
 
     return expressions.pop()           # If parens balance, then left with expression
 

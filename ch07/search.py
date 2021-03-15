@@ -1,5 +1,7 @@
 """
-Code to blindly search through a Graph in Depth First and Breadth First strategies.
+Code to blindly search through a Graph in Depth First and Breadth First strategies. Also
+contains a rudimentary Smart Search for undirected graphs when there is a metric showing
+how far a node is from the target.
 """
 import random
 from ch07.maze import Maze, to_networkx, solution_graph, node_from_field
@@ -17,6 +19,9 @@ def path_to(node_from, src, target):
     to target. Have to follow the node_from in reverse order, which is why the
     nodes discovered are all inserted at index position 0 in the path.
     """
+    if node_from[target] is None:
+        raise ValueError('{} is unreachable from {}'.format(target,src))
+    
     path = []
     v = target
     while v != src:
@@ -74,14 +79,9 @@ def bfs_search(G, src):
     """
     marked = {}
     node_from = {}
-    dist_to = {}
-
-    for v in G.nodes():
-        dist_to[v] = float('inf')
 
     q = Queue()
     q.enqueue(src)
-    dist_to[src] = 0
     marked[src] = True
 
     while not q.is_empty():
@@ -89,26 +89,48 @@ def bfs_search(G, src):
         for w in G[v]:
             if not w in marked:
                 node_from[w] = v
-                dist_to[w] = dist_to[v] + 1
                 marked[w] = True
                 q.enqueue(w)
 
-    return node_from            
+    return node_from
 
-#######################################################################
-if __name__ == '__main__':
-    random.seed(15)
-    m = Maze(3,5)
-    G = to_networkx(m)
+def distance_to_target(from_cell, to_cell):
+        return abs(from_cell[0] - to_cell[0]) + abs(from_cell[1] - to_cell[1])
+
+def smart_search(G, src, target):
+    """Non-recursive depth-first search investigating given position."""
+    from ch04.heap import PQ
+    pq = PQ(len(G.nodes))
+    marked = {}
+    node_from = {}
     
-    # dfs_search_nr and dfs_search() produce different results
-    field = dfs_search(G, m.start())
-    H = solution_graph(G, path_to(field, m.start(), m.end()))
-    F = node_from_field(G, field)
-     
-    import matplotlib.pyplot as plt
+    dist_to = {}
+    dist_to[src] = 0
+    marked[src] = True
+    
+    # Using a MAX PRIORITY QUEUE means we rely on negative distance to
+    # choose the one that is closest...
+    pq.enqueue(src, -distance_to_target(src, target))
+    
+    while not pq.is_empty():
+        v = pq.dequeue()
+       
+        for w in G.neighbors(v):
+            if not w in marked:
+                node_from[w] = v
+                dist_to[w] = dist_to[v] + 1
+                pq.enqueue(w, -distance_to_target(w, target))
+                marked[w] = True
 
-    fig, axes = plt.subplots(nrows=1, ncols=2)
+    return node_from
+
+def draw_solution(G, field, src, target):
+    import matplotlib.pyplot as plt
+    
+    H = solution_graph(G, path_to(field, src, target))
+    F = node_from_field(G, field)
+ 
+    _, axes = plt.subplots(nrows=1, ncols=2)
     ax = axes.flatten()
 
     # get original positional location from original graph
@@ -117,4 +139,15 @@ if __name__ == '__main__':
     pos_f = nx.get_node_attributes(F, 'pos')
     nx.draw(F, pos_f, with_labels = True, node_color="w", font_size=8, ax=ax[1])  
     
+#######################################################################
+if __name__ == '__main__':
+    random.seed(15)
+    m = Maze(3,5)    # Anything bigger and these are too small to read
+    graph = to_networkx(m)
+    
+    #draw_solution(graph, dfs_search(graph, m.start()), m.start(), m.end())
+    draw_solution(graph, bfs_search(graph, m.start()), m.start(), m.end())
+    #draw_solution(graph, smart_search(graph, m.start(), m.end()), m.start(), m.end())
+    
+    import matplotlib.pyplot as plt
     plt.show()

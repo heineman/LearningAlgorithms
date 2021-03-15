@@ -279,7 +279,7 @@ class Test_Ch03(unittest.TestCase):
         ht.put('a', 99)
         ht.put('zyzzyvas', 101)
         self.assertEqual('a', ht.table[0].key)
-        self.assertEqual('zyzzyvas', ht.table[321164].key)
+        self.assertEqual('zyzzyvas', ht.table[321128].key)
 
         self.assertEqual(99, ht.get('a'))
         self.assertEqual(101, ht.get('zyzzyvas'))
@@ -395,7 +395,7 @@ class Test_Ch03(unittest.TestCase):
     def test_prime_number_difference(self):
         from ch03.challenge import prime_number_difference
         K = ["a", "rose", "by", "any", "other", "name", "would", "smell", "as", "sweet"]
-        tbl = prime_number_difference(words=K, output=True)
+        tbl = prime_number_difference(words=K, output=False)
         self.assertTrue('Prime', tbl.entry(428977, 'Prime'))
 
     def test_bad_timing(self):
@@ -414,7 +414,7 @@ class Test_Ch03(unittest.TestCase):
         from ch03.book import count_hash
 
         tbl = count_hash(output=False)
-        self.assertEqual(321165, tbl.entry('zyzzyvas', 'N'))
+        self.assertEqual(321129, tbl.entry('zyzzyvas', 'N'))
 
     def test_run_access_trials(self):
         from ch03.growth_test import run_access_trials
@@ -449,19 +449,20 @@ class Test_Ch03(unittest.TestCase):
         from ch03.book import count_collisions
 
         tbl = count_collisions(num_rows=4, output=False)
-        self.assertTrue(tbl.entry(642330, 'Max LL') > 0)        
+        self.assertTrue(tbl.entry(642258, 'Max LL') > 0)        
 
     def test_count_collisions_dynamic(self):
         from ch03.book import count_collisions_dynamic
 
         tbl = count_collisions_dynamic(num_rows=4, output=False)
-        self.assertTrue(tbl.entry(642330, 'Max LL') > 0)
-        
+        self.assertTrue(tbl.entry(642258, 'Max LL') > 0)
+
     def test_time_results_open_addressing(self):
         from ch03.book import time_results_open_addressing
-        
-        tbl = time_results_open_addressing(num_rows=2)
+
+        tbl = time_results_open_addressing(num_rows=2, output=False)
         self.assertTrue(tbl.entry(32,'8,192') < tbl.entry(64,'8,192'))
 
+#######################################################################
 if __name__ == '__main__':
     unittest.main()

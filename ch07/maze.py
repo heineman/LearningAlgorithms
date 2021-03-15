@@ -74,8 +74,8 @@ class Maze:
     when heading into a new, unvisited cell.
     
     To add a bit of variety, a salt parameter randomly clears additional walls,
-    with a default setting of 0.05. If you pass in 0, then the maze will likely
-    have a long and winding solution to the maze.
+    with a default setting of 0.05. If you salt=0, then the maze will have
+    perfectly cut rooms, with a long and winding solution to the maze.
     
     This implementation uses stack-based Depth First Search to handle cases
     with large mazes.
@@ -139,8 +139,8 @@ class Maze:
                 self.marked[sq] = True
                 del path[0]
 
-    def construct(self):
-        """construct maze of given height/width and size."""
+    def initialize(self):
+        """Reset to initial state with no walls and all neighbors are set."""
         self.marked     = dict( ((r,c), False) for r in range(self.num_rows) for c in range(self.num_cols) )
         self.east_wall  = dict( ((r,c), False) for r in range(self.num_rows) for c in range(self.num_cols) )
         self.south_wall = dict( ((r,c), False) for r in range(self.num_rows) for c in range(self.num_cols) )
@@ -161,6 +161,9 @@ class Maze:
                 if c != self.num_cols-1:
                     self.neighbors[r,c].append((r,c+1))
 
+    def construct(self):
+        """construct maze of given height/width and size."""
+        self.initialize()
         sq = self.start()
         self.dfs_visit_nr(sq)
         self.south_wall[self.end()] = False

@@ -15,7 +15,7 @@ If this code just doesn't work for you, then simply hard-code something like thi
 _english_words = []
 
 def english_words():
-    """Return list of 321,165 English words from dictionary."""
+    """Return list of 321,129 English words from dictionary."""
     if _english_words:
         return _english_words
 
