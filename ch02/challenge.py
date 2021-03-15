@@ -1,6 +1,7 @@
 """Challenge problems for ch02."""
 
 import timeit
+import math
 
 from algs.table import DataTable
 from algs.modeling import quadratic_model, log_model, numpy_error
@@ -8,13 +9,20 @@ from algs.modeling import quadratic_model, log_model, numpy_error
 def log_log_model(n, a):
     """Formula for A*Log_2(N) with single coefficient."""
     if numpy_error:
-        import math
         logn = math.log(n)/math.log(2)
         return a*logn
     else:
         import numpy as np
         logn = np.log(n)/np.log(2)
         return a*logn
+
+def factorial_model(n, a):
+    """Formula for A*N! with single coefficient."""
+    if numpy_error:
+        return a*math.factorial(n)
+    else:
+        from scipy.special import factorial
+        return a*factorial(n)
 
 def log_log_table(max_k=55, output=True, decimals=3):
     """
@@ -100,11 +108,6 @@ random.shuffle(x)'''.format(n), number=10)
         tbl.row([n, sort_time, quadratic_model(n, quadratic_coeff[0], quadratic_coeff[1])])
 
     return tbl
-
-def factorial_model(n, a):
-    """Formula for A*N! with single coefficient."""
-    from scipy.special import factorial
-    return a*factorial(n)
 
 def run_permutation_sort(max_n=13, output=True, decimals=4):
     """Generate table for permutation sort up to (but not including) max_n."""

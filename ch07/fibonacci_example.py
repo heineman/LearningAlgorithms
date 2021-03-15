@@ -1,11 +1,6 @@
 """
 Fibonacci Spreadsheet example for book.
 """
-
-import tkinter
-
-from ch07.spreadsheet import Spreadsheet
-
 try:
     import networkx as nx
 except ImportError:
@@ -45,10 +40,15 @@ def fibonacci_example(ss):
 
 #######################################################################
 if __name__ == "__main__":
-    root = tkinter.Tk()
-    ss = Spreadsheet(root)
-    fibonacci_example(ss)
-    from ch07.digraph_search import topological_sort
-    print (list(topological_sort(ss.digraph)))
-    root.mainloop()
-    
+    try:
+        import tkinter
+        from ch07.spreadsheet import Spreadsheet
+
+        root = tkinter.Tk()
+        ss = Spreadsheet(root)
+        fibonacci_example(ss)
+        from ch07.digraph_search import topological_sort
+        print (list(topological_sort(ss.digraph)))
+        root.mainloop()
+    except (ImportError):
+        print('tkinter is not installed so unable to launch spreadsheet application')
