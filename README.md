@@ -47,7 +47,12 @@ the coverage module with:
 pip install coverage
 
 Then in the top directory, execute the following commands to generate code
-coverage data and then present it as an HTML directory (found in `htmlcov`) 
+coverage data and then present it as an HTML directory (found in `htmlcov`).
+There is a .coveragerc file that ensures only the book code is targeted.
 
-	coverage run --source=algs,ch01,ch02,ch03,ch04,ch05,ch06 -m unittest discover
+	coverage run -m unittest discover
+	coverage run -a book.py
 	coverage html
+
+The test cases execute within 15 minutes or so. The book takes up to six hours
+to fully run, since it generates all tables and data for figures in the book.
