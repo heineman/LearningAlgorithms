@@ -4,7 +4,7 @@ import unittest
 from algs.counting import RecordedItem
 from algs.node import Node
 from algs.table import DataTable
-from algs.modeling import Model
+from algs.modeling import Model, numpy_error
 
 class TestHashing(unittest.TestCase):
     """Test cases for book package."""
@@ -66,8 +66,11 @@ class TestHashing(unittest.TestCase):
         self.assertEqual(list(range(2,10)), tbl.column('Another'))
 
         model = tbl.best_model('Another')[0]
-        self.assertEqual(model[0], Model.LINEAR)
-        self.assertAlmostEqual(model[3], 1.0000, places=5)
+        if numpy_error:
+            pass
+        else:
+            self.assertEqual(model[0], Model.LINEAR)
+            self.assertAlmostEqual(model[3], 1.0000, places=5)
 
 #######################################################################
 if __name__ == '__main__':

@@ -175,6 +175,8 @@ class DataTable:
         # If first one is smaller than threshold, just return it, otherwise
         # return all that exceed threshold.
         result = models[0]
+        if len(result) <= 1:
+            return result
         if result[1] < threshold:
             return result
         return list(filter(lambda x: x[1] >= threshold, models))

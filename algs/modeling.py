@@ -98,7 +98,7 @@ def best_models(nval, yval, preselected = None):
     and select this model in advance.
     """
     if numpy_error:
-        return [(Model.ERROR,0,0,0,0)]
+        return [[(Model.ERROR,0,0,0,0)]]
 
     npx = np.array(nval)
     npy = np.array(yval)
