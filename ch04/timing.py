@@ -1,5 +1,11 @@
 """
-Timing Results for chapter 4
+Timing Results for chapter 4.
+
+All timing costs are scaled by 1000 to convert from seconds into milliseconds.
+Results from runTrials divided by T*N because the number of statements executed
+is directly proportional to that, and we are trying to find the average
+operational cost (of both enqueue and dequeue
+
 """
 import timeit
 from algs.table import DataTable
@@ -13,7 +19,7 @@ def build_up(pq, N):
         pq.enqueue(k, k)         # use key as the value (doesn't really matter)
         k = (k + delta) % N
 
-def drain(pq, n):
+def drain(pq, n=0):
     """invoke remove_max_priority() n times, or until empty. Pass in 0 to drain everything."""
     while pq:
         n -= 1
@@ -67,12 +73,12 @@ def trial_factorial_heap(max_n=2097152, output=True, decimals=2):
         N *= 2
     return tbl
 
-def dynamic_comparison():
+def dynamic_comparison(max_n=1048576, output=True, decimals=2):
     """Generate table for comparing resizable hashtable performance."""
     T = 3
     base = 256
-    high = 65536*16
-    tbl = DataTable([8,8,8],['N','Heap', 'DHeap'], output=True, decimals=2)
+    high = max_n
+    tbl = DataTable([8,8,8],['N','Heap', 'DHeap'], output=output, decimals=decimals)
 
     heap = {}
     dheap = {}
@@ -83,11 +89,9 @@ def dynamic_comparison():
         tbl.row([N, heap[N], dheap[N]])
 
         N *= 2
+    return tbl
 
-# All timing costs are scaled by 1000 to convert from seconds into milliseconds.
-# Results from runTrials divided by T*N because the number of statements executed
-# is directly proportional to that, and we are trying to find the average
-# operational cost (of both enqueue and dequeue
+#######################################################################
 if __name__ == '__main__':
     dynamic_comparison()
     trial_factorial_heap()

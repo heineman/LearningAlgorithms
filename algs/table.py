@@ -63,7 +63,7 @@ class DataTable:
         for idx,width in enumerate(widths):
             self.fmt += '{{0[{}]:>{}}}\t'.format(idx, width)
             self.entry_fmt += '{{0[{}]:>{}{}}}\t'.format(idx, width, symbol)
-            symbol = '.' + str(decimals) + 'f'
+            symbol = '.{}f'.format(decimals)
         if output:
             print(self.fmt.format(labels))
 
@@ -97,7 +97,7 @@ class DataTable:
                 new_formats = []
                 for fmt,val,width in zip(formats, row, self.widths):
                     if val == SKIP:
-                        new_formats.append(fmt.split(':')[0] + ':>' + str(width) + 's}')
+                        new_formats.append('{}:>{}s}}'.format(fmt.split(':')[0], width))
                     else:
                         new_formats.append(fmt)
                 formats = new_formats

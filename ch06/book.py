@@ -32,8 +32,8 @@ def remove_value(A, val):
 def run_trials_pq_n(clazz, N, factor):
     """Run a single trial."""
     stmt = '''
-from {} import PQ 
-one_run(PQ({}), {}, {})'''.format(clazz,N,N,factor)
+from {0} import PQ 
+one_run(PQ({1}), {1}, {2})'''.format(clazz,N,factor)
     return min(timeit.repeat(stmt=stmt, setup = 'from ch04.timing import one_run',
                              repeat=5, number=10))/10
 
@@ -201,19 +201,19 @@ def compare_avl_pq_with_heap_pq(max_k=16, output=True, decimals=2):
     for n in [2**k for k in range(10, max_k)]:
         t_heap_pq = min(timeit.repeat(stmt='''
 random.seed(11)
-pq = PQ({})
-for _ in range({}):
+pq = PQ({0})
+for _ in range({0}):
     r = random.random()
     pq.enqueue(r,r)
 while pq:
-    pq.dequeue()'''.format(n,n), setup='''
+    pq.dequeue()'''.format(n), setup='''
 from ch04.heap import PQ
 import random''', repeat=repeat, number=num))/num
 
         t_avl_pq = min(timeit.repeat(stmt='''
 random.seed(11)
 pq = PQ()
-for _ in range({}):
+for _ in range({0}):
     r = random.random()
     pq.enqueue(r,r)
 while pq:

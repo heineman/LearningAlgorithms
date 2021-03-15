@@ -33,9 +33,9 @@ class Reference:
 
     Has default eval, __str_() methods and supports converting into postfix.
     """
-    def __init__(self, e, environment={}):
+    def __init__(self, e, environment=None):
         self.reference = e
-        self.environment = environment
+        self.environment = {} if environment is None else environment
 
     def __str__(self):
         return str(self.reference)
@@ -128,7 +128,7 @@ def add_operator(op, func):
 
     _operators[op] = func
 
-def build_expression(s, environment={}):
+def build_expression(s, environment=None):
     """
     Given a string consisting of numeric values, parentheses and
     mathematical operators, return Expression tree using a stack-based
@@ -157,7 +157,7 @@ def build_expression(s, environment={}):
         else:                          # If just a numeric value, push it for later
             try:
                 expressions.push(Value(float(token)))
-            except:
+            except(ValueError):
                 # If it cannot be evaluated, leave untouched for post processing, perhaps?
                 expressions.push(Reference(token, environment))
 

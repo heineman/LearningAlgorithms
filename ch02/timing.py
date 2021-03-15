@@ -36,11 +36,8 @@ Generate timing results for inefficient sorting algorithms.
 """
 
 import timeit
-import numpy as np
-from scipy.optimize import curve_fit
-
 from algs.table import DataTable
-from algs.modeling import factorial_model
+from algs.modeling import numpy_error, factorial_model
 
 def run_permutation_sort_worst_case(top):
     """Generate table for permutation sort from 1 up to and including top."""
@@ -54,18 +51,6 @@ from ch02.random_sort import permutation_sort
 x=list(range({},0,-1))'''.format(n), number=1)
         x.append(n)
         y.append(sort_time)
-
-    # Coefficients are returned as first argument
-    [factorial_coeffs, _] = curve_fit(factorial_model, np.array(x), np.array(y))
-    print('Factorial    = {}*N!'.format(factorial_coeffs[0]))
-
-    tbl = DataTable([8,8,8], ['N', 'TimeToSort', 'Model'], decimals=4)
-
-    for n in range(1,top+1):
-        sort_time = timeit.timeit(stmt='permutation_sort(x)', setup='''
-from ch02.random_sort import permutation_sort
-x=list(range({},0,-1))'''.format(n), number=1)
-        tbl.row([n, sort_time, factorial_model(n, factorial_coeffs[0])])
 
 def run_random_sort(top):
     """Generate table for random sort."""
@@ -83,7 +68,13 @@ random.shuffle(x)'''.format(n), number=1)
         y.append(sort_time)
 
     # Coefficients are returned as first argument
-    [factorial_coeffs, _] = curve_fit(factorial_model, np.array(x), np.array(y))
+    if numpy_error:
+        factorial_coeffs = [0]
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+
+        [factorial_coeffs, _] = curve_fit(factorial_model, np.array(x), np.array(y))
     print('Factorial    = {}*N!'.format(factorial_coeffs[0]))
 
     tbl = DataTable([8,8,8], ['N', 'TimeToSort', 'Model'], decimals=4)

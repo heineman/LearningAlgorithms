@@ -5,21 +5,21 @@ containing k! elements, where k is the level.
 from ch04.entry import Entry
 
 # SUMS of factorials. 1st id on a new level is 1 + this
-factorials = [0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800 ]
-sums =       [0, 1, 3, 9, 33, 153, 873, 5913, 46233, 409113, 4037913, 43954713 ]
+_factorials = [0, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800, 39916800 ]
+_sums =       [0, 1, 3, 9, 33, 153, 873, 5913, 46233, 409113, 4037913, 43954713 ]
 
-firsts =     [0, 1, 2, 4, 10, 34, 154, 874, 5914, 46234, 409114, 4037914, 40325914 ]
-constants =  [0, 2, 6, 16, 50, 204, 1078, 6992, 53226, 462340, 4500254, 48454968, 524236882]
+_firsts =     [0, 1, 2, 4, 10, 34, 154, 874, 5914, 46234, 409114, 4037914, 40325914 ]
+_constants =  [0, 2, 6, 16, 50, 204, 1078, 6992, 53226, 462340, 4500254, 48454968, 524236882]
 
 def fh_parent(k,lev):
     """Return index of parent for index k on level lev."""
     if lev <= 0:
         return 1    # HACK. Covers base case inelegantly
-    return (k + constants[lev-1]) // (lev+1)    # was firsts[lev-1]*lev
+    return (k + _constants[lev-1]) // (lev+1)    # was firsts[lev-1]*lev
 
 def fh_child(k,lev):
     """Return index of first child of index k on level lev."""
-    return k*(lev+2) - constants[lev]      # was firsts[lev]*(lev+1)
+    return k*(lev+2) - _constants[lev]      # was firsts[lev]*(lev+1)
 
 def validate_level(pq, lev, k):
     """Validate node k on a given level."""
@@ -65,7 +65,7 @@ class PQ:
         if self.N == self.size:
             raise RuntimeError('Priority Queue is Full!')
         self.N += 1
-        if self.N > sums[self.level+1]:
+        if self.N > _sums[self.level+1]:
             self.level += 1
 
         self.storage[self.N] = Entry(v, p)
@@ -124,7 +124,7 @@ class PQ:
         max_entry = self.storage[1]
         self.swap(1, self.N)
         self.N -= 1
-        if self.N == sums[self.level]:          # advance to next level
+        if self.N == _sums[self.level]:          # advance to next level
             self.level -= 1
 
         self.storage[self.N+1] = None           # avoid lingering

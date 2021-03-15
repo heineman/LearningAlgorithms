@@ -1,26 +1,33 @@
+"""
+Timing Results for chapter 5.
+"""
 import timeit
+from algs.table import DataTable
 
-def table_trials():
+def table_trials(output=True, decimals=2):
     """Compare Merge Sort against built in Python sort."""
+    tbl = DataTable([8,10,10], ['N', 'MergeSort', 'Built-In Sort'], output=output, decimals=decimals)
+    
     for n in [2**k for k in range(8, 20)]:
-        msort = 1000*min(timeit.repeat(stmt='sort(x)', setup='''
+        msort = 1000*min(timeit.repeat(stmt='merge_sort(x)', setup='''
 import random
-from ch05.merge import sort
+from ch05.merge import merge_sort
 x=list(range({}))
 random.shuffle(x)'''.format(n), repeat=20, number=20))
 
         builtin = 1000*min(timeit.repeat(stmt='x.sort()', setup='''
 import random
-from ch05.merge import sort
 x=list(range({}))
 random.shuffle(x)'''.format(n), repeat=20, number=20))
 
-        print('{}\t{}\t{}'.format(n, msort, builtin))
+        tbl.row([n, msort, builtin])
+    return tbl
 
-def quadratic_sort_trials():
-    """Compare Selection Sort against two flavors of Insertion Sort."""
-    print('{}\t{}\t{}\t{}'.format('N', 'Select', 'Insert', 'InsertBAS'))
-    for n in [2**k for k in range(8, 16)]:
+def quadratic_sort_trials(max_k=16, output=True, decimals=1):
+    """Compare Selection Sort against two flavors of Insertion Sort up to (but not including) 2^max_k."""
+    tbl = DataTable([8,8,8,8], ['N', 'Select', 'Insert', 'InsertBAS'], output=output, decimals=decimals)
+    
+    for n in [2**k for k in range(8, max_k)]:
         if n > 2048:
             m_select = -1
         else:
@@ -45,9 +52,15 @@ from ch05.sorting import insertion_sort_bas
 x=list(range({}))
 random.shuffle(x)'''.format(n), repeat=20, number=20))
 
-        print('{}\t{:.1f}\t{:.1f}\t{:.1f}'.format(n, m_select, m_insert, m_insert_bas))
+        tbl.row([n, m_select, m_insert, m_insert_bas])
+    return tbl
 
 #######################################################################
 if __name__ == '__main__':
-    quadratic_sort_trials()
+    print('Compare Merge Sort against built in Python sort. This takes unusually long.')
     table_trials()
+    print()
+    
+    print('Compare Selection Sort against two flavors of Insertion Sort. This takes unusually long.')
+    quadratic_sort_trials()
+    

@@ -68,7 +68,7 @@ class HeapSortCounting:
             print('|'.join([' {:>2} '.format(k) for k in A]) + '\t{} comparisons'.format(self.num_comparisons))
 
     def sort(self):
-        """Use Heap to Sort array in place."""
+        """Use Heap to sort array in place."""
         while self.N > 1:
             self.swap(1, self.N)
             self.N -= 1

@@ -132,7 +132,7 @@ class PQ:
 
     def _remove_max(self, node):
         """
-        Remove max and unwind, addressing AVL property on way back. Return 
+        Remove max and unwind, addressing AVL property on way back. Return
         pair (value, new root)
         """
         if node.right is None:

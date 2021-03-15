@@ -32,7 +32,7 @@ class BinaryTree:
     def _insert(self, node, val, sofar):
         """Inserts a new BinaryNode to the tree containing this value."""
         if node is None:
-            return (BinaryNode(val), sofar + 'create a new subtree with root of `{}`.'.format(val))
+            return (BinaryNode(val), '{}create a new subtree with root of `{}`.'.format(sofar, val))
 
         if val <= node.value:
             sofar += '`{1}` is smaller than or equal to `{0}`, so insert `{1}` into the left subtree of `{0}` '.format(node.value, val)

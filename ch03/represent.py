@@ -98,7 +98,7 @@ def random_words(all_words, n):
 
     low_bar = len(all_words) / 2
     if n > low_bar:
-        raise RuntimeError('n must be smaller than ' + low_bar)
+        raise RuntimeError('n must be smaller than {}'.format(low_bar))
 
     while len(random_list) < n:
         s = all_words[random.randint(0, len(all_words))]

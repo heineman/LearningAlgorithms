@@ -5,10 +5,6 @@ from ch06.recursive_lists import create_linked_list, reverse, sum_list, sum_iter
 from ch06.recursive_lists import iterate_list
 from ch06.avl import check_avl_property
 
-
-def to_int(x):
-    return int(x)
-
 class TestChapter06(unittest.TestCase):
 
     def test_expression(self):
@@ -45,7 +41,7 @@ class TestChapter06(unittest.TestCase):
         self.assertEqual(4.0, expr.right.value)
         
         expr = build_expression('3')
-        self.assertEquals(3.0, expr.value)
+        self.assertEqual(3.0, expr.value)
 
     def test_sum_list(self):
         self.assertEqual(0, sum_list(create_linked_list([])))
@@ -309,7 +305,6 @@ class TestChapter06(unittest.TestCase):
 
     def test_val_height_valid_on_remove(self):
         from ch06.balanced import BinaryTree
-        from ch06.avl import check_avl_property
         bt1 = BinaryTree()
         bt1.insert(7)
         bt1.insert(4)
@@ -325,7 +320,6 @@ class TestChapter06(unittest.TestCase):
 
     def test_avl_stress(self):
         from ch06.balanced import BinaryTree
-        from ch06.avl import check_avl_property
 
         bt1 = BinaryTree()
         N = 63
@@ -373,7 +367,6 @@ class TestChapter06(unittest.TestCase):
 
     def test_pq_stress(self):
         from ch06.pq import PQ
-        from ch06.avl import check_avl_property
         
         pq1 = PQ()
         self.assertTrue(pq1.is_empty())
@@ -408,7 +401,6 @@ class TestChapter06(unittest.TestCase):
 
     def test_symbol_stress(self):
         from ch06.symbol import BinaryTree
-        from ch06.avl import check_avl_property
         sy1 = BinaryTree()
         N = 127
         keys = list(range(N))
@@ -523,7 +515,6 @@ class TestChapter06(unittest.TestCase):
     def test_fibonacci_avl_trees(self):
         from ch06.challenge import fibonacci_avl_tree, rotations
         from ch05.challenge import fib
-        from ch06.avl import check_avl_property
 
         tree = fibonacci_avl_tree(8)
         check_avl_property(tree.root)
@@ -631,7 +622,7 @@ class TestChapter06(unittest.TestCase):
 
     def test_produce_height_stats_balanced_integers(self):
         from ch06.challenge import produce_height_stats_balanced_integers
-        
+
         tbl = produce_height_stats_balanced_integers(max_k=10, output=False)
         self.assertEqual(7, tbl.entry(128, 'height'))
 
@@ -639,7 +630,7 @@ class TestChapter06(unittest.TestCase):
         from ch06.challenge import find_multiple_rotations, recreate_tree, rotations, BinaryTree
         extra = 1
         (tree_rep, to_delete) = find_multiple_rotations(extra=extra, lo=9, hi=30, num_attempts=10000, output=False)
-        bt3 = recreate_tree(tree_rep, convert=to_int)
+        bt3 = recreate_tree(tree_rep, convert=int)
         tree = BinaryTree()
         tree.root = bt3
         num_rotations = rotations[0]

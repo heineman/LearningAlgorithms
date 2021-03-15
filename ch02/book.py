@@ -190,10 +190,10 @@ def algorithms_a_b():
         tbl.row([n, alg_a(n), int(alg_b(n)), alg_a(n)/1500, alg_a(n)/3000, alg_b(n)/1500, alg_a(n)/(250*3000)])
     return tbl
 
-def growth_table():
+def growth_table(output=True):
     """Generate table for growth of different computations."""
     labels = ['N', 'log N', 'Linear', 'N log N', 'N^2', 'N^3', '2^N', 'N!']
-    tbl = DataTable([15,15,15,15,15,15,15,15], labels)
+    tbl = DataTable([15,15,15,15,15,15,15,15], labels, output=output)
     for hdr in labels:
         tbl.format(hdr, ',d')
     
@@ -271,4 +271,5 @@ def generate_ch02():
 
 #######################################################################
 if __name__ == '__main__':
+    growth_table()
     generate_ch02()
