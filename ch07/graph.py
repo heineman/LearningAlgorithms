@@ -7,6 +7,29 @@ Note: Doesn't offer capability to draw graphs.
 """
 from algs.node import Node
 
+WEIGHT = 'weight'
+
+class Edge:
+    """
+    Replacement edge in case networkx is not available. Stores optional weight
+    """
+    def __init__(self, head, tail, weight=None):
+        self.head = head
+        self.tail = tail
+        self.weight = weight
+
+    def __item__(self, tag):
+        """Use to get weight from edge."""
+        if tag == 'weight':
+            return self.weight
+        return None
+
+    def __str__(self):
+        if self.weight:
+            return '{} -> {} ({})'.format(self.head, self.tail, self.weight)
+        else:
+            return '{} -> {}'.format(self.head, self.tail)
+
 class UndirectedGraph:
     """
     Use Dictionary to store all vertices. Values are lists of neighboring nodes.
@@ -31,6 +54,10 @@ class UndirectedGraph:
         """Get neighboring nodes to this node."""
         for node in self.adjacency[u]:
             yield node
+
+    def number_of_nodes(self):
+        """Return number of nodes in graph."""
+        return len(self.adjacency)
 
     def nodes(self):
         """Return all nodes."""
@@ -119,6 +146,10 @@ class MatrixUndirectedGraph:
             if self.matrix[idx][j]:
                 yield self.labels[j]
 
+    def number_of_nodes(self):
+        """Return number of nodes in graph."""
+        return len(self.labels)
+
     def nodes(self):
         """Return all nodes."""
         for n in self.labels:
@@ -172,6 +203,7 @@ class DirectedGraph:
     def __init__(self):
         self.adjacency = {}
         self.positions = {}
+        self.weights = {}
  
     def add_node(self, u, pos=None):
         """Add node to graph, if not already there."""
@@ -199,14 +231,20 @@ class DirectedGraph:
         """Return all edges."""
         if u:
             for v in self.adjacency[u]:
-                yield (u, v)
+                if (u,v) in self.weights:
+                    yield (u, v, self.weights[(u,v)])
+                else:
+                    yield (u, v)
         else:
             for u in self.nodes():
                 for v in self.adjacency[u]:
-                    yield (u, v)
+                    if (u,v) in self.weights:
+                        yield (u, v, self.weights[(u,v)])
+                    else:
+                        yield (u, v)
 
-    def add_edge(self, u, v):
-        """Add edge from u => v."""
+    def add_edge(self, u, v, weight=None):
+        """Add edge from u => v with optional weight associated with edge."""
         if not u in self.adjacency:
             self.adjacency[u] = []
 
@@ -217,11 +255,16 @@ class DirectedGraph:
         if v in self.adjacency[u]:
             return
         self.adjacency[u].append(v)
+        if weight:
+            self.weights[(u,v)] = weight
 
     def add_edges_from(self, edges):
         """Add edges to graph, if not already there."""
-        for u,v in edges:
-            self.add_edge(u,v)
+        for edge in edges:
+            if len(edge) == 2:
+                self.add_edge(edge[0], edge[1])
+            else:
+                self.add_edge(edge[0], edge[2], edge[3])    # weights
 
 class Replacement:
     """Provides an object which can fill the role of 'nx' in the graph chapter code."""

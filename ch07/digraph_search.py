@@ -73,9 +73,8 @@ def topological_sort(DG):
     Use recursive Depth First Search to generate a topological sort of nodes.
     Only call when no cycle exists!
     """
-    from ch07.list_stack import Stack
     marked = {}
-    reverse_postorder = Stack()
+    reverse_postorder = []
     
     def dfs(v):
         marked[v] = True
@@ -84,14 +83,13 @@ def topological_sort(DG):
             if not w in marked:
                 dfs(w)
 
-        reverse_postorder.push(v)
+        reverse_postorder.append(v)
 
     for v in DG.nodes():
         if not v in marked:
             dfs(v)
 
-    while not reverse_postorder.is_empty():
-        yield reverse_postorder.pop()
+    return reversed(reverse_postorder)
 
 def has_cycle_nr(DG):
     """Conduct non-recursive cycle detection over directed graph."""

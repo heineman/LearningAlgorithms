@@ -97,10 +97,10 @@ def bfs_search(G, src):
 def distance_to_target(from_cell, to_cell):
         return abs(from_cell[0] - to_cell[0]) + abs(from_cell[1] - to_cell[1])
 
-def smart_search(G, src, target):
+def smart_search(G, src, target, distance=distance_to_target):
     """Non-recursive depth-first search investigating given position."""
     from ch04.heap import PQ
-    pq = PQ(len(G.nodes))
+    pq = PQ(G.number_of_nodes())
     marked = {}
     node_from = {}
     
@@ -110,7 +110,7 @@ def smart_search(G, src, target):
     
     # Using a MAX PRIORITY QUEUE means we rely on negative distance to
     # choose the one that is closest...
-    pq.enqueue(src, -distance_to_target(src, target))
+    pq.enqueue(src, -distance(src, target))
     
     while not pq.is_empty():
         v = pq.dequeue()
@@ -119,7 +119,7 @@ def smart_search(G, src, target):
             if not w in marked:
                 node_from[w] = v
                 dist_to[w] = dist_to[v] + 1
-                pq.enqueue(w, -distance_to_target(w, target))
+                pq.enqueue(w, -distance(w, target))
                 marked[w] = True
 
     return node_from

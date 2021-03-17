@@ -25,7 +25,7 @@ def make_sample_graph():
         if i < 5:
             G.add_edge('C{}'.format(i), 'C{}'.format(i+1))
 
-    print(len(G.nodes()), 'nodes and ', len(G.edges()), 'edges.')
+    print(G.number_of_nodes(), 'nodes and ', len(G.edges()), 'edges.')
     print('neighbors of C3:', list(G['C3']))
     print('edges adjacent to C3:', list(G.edges('C3')))
 
@@ -35,16 +35,16 @@ def make_sample_directed_graph():
 
     DG.add_node('A2')
     DG.add_nodes_from(['A3', 'A4', 'A5'])
-    DG.add_edge('A3', 'A2')
-    DG.add_edges_from([('A4', 'A3'), ('A5', 'A4')])
+    DG.add_edge('A2', 'A3')
+    DG.add_edges_from([('A3', 'A4'), ('A4', 'A5')])
 
-    DG.add_edges_from([('B4', 'B3'), ('B4', 'B2')])
-    DG.add_edges_from([('B5', 'B4'), ('B5', 'B3')])
+    DG.add_edges_from([('B3', 'B4'), ('B2', 'B4')])
+    DG.add_edges_from([('B4', 'B5'), ('B3', 'B5')])
 
     for i in range(2, 6):
-        DG.add_edge('C{}'.format(i), 'B{}'.format(i))
+        DG.add_edge('B{}'.format(i), 'C{}'.format(i))
         if i < 5:
-            DG.add_edge('C{}'.format(i+1), 'C{}'.format(i))
+            DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
 
     print(len(list(DG.nodes())), 'nodes and ', len(list(DG.edges())), 'edges.')
     print('neighbors of C3:', list(DG['C3']))

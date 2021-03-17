@@ -523,4 +523,5 @@ def generate_ch03():
 
 #######################################################################
 if __name__ == '__main__':
-    generate_ch03()
+    perfect_trial('by')
+    #generate_ch03()

@@ -35,8 +35,8 @@ class PQ:
 
     def less(self, i, j):
         """
-        Helper function to determine if storage[i] has higher
-        priority than storage[j].
+        Helper function to determine if storage[j] has higher
+        priority than storage[i].
         """
         return self.storage[i].priority < self.storage[j].priority
 
@@ -63,11 +63,11 @@ class PQ:
             parent = child
 
     def peek(self):
-        """Return the value at the top of the priority queue."""
+        """Peek without disturbing the value at the top of the priority queue."""
         if self.N == 0:
             raise RuntimeError('PriorityQueue is empty!')
 
-        return self.storage[1]
+        return self.storage[1].value
 
     def dequeue(self):
         """Remove and return value with highest priority in priority queue."""

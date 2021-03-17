@@ -15,6 +15,20 @@ class Test_Ch07(unittest.TestCase):
         DG = nx.DiGraph()
         topological_example(DG, 5)
         print(list(nx.topological_sort(DG)))
+        from ch07.digraph_search import topological_sort
+        print(list(topological_sort(DG)))
+        
+    def test_topological_figure(self):
+        DG = nx.DiGraph()
+        DG.add_edges_from([('a', 'b'), ('a', 'c'), ('b', 'c'), ('b', 'd')])
+        print(list(nx.topological_sort(DG)))
+        from ch07.digraph_search import topological_sort
+        print(list(topological_sort(DG)))
+        
+        DG = nx.DiGraph()
+        from ch07.book import make_sample_directed_graph
+        DG = make_sample_directed_graph()
+        print(list(topological_sort(DG)))
     
     def small_example(self, G):
         G.add_node('A2')
@@ -49,17 +63,38 @@ class Test_Ch07(unittest.TestCase):
         from ch07.graph import MatrixUndirectedGraph, UndirectedGraph
         self.small_example(UndirectedGraph())
         self.small_example(MatrixUndirectedGraph())
+
+    def test_indexed_min_heap(self):
+        from ch07.indexed_pq import IndexedMinPQ
         
+        impq = IndexedMinPQ(5)
+        impq.enqueue(3, 5)
+        impq.enqueue(1, 2)
+        self.assertEqual(1, impq.dequeue())
+        self.assertEqual(3, impq.dequeue())
+
+    def test_imqp_example(self):
+        from ch07.dijkstra_sp import dijkstra_sp
+        G = nx.DiGraph()
+        G.add_edge('a', 'b', weight=6)
+        G.add_edge('a', 'c', weight=10)
+        G.add_edge('b', 'c', weight=2)
+        
+        (dist_to, edge_to) = dijkstra_sp(G, 'a')
+        self.assertEqual(8, dist_to['c'])
+        self.assertEqual('b', edge_to['c'][0])
+        self.assertEqual('a', edge_to['b'][0])
+
     def test_cycle_detection(self):
         from ch07.fibonacci_example import fibonacci_example
-        
+
         try:
             import tkinter
             from ch07.spreadsheet import Spreadsheet
         except(ImportError):
             print('unable to access tkinter.')
             return
-        
+
         ss = Spreadsheet(tkinter.Tk())
         fibonacci_example(ss)
         try:
@@ -68,13 +103,13 @@ class Test_Ch07(unittest.TestCase):
             self.fail('no cycle yet...')
         except:
             pass
-        
+
         try:
             ss.set('B2', '=C5')
             self.fail('should have detected cycle')
         except(RuntimeError):
             pass
-        
+
         # just grab the graph and hack it together
         ss.digraph.add_edge('C5', 'B2')
         #print(networkx.algorithms.cycles.find_cycle(ss.digraph))
