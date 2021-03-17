@@ -5,6 +5,7 @@ from ch07.graph import WEIGHT
 
 from ch07.tmg_load import tmg_load, plot_gps, plot_highways
 from ch07.search import bfs_search, path_to
+from resources.highway import highway_map
 
 def plot_edge_path(positions, src, target, edge_to, marker='.', color='green'):
     nx = []
@@ -46,7 +47,7 @@ def plot_node_from(G, positions, src, target, node_from, marker='.', color='oran
 
 #######################################################################
 if __name__ == '__main__':
-    (G,positions) = tmg_load('C:\\Users\\Home\\Downloads\\MA-region-simple.tmg')
+    (G,positions) = tmg_load(highway_map())
     plot_gps(positions)
     
     src = 389
@@ -72,5 +73,5 @@ if __name__ == '__main__':
     print('{} total steps for Dijkstra Single-source Shortest Path Search'.format(len(sp_path_to(edge_to, src, target))))
     
     plot_edge_path(positions, src, target, edge_to)
-    
+    plt.axis('off')
     plt.show()

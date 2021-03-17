@@ -202,7 +202,7 @@ def performance_different_approaches(output=True):
     # Ascending / Descending / Weave
     from ch01.largest_two import largest_two, sorting_two, double_two, mutable_two, tournament_two
     funcs = [largest_two, sorting_two, double_two, mutable_two, tournament_two]
-    algs  = ["largest_two", "sorting_two", "double_two", "mutable_two", "tournament_two"]
+    algs  = ['largest_two', 'sorting_two', 'double_two', 'mutable_two', 'tournament_two']
 
     for label,func in zip(algs,funcs):
         RecordedItem.clear()
@@ -326,7 +326,7 @@ def generate_ch01():
         process(run_best_worst(),
                 chapter, table_number,
                 'Comparing runtime performance (in ms) of all four algorithms',
-                yaxis = "Time (in ms)")
+                yaxis = 'Time (in ms)')
 
     # Taken from table
     with FigureNum(10) as figure_number:
@@ -337,7 +337,7 @@ def generate_ch01():
         process(count_operations(),
                 chapter, table_number,
                 'Counting operations in four different functions',
-                yaxis = "Number of times ct is incremented")
+                yaxis = 'Number of times ct is incremented')
 
 #######################################################################
 if __name__ == '__main__':

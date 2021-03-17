@@ -37,6 +37,7 @@ class UndirectedGraph:
     def __init__(self):
         self.adjacency = {}
         self.positions = {}
+        self.E         = 0
 
     def add_node(self, u, pos=None):
         """Add node to graph, if not already there."""
@@ -82,6 +83,10 @@ class UndirectedGraph:
                     n = n.next
                 seen.append(u)
 
+    def number_of_edges(self):
+        """Return number of edges in graph."""
+        return self.E
+
     def neighbors(self, u):
         """Return neighboring nodes."""
         for node in self.adjacency[u]:
@@ -103,6 +108,7 @@ class UndirectedGraph:
             
         self.adjacency[u] = Node(v, self.adjacency[u])
         self.adjacency[v] = Node(u, self.adjacency[v])
+        self.E += 1
 
     def add_edges_from(self, edges):
         """Add edges to graph, if not already there."""
@@ -116,7 +122,8 @@ class MatrixUndirectedGraph:
     def __init__(self):
         self.matrix = None
         self.positions = []
-        self.labels = []
+        self.labels    = []
+        self.E         = 0
 
     def add_node(self, u, pos=None):
         """Add node to graph, if not already there."""
@@ -168,6 +175,10 @@ class MatrixUndirectedGraph:
                     if self.matrix[i][j]:
                         yield  (self.labels[i], self.labels[j]) 
 
+    def number_of_edges(self):
+        """Return number of edges in graph."""
+        return self.E
+
     def neighbors(self, u):
         """Return neighboring nodes."""
         idx = self.labels.index(u)
@@ -190,6 +201,7 @@ class MatrixUndirectedGraph:
             return
         self.matrix[i][j] = True
         self.matrix[j][i] = True
+        self.E += 1
 
     def add_edges_from(self, edges):
         """Add edges to graph, if not already there."""
@@ -203,7 +215,8 @@ class DirectedGraph:
     def __init__(self):
         self.adjacency = {}
         self.positions = {}
-        self.weights = {}
+        self.weights   = {}
+        self.E         = 0
  
     def add_node(self, u, pos=None):
         """Add node to graph, if not already there."""
@@ -227,6 +240,10 @@ class DirectedGraph:
         """Return all nodes."""
         return self.adjacency.keys()
 
+    def number_of_nodes(self):
+        """Return number of nodes in graph."""
+        return len(self.adjacency)
+
     def edges(self, u=None):
         """Return all edges."""
         if u:
@@ -243,6 +260,10 @@ class DirectedGraph:
                     else:
                         yield (u, v)
 
+    def number_of_edges(self):
+        """Return number of edges in graph."""
+        return self.E
+
     def add_edge(self, u, v, weight=None):
         """Add edge from u => v with optional weight associated with edge."""
         if not u in self.adjacency:
@@ -255,6 +276,7 @@ class DirectedGraph:
         if v in self.adjacency[u]:
             return
         self.adjacency[u].append(v)
+        self.E += 1
         if weight:
             self.weights[(u,v)] = weight
 
@@ -288,6 +310,6 @@ class Replacement:
         """I am not going to provide this capability."""
         return graph.positions
 
-    def draw(self, graph, pos, with_labels = True, node_color="w", font_size=8, ax=None):
+    def draw(self, graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
         """I am not going to provide this capability."""
         pass

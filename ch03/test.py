@@ -394,7 +394,7 @@ class Test_Ch03(unittest.TestCase):
 
     def test_prime_number_difference(self):
         from ch03.challenge import prime_number_difference
-        K = ["a", "rose", "by", "any", "other", "name", "would", "smell", "as", "sweet"]
+        K = ['a', 'rose', 'by', 'any', 'other', 'name', 'would', 'smell', 'as', 'sweet']
         tbl = prime_number_difference(words=K, output=False)
         self.assertTrue('Prime', tbl.entry(428977, 'Prime'))
 

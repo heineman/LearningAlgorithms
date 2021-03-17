@@ -1,4 +1,4 @@
-"""""
+"""
 Merge sort uses auxiliary storage
 """
 

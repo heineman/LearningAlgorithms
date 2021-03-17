@@ -18,7 +18,7 @@ class Entry:
         return '{} -> {}'.format(self.key, self.value)
 
 class LinkedEntry:
-    """An (k, v) entry for a hashtable using linked lists, via next."""
+    """A (k, v) entry for a hashtable using linked lists, via next."""
     def __init__(self, k, v, nxt=None):
         self.key = k
         self.value = v

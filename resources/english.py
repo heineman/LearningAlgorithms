@@ -39,7 +39,7 @@ def english_words():
 
     # if still cannot access, then you will have to hard-code to
     # change the following path name to the location of the
-    # "words.english.txt" file
+    # words.english.txt file
     import os
     file = open(os.path.join('resources', 'words.english.txt'))
     for line in file.readlines():

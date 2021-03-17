@@ -8,7 +8,7 @@ class ValueBadHash:
         self.v = v
 
     def __repr__(self):
-        return f"ValueBadHash({self.v})"
+        return 'ValueBadHash({})'.format(self.v)
 
     def __hash__(self):
         """only four different values."""

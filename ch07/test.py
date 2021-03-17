@@ -44,8 +44,8 @@ class Test_Ch07(unittest.TestCase):
             if i < 5:
                 G.add_edge('C{}'.format(i), 'C{}'.format(i+1))
 
-        self.assertEqual(12, len(list(G.nodes())))
-        self.assertEqual(12, len(list(G.edges())))
+        self.assertEqual(12, G.number_of_nodes())
+        self.assertEqual(12, G.number_of_edges())
         self.assertEqual(sorted(['C2', 'B3', 'C4']), sorted(list(G['C3'])))
         self.assertEqual(sorted([('C3', 'C2'), ('C3', 'B3'), ('C3', 'C4')]), sorted(list(G.edges('C3'))))
 

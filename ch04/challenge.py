@@ -81,7 +81,7 @@ def combined_sorted():
         print (m)
 
 def k_smallest(A, k):
-    """Super-efficient (and easy to write) k_smallest selection for an arbitrary iterable."""
+    """Super-efficient (and easy to write) k-smallest selection for an arbitrary iterable."""
     from ch04.heap import PQ
     pq = PQ(k)
 

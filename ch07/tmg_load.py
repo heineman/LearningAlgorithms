@@ -91,8 +91,8 @@ def tmg_load(raw_data):
 #######################################################################
 if __name__ == '__main__':    
     (G,positions) = tmg_load(highway_map())
-    print(len(list(G.nodes())), len(list(G.edges())))
-    
+    print(G.number_of_nodes(), G.number_of_edges())
+
     src = 389
     target = 2256
     

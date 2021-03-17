@@ -39,7 +39,7 @@ def fibonacci_example(ss):
         ss.set(k,entries[k])
 
 #######################################################################
-if __name__ == "__main__":
+if __name__ == '__main__':
     try:
         import tkinter
         from ch07.spreadsheet import Spreadsheet

@@ -74,7 +74,7 @@ def topological_sort(DG):
     Only call when no cycle exists!
     """
     marked = {}
-    reverse_postorder = []
+    postorder = []
     
     def dfs(v):
         marked[v] = True
@@ -83,13 +83,13 @@ def topological_sort(DG):
             if not w in marked:
                 dfs(w)
 
-        reverse_postorder.append(v)
+        postorder.append(v)
 
     for v in DG.nodes():
         if not v in marked:
             dfs(v)
 
-    return reversed(reverse_postorder)
+    return reversed(postorder)
 
 def has_cycle_nr(DG):
     """Conduct non-recursive cycle detection over directed graph."""

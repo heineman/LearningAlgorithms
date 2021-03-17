@@ -86,7 +86,7 @@ class DataTable:
         self.entry_fmt = prefix + str(self.widths[idx]) + fmt + suffix
 
     def row(self, row):
-        """"
+        """
         Helper method to load up an entire row of values.
         If any values are SKIP then must eliminate without throwing off the formatting of output
         """
@@ -247,7 +247,7 @@ class FigureNum:
         self.number = num
 
     def element(self):
-        return "Figure"
+        return 'Figure'
 
     @contextmanager
     def __enter__(self):
@@ -265,7 +265,7 @@ class TableNum:
         self.number = num
 
     def element(self):
-        return "Table"
+        return 'Table'
 
     @contextmanager
     def __enter__(self):
@@ -283,7 +283,7 @@ class ExerciseNum:
         self.number = num
 
     def element(self):
-        return "Exercise"
+        return 'Exercise'
 
     @contextmanager
     def __enter__(self):

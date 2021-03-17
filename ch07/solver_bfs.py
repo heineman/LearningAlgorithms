@@ -62,7 +62,7 @@ class BreadthFirstSearchSolver():
         return False
 
 #######################################################################
-if __name__ == "__main__":
+if __name__ == '__main__':
     random.seed(15)
     m = Maze(60,60)
     root = tkinter.Tk()

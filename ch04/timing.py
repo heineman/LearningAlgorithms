@@ -45,7 +45,8 @@ one_run(PQ(256), {}, {})'''.format(clazz,N,factor)
 def one_run(pq, N, factor):
     """
     Conduct a run that exercised priority queue without causing a failure.
-    Assume N divisible by 4 and factor > 2. Total of factor*N operations."""
+    Assume N divisible by 4 and factor > 2. Total of factor*N operations.
+    """
     build_up(pq, N//2)       # Fill halfway
     drain(pq, N//4)          # Now go back to 1/4 full
     for _ in range(factor-2):

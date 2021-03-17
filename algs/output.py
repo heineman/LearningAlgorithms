@@ -3,7 +3,7 @@ Provide access to where images are output.
 """
 import os
 
-IMAGE_DIR = "images"
+IMAGE_DIR = 'images'
 
 def visualize(tbl, description, label, xaxis='Problem instance size', yaxis='Time (in seconds)'):
     """

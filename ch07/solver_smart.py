@@ -80,7 +80,7 @@ class SmartSearchSolver():
         return False
 
 #######################################################################
-if __name__ == "__main__":
+if __name__ == '__main__':
     random.seed(15)
     m = Maze(13,13)
     root = tkinter.Tk()

@@ -19,7 +19,7 @@ def perfect_hash(key):
 
 # ============================ Sanity check =============================
 
-K = ["a", "rose", "by", "any", "other", "name", "would", "smell", "as", "sweet"]
+K = ['a', 'rose', 'by', 'any', 'other', 'name', 'would', 'smell', 'as', 'sweet']
 assert len(K) == 10
 
 for h, k in enumerate(K):

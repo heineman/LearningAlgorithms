@@ -4,7 +4,6 @@ for book, which contains highway network, waypoints, and a
 Breadth-First Search solution
 """
 
-from math import cos, asin, sqrt, pi
 import matplotlib.pyplot as plt
 
 from algs.output import image_file
@@ -55,8 +54,6 @@ def compute_distance(positions, src, target):
 #######################################################################
 if __name__ == '__main__':    
     (G,positions) = tmg_load(highway_map())
-    #print(len(list(G.nodes())), len(list(G.edges())))
-    # Border of New York State (389) to Provincetown (2256)
     src = 389
     target = 2256
 
@@ -71,7 +68,7 @@ if __name__ == '__main__':
 
     plot_node_from(G, positions, src, target, node_from, color='purple')
     print('{0} total steps for Breadth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
-
+    plt.axis('off')
     plt.savefig(image_file('figure-mass-highway-bfs.png'))
     print(image_file('figure-mass-highway-bfs.png'))
 
@@ -85,7 +82,7 @@ if __name__ == '__main__':
     
     plot_node_from(G, positions, src, target, node_from, color='purple')
     print('{0} total steps for Depth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
-    
+    plt.axis('off')
     plt.savefig(image_file('figure-mass-highway-dfs.png'))
     print(image_file('figure-mass-highway-dfs.png'))
 
@@ -103,6 +100,6 @@ if __name__ == '__main__':
     
     plot_node_from(G, positions, src, target, node_from, color='purple')
     print('{0} total steps for Smart Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
-    
+    plt.axis('off')
     plt.savefig(image_file('figure-mass-highway-smart.png'))
     print(image_file('figure-mass-highway-smart.png'))

@@ -36,7 +36,7 @@ def highway_map():
 
     # if still cannot access, then you will have to hard-code to
     # change the following path name to the location of the
-    # "words.english.txt" file
+    # TMG file
     import os
     file = open(os.path.join('resources', 'MA-region-simple.tmg'))
     for line in file.readlines():

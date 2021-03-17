@@ -135,9 +135,9 @@ def draw_solution(G, field, src, target):
 
     # get original positional location from original graph
     pos_h = nx.get_node_attributes(H, 'pos')
-    nx.draw(H, pos_h, with_labels = True, node_color="w", font_size=8, ax=ax[0])
+    nx.draw(H, pos_h, with_labels = True, node_color='w', font_size=8, ax=ax[0])
     pos_f = nx.get_node_attributes(F, 'pos')
-    nx.draw(F, pos_f, with_labels = True, node_color="w", font_size=8, ax=ax[1])  
+    nx.draw(F, pos_f, with_labels = True, node_color='w', font_size=8, ax=ax[1])  
     
 #######################################################################
 if __name__ == '__main__':

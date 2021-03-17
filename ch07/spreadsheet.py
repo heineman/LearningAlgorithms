@@ -138,7 +138,7 @@ class Spreadsheet:
                 self._recompute(w)
 
 #######################################################################
-if __name__ == "__main__":
+if __name__ == '__main__':
     root = tkinter.Tk()
     root.title('You must press ENTER to change the contents of a cell.')
     ss = Spreadsheet(root)

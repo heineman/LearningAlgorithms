@@ -99,7 +99,7 @@ def sample_search(p1,p2):
     return None
 
 def month_index(m,p1,p2):
-    """"Computed Function to return unique key for month names."""
+    """Computed Function to return unique key for month names."""
     ct = 0
     for ch in m:
         ct = (ct*p1 + ord(ch)) % p2

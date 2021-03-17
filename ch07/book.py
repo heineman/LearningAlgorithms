@@ -12,7 +12,6 @@ from algs.table import DataTable, captionx, FigureNum, TableNum, process
 def make_sample_graph():
     """Create sample graph."""
     G = nx.Graph()
-
     G.add_node('A2')
     G.add_nodes_from(['A3', 'A4', 'A5'])
     G.add_edge('A2', 'A3')
@@ -25,7 +24,7 @@ def make_sample_graph():
         if i < 5:
             G.add_edge('C{}'.format(i), 'C{}'.format(i+1))
 
-    print(G.number_of_nodes(), 'nodes and ', len(G.edges()), 'edges.')
+    print(G.number_of_nodes(), 'nodes and ', G.number_of_edges(), 'edges.')
     print('neighbors of C3:', list(G['C3']))
     print('edges adjacent to C3:', list(G.edges('C3')))
 
@@ -46,7 +45,7 @@ def make_sample_directed_graph():
         if i < 5:
             DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
 
-    print(len(list(DG.nodes())), 'nodes and ', len(list(DG.edges())), 'edges.')
+    print(DG.number_of_nodes(), 'nodes and ', DG.number_of_edges(), 'edges.')
     print('neighbors of C3:', list(DG['C3']))
     print('edges adjacent to C3:', list(DG.edges('C3')))
     return DG
@@ -200,6 +199,10 @@ def defeat_smart_search():
 
 #######################################################################
 if __name__ == '__main__':
+    """
+    Need strategy for dealing with situations when pyplot not installed.
+    """
+    make_sample_graph()
     table_topological_example()
     #make_sample_directed_graph()
     #defeat_smart_search()

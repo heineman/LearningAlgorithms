@@ -62,7 +62,7 @@ class Viewer:
             self.built[cell] = self.canvas.create_oval(cx + inset, ry + inset, cx + size - 2*inset, ry + size - 2*inset, fill=color)
 
 #######################################################################
-if __name__ == "__main__":
+if __name__ == '__main__':
     random.seed(15)   # 28 is also good(24 is long solution)
     m = Maze(50,50)
     root = tkinter.Tk()

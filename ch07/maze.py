@@ -169,13 +169,13 @@ class Maze:
         self.south_wall[self.end()] = False
 
 #######################################################################
-if __name__ == "__main__":
+if __name__ == '__main__':
     random.seed(15)     # 28 is also good
     m = Maze(3,5)
     g = to_networkx(m)
     import matplotlib.pyplot as plt
 
     pos = nx.get_node_attributes(g, 'pos') 
-    nx.draw(g, pos, with_labels = True, node_color="w", font_size=8) 
+    nx.draw(g, pos, with_labels = True, node_color='w', font_size=8) 
 
     plt.show()

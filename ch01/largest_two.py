@@ -89,7 +89,7 @@ class Match:
         return m
 
 def tournament_two_object(A):
-    """"
+    """
     Returns two largest values in A. Only works for lists whose length
     is a power of 2. This implementation is much slower because it
     instantiates Match objects.
@@ -119,7 +119,7 @@ def tournament_two_object(A):
     return (largest,second)
 
 def tournament_two(A):
-    """"
+    """
     Returns two largest values in A. Only works for lists whose length
     is a power of 2.
     """
