@@ -1,6 +1,7 @@
 """Challenge questions for Chapter 03."""
 
 from algs.table import DataTable
+from time import time_ns
 
 class ValueBadHash:
     """Class with horrendous hash() method to ensure clashes."""
@@ -92,8 +93,14 @@ def prime_number_difference(words, output=True, decimals=2):
 def measure_performance_resize(max_d=50, output=True):
     """Generate table of statistics for table resizing up to (but not including maxd=50)."""
     from ch03.hashtable_linked import DynamicHashtable
-    from time import time_ns
     from resources.english import english_words
+
+    try:
+        from time import time_ns
+        timing = time_ns
+    except (ImportError):
+        from time import time
+        timing = time
 
     if output:
         print('Dynamic Resizing Hashtable')
@@ -110,11 +117,11 @@ def measure_performance_resize(max_d=50, output=True):
     average = 0
     words = english_words()
     for w in words:
-        before = time_ns()
+        before = timing()
         old_size = len(ht.table)
         ht.put(w,w)
         new_size = len(ht.table)
-        after = time_ns()
+        after = timing()
         average += (after-before)
         if last:
             if after - before > last:
@@ -143,11 +150,11 @@ def measure_performance_resize(max_d=50, output=True):
     average = 0
     words = english_words()
     for w in words:
-        before = time_ns()
+        before = timing()
         old_size = len(ht.table)
         ht.put(w,w)
         new_size = len(ht.table)
-        after = time_ns()
+        after = timing()
         average += (after-before)
         if last:
             if after - before > last:
@@ -172,9 +179,9 @@ def measure_performance_resize(max_d=50, output=True):
         average = 0
         words = english_words()
         for w in words:
-            before = time_ns()
+            before = timing()
             ht.put(w,w)
-            after = time_ns()
+            after = timing()
             average += (after-before)
 
         average /= len(words)

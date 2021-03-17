@@ -15,7 +15,9 @@ _highway_data = []
 
 def highway_map():
     """Return TMG file containing highway data."""
-    
+    if _highway_data:
+        return _highway_data
+
     # Try to load up...
     try:
         import importlib.resources as pkg_resources
@@ -38,7 +40,7 @@ def highway_map():
     # change the following path name to the location of the
     # TMG file
     import os
-    file = open(os.path.join('resources', 'MA-region-simple.tmg'))
-    for line in file.readlines():
-        _highway_data.append(line[:-1])    # chomp '\n'
+    with open(os.path.join('resources', 'MA-region-simple.tmg')) as file:
+        for line in file.readlines():
+            _highway_data.append(line[:-1])    # chomp '\n'
     return _highway_data

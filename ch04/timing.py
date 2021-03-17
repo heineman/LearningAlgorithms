@@ -4,7 +4,7 @@ Timing Results for chapter 4.
 All timing costs are scaled by 1000 to convert from seconds into milliseconds.
 Results from runTrials divided by T*N because the number of statements executed
 is directly proportional to that, and we are trying to find the average
-operational cost (of both enqueue and dequeue
+operational cost (of both enqueue and dequeue).
 
 """
 import timeit
@@ -56,7 +56,7 @@ def one_run(pq, N, factor):
     build_up(pq, N//2)       # back to 3/4 full
     drain(pq, 0)             # empty out...
 
-def trial_factorial_heap(max_n=2097152, output=True, decimals=2):
+def trial_factorial_heap(max_n=32768, output=True, decimals=2):
     """
     Generate trial using factorial heap compared with regular heap up to but not including max_n
     """
@@ -74,7 +74,7 @@ def trial_factorial_heap(max_n=2097152, output=True, decimals=2):
         N *= 2
     return tbl
 
-def dynamic_comparison(max_n=1048576, output=True, decimals=2):
+def dynamic_comparison(max_n=32768, output=True, decimals=2):
     """Generate table for comparing resizable hashtable performance."""
     T = 3
     base = 256

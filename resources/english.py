@@ -22,8 +22,8 @@ def english_words():
     # Try to load up...
     try:
         import importlib.resources as pkg_resources
-        file = pkg_resources.read_text('resources', 'words.english.txt')
-        _english_words.extend(file.splitlines())
+        contents = pkg_resources.read_text('resources', 'words.english.txt')
+        _english_words.extend(contents.splitlines())
         return _english_words
     except ImportError:
         pass
@@ -31,8 +31,8 @@ def english_words():
     try:
         import pkg_resources
 
-        file = pkg_resources.resource_string('resources', 'words.english.txt').decode('utf-8')
-        _english_words.extend(file.splitlines())
+        contents = pkg_resources.resource_string('resources', 'words.english.txt').decode('utf-8')
+        _english_words.extend(contents.splitlines())
         return _english_words
     except ImportError:
         pass
@@ -41,7 +41,7 @@ def english_words():
     # change the following path name to the location of the
     # words.english.txt file
     import os
-    file = open(os.path.join('resources', 'words.english.txt'))
-    for line in file.readlines():
-        _english_words.append(line[:-1])    # chomp '\n'
+    with open(os.path.join('resources', 'words.english.txt')) as file:
+        for line in file.readlines():
+            _english_words.append(line[:-1])    # chomp '\n'
     return _english_words

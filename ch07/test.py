@@ -64,6 +64,18 @@ class Test_Ch07(unittest.TestCase):
         self.small_example(UndirectedGraph())
         self.small_example(MatrixUndirectedGraph())
 
+    def test_dijkstra_replacement(self):
+        from ch07.graph import Replacement
+        nx = Replacement()
+        DG = nx.DiGraph()
+        DG.add_edge('a', 'b', weight=6)
+        DG.add_edge('a', 'c', weight=10)
+        DG.add_edge('b', 'c', weight=2)
+        
+        from ch07.dijkstra_sp import dijkstra_sp
+        (dist_to, edge_to) = dijkstra_sp(DG, 'a')
+        self.assertEqual(8, dist_to['c'])
+        
     def test_indexed_min_heap(self):
         from ch07.indexed_pq import IndexedMinPQ
         
@@ -114,5 +126,6 @@ class Test_Ch07(unittest.TestCase):
         ss.digraph.add_edge('C5', 'B2')
         #print(networkx.algorithms.cycles.find_cycle(ss.digraph))
 
+#######################################################################
 if __name__ == '__main__':
     unittest.main()

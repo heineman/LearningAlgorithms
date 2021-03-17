@@ -408,7 +408,7 @@ class Test_Ch03(unittest.TestCase):
     def test_measure_performance_resize(self):
         from ch03.challenge import measure_performance_resize
 
-        measure_performance_resize(max_d=5, output=False)
+        measure_performance_resize(max_d=5, output=True)
 
     def test_count_hash(self):
         from ch03.book import count_hash

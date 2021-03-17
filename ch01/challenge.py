@@ -10,7 +10,7 @@ def partition(A, lo, hi, idx):
     """
     Partition using A[idx] as value. Note lo and hi are INCLUSIVE on both
     ends and idx must be valid index. Count the number of comparisons
-    by populating A with RecordedItem instances
+    by populating A with RecordedItem instances.
     """
     if lo == hi:
         return lo
@@ -190,6 +190,9 @@ def is_palindrome_letters_only(s):
     """
     Confirm Palindrome, even when string contains non-alphabet letters
     and ignore capitalization.
+    
+    casefold() method, which was introduced in Python 3.3, could be 
+    used instead of this older method, which converts to lower().
     """
     i = 0
     j = hi = len(s) - 1
@@ -203,8 +206,7 @@ def is_palindrome_letters_only(s):
             j -= 1
             if j == 0: break
 
-        # safe way to compare characters while ignoring their case
-        if s[i].casefold() != s[j].casefold(): return False
+        if s[i].lower() != s[j].lower(): return False
         i += 1
         j -= 1
 

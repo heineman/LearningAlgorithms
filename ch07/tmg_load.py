@@ -8,11 +8,11 @@ from ch07.graph import WEIGHT
 from resources.highway import highway_map
 import matplotlib.pyplot as plt
 
-try:
-    import networkx as nx
-except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
+#try:
+#    import networkx as nx
+#except ImportError:
+from ch07.graph import Replacement
+nx = Replacement()
 
 def plot_gps(positions, s=8, marker='.', color='blue'):
     """Draw positions of individual nodes."""
@@ -96,7 +96,9 @@ if __name__ == '__main__':
     src = 389
     target = 2256
     
-    path = nx.single_source_shortest_path(G, src)[target]
+    paths = nx.single_source_shortest_path(G, src)
+    path = paths[target]
+    
     total = 0
     for i in range(len(path)-1):
         total += G[path[i]][path[i+1]][WEIGHT]
@@ -108,5 +110,4 @@ if __name__ == '__main__':
     
     plot_gps(positions)
     plot_highways(positions, G.edges())
-    plt.savefig('books_read.png')
-
+    plt.show()
