@@ -1,7 +1,6 @@
 """Challenge questions for Chapter 03."""
 
 from algs.table import DataTable
-from time import time_ns
 
 class ValueBadHash:
     """Class with horrendous hash() method to ensure clashes."""
@@ -96,6 +95,7 @@ def measure_performance_resize(max_d=50, output=True):
     from resources.english import english_words
 
     try:
+        # Added in Python 3.7
         from time import time_ns
         timing = time_ns
     except (ImportError):
@@ -107,7 +107,7 @@ def measure_performance_resize(max_d=50, output=True):
     tbl = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'], output=output)
     tbl.format('idx', 'd')
     tbl.format('word', 's')
-    tbl.format('time', 'd')
+    tbl.format('time', '1f')        # to support both possibilities, use '.1f' instead of 'd'
     tbl.format('old-size', ',d')
     tbl.format('new-size', ',d')
 

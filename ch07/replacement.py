@@ -134,9 +134,9 @@ class AdjacencyViewer:
     def __iter__(self):
         for j in self.neighbors:
             if (self.i, j) in self.mat.weights:
-                return {WEIGHT: self.mat.weights[(self.i,j)]}
+                yield {WEIGHT: self.mat.weights[(self.i,j)]}
             else:
-                return (self.mat.labels[self.i], self.mat.labels[j])
+                yield self.mat.labels[j]
 
 class MatrixUndirectedGraph:
     NO_EDGE = float('-inf')
@@ -295,6 +295,16 @@ class DirectedGraph:
         if u in self.adjacency:
             for node in self.adjacency[u]:
                 yield node
+
+    def get_edge_data(self, u, v):
+        """Return weight for edge."""
+        if not u in self.adjacency:
+            return None
+
+        if not v in self.adjacency[u]:
+            return None
+
+        return {WEIGHT: self.weights[(u,v)]}
 
     def nodes(self):
         """Return all nodes."""

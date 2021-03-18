@@ -104,7 +104,7 @@ class Test_Ch07(unittest.TestCase):
             print('unable to access tkinter.')
             return
 
-        ss = Spreadsheet(tkinter.Tk())
+        ss = Spreadsheet(tkinter.Tk(), nx.DiGraph())
         fibonacci_example(ss)
         try:
             import networkx.algorithms.cycles

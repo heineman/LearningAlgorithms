@@ -2,7 +2,7 @@
 Dijkstra's Single-source Shortest path algorithm.
 """
 from ch07.indexed_pq import IndexedMinPQ
-from ch07.graph import WEIGHT
+from ch07.replacement import WEIGHT
 
 def dijkstra_sp(G, s):
     """Return sequence of nodes forming the shortest paths."""
