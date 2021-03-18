@@ -349,6 +349,23 @@ class DirectedGraph:
         self.E += 1
         if weight:
             self.weights[(u,v)] = weight
+            
+    def remove_edge(self, u, v):
+        """Remove edge from u => v."""
+        if not u in self.adjacency:
+            return
+
+        if not v in self.adjacency:
+            return
+
+        # Not present? leave now
+        if not v in self.adjacency[u]:
+            return
+        
+        self.adjacency[u].remove(v)
+        self.E -= 1
+        if (u,v) in self.weights:
+            self.weights((u,v), None)
 
     def add_edges_from(self, edges):
         """Add edges to graph, if not already there."""
@@ -389,16 +406,16 @@ def single_source_shortest_path(self, graph, src):
     
     return expanded
 
-def topological_sort(self, digraph):
+def topological_sort(digraph):
     """Link in with Topological sort."""
     from ch07.digraph_search import topological_sort
     return topological_sort(digraph)
 
-def get_node_attributes(self, graph):
+def get_node_attributes(graph):
     """I am not going to provide this capability."""
     return graph.positions
 
-def draw(self, graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
+def draw(graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
     """I am not going to provide this capability."""
     pass
 

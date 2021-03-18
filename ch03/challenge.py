@@ -141,7 +141,7 @@ def measure_performance_resize(max_d=50, output=True):
                        output=output)
     tbl_ir.format('idx', 'd')
     tbl_ir.format('word', 's')
-    tbl_ir.format('time', 'd')
+    tbl_ir.format('time', '1f')
     tbl_ir.format('old-size', ',d')
     tbl_ir.format('new-size', ',d')
     ht = DynamicHashtableIncrementalResizing(1023,10)
