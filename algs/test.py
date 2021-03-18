@@ -6,7 +6,7 @@ from algs.node import Node
 from algs.table import DataTable
 from algs.modeling import Model, numpy_error
 
-class TestHashing(unittest.TestCase):
+class TestAlgs(unittest.TestCase):
     """Test cases for book package."""
 
     def test_counting(self):

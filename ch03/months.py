@@ -163,12 +163,12 @@ if __name__ == '__main__':
     print_month('February', 2024)
     print()
 
-    (best_tuple, best) = search_for_data()
+    (best_tuple, _) = search_for_data()
     print('Two constants in monthIndex should be p1 =', best_tuple[0], 'and p2 =', best_tuple[1])
 
-    result = search_for_hashes()
-    print('Need hashtable of size', len(result), 'to store months uniquely.')
-    print(result)
+    hash_result = search_for_hashes()
+    print('Need hashtable of size', len(hash_result), 'to store months uniquely.')
+    print(hash_result)
     ht = craft_table()
 
     print('created hashtable of size', ht.M)

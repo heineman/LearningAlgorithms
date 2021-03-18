@@ -1,4 +1,6 @@
 """
+Challenge exercises for chapter 6
+
 Randomly generate n values uniformly and insert into a non-balancing BST.
 When the BST hits depth K what is the value of (a) the root; (b) and N
 """

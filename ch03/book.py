@@ -123,11 +123,11 @@ all_words=english_words()[:{}]'''.format(num_to_add),repeat=1,number=100))
             line.append(timing)
         num_rows -= 1
         tbl.row(line)
-        
+
         # Provide effective way to terminate early for testing.
         if num_rows == 0:
             break
-        
+
     return tbl
 
 def count_collisions_dynamic(num_rows=0, output=True, decimals=2):
@@ -232,7 +232,7 @@ def compare_dynamic_build_and_access_time(repeat=10, num=5, max_m=640000, output
 
     # sufficient to allow 321,129 and to spare (divide by 0.75 to get 428,172).
     SUFF=428172
-    
+
     # When 'ht = HTLL(...) is inside the STMT, it measures BUILD TIME.
     # When it is included in the setup, we are measuring ACCESS TIME.
     ll_build = min(timeit.repeat(stmt='''
@@ -271,7 +271,8 @@ words = english_words()
 for w in words:
     ht.put(w,w)'''.format(SUFF), repeat=repeat, number=num))/num
 
-    tbl = DataTable([8,10,10,10,10],['M', 'BuildLL', 'AccessLL', 'BuildOA', 'AccessOA'], output=output, decimals=3)
+    tbl = DataTable([8,10,10,10,10],['M', 'BuildLL', 'AccessLL', 'BuildOA', 'AccessOA'],
+                    output=output, decimals=3)
 
     M = 625
     while M <= max_m:
@@ -327,7 +328,8 @@ def count_hash(output=True, decimals=2):
     from ch03.growth_test import DynamicHashtableLinkedCounting
 
     ht = DynamicHashtableLinkedCounting(1023)
-    tbl = DataTable([20,10,10,10],['Word', 'N', '#insert', 'average'], output=output, decimals=decimals)
+    tbl = DataTable([20,10,10,10],['Word', 'N', '#insert', 'average'],
+                    output=output, decimals=decimals)
     tbl.format('Word', 's')
     tbl.format('N', ',d')
     tbl.format('#insert', ',d')
@@ -352,9 +354,9 @@ def count_hash(output=True, decimals=2):
 
     return tbl
 
-def avoid_digit(n, d):
-    """Sample Python generator to yield all integers from 1 to n that do not involve d."""
-    strd = str(d)
+def avoid_digit(n, digit):
+    """Sample Python generator to yield all integers from 1 to n that do not involve digit."""
+    strd = str(digit)
     for i in range(n):
         if strd not in str(i):
             yield i
@@ -375,7 +377,8 @@ def iteration_order(output=True):
         ht_ll.put(w, w)
         ht_ph.put(w, w)
 
-    tbl = DataTable([8,8,8], ['Open Addressing', 'Separate Chaining', 'Perfect Hash'], output=output)
+    tbl = DataTable([8,8,8], ['Open Addressing', 'Separate Chaining', 'Perfect Hash'],
+                    output=output)
     tbl.format('Open Addressing', 's')
     tbl.format('Separate Chaining', 's')
     tbl.format('Perfect Hash', 's')
@@ -384,10 +387,11 @@ def iteration_order(output=True):
     return tbl
 
 def perfect_trial(key):
+    """Depict steps in the computation of perfect hash for given key."""
     from ch03.perfect.generated_dictionary import G, S1, S2, hash_f
     hk1 = hash_f(key, S1)
     print('hash_f(\'{}\', S1)={}'.format(key, hk1))
-    
+
     total = 0
     for idx,ch in enumerate(key):
         print(comma(S1[idx]),'*',ord(ch),end='')
@@ -395,7 +399,7 @@ def perfect_trial(key):
         if idx < len(key)-1: print (' + ', end='')
     print(' % {0} = {1} % {0} = {2}'.format(comma(len(G)), comma(total), comma(total % len(G))))
     print()
-    
+
     hk2 = hash_f(key, S2)
     print('hash_f(\'{}\', S2)={}'.format(key, hk2))
     total = 0

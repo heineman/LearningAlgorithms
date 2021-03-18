@@ -94,8 +94,8 @@ def counting_sort_improved(A,M):
             pos += counts[val]
         val += 1
 
-def run_counting_sort_trials(max_k=21, output=True):
-    """Generate table for counting sort up to (but not including) max_k=21."""
+def run_counting_sort_trials(max_k=15, output=True):
+    """Generate table for counting sort up to (but not including) max_k=15."""
     tbl = DataTable([8,15,15],
                     ['N', 'counting_sort', 'counting_sort_improved'], output=output)
 
@@ -226,5 +226,5 @@ if __name__ == '__main__':
     print('Median Questions\n')
     run_median_trial()
 
-    print('Challenge Questions\n')
+    print('Counting Sort Trials\n')
     run_counting_sort_trials()

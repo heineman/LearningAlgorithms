@@ -1,4 +1,6 @@
-"""Challenge questions for chapter 5"""
+"""
+Challenge exercises for chapter 5
+"""
 import timeit
 
 from algs.table import DataTable
@@ -274,10 +276,13 @@ random.shuffle(A)'''.format(n), repeat=10, number=10))
 
 #######################################################################
 if __name__ == '__main__':
+    print('Attempting to rediscover heap. This might take unusually long time')
     print(rediscover_heap())
 
+    print('12th Fibonacci number is 144.')
     print(fib_with_lucas(12))
 
+    print('Number of swaps in sample hashtable')
     print(num_swaps_hashable(['15', '21', '20', '2', '15', '24', '5', '19']))
 
     # Construct an array with UP-DOWN-UP structure.

@@ -75,7 +75,7 @@ def max_sort(A):
         A = A[:index_max] + A[index_max+1:]
     return A + result
 
-def run_max_sort_worst_case(max_k=15, output=True, decimals=4):
+def run_max_sort_worst_case(max_k=14, output=True, decimals=4):
     """Generate table for max sort up to (but not including 2**max_k)."""
     xvals = []
     yvals = []
@@ -109,7 +109,7 @@ random.shuffle(x)'''.format(n), number=10)
 
     return tbl
 
-def run_permutation_sort(max_n=13, output=True, decimals=4):
+def run_permutation_sort(max_n=12, output=True, decimals=4):
     """Generate table for permutation sort up to (but not including) max_n."""
     xvals = []
     yvals = []

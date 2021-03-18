@@ -98,16 +98,16 @@ def measure_performance_resize(max_d=50, output=True):
         # Added in Python 3.7
         from time import time_ns
         timing = time_ns
-    except (ImportError):
+    except ImportError:
         from time import time
         timing = time
 
     if output:
         print('Dynamic Resizing Hashtable')
-    tbl = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'], output=output)
+    tbl = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'],
+                    output=output, decimals=1)
     tbl.format('idx', 'd')
     tbl.format('word', 's')
-    tbl.format('time', '1f')        # to support both possibilities, use '.1f' instead of 'd'
     tbl.format('old-size', ',d')
     tbl.format('new-size', ',d')
 
@@ -137,11 +137,10 @@ def measure_performance_resize(max_d=50, output=True):
         print('Average was ', average)
         print('Incremental Resizing Hashtable')
 
-    tbl_ir = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'], 
-                       output=output)
+    tbl_ir = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'],
+                       output=output, decimals=1)
     tbl_ir.format('idx', 'd')
     tbl_ir.format('word', 's')
-    tbl_ir.format('time', '1f')
     tbl_ir.format('old-size', ',d')
     tbl_ir.format('new-size', ',d')
     ht = DynamicHashtableIncrementalResizing(1023,10)

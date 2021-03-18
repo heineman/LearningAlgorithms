@@ -11,7 +11,7 @@ def sample(i):
     """Helper method to generate a meaningful sample value."""
     return 'sample{}'.format(i)
 
-class Test_Ch03(unittest.TestCase):
+class TestChapter3(unittest.TestCase):
 
     def test_base26(self):
         from ch03.base26 import base26
@@ -288,7 +288,7 @@ class Test_Ch03(unittest.TestCase):
 
     def test_resize_hash_small_open_addressing(self):
         from ch03.hashtable_open import DynamicHashtable
-        
+
         with self.assertRaises(ValueError):
             DynamicHashtable(0)
 
@@ -396,7 +396,7 @@ class Test_Ch03(unittest.TestCase):
         from ch03.challenge import prime_number_difference
         K = ['a', 'rose', 'by', 'any', 'other', 'name', 'would', 'smell', 'as', 'sweet']
         tbl = prime_number_difference(words=K, output=False)
-        self.assertTrue('Prime', tbl.entry(428977, 'Prime'))
+        self.assertEqual('Prime', tbl.entry(428977, 'Prime'))
 
     def test_bad_timing(self):
         from resources.english import english_words
@@ -408,7 +408,10 @@ class Test_Ch03(unittest.TestCase):
     def test_measure_performance_resize(self):
         from ch03.challenge import measure_performance_resize
 
-        measure_performance_resize(max_d=5, output=True)
+        # cannot have test cases since the values in each row are based on hashing
+        # results and change each time
+        (_, _, tbl_d) = measure_performance_resize(max_d=5, output=True)
+        self.assertTrue(tbl_d.entry(1, 'Average') > 0)
 
     def test_count_hash(self):
         from ch03.book import count_hash
@@ -449,7 +452,7 @@ class Test_Ch03(unittest.TestCase):
         from ch03.book import count_collisions
 
         tbl = count_collisions(num_rows=4, output=False)
-        self.assertTrue(tbl.entry(642258, 'Max LL') > 0)        
+        self.assertTrue(tbl.entry(642258, 'Max LL') > 0)
 
     def test_count_collisions_dynamic(self):
         from ch03.book import count_collisions_dynamic

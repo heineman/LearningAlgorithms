@@ -3,7 +3,7 @@ import random
 import unittest
 from algs.sorting import check_sorted
 
-class Test_Ch02(unittest.TestCase):
+class TestChapter2(unittest.TestCase):
 
     def test_mult(self):
         from ch02.mult import create_pair, mult_pair, create_random_pair

@@ -7,7 +7,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
     
-class Test_Ch07(unittest.TestCase):
+class TestChapter7(unittest.TestCase):
 
     def test_topological_example(self):
         from ch07.book import topological_example

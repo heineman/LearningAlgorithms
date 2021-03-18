@@ -12,7 +12,7 @@ from ch01.challenge import counting_sort_improved, is_palindrome1, is_palindrome
 BEST_CASE = list(range(10))
 WORST_CASE = list(range(10,0,-1))
 
-class Test_Ch01(unittest.TestCase):
+class TestChapter1(unittest.TestCase):
 
     def test_largest(self):
         self.assertEqual(9, native_largest(BEST_CASE))

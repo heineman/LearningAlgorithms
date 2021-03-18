@@ -1,7 +1,7 @@
 """Test cases for chapter 4."""
 import unittest
 
-class Test_Ch04(unittest.TestCase):
+class TestChapter4(unittest.TestCase):
 
     def validate(self, queue):
         """For a queue validates a few simple operations."""

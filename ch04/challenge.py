@@ -1,10 +1,9 @@
-"""Challenge questions for chapter 4
-
+"""
+Challenge questions for chapter 4
 """
 import timeit
-import numpy as np
-from scipy.optimize import curve_fit
-from scipy.stats.stats import pearsonr
+from algs.modeling import numpy_error
+
 from algs.table import DataTable, comma, best_models
 from algs.modeling import n_log_n_model
 
@@ -60,25 +59,32 @@ def combined_sorted():
     x = [2**k for k in range(lo,hi)]
     y = [tbl.entry(r,comma(r)) for r in [2**k for k in range(lo,hi)]]
 
-    (coeffs,_) = curve_fit(n_log_n_model, np.array(x), np.array(y))
-    a = coeffs[0] / 2
+    if numpy_error:
+        a = 0
+    else:
+        import numpy as np
+        from scipy.optimize import curve_fit
+        from scipy.stats.stats import pearsonr
+    
+        (coeffs,_) = curve_fit(n_log_n_model, np.array(x), np.array(y))
+        a = coeffs[0] / 2
 
-    y_fit = [n_log_n_model(r,a) for r in [2**k for k in range(lo,hi)]]
-
-    print()
-    print(pearsonr(y, y_fit))
-    print()
-    print('Prediction')
-    model = DataTable([8] * (hi-lo+1), ['N'] + [comma(2**k) for k in range(lo,hi)])
-    for n in [2**k for k in range(lo,hi)]:
-        row = [n]
-        for m in [2**k for k in range(lo,hi)]:
-            row.append(n_log_n_model(n,a) + n_log_n_model(m,a))
-        model.row(row)
-
-    # Just do one column
-    for m in best_models(x, tbl.column(comma(1024))):
-        print (m)
+        y_fit = [n_log_n_model(r,a) for r in [2**k for k in range(lo,hi)]]
+    
+        print()
+        print(pearsonr(y, y_fit))
+        print()
+        print('Prediction')
+        model = DataTable([8] * (hi-lo+1), ['N'] + [comma(2**k) for k in range(lo,hi)])
+        for n in [2**k for k in range(lo,hi)]:
+            row = [n]
+            for m in [2**k for k in range(lo,hi)]:
+                row.append(n_log_n_model(n,a) + n_log_n_model(m,a))
+            model.row(row)
+    
+        # Just do one column
+        for m in best_models(x, tbl.column(comma(1024))):
+            print (m)
 
 def k_smallest(A, k):
     """Super-efficient (and easy to write) k-smallest selection for an arbitrary iterable."""
@@ -141,7 +147,7 @@ def iterator_trial():
         pq.enqueue(prior, prior)
 
     while pq:
-        print([k for k in iterator(pq)])
+        print(list(iterator(pq)))
         print(pq.dequeue())
 
 #######################################################################

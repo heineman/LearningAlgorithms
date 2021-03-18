@@ -5,7 +5,7 @@ from ch06.recursive_lists import create_linked_list, reverse, sum_list, sum_iter
 from ch06.recursive_lists import iterate_list
 from ch06.avl import check_avl_property
 
-class TestChapter06(unittest.TestCase):
+class TestChapter6(unittest.TestCase):
 
     def test_expression(self):
         from ch06.book import expression_tree, debug_expression

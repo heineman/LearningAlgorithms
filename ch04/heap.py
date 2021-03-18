@@ -63,11 +63,14 @@ class PQ:
             parent = child
 
     def peek(self):
-        """Peek without disturbing the value at the top of the priority queue."""
+        """
+        Peek without disturbing the value at the top of the priority queue. Must
+        return entire Entry, since the one calling might like to know priority and value
+        """
         if self.N == 0:
             raise RuntimeError('PriorityQueue is empty!')
 
-        return self.storage[1].value
+        return self.storage[1]
 
     def dequeue(self):
         """Remove and return value with highest priority in priority queue."""

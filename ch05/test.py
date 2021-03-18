@@ -4,7 +4,7 @@ import unittest
 BEST_CASE = list(range(10))
 WORST_CASE = list(range(10,0,-1))
 
-class Test_ch05(unittest.TestCase):
+class TestChapter5(unittest.TestCase):
 
     def test_merge_sort(self):
         from ch05.merge import merge_sort
