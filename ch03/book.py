@@ -319,15 +319,34 @@ for w in words:
     tbl.row(['Fixed', ll_build, ll_access, oa_build, oa_access])
     return tbl
 
+class CountableHash:
+    """Class Wrapper to count number of times a value is hashed."""
+    hash_count = 0
+    
+    def __init__(self, w):
+        self.word = w
+
+    def __repr__(self):
+        return 'ValueBadHash({})'.format(self.word)
+
+    def __hash__(self):
+        """Pass through to inner while incrementing count."""
+        CountableHash.hash_count += 1
+        return hash(self.word)
+
+    def __eq__(self, other):
+        return (self.__class__ == other.__class__ and
+                self.word == other.word)
+
 def count_hash(output=True, decimals=2):
     """
     For all English words, starting with a hashtable of size 1,024 and
     a load factor of 0.75, count how many times the hash code (i.e., %)
     is invoked.
     """
-    from ch03.growth_test import DynamicHashtableLinkedCounting
+    from ch03.hashtable_linked import DynamicHashtable
 
-    ht = DynamicHashtableLinkedCounting(1023)
+    ht = DynamicHashtable(1023)
     tbl = DataTable([20,10,10,10],['Word', 'N', '#insert', 'average'],
                     output=output, decimals=decimals)
     tbl.format('Word', 's')
@@ -337,19 +356,19 @@ def count_hash(output=True, decimals=2):
     last_word = None
     for w in english_words():
         last_word = w
-        last = ht.hash_count
-        ht.put(w, w)
-        if ht.hash_count != last + 1:
-            tbl.row([w, ht.N, ht.hash_count, ht.hash_count/ht.N])
+        last = CountableHash.hash_count
+        ht.put(CountableHash(w), w)
+        if CountableHash.hash_count != last + 1:
+            tbl.row([w, ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])
 
-    tbl.row([last_word, ht.N, ht.hash_count, ht.hash_count/ht.N])
+    tbl.row([last_word, ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])
 
     # determine when next resize event would occur...
     for i in range(1, 200000):
-        last = ht.hash_count
-        ht.put(last_word + str(i), last_word)
-        if ht.hash_count != last + 1:
-            tbl.row([last_word + str(i), ht.N, ht.hash_count, ht.hash_count/ht.N])
+        last = CountableHash.num_hash
+        ht.put(CountableHash(last_word + str(i)), last_word)
+        if CountableHash.hash_count != last + 1:
+            tbl.row([last_word + str(i), ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])
             break
 
     return tbl
@@ -527,5 +546,6 @@ def generate_ch03():
 
 #######################################################################
 if __name__ == '__main__':
+    count_hash()
     perfect_trial('by')
     #generate_ch03()

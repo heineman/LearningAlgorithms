@@ -8,7 +8,10 @@ This repository contains the Python code for:
 	
 Each chapter has its own folder containing the code for that chapter.
 All Python code conforms to Python 3.4 and has been tested to work
-with Python 3.3.
+with Python 3.3. While the core algorithms presented in the book
+will continue to work with earlier versions of Python, some code used
+to generate the tables and images in the book will not compile properly
+because of changes to Python libraries.
 
 ## Chapter structure
 
@@ -22,7 +25,7 @@ specific Python scripts:
               complete are pulled out separately
 * `test.py` - test cases to validate the algorithms and supporting methods.
 
-A separate `util` folder contains Python scripts that are shared across
+A separate `algs` folder contains Python scripts that are shared across
 the different chapters.
 
 ## Documentation
@@ -39,6 +42,9 @@ the top-level documentation for the script.
 A dictionary of 321,129 English words is provided in the `words.english.txt` 
 file and is used to provide sample inputs throughout the book.
 
+A TMG graph file containing a representation of highways in Massachusetts is 
+graciously provided by James Teresco from https://travelmapping.net/graphs
+
 ## Dependencies
 
 The code depends on numpy, scipy and networkx. If these libraries are
@@ -53,25 +59,28 @@ is not efficient or suitable for production use.
 You can generate code coverage reports for the test cases after you install
 the coverage module with:
 
-pip install coverage
+  pip install coverage
 
 Then in the top directory, execute the following commands to generate code
 coverage data and then present it as an HTML directory (found in `htmlcov`).
 There is a .coveragerc file that ensures only the book code is targeted.
 
-	coverage run -m unittest discover
-	coverage run -a book.py
-	coverage html
+  coverage run -m unittest discover
+  coverage run -a book.py
+  coverage html
 
 The test cases execute within 15 minutes or so. The book takes up to six hours
 to fully run, since it generates all tables and data for figures in the book.
 If you want to complete all timing results, then add those as well:
 
-	coverage run -a ch01/timing.py
-	coverage run -a ch02/timing.py
-	coverage run -a ch03/timing.py
-	coverage run -a ch04/timing.py
-	coverage run -a ch05/timing.py
-	coverage run -a ch06/timing.py
-	coverage run -a ch07/timing.py
+  coverage run -a ch01/timing.py
+  coverage run -a ch02/timing.py
+  coverage run -a ch03/timing.py
+  coverage run -a ch04/timing.py
+  coverage run -a ch05/timing.py
+  coverage run -a ch06/timing.py
+  coverage run -a ch07/timing.py
 
+  Each chapter has challenge exercises that have been completely solved, these
+  can be executed from each chNN/challenge.py file.
+  

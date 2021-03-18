@@ -1,4 +1,6 @@
-"""Test cases for chapter 3."""
+"""
+Test cases for chapter 3.
+"""
 import random
 import unittest
 from algs.table import SKIP
@@ -410,7 +412,7 @@ class TestChapter3(unittest.TestCase):
 
         # cannot have test cases since the values in each row are based on hashing
         # results and change each time
-        (_, _, tbl_d) = measure_performance_resize(max_d=5, output=True)
+        (_, _, tbl_d) = measure_performance_resize(max_d=5, output=False)
         self.assertTrue(tbl_d.entry(1, 'Average') > 0)
 
     def test_count_hash(self):

@@ -3,7 +3,10 @@
 from algs.table import DataTable
 
 class ValueBadHash:
-    """Class with horrendous hash() method to ensure clashes."""
+    """
+    Class with horrendous hash() method (just four possible values) to 
+    ensure clashes.
+    """
     def __init__(self, v):
         self.v = v
 
@@ -105,7 +108,7 @@ def measure_performance_resize(max_d=50, output=True):
     if output:
         print('Dynamic Resizing Hashtable')
     tbl = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'],
-                    output=output, decimals=1)
+                    output=output, decimals=2)
     tbl.format('idx', 'd')
     tbl.format('word', 's')
     tbl.format('old-size', ',d')
@@ -138,7 +141,7 @@ def measure_performance_resize(max_d=50, output=True):
         print('Incremental Resizing Hashtable')
 
     tbl_ir = DataTable([8, 15, 15, 10, 10], ['idx', 'word', 'time', 'old-size', 'new-size'],
-                       output=output, decimals=1)
+                       output=output, decimals=2)
     tbl_ir.format('idx', 'd')
     tbl_ir.format('word', 's')
     tbl_ir.format('old-size', ',d')

@@ -75,20 +75,19 @@ def run_largest_alternate(output=True, decimals=3):
         print('Alternate', tbl.best_model('alternate', Model.QUADRATIC))
     return tbl
 
-def just_compare_sort_tournament_two(output=True, decimals=2):
-    """Very large data sets to investigate whether crossover occurs (no)."""
+def just_compare_sort_tournament_two(max_k=25, output=True, decimals=2):
+    """Very large data sets to investigate whether crossover occurs (no it does not)."""
     tbl = DataTable([15,10,15],
         ['N','sorting_two','tournament_two'],
         output=output, decimals=decimals)
 
-    trials = [2**k for k in range(10,25)]
+    trials = [2**k for k in range(10,max_k)]
     num = 5
     for n in trials:
-
         m_tt = timeit.timeit(stmt='random.shuffle(x)\ntournament_two(x)', setup='''
 import random
 from ch01.largest_two import tournament_two
-x=list(range({))'''.format(n), number=num)
+x=list(range({}))'''.format(n), number=num)
 
         m_st = timeit.timeit(stmt='random.shuffle(x)\nsorting_two(x)', setup='''
 import random

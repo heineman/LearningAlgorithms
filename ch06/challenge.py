@@ -37,7 +37,7 @@ class BinaryNode:
         """Return number of nodes in subtree rooted at node."""
         ct = 1
         if self.left:  ct += self.left.size()
-        if self.right: ct += self.right.size() 
+        if self.right: ct += self.right.size()
         return ct
 
 rotations = [0]

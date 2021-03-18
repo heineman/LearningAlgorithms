@@ -50,7 +50,7 @@ class TestAlgs(unittest.TestCase):
 
         self.assertEqual(['other', 'sample'], list(node2))
 
-    def test_table(self): 
+    def test_table(self):
         tbl = DataTable([8, 8, 8], ['N', 'Another', 'SquareRoot'], output=False, decimals=4)
         tbl.format('Another', 'd')
         for n in range(2,10):

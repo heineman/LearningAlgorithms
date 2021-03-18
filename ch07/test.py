@@ -9,6 +9,19 @@ except ImportError:
     
 class TestChapter7(unittest.TestCase):
 
+    def test_dijkstra_sp(self):
+        from ch07.dijkstra_sp import dijkstra_sp, path_to
+        DG = nx.DiGraph()
+        DG.add_edge('a', 'b', weight=3)
+        DG.add_edge('a', 'c', weight=9)
+        DG.add_edge('b', 'c', weight=4)
+        DG.add_edge('b', 'd', weight=2)
+        DG.add_edge('d', 'c', weight=1)
+        (dist_to, edge_to) = dijkstra_sp(DG, 'a')
+        path = path_to(edge_to, 'a', 'c')
+        self.assertEqual(6, dist_to['c'])
+        self.assertEqual(['a', 'b', 'd', 'c'], path)
+
     def test_topological_example(self):
         from ch07.book import topological_example
         DG = nx.DiGraph()

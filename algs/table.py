@@ -205,7 +205,7 @@ def process(table, chapter, number, description, create_image=True, xaxis='Probl
 def captionx(chapter, number):
     """
     Return string for 'element chapter-number. description'.
-    number is either a TableNum or a FigureNum. 
+    number is either a TableNum or a FigureNum.
     """
     return '{} {}-{}'.format(number.args[0].element(), chapter, number.args[0])
 

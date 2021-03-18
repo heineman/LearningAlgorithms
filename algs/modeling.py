@@ -23,23 +23,23 @@ try:
     def log_model(n, a):
         """Formula for A*Log_2(N) with single coefficient."""
         return a*np.log(n)/np.log(2)
-       
+
     def linear_model(n, a, b):
         """Formula for A*N + B linear model with two coefficients."""
         return a*n + b
-            
+
     def n_log_n_model(n, a):
         """Formula for A*N*Log_2(N) with single coefficient."""
         return a*n*np.log(n)/np.log(2)
-               
+
     def log_linear_model(n, a, b):
         """Formula for A*N*Log_2(N) + B*N with two coefficients."""
         return a*n*np.log(n)/np.log(2) + b*n
-                    
+
     def quadratic_model(n, a, b):
         """Formula for A*N*N + B*N quadratic model with three coefficients."""
         return a*n*n + b*n
-                        
+
     def factorial_model(n, a):
         """Models N! or N factorial."""
         return a * factorial(n)
@@ -52,23 +52,23 @@ except ImportError:
     def log_model(n, a):
         """Formula for A*Log_2(N) with single coefficient."""
         return a*math.log(n)/math.log(2)
-       
+
     def linear_model(n, a, b):
         """Formula for A*N + B linear model with two coefficients."""
         return a*n + b
-            
+
     def n_log_n_model(n, a):
         """Formula for A*N*Log_2(N) with single coefficient."""
         return a*n*math.log(n)/math.log(2)
-               
+
     def log_linear_model(n, a, b):
         """Formula for A*N*Log_2(N) + B*N with two coefficients."""
         return a*n*math.log(n)/math.log(2) + b*n
-                    
+
     def quadratic_model(n, a, b):
         """Formula for A*N*N + B*N quadratic model with three coefficients."""
         return a*n*n + b*n
-                        
+
     def factorial_model(n, a):
         """Models N! or N factorial."""
         return a * math.factorial(n)
@@ -185,6 +185,7 @@ def best_models(nval, yval, preselected = None):
     return models
 
 def pearson_correlation(y_act, y_fit):
+    """Return pearson correlation, if numpy is available, otherwise just 0.0."""
     if numpy_error:
         return 0.0
     return pearsonr(y_act, y_fit)

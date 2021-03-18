@@ -4,15 +4,15 @@ Python script to load up TMG file as a Graph.
 
 from math import cos, asin, sqrt, pi
 from ch07.dijkstra_sp import dijkstra_sp
-from ch07.graph import WEIGHT
+from ch07.replacement import WEIGHT
 from resources.highway import highway_map
 import matplotlib.pyplot as plt
 
-#try:
-#    import networkx as nx
-#except ImportError:
-from ch07.graph import Replacement
-nx = Replacement()
+try:
+    import networkx as nx
+except ImportError:
+    from ch07.graph import Replacement
+    nx = Replacement()
 
 def plot_gps(positions, s=8, marker='.', color='blue'):
     """Draw positions of individual nodes."""

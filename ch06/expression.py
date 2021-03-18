@@ -157,7 +157,7 @@ def build_expression(s, environment=None):
         else:                          # If just a numeric value, push it for later
             try:
                 expressions.push(Value(float(token)))
-            except(ValueError):
+            except ValueError:
                 # If it cannot be evaluated, leave untouched for post processing, perhaps?
                 expressions.push(Reference(token, environment))
 

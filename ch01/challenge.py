@@ -190,8 +190,8 @@ def is_palindrome_letters_only(s):
     """
     Confirm Palindrome, even when string contains non-alphabet letters
     and ignore capitalization.
-    
-    casefold() method, which was introduced in Python 3.3, could be 
+
+    casefold() method, which was introduced in Python 3.3, could be
     used instead of this older method, which converts to lower().
     """
     i = 0

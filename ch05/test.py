@@ -264,7 +264,7 @@ class TestChapter5(unittest.TestCase):
     def test_insertion_sort_bas_table(self):
         from ch05.challenge import insertion_sort_bas
         
-        tbl = insertion_sort_bas(max_k=14, output=True)
+        tbl = insertion_sort_bas(max_k=14, output=False)
         self.assertTrue(tbl.entry(4096, 'Time') <= tbl.entry(8192, 'Time'))
 
 #######################################################################

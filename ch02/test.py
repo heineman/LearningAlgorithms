@@ -1,4 +1,6 @@
-"""Test cases for chapter 2."""
+"""
+Test cases for chapter 2.
+"""
 import random
 import unittest
 from algs.sorting import check_sorted

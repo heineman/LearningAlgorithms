@@ -10,7 +10,7 @@ class TestChapter6(unittest.TestCase):
     def test_expression(self):
         from ch06.book import expression_tree, debug_expression
         from ch06.expression import build_expression, add_operator
-        
+
         mult7 = expression_tree()
         self.assertEqual(42.0, mult7.eval())
         self.assertEqual('(((3 + 1) / 4) * (((1 + 5) * 9) - (2 * 6)))', str(mult7))
@@ -23,23 +23,23 @@ class TestChapter6(unittest.TestCase):
         mult2 = debug_expression()
         self.assertEqual(54, mult2.eval())
         self.assertEqual('((1 + 5) * 9)', str(mult2))
-        
+
         def mod(a,b):
             """%"""
             return a % b
-        
+
         add_operator('%', mod)
         expr = build_expression('((9 % 2) * 5)')
         self.assertEqual(5.0, expr.eval())
         self.assertEqual([9.0, 2.0, '%', 5.0, '*'], list(expr.postfix()))
-        
+
         expr = build_expression('(1.9 + 18.232)')
         self.assertEqual(1.9+18.232, expr.eval())
-        
+
         expr = build_expression('(A1 + 4)')
         self.assertEqual('A1', expr.left.reference)
         self.assertEqual(4.0, expr.right.value)
-        
+
         expr = build_expression('3')
         self.assertEqual(3.0, expr.value)
 
@@ -68,7 +68,7 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual((2000*1999)/2, sum_iterative(first))
 
         # This raises an exception. With Python 3.5 and higher, this is
-        # RecursionError, but to remain compatible with earlier 3.x I've 
+        # RecursionError, but to remain compatible with earlier 3.x I've
         # left as a RuntimeError
         with self.assertRaises(RuntimeError):
             sum_list(first)
@@ -367,7 +367,7 @@ class TestChapter6(unittest.TestCase):
 
     def test_pq_stress(self):
         from ch06.pq import PQ
-        
+
         pq1 = PQ()
         self.assertTrue(pq1.is_empty())
         self.assertFalse(9 in pq1)
@@ -463,7 +463,7 @@ class TestChapter6(unittest.TestCase):
         expected = [2,4,7,8,10]
         new1 = remove_value(sample, 6)
         self.assertEqual(expected, new1)
-        
+
         new2 = remove_value(expected,99)    # wasn't there...
         self.assertEqual([2,4,7,8,10], new2)
 
@@ -473,8 +473,11 @@ class TestChapter6(unittest.TestCase):
         bt1 = BinaryTree()
         for i in [50, 30, 70, 20, 40, 60, 10, 45]:
             bt1.insert(i)
-
+        self.assertEqual(50, bt1.root.value)
+        self.assertEqual(30, bt1.root.left.value)
+        self.assertEqual(20, bt1.root.left.left.value)
         bt1.insert(5)
+        self.assertEqual(10, bt1.root.left.left.value)  # rotate
 
     def test_string_structure(self):
         from ch06.tree import BinaryTree
@@ -501,10 +504,10 @@ class TestChapter6(unittest.TestCase):
             check_avl_property(bt1.root)
         for _ in range(10):
             for _ in range(5):
-                vx = bt1.min_value()
-                bt1.remove(vx)
+                vmin = bt1.min_value()
+                bt1.remove(vmin)
                 check_avl_property(bt1.root)
-                self.assertFalse(vx in bt1)
+                self.assertFalse(vmin in bt1)
             for _ in range(10):
                 bt1.remove(bt1.root.value)
                 check_avl_property(bt1.root)
@@ -571,7 +574,7 @@ class TestChapter6(unittest.TestCase):
         from ch06.challenge import produce_table
 
         tbl = produce_table(max_k=5, output=False)
-        self.assertTrue(tbl.entry(3, 'N') >= 3)   # with 3 nodes, can at least get to 3 or maybe more...
+        self.assertTrue(tbl.entry(3, 'N') >= 3)
 
     def test_average_performance(self):
         from ch06.book import average_performance
@@ -599,7 +602,7 @@ class TestChapter6(unittest.TestCase):
         self.assertTrue(access > 0)
 
     def test_recreate_tree(self):
-        from ch06.challenge import recreate_tree#         
+        from ch06.challenge import recreate_tree
 
         root = recreate_tree('(19,,)')
         self.assertEqual('19', root.value)
@@ -629,7 +632,8 @@ class TestChapter6(unittest.TestCase):
     def test_max_rotations(self):
         from ch06.challenge import find_multiple_rotations, recreate_tree, rotations, BinaryTree
         extra = 1
-        (tree_rep, to_delete) = find_multiple_rotations(extra=extra, lo=9, hi=30, num_attempts=10000, output=False)
+        (tree_rep, to_delete) = find_multiple_rotations(extra=extra, 
+                                        lo=9, hi=30, num_attempts=10000, output=False)
         bt3 = recreate_tree(tree_rep, convert=int)
         tree = BinaryTree()
         tree.root = bt3
