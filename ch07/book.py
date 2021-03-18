@@ -4,9 +4,8 @@ import timeit
 try:
     import networkx as nx
 except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
-
+    import ch07.replacement as nx
+    
 from algs.table import DataTable, captionx, FigureNum, TableNum, process
 
 def make_sample_graph():

@@ -4,14 +4,14 @@ contains a rudimentary Smart Search for undirected graphs when there is a metric
 how far a node is from the target.
 """
 import random
-from ch07.maze import Maze, to_networkx, solution_graph, node_from_field
-from ch04.list_queue import Queue
-
 try:
     import networkx as nx
 except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
+    import ch07.replacement as nx
+
+from ch07.maze import Maze, to_networkx, solution_graph, node_from_field
+from ch04.list_queue import Queue
+
 
 def path_to(node_from, src, target):
     """

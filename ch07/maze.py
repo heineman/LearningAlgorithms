@@ -3,8 +3,7 @@ import random
 try:
     import networkx as nx
 except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
+    import ch07.replacement as nx
 
 def to_networkx(maze):
     """Return a NetworkX Graph representing maze."""

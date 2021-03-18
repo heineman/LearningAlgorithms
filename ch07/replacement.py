@@ -274,6 +274,10 @@ class DirectedGraph:
         self.weights   = {}
         self.E         = 0
  
+    def __contains__(self, v):
+        """Determine if v is in the graph."""
+        return v in self.adjacency
+ 
     def add_node(self, u, pos=None):
         """Add node to graph, if not already there."""
         if u in self.adjacency:
@@ -344,51 +348,52 @@ class DirectedGraph:
             else:
                 self.add_edge(edge[0], edge[2], edge[3])    # weights
 
-class Replacement:
-    """Provides an object which can fill the role of 'nx' in the graph chapter code."""
+class Graph(MatrixUndirectedGraph):
     def __init__(self):
-        pass
+        MatrixUndirectedGraph.__init__(self)
 
-    def Graph(self):
-        """Create undirected graph."""
-        return MatrixUndirectedGraph()    # UndirectedGraph
+class DiGraph(DirectedGraph):
+    def __init__(self):
+        DirectedGraph.__init__(self)
 
-    def DiGraph(self):
-        """Create directed graph."""
-        return DirectedGraph()
+def single_source_shortest_path(self, graph, src):
+    """
+    Act on Single Source Shortest Path and return path as dictionary, where
+    each node is expanded to have its 
+    """
+    from ch07.dijkstra_sp import dijkstra_sp
+    (dist_to, edge_to) = dijkstra_sp(graph, src)
+    
+    expanded = {}
+    for n in graph.nodes():
+        if n == src:
+            expanded[src] = []
+        else:
+            path = []
+            t = n
+            while t != src:
+                path.insert(0, t)
+                t = edge_to[t][0]
+            path.insert(0, src)
+            expanded[n] = path
+    
+    return expanded
 
-    def single_source_shortest_path(self, graph, src):
-        """
-        Act on Single Source Shortest Path and return path as dictionary, where
-        each node is expanded to have its 
-        """
-        from ch07.dijkstra_sp import dijkstra_sp
-        (dist_to, edge_to) = dijkstra_sp(graph, src)
-        
-        expanded = {}
-        for n in graph.nodes():
-            if n == src:
-                expanded[src] = []
-            else:
-                path = []
-                t = n
-                while t != src:
-                    path.insert(0, t)
-                    t = edge_to[t][0]
-                path.insert(0, src)
-                expanded[n] = path
-        
-        return expanded
+def topological_sort(self, digraph):
+    """Link in with Topological sort."""
+    from ch07.digraph_search import topological_sort
+    return topological_sort(digraph)
 
-    def topological_sort(self, digraph):
-        """Link in with Topological sort."""
-        from ch07.digraph_search import topological_sort
-        return topological_sort(digraph)
+def get_node_attributes(self, graph):
+    """I am not going to provide this capability."""
+    return graph.positions
 
-    def get_node_attributes(self, graph):
-        """I am not going to provide this capability."""
-        return graph.positions
+def draw(self, graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
+    """I am not going to provide this capability."""
+    pass
 
-    def draw(self, graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
-        """I am not going to provide this capability."""
-        pass
+def dijkstra_path(G, src, target):
+    """Dijkstra delegation."""
+    from ch07.dijkstra_sp import dijkstra_sp
+    
+    return dijkstra_sp(G, src, target)

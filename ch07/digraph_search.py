@@ -163,7 +163,9 @@ def return_cycle_nr(DG):
     
     return None
 
-from ch07.book import make_sample_directed_graph
-DG = make_sample_directed_graph()
-#DG.add_edge('B2', 'C5')
-print('well:',has_cycle(DG))
+#######################################################################
+if __name__ == '__main__':
+    from ch07.book import make_sample_directed_graph
+    DG = make_sample_directed_graph()
+    #DG.add_edge('B2', 'C5')
+    print('well:',has_cycle(DG))

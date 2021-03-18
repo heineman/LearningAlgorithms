@@ -4,9 +4,8 @@ Fibonacci Spreadsheet example for book.
 try:
     import networkx as nx
 except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
-
+    import ch07.replacement as nx
+    
 def fibonacci_example(ss):
     """Initialize Spreadsheet to small Fibonacci example for book."""
     entries = {
@@ -45,7 +44,7 @@ if __name__ == '__main__':
         from ch07.spreadsheet import Spreadsheet
 
         root = tkinter.Tk()
-        ss = Spreadsheet(root)
+        ss = Spreadsheet(root, nx.DiGraph())
         fibonacci_example(ss)
         from ch07.digraph_search import topological_sort
         print (list(topological_sort(ss.digraph)))

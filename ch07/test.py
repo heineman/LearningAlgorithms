@@ -5,9 +5,8 @@ import unittest
 try:
     import networkx as nx
 except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
-
+    import ch07.replacement as nx
+    
 class Test_Ch07(unittest.TestCase):
 
     def test_topological_example(self):
@@ -54,20 +53,18 @@ class Test_Ch07(unittest.TestCase):
         self.small_example(G)
         
     def test_small_example_stub_replacement(self):
-        from ch07.graph import Replacement
-        nx = Replacement()
-        G = nx.Graph()
+        import ch07.replacement 
+        G = ch07.replacement.Graph()
         self.small_example(G)
         
     def test_representations(self):
-        from ch07.graph import MatrixUndirectedGraph, UndirectedGraph
+        from ch07.replacement import MatrixUndirectedGraph, UndirectedGraph
         self.small_example(UndirectedGraph())
         self.small_example(MatrixUndirectedGraph())
 
     def test_dijkstra_replacement(self):
-        from ch07.graph import Replacement
-        nx = Replacement()
-        DG = nx.DiGraph()
+        import ch07.replacement 
+        DG = ch07.replacement.DiGraph()
         DG.add_edge('a', 'b', weight=6)
         DG.add_edge('a', 'c', weight=10)
         DG.add_edge('b', 'c', weight=2)

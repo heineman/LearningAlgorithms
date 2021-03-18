@@ -5,21 +5,15 @@ Breadth-First Search solution
 """
 
 import matplotlib.pyplot as plt
-
+    
 from algs.output import image_file
 from resources.highway import highway_map
 
 from ch07.dijkstra_sp import dijkstra_sp
-from ch07.graph import WEIGHT
 from ch07.plot_map import plot_node_from
 from ch07.tmg_load import tmg_load, distance
 from ch07.search import bfs_search, path_to, dfs_search_recursive, smart_search
 
-try:
-    import networkx as nx
-except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
 
 def plot_gps(positions, s=8, marker='.', color='blue'):
     """Draw positions of individual nodes."""

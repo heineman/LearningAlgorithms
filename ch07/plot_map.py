@@ -1,7 +1,11 @@
 import matplotlib.pyplot as plt
-import networkx as nx
+try:
+    import networkx as nx
+except ImportError:
+    import ch07.replacement as nx
+
 from ch07.dijkstra_sp import dijkstra_sp, path_to as sp_path_to
-from ch07.graph import WEIGHT
+from ch07.replacement import WEIGHT
 
 from ch07.tmg_load import tmg_load, plot_gps, plot_highways
 from ch07.search import bfs_search, path_to

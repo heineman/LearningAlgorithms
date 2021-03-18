@@ -3,12 +3,6 @@ import tkinter
 from ch06.expression import build_expression
 from ch07.digraph_search import has_cycle
 
-try:
-    import networkx as nx
-except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
-
 def is_formula(s):
     """Determine if string is a formula."""
     return s[0] == '=' if len(s) > 0 else False
@@ -32,11 +26,11 @@ class Spreadsheet:
     """
     undefined = 'Undef'
     
-    def __init__(self, master, num_rows=10, num_cols=5):
+    def __init__(self, master, new_digraph, num_rows=10, num_cols=5):
         self.master   = master
         self.num_rows = num_rows
         self.num_cols = num_cols
-        self.digraph  = nx.DiGraph()
+        self.digraph  = new_digraph
         self.values           = {}
         self.expressions      = {}
         self.expressions_raw  = {}
