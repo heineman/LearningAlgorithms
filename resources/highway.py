@@ -1,6 +1,7 @@
 """
 Provide access to Highway map stored in TMG file
-Compatible with Python 3.7
+
+Highway file graciously provided by James Teresco from https://travelmapping.net/graphs/
 
 If this code just doesn't work for you, then simply hard-code something like this:
 
