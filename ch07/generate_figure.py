@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 from algs.output import image_file
 from resources.highway import highway_map
 
-from ch07.dijkstra_sp import dijkstra_sp, path_to as dijkstra_to
+from ch07.dijkstra_sp import dijkstra_sp, edges_path_to
 from ch07.plot_map import plot_node_from
 from ch07.tmg_load import tmg_load, distance
 from ch07.search import bfs_search, path_to, dfs_search_recursive, smart_search
@@ -54,7 +54,7 @@ if __name__ == '__main__':
 
     (dist_to, edge_to) = dijkstra_sp(G, src)
     print('Dijkstra shortest distance is {:.1f}'.format(dist_to[target]))
-    path = dijkstra_to(edge_to, src, target)
+    path = edges_path_to(edge_to, src, target)
     plot_gps(positions)
     plot_highways(positions, G.edges())
     plot_path(positions, path)

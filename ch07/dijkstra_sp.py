@@ -5,7 +5,10 @@ from ch07.indexed_pq import IndexedMinPQ
 from ch07.replacement import WEIGHT
 
 def dijkstra_sp(G, s):
-    """Return sequence of nodes forming the shortest paths."""
+    """
+    Compute Dijkstra's algorithm using s as source and return dist_to[] with 
+    results and edge_to[] to be able to recover the shortest paths.
+    """
     N = G.number_of_nodes()
 
     inf = float('inf')
@@ -35,7 +38,7 @@ def dijkstra_sp(G, s):
 
     return (dist_to, edge_to)
 
-def path_to(edge_to, src, target):
+def edges_path_to(edge_to, src, target):
     """Recover path from src to target."""
     if edge_to[target] is None:
         raise ValueError('{} is unreachable from {}'.format(target,src))

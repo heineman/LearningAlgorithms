@@ -1,6 +1,7 @@
 """Testing for Chapter 07."""
 
 import unittest
+from algs.table import DataTable, SKIP
 
 try:
     import networkx as nx
@@ -9,8 +10,96 @@ except ImportError:
     
 class TestChapter7(unittest.TestCase):
 
+    def test_allpairs_sp(self):
+        from ch07.all_pairs_sp import all_pairs_sp, all_pairs_path_to
+        G = nx.Graph()
+        G.add_edge('a', 'b', weight=3)
+        G.add_edge('a', 'c', weight=5)
+        G.add_edge('b', 'c', weight=9)
+        G.add_edge('b', 'd', weight=2)
+        G.add_edge('d', 'c', weight=1)
+        (dist_to, edge_to) = all_pairs_sp(G)
+        path = all_pairs_path_to(edge_to, 'b', 'c')
+        self.assertEqual(3, dist_to['b']['c'])
+        self.assertEqual(['b', 'd', 'c'], path)
+        
+        path = all_pairs_path_to(edge_to, 'a', 'd')
+        self.assertEqual(5, dist_to['a']['d'])
+        self.assertEqual(['a', 'b', 'd'], path)
+        
+        tbl = DataTable([6,6,6,6,6], ['.', 'a', 'b', 'c', 'd'])
+        tbl.format('.','s')
+        for f in 'abcd':
+            tbl.format(f, 's')
+        for u in 'abcd':
+            row = [u]
+            for v in 'abcd':
+                row.append(edge_to[u][v]) if edge_to[u][v] else row.append(SKIP)
+            tbl.row(row)
+        
+    def test_allpairs_directed_sp(self):
+        from ch07.all_pairs_sp import all_pairs_sp, all_pairs_path_to
+        DG = nx.DiGraph()
+        DG.add_edge('a', 'b', weight=4)
+        DG.add_edge('b', 'a', weight=2)
+        DG.add_edge('a', 'c', weight=3)
+        DG.add_edge('b', 'd', weight=5)
+        DG.add_edge('c', 'b', weight=6)
+        DG.add_edge('d', 'b', weight=1)
+        DG.add_edge('d', 'c', weight=7)
+        (dist_to, edge_to) = all_pairs_sp(DG)
+        path = all_pairs_path_to(edge_to, 'b', 'c')
+        self.assertEqual(5, dist_to['b']['c'])
+        self.assertEqual(['b', 'a', 'c'], path)
+        
+        path = all_pairs_path_to(edge_to, 'd', 'c')
+        self.assertEqual(6, dist_to['d']['c'])
+        self.assertEqual(['d', 'b', 'a', 'c'], path)
+        
+        tbl_dist_to = DataTable([6,6,6,6,6], ['.', 'a', 'b', 'c', 'd'], output=True)
+        tbl_dist_to.format('.','s')
+        for f in 'abcd':
+            tbl_dist_to.format(f, 'd')
+        for u in 'abcd':
+            row = [u]
+            for v in 'abcd':
+                if u == v:
+                    row.append(0) 
+                else:
+                    row.append(dist_to[u][v])
+            tbl_dist_to.row(row)
+        
+        tbl = DataTable([6,6,6,6,6], ['.', 'a', 'b', 'c', 'd'], output=False)
+        tbl.format('.','s')
+        for f in 'abcd':
+            tbl.format(f, 's')
+        for u in 'abcd':
+            row = [u]
+            for v in 'abcd':
+                row.append(edge_to[u][v]) if edge_to[u][v] else row.append(SKIP)
+            tbl.row(row)
+            
+        tbl_path = DataTable([6,12,12,12,12], ['.', 'a', 'b', 'c', 'd'], output=True)
+        tbl_path.format('.','s')
+        for f in 'abcd':
+            tbl_path.format(f, 's')
+        for u in 'abcd':
+            path_row = [u]
+            for v in 'abcd':
+                if u == v:
+                    path_row.append(SKIP)
+                else:
+                    path_row.append('->'.join(all_pairs_path_to(edge_to, u, v)))
+            tbl_path.row(path_row)
+            
+        self.assertEqual('d->b->a->c', tbl_path.entry('d', 'c'))
+        self.assertEqual(6, tbl_dist_to.entry('d', 'c'))
+        
+        # edge on shortest path into 'c', when starting from 'd', came from 'a'
+        self.assertEqual('a', tbl.entry('d', 'c'))    
+
     def test_dijkstra_sp(self):
-        from ch07.dijkstra_sp import dijkstra_sp, path_to
+        from ch07.dijkstra_sp import dijkstra_sp, edges_path_to
         DG = nx.DiGraph()
         DG.add_edge('a', 'b', weight=3)
         DG.add_edge('a', 'c', weight=9)
@@ -18,7 +107,7 @@ class TestChapter7(unittest.TestCase):
         DG.add_edge('b', 'd', weight=2)
         DG.add_edge('d', 'c', weight=1)
         (dist_to, edge_to) = dijkstra_sp(DG, 'a')
-        path = path_to(edge_to, 'a', 'c')
+        path = edges_path_to(edge_to, 'a', 'c')
         self.assertEqual(6, dist_to['c'])
         self.assertEqual(['a', 'b', 'd', 'c'], path)
 

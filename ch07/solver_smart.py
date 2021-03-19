@@ -82,7 +82,7 @@ class SmartSearchSolver():
 #######################################################################
 if __name__ == '__main__':
     random.seed(15)
-    m = Maze(13,13)
+    m = Maze(60,60)
     root = tkinter.Tk()
     dfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
     root.mainloop()

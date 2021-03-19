@@ -95,4 +95,6 @@ def dynamic_comparison(max_n=32768, output=True, decimals=2):
 #######################################################################
 if __name__ == '__main__':
     dynamic_comparison()
+    print()
+    
     trial_factorial_heap()

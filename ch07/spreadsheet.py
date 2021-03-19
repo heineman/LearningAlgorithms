@@ -3,6 +3,11 @@ import tkinter
 from ch06.expression import build_expression
 from ch07.digraph_search import has_cycle
 
+try:
+    import networkx as nx
+except ImportError:
+    import ch07.replacement as nx
+
 def is_formula(s):
     """Determine if string is a formula."""
     return s[0] == '=' if len(s) > 0 else False
@@ -135,5 +140,5 @@ class Spreadsheet:
 if __name__ == '__main__':
     root = tkinter.Tk()
     root.title('You must press ENTER to change the contents of a cell.')
-    ss = Spreadsheet(root)
+    ss = Spreadsheet(root, nx.DiGraph())
     root.mainloop()

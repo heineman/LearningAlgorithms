@@ -30,12 +30,11 @@ the different chapters.
 
 ## Documentation
 
-The code documentation style follows the NumPy/SciPy Docstrings style. The
+The code documentation style follows standard Python documentation style. The
 supporting scripts (i.e., `book.py`, `timing.py`, `test.py`) typically have no
 documentation.
 
-Within each `book.py` file, the output from sample runs is included within 
-the top-level documentation for the script.
+Sample output for all executions is provided in doc folder.
 
 ## Resources
 
@@ -47,11 +46,13 @@ graciously provided by James Teresco from https://travelmapping.net/graphs
 
 ## Dependencies
 
-The code depends on numpy, scipy and networkx. If these libraries are
-not installed, the scripts continue to operate in degraded fashion. 
+The code depends on [numpy](https://numpy.org/), [scipy](https://www.scipy.org/)
+and [networkx](https://networkx.org/). If these libraries are not installed, 
+the scripts continue to operate in degraded fashion. 
+
 numpy and scipy are only used to model and perform analysis on data 
 and runtime performance. networkx is used to construct graphs, and if 
-this library is not installed, a replacement graph structure which 
+this library is not installed, a replacement graph structure is used which 
 is not efficient or suitable for production use.
 
 ## Testing
@@ -83,4 +84,3 @@ If you want to complete all timing results, then add those as well:
 
   Each chapter has challenge exercises that have been completely solved, these
   can be executed from each chNN/challenge.py file.
-  

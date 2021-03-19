@@ -4,7 +4,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-from ch07.dijkstra_sp import dijkstra_sp, path_to as sp_path_to
+from ch07.dijkstra_sp import dijkstra_sp, edges_path_to
 from ch07.replacement import WEIGHT
 
 from ch07.tmg_load import tmg_load, plot_gps, plot_highways
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     plot_path(positions, path)
     
     (dist_to, edge_to) = dijkstra_sp(G, src)
-    print('{} total steps for Dijkstra Single-source Shortest Path Search'.format(len(sp_path_to(edge_to, src, target))))
+    print('{} total steps for Dijkstra Single-source Shortest Path Search'.format(len(edges_path_to(edge_to, src, target))))
     
     plot_edge_path(positions, src, target, edge_to)
     plt.axis('off')
