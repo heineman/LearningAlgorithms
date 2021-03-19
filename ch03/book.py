@@ -365,7 +365,7 @@ def count_hash(output=True, decimals=2):
 
     # determine when next resize event would occur...
     for i in range(1, 200000):
-        last = CountableHash.num_hash
+        last = CountableHash.hash_count
         ht.put(CountableHash(last_word + str(i)), last_word)
         if CountableHash.hash_count != last + 1:
             tbl.row([last_word + str(i), ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])

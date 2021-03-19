@@ -11,19 +11,19 @@ except ImportError:
 class TestChapter7(unittest.TestCase):
 
     def test_allpairs_sp(self):
-        from ch07.all_pairs_sp import all_pairs_sp, all_pairs_path_to
+        from ch07.all_pairs_sp import floyd_warshall, all_pairs_path_to
         G = nx.Graph()
         G.add_edge('a', 'b', weight=3)
         G.add_edge('a', 'c', weight=5)
         G.add_edge('b', 'c', weight=9)
         G.add_edge('b', 'd', weight=2)
         G.add_edge('d', 'c', weight=1)
-        (dist_to, edge_to) = all_pairs_sp(G)
-        path = all_pairs_path_to(edge_to, 'b', 'c')
+        (dist_to, node_from) = floyd_warshall(G)
+        path = all_pairs_path_to(node_from, 'b', 'c')
         self.assertEqual(3, dist_to['b']['c'])
         self.assertEqual(['b', 'd', 'c'], path)
         
-        path = all_pairs_path_to(edge_to, 'a', 'd')
+        path = all_pairs_path_to(node_from, 'a', 'd')
         self.assertEqual(5, dist_to['a']['d'])
         self.assertEqual(['a', 'b', 'd'], path)
         
@@ -34,11 +34,11 @@ class TestChapter7(unittest.TestCase):
         for u in 'abcd':
             row = [u]
             for v in 'abcd':
-                row.append(edge_to[u][v]) if edge_to[u][v] else row.append(SKIP)
+                row.append(node_from[u][v]) if node_from[u][v] else row.append(SKIP)
             tbl.row(row)
         
     def test_allpairs_directed_sp(self):
-        from ch07.all_pairs_sp import all_pairs_sp, all_pairs_path_to
+        from ch07.all_pairs_sp import floyd_warshall, all_pairs_path_to
         DG = nx.DiGraph()
         DG.add_edge('a', 'b', weight=4)
         DG.add_edge('b', 'a', weight=2)
@@ -47,12 +47,12 @@ class TestChapter7(unittest.TestCase):
         DG.add_edge('c', 'b', weight=6)
         DG.add_edge('d', 'b', weight=1)
         DG.add_edge('d', 'c', weight=7)
-        (dist_to, edge_to) = all_pairs_sp(DG)
-        path = all_pairs_path_to(edge_to, 'b', 'c')
+        (dist_to, node_from) = floyd_warshall(DG)
+        path = all_pairs_path_to(node_from, 'b', 'c')
         self.assertEqual(5, dist_to['b']['c'])
         self.assertEqual(['b', 'a', 'c'], path)
         
-        path = all_pairs_path_to(edge_to, 'd', 'c')
+        path = all_pairs_path_to(node_from, 'd', 'c')
         self.assertEqual(6, dist_to['d']['c'])
         self.assertEqual(['d', 'b', 'a', 'c'], path)
         
@@ -76,7 +76,7 @@ class TestChapter7(unittest.TestCase):
         for u in 'abcd':
             row = [u]
             for v in 'abcd':
-                row.append(edge_to[u][v]) if edge_to[u][v] else row.append(SKIP)
+                row.append(node_from[u][v]) if node_from[u][v] else row.append(SKIP)
             tbl.row(row)
             
         tbl_path = DataTable([6,12,12,12,12], ['.', 'a', 'b', 'c', 'd'], output=True)
@@ -89,7 +89,7 @@ class TestChapter7(unittest.TestCase):
                 if u == v:
                     path_row.append(SKIP)
                 else:
-                    path_row.append('->'.join(all_pairs_path_to(edge_to, u, v)))
+                    path_row.append('->'.join(all_pairs_path_to(node_from, u, v)))
             tbl_path.row(path_row)
             
         self.assertEqual('d->b->a->c', tbl_path.entry('d', 'c'))
@@ -151,9 +151,16 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(sorted([('C3', 'C2'), ('C3', 'B3'), ('C3', 'C4')]), sorted(list(G.edges('C3'))))
 
     def test_small_example(self):
+        from ch07.search import dfs_search, path_to
+        from ch07.challenge import path_to_recursive
         G = nx.Graph()
         self.small_example(G)
         
+        node_from = dfs_search(G, 'A2')
+        self.assertEqual(['A2', 'A3', 'A4', 'A5'], path_to(node_from, 'A2', 'A5'))
+        self.assertEqual(['A2', 'A3', 'A4', 'A5'], list(path_to_recursive(node_from, 'A2', 'A5')))
+        
+
     def test_small_example_stub_replacement(self):
         import ch07.replacement 
         G = ch07.replacement.Graph()

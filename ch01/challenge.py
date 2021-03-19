@@ -1,4 +1,6 @@
-"""Chapter 1 Challenge Questions."""
+"""
+Challenge Exercises for Chapter 1.
+"""
 
 import random
 import timeit

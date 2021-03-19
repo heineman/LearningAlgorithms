@@ -82,5 +82,5 @@ If you want to complete all timing results, then add those as well:
   coverage run -a ch06/timing.py
   coverage run -a ch07/timing.py
 
-  Each chapter has challenge exercises that have been completely solved, these
-  can be executed from each chNN/challenge.py file.
+Each chapter has challenge exercises that have been completely solved, these
+can be executed from each chNN/challenge.py file.

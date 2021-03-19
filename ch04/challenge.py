@@ -1,6 +1,7 @@
 """
-Challenge questions for chapter 4
+Challenge Exercises for Chapter 4.
 """
+
 import timeit
 from algs.modeling import numpy_error
 

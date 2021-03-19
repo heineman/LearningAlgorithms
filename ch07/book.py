@@ -50,34 +50,34 @@ def make_sample_directed_graph():
     return DG
 
 def topological_example(G, N):
-        """Create stylized graph with N^2 nodes and edges to lead to sink node."""
-        for i in range(N):
+    """Create stylized graph with N^2 nodes and edges to lead to sink node."""
+    for i in range(N):
+        label = chr(ord('A') + i)
+        for j in range(i+1):
+            G.add_node(label + str(j+1))
+            
+    for i in range(N-1,0,-1):
+        label = chr(ord('A') + N + (N-i) - 1)
+        for j in range(i):
+            G.add_node(label + str(j+1))
+    
+    for i in range(N-1):
+        for j in range(i+1):
             label = chr(ord('A') + i)
-            for j in range(i+1):
-                G.add_node(label + str(j+1))
+            u = label + str(j+1)
+            for k in range(i+2):
+                label = chr(ord('A') + (i+1))
+                v = label + str(k+1)
+                G.add_edge(u, v)
                 
-        for i in range(N-1,0,-1):
-            label = chr(ord('A') + N + (N-i) - 1)
-            for j in range(i):
-                G.add_node(label + str(j+1))
-        
-        for i in range(N-1):
-            for j in range(i+1):
-                label = chr(ord('A') + i)
-                u = label + str(j+1)
-                for k in range(i+2):
-                    label = chr(ord('A') + (i+1))
-                    v = label + str(k+1)
-                    G.add_edge(u, v)
-                    
-        for i in range(N-2,-1,-1):
-            for j in range(i+2):
-                label = chr(ord('A') + N + (N-i) - 3)
-                u = label + str(j+1)
-                for k in range(i+1):
-                    label = chr(ord('A') + N + (N-i) - 2)
-                    v = label + str(k+1)
-                    G.add_edge(u, v)
+    for i in range(N-2,-1,-1):
+        for j in range(i+2):
+            label = chr(ord('A') + N + (N-i) - 3)
+            u = label + str(j+1)
+            for k in range(i+1):
+                label = chr(ord('A') + N + (N-i) - 2)
+                v = label + str(k+1)
+                G.add_edge(u, v)
 
 def table_topological_example():
     """Compare Topological sort performance."""
@@ -118,7 +118,7 @@ topological_example(DG,{})'''.format(N), repeat=5, number=3))
         tbl.row([len(list(DG.nodes())), len(list(DG.edges())), built_in, mtime])
     return tbl
 
-def generate_ch06():
+def generate_ch07():
     """Generate Tables and Figures for chapter 07."""
     chapter = 7
 
@@ -205,4 +205,4 @@ if __name__ == '__main__':
     table_topological_example()
     #make_sample_directed_graph()
     #defeat_smart_search()
-    #generate_ch06()
+    #generate_ch07()

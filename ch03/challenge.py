@@ -1,4 +1,6 @@
-"""Challenge questions for Chapter 03."""
+"""
+Challenge Exercises for Chapter 3.
+"""
 
 from algs.table import DataTable
 

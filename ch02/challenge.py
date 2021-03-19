@@ -1,4 +1,6 @@
-"""Challenge problems for ch02."""
+"""
+Challenge Exercises for Chapter 2.
+"""
 
 import timeit
 import math

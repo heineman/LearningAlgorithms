@@ -1,6 +1,7 @@
 """
-Challenge exercises for chapter 5
+Challenge Exercises for Chapter 5.
 """
+
 import timeit
 
 from algs.table import DataTable
