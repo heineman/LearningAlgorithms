@@ -3,7 +3,7 @@ Python script to load up TMG file as a Graph.
 """
 
 from math import cos, asin, sqrt, pi
-from ch07.dijkstra_sp import dijkstra_sp
+from ch07.single_source_sp import dijkstra_sp
 from ch07.replacement import WEIGHT
 from resources.highway import highway_map
 import matplotlib.pyplot as plt

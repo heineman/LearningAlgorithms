@@ -94,11 +94,11 @@ def bfs_search(G, src):
 
     return node_from
 
-def distance_to_target(from_cell, to_cell):
-        return abs(from_cell[0] - to_cell[0]) + abs(from_cell[1] - to_cell[1])
-
-def smart_search(G, src, target, distance=distance_to_target):
-    """Non-recursive depth-first search investigating given position."""
+def smart_search(G, src, target, distance):
+    """
+    Non-recursive depth-first search investigating given position. Needs
+    a distance (node1, node2) function to determine distance between two nodes.
+    """
     from ch04.heap import PQ
     pq = PQ(G.number_of_nodes())
     marked = {}

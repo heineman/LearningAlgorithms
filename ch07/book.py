@@ -171,8 +171,6 @@ def defeat_smart_search():
     """Construct a rectangular maze graph that thawarts smart search."""
     from ch07.maze import Maze
     from ch07.solver_smart import SmartSearchSolver
-    from ch07.solver_dfs import DepthFirstSearchSolver
-    from ch07.solver_bfs import BreadthFirstSearchSolver
     m = Maze(13,13)
     m.initialize()    # back to scratch WITH ALL WALLS
     
@@ -193,7 +191,7 @@ def defeat_smart_search():
     import tkinter
     
     root = tkinter.Tk()
-    dfs = BreadthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+    dfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
     root.mainloop()
 
 #######################################################################
@@ -201,6 +199,7 @@ if __name__ == '__main__':
     """
     Need strategy for dealing with situations when pyplot not installed.
     """
+    defeat_smart_search()
     make_sample_graph()
     table_topological_example()
     #make_sample_directed_graph()

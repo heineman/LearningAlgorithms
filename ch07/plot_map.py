@@ -4,7 +4,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-from ch07.dijkstra_sp import dijkstra_sp, edges_path_to
+from ch07.single_source_sp import dijkstra_sp, edges_path_to
 from ch07.replacement import WEIGHT
 
 from ch07.tmg_load import tmg_load, plot_gps, plot_highways
