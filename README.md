@@ -60,27 +60,31 @@ is not efficient or suitable for production use.
 You can generate code coverage reports for the test cases after you install
 the coverage module with:
 
-  pip install coverage
+    pip install coverage
 
 Then in the top directory, execute the following commands to generate code
 coverage data and then present it as an HTML directory (found in `htmlcov`).
 There is a .coveragerc file that ensures only the book code is targeted.
+If you have not installed the coverage module, then replace each 
+"coverage run" below with just "python3" and remove the "-a" command 
+line option, which is there just to ask coverage to append coverage
+data across multiple runs.
 
-  coverage run -m unittest discover
-  coverage run -a book.py
-  coverage html
+    coverage run -m unittest discover
+    coverage run -a book.py
+    coverage html
 
 The test cases execute within 15 minutes or so. The book takes up to six hours
 to fully run, since it generates all tables and data for figures in the book.
 If you want to complete all timing results, then add those as well:
 
-  coverage run -a ch01/timing.py
-  coverage run -a ch02/timing.py
-  coverage run -a ch03/timing.py
-  coverage run -a ch04/timing.py
-  coverage run -a ch05/timing.py
-  coverage run -a ch06/timing.py
-  coverage run -a ch07/timing.py
+    coverage run -a ch01/timing.py
+    coverage run -a ch02/timing.py
+    coverage run -a ch03/timing.py
+    coverage run -a ch04/timing.py
+    coverage run -a ch05/timing.py
+    coverage run -a ch06/timing.py
+    coverage run -a ch07/timing.py
 
 Each chapter has challenge exercises that have been completely solved, these
 can be executed from each chNN/challenge.py file.

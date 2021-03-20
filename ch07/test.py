@@ -27,48 +27,6 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(5, dist_to['a']['d'])
         self.assertEqual(['a', 'b', 'd'], path)
         
-        tbl = DataTable([6,6,6,6,6], ['.', 'a', 'b', 'c', 'd'])
-        tbl.format('.','s')
-        for f in 'abcd':
-            tbl.format(f, 's')
-        for u in 'abcd':
-            row = [u]
-            for v in 'abcd':
-                row.append(node_from[u][v]) if node_from[u][v] else row.append(SKIP)
-            tbl.row(row)
-        
-    def test_allpairs_directed_sp(self):
-        from ch07.all_pairs_sp import floyd_warshall, all_pairs_path_to
-        DG = nx.DiGraph()
-        DG.add_edge('a', 'b', weight=4)
-        DG.add_edge('b', 'a', weight=2)
-        DG.add_edge('a', 'c', weight=3)
-        DG.add_edge('b', 'd', weight=5)
-        DG.add_edge('c', 'b', weight=6)
-        DG.add_edge('d', 'b', weight=1)
-        DG.add_edge('d', 'c', weight=7)
-        (dist_to, node_from) = floyd_warshall(DG)
-        path = all_pairs_path_to(node_from, 'b', 'c')
-        self.assertEqual(5, dist_to['b']['c'])
-        self.assertEqual(['b', 'a', 'c'], path)
-        
-        path = all_pairs_path_to(node_from, 'd', 'c')
-        self.assertEqual(6, dist_to['d']['c'])
-        self.assertEqual(['d', 'b', 'a', 'c'], path)
-        
-        tbl_dist_to = DataTable([6,6,6,6,6], ['.', 'a', 'b', 'c', 'd'], output=True)
-        tbl_dist_to.format('.','s')
-        for f in 'abcd':
-            tbl_dist_to.format(f, 'd')
-        for u in 'abcd':
-            row = [u]
-            for v in 'abcd':
-                if u == v:
-                    row.append(0) 
-                else:
-                    row.append(dist_to[u][v])
-            tbl_dist_to.row(row)
-        
         tbl = DataTable([6,6,6,6,6], ['.', 'a', 'b', 'c', 'd'], output=False)
         tbl.format('.','s')
         for f in 'abcd':
@@ -78,8 +36,32 @@ class TestChapter7(unittest.TestCase):
             for v in 'abcd':
                 row.append(node_from[u][v]) if node_from[u][v] else row.append(SKIP)
             tbl.row(row)
-            
-        tbl_path = DataTable([6,12,12,12,12], ['.', 'a', 'b', 'c', 'd'], output=True)
+
+        self.assertEqual('d', tbl.entry('b', 'c'))        
+        
+    def test_allpairs_directed_sp(self):
+        from ch07.all_pairs_sp import floyd_warshall, all_pairs_path_to, debug_state
+        DG = nx.DiGraph()
+        DG.add_edge('a', 'b', weight=4)
+        DG.add_edge('b', 'a', weight=2)
+        DG.add_edge('a', 'c', weight=3)
+        DG.add_edge('b', 'd', weight=5)
+        DG.add_edge('c', 'b', weight=6)
+        DG.add_edge('d', 'b', weight=1)
+        DG.add_edge('d', 'c', weight=7)
+        (dist_to, node_from) = floyd_warshall(DG)
+        
+        path = all_pairs_path_to(node_from, 'b', 'c')
+        self.assertEqual(5, dist_to['b']['c'])
+        self.assertEqual(['b', 'a', 'c'], path)
+        
+        path = all_pairs_path_to(node_from, 'd', 'c')
+        self.assertEqual(6, dist_to['d']['c'])
+        self.assertEqual(['d', 'b', 'a', 'c'], path)
+        
+        (tbl, tbl_dist_to) = debug_state('test case', DG, node_from, dist_to, output=False)
+
+        tbl_path = DataTable([6,12,12,12,12], ['.', 'a', 'b', 'c', 'd'], output=False)
         tbl_path.format('.','s')
         for f in 'abcd':
             tbl_path.format(f, 's')
@@ -91,15 +73,39 @@ class TestChapter7(unittest.TestCase):
                 else:
                     path_row.append('->'.join(all_pairs_path_to(node_from, u, v)))
             tbl_path.row(path_row)
-            
+
+        # edge on shortest path into 'c', when starting from 'd', came from 'a'
         self.assertEqual('d->b->a->c', tbl_path.entry('d', 'c'))
         self.assertEqual(6, tbl_dist_to.entry('d', 'c'))
-        
-        # edge on shortest path into 'c', when starting from 'd', came from 'a'
         self.assertEqual('a', tbl.entry('d', 'c'))    
 
+    def test_bellman_ford_negative_cycle_sp(self):
+        from ch07.single_source_sp import bellman_ford 
+
+        NegCycle = nx.DiGraph()
+        NegCycle.add_edge('a', 'b', weight=3)
+        NegCycle.add_edge('b', 'c', weight=-2)
+        NegCycle.add_edge('c', 'd', weight=-3)
+        NegCycle.add_edge('d', 'b', weight=4)
+        NegCycle.add_edge('d', 'e', weight=5)
+       
+        with self.assertRaises(RuntimeError):
+            bellman_ford(NegCycle, 'a')
+
+    def test_bad_dijkstra_sp(self):
+        from ch07.single_source_sp import dijkstra_sp
+
+        DG = nx.DiGraph()
+        DG.add_edge('a', 'b', weight=3)
+        DG.add_edge('a', 'c', weight=1)
+        DG.add_edge('c', 'd', weight=1)
+        DG.add_edge('b', 'd', weight=-2)
+        with self.assertRaises(ValueError):
+            dijkstra_sp(DG, 'a')
+
     def test_dijkstra_sp(self):
-        from ch07.dijkstra_sp import dijkstra_sp, edges_path_to
+        from ch07.single_source_sp import dijkstra_sp, edges_path_to, bellman_ford 
+
         DG = nx.DiGraph()
         DG.add_edge('a', 'b', weight=3)
         DG.add_edge('a', 'c', weight=9)
@@ -109,6 +115,11 @@ class TestChapter7(unittest.TestCase):
         (dist_to, edge_to) = dijkstra_sp(DG, 'a')
         path = edges_path_to(edge_to, 'a', 'c')
         self.assertEqual(6, dist_to['c'])
+        self.assertEqual(['a', 'b', 'd', 'c'], path)
+        
+        (dist_to_bf, edge_to_bf) = bellman_ford(DG, 'a')
+        path = edges_path_to(edge_to_bf, 'a', 'c')
+        self.assertEqual(6, dist_to_bf['c'])
         self.assertEqual(['a', 'b', 'd', 'c'], path)
 
     def test_topological_example(self):
@@ -178,7 +189,7 @@ class TestChapter7(unittest.TestCase):
         DG.add_edge('a', 'c', weight=10)
         DG.add_edge('b', 'c', weight=2)
         
-        from ch07.dijkstra_sp import dijkstra_sp
+        from ch07.single_source_sp import dijkstra_sp
         (dist_to, edge_to) = dijkstra_sp(DG, 'a')
         self.assertEqual(8, dist_to['c'])
         
@@ -192,7 +203,7 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(3, impq.dequeue())
 
     def test_imqp_example(self):
-        from ch07.dijkstra_sp import dijkstra_sp
+        from ch07.single_source_sp import dijkstra_sp
         G = nx.DiGraph()
         G.add_edge('a', 'b', weight=6)
         G.add_edge('a', 'c', weight=10)

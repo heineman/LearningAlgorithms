@@ -1,8 +1,39 @@
 """
-Dijkstra's Single-source Shortest path algorithm.
+ Single-source Shortest path algorithms, including Dijkstra and Bellman-Ford.
 """
 from ch07.indexed_pq import IndexedMinPQ
 from ch07.replacement import WEIGHT
+
+
+def bellman_ford(G, s):
+    """
+    Compute All Pairs Shortest Path using Bellman_ford and return  
+    dist_to[] with results and edge_to[] to be able to recover the 
+    shortest paths. Can work even if there are negative edge weights,
+    but NOT if a negative cycle exists. Fortunately it can detect 
+    this situation.
+    """
+    inf = float('inf')
+    dist_to = {v:inf for v in G.nodes()}
+    dist_to[s] = 0
+    edge_to = {}
+
+    def relax(e):
+        n, v, weight = e[0], e[1], e[2][WEIGHT]
+        if dist_to[n] + weight < dist_to[v]:
+            dist_to[v] = dist_to[n] + weight
+            edge_to[v] = e
+            return True
+        return False
+
+    #debug_state('initialize', G, node_from, dist_to)   
+    for i in range(G.number_of_nodes()+1):
+        for e in G.edges(data=True):
+            if relax(e):
+                if i == G.number_of_nodes():
+                    raise RuntimeError('Negative Cycle exists in graph.')
+
+    return (dist_to, edge_to)
 
 def dijkstra_sp(G, s):
     """
@@ -12,10 +43,7 @@ def dijkstra_sp(G, s):
     N = G.number_of_nodes()
 
     inf = float('inf')
-    dist_to = {}
-    for v in G.nodes():
-        dist_to[v] = inf
-    edge_to = {}
+    dist_to = {v:inf for v in G.nodes()}
     dist_to[s] = 0
 
     impq = IndexedMinPQ(N)
@@ -31,6 +59,7 @@ def dijkstra_sp(G, s):
             edge_to[v] = e
             impq.decrease_priority(v, dist_to[v])
 
+    edge_to = {}
     while not impq.is_empty():
         v = impq.dequeue()
         for e in G.edges(v, data=True):
