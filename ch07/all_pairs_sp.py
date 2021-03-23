@@ -36,8 +36,8 @@ def debug_state(title, G, node_from, dist_to, output=True):
 
 def floyd_warshall(G):
     """
-    Compute All Pairs Shortest Path using Floyd Warshall and return  
-    dist_to[] with results and node_from[] to be able to recover the 
+    Compute All Pairs Shortest Path using Floyd Warshall and return
+    dist_to[] with results and node_from[] to be able to recover the
     shortest paths.
     """
     inf = float('inf')

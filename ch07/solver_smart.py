@@ -41,7 +41,7 @@ class SmartSearchSolver():
                 break
         self.master.update()
 
-    def distance_to_target(self, to_cell):
+    def distance_to(self, to_cell):
         return abs(self.end[0] - to_cell[0]) + abs(self.end[1] - to_cell[1])
 
     def smart_search(self, pos):
@@ -56,7 +56,7 @@ class SmartSearchSolver():
         # Using a MAX PRIORITY QUEUE means we rely on negative distance to
         # choose the one that is closest...
         self.marked[src] = True
-        pq.enqueue(src, -self.distance_to_target(src))
+        pq.enqueue(src, -self.distance_to(src))
         
         while not pq.is_empty():
             cell = pq.dequeue()
@@ -73,7 +73,7 @@ class SmartSearchSolver():
                 if not next_cell in self.marked:
                     self.node_from[next_cell] = cell
                     dist_to[next_cell] = dist_to[cell] + 1
-                    pq.enqueue(next_cell, -self.distance_to_target(next_cell))
+                    pq.enqueue(next_cell, -self.distance_to(next_cell))
                     self.marked[next_cell] = True
                     self.viewer.color_cell(next_cell, 'blue')
 

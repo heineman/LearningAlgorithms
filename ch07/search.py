@@ -18,6 +18,8 @@ def path_to(node_from, src, target):
     Given a dictionary that results from a search, reproduce path from original src
     to target. Have to follow the node_from in reverse order, which is why the
     nodes discovered are all inserted at index position 0 in the path.
+
+    Performance is O(N) since a path could involve all nodes, in the worst case.
     """
     if node_from[target] is None:
         raise ValueError('{} is unreachable from {}'.format(target,src))
@@ -35,8 +37,15 @@ def path_to(node_from, src, target):
 
 def dfs_search_recursive(G, src):
     """
-    Apply Depth First Search to a graph from a starting node. Return 
-    dictionary of explored trail. Fails if recursion is too deep.
+    Apply Depth First Search to a graph from src. Return 
+    dictionary of explored trail. 
+
+    Performance is O(N+E) since every edge is visited once for a directed
+    graph and twice for an undirected graph.
+
+    Warning: This code is likely to cause a RecursionError when applied 
+    to a graph with thousands of nodes, because Python sets the reecursion
+    limit to about 1000.
     """
     marked = {}
     node_from = {}
@@ -53,7 +62,13 @@ def dfs_search_recursive(G, src):
     return node_from
 
 def dfs_search(G, src):
-    """Conduct non-recursive Depth First Search on G starting from s."""
+    """
+    Apply non-recurisve Depth First Search to a graph from src. Return 
+    dictionary of explored trail. 
+
+    Performance is O(N+E) since every edge is visited once for a directed
+    graph and twice for an undirected graph.    
+    """
     from ch07.list_stack import Stack
     marked = {}
     node_from = {}
@@ -76,6 +91,9 @@ def bfs_search(G, src):
     """
     Apply Depth First Search to a graph from a starting node. Return 
     dictionary of explored trail.
+
+    Performance is O(N+E) since every edge is visited once for a directed
+    graph and twice for an undirected graph.    
     """
     marked = {}
     node_from = {}
@@ -98,6 +116,12 @@ def smart_search(G, src, target, distance):
     """
     Non-recursive depth-first search investigating given position. Needs
     a distance (node1, node2) function to determine distance between two nodes.
+
+    Performance is O(N log N + E) since every edge is visited once for a directed
+    graph and twice for an undirected graph. Each of the N nodes is processed by
+    the priority queue, where dequeue() and enqueue() operations are each O(log N).
+    While it is unlikely that the priority queue will ever contain N nodes, the 
+    worst case possibility always exists.
     """
     from ch04.heap import PQ
     pq = PQ(G.number_of_nodes())
@@ -125,6 +149,11 @@ def smart_search(G, src, target, distance):
     return node_from
 
 def draw_solution(G, field, src, target):
+    """
+    Use matplotlib to draw the original graph containing the solution to
+    a designated target vertex; in the second graph the node_from dictionary
+    is visualized.
+    """ 
     import matplotlib.pyplot as plt
     
     H = solution_graph(G, path_to(field, src, target))

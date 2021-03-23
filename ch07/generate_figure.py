@@ -64,8 +64,8 @@ if __name__ == '__main__':
     plot_node_from(G, positions, src, target, node_from, color='purple')
     print('{0} total steps for Breadth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
     plt.axis('off')
-    plt.savefig(image_file('figure-mass-highway-bfs.png'))
-    print(image_file('figure-mass-highway-bfs.png'))
+    plt.savefig(image_file('figure-mass-highway-bfs.svg'), format="svg")
+    print(image_file('figure-mass-highway-bfs.svg'))
 
     plt.clf()
 
@@ -78,8 +78,8 @@ if __name__ == '__main__':
     plot_node_from(G, positions, src, target, node_from, color='purple')
     print('{0} total steps for Depth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
     plt.axis('off')
-    plt.savefig(image_file('figure-mass-highway-dfs.png'))
-    print(image_file('figure-mass-highway-dfs.png'))
+    plt.savefig(image_file('figure-mass-highway-dfs.svg'), format="svg")
+    print(image_file('figure-mass-highway-dfs.svg'))
 
     plt.clf()
 
@@ -96,5 +96,5 @@ if __name__ == '__main__':
     plot_node_from(G, positions, src, target, node_from, color='purple')
     print('{0} total steps for Smart Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
     plt.axis('off')
-    plt.savefig(image_file('figure-mass-highway-smart.png'))
-    print(image_file('figure-mass-highway-smart.png'))
+    plt.savefig(image_file('figure-mass-highway-smart.svg'), format="svg")
+    print(image_file('figure-mass-highway-smart.svg'))

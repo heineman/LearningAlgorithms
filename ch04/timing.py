@@ -27,20 +27,21 @@ def drain(pq, n=0):
         if n == 0:
             return
 
-# Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N
 def run_trials(clazz, N, factor):
+    """Execute 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N."""
     stmt = '''
 from {0} import PQ 
 one_run(PQ({1}), {1}, {2})'''.format(clazz,N,factor)
     return min(timeit.repeat(stmt=stmt,
                 setup='from ch04.timing import one_run', repeat=5, number=10))/10
 
-# Executes 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N
 def run_dynamic_trials(clazz, N, factor):
+    """Execute 3*N/2 add operations and 3*N/2 remove_max operations for a total of 3*N."""
     stmt = '''
 from {} import PQ 
 one_run(PQ(256), {}, {})'''.format(clazz,N,factor)
-    return min(timeit.repeat(stmt=stmt, setup='from ch04.timing import one_run', repeat=5, number=10))/10
+    return min(timeit.repeat(stmt=stmt, setup='from ch04.timing import one_run',
+                             repeat=5, number=10))/10
 
 def one_run(pq, N, factor):
     """
@@ -96,5 +97,5 @@ def dynamic_comparison(max_n=32768, output=True, decimals=2):
 if __name__ == '__main__':
     dynamic_comparison()
     print()
-    
+
     trial_factorial_heap()

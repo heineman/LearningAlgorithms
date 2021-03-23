@@ -81,7 +81,13 @@ class Model:
     N_LOG_N = 3
     LOG_LINEAR = 4
     QUADRATIC = 5
-
+    
+    @classmethod
+    def to_string(cls, tpe):
+        if Model.ERROR <= tpe <= Model.QUADRATIC:
+            return ['ERROR', 'LOG', 'LINEAR', 'N LOG N', 'LOG LINEAR', 'QUADRATIC'][tpe]
+        raise ValueError('unknown Model type:{}'.format(tpe))
+        
 def best_models(nval, yval, preselected = None):
     """
     Given two 1-dimensional arrays, returns list of computed models, in

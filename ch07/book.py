@@ -1,11 +1,13 @@
 """Code for chapter 07."""
 
 import timeit
+import random
+
 try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
-    
+
 from algs.table import DataTable, captionx, FigureNum, TableNum, process
 
 def make_sample_graph():
@@ -55,12 +57,12 @@ def topological_example(G, N):
         label = chr(ord('A') + i)
         for j in range(i+1):
             G.add_node(label + str(j+1))
-            
+
     for i in range(N-1,0,-1):
         label = chr(ord('A') + N + (N-i) - 1)
         for j in range(i):
             G.add_node(label + str(j+1))
-    
+
     for i in range(N-1):
         for j in range(i+1):
             label = chr(ord('A') + i)
@@ -69,7 +71,7 @@ def topological_example(G, N):
                 label = chr(ord('A') + (i+1))
                 v = label + str(k+1)
                 G.add_edge(u, v)
-                
+
     for i in range(N-2,-1,-1):
         for j in range(i+2):
             label = chr(ord('A') + N + (N-i) - 3)
@@ -81,12 +83,6 @@ def topological_example(G, N):
 
 def table_topological_example():
     """Compare Topological sort performance."""
-    try:
-        import networkx as nx
-    except ImportError:
-        from ch07.graph import Replacement
-        nx = Replacement()
-        
     DG = nx.DiGraph()    
     topological_example(DG,4)
    
@@ -194,14 +190,54 @@ def defeat_smart_search():
     dfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
     root.mainloop()
 
+def output_adjacency_matrix():
+    """Output adjacency matrix for example maze."""
+    from ch07.maze import Maze, to_networkx
+    random.seed(15)
+    m = Maze(3,5)
+    g = to_networkx(m)
+    N = g.number_of_nodes()
+    count = 0
+    for r in g.nodes():
+        row = [str(r)]
+        for c in g.nodes():
+            if (c in g[r]):
+                row.append('1')
+                count += 1
+            else:
+                row.append('')
+        print('\t'.join(row))
+    print (count / (N*N))
+
+def output_adjacency_list():
+    """Output adjacency list for example maze."""
+    from ch07.maze import Maze, to_networkx
+    random.seed(15)
+    m = Maze(3,5)
+    g = to_networkx(m)
+    N = g.number_of_nodes()
+    tbl = DataTable([8] + [3]*N, ['node'] + ['n{}'.format(i) for i in range(N)])
+    tbl.format('node', 's')
+    for i in range(N):
+        tbl.format('n{}'.format(i), 's')
+                        
+    for r in g.nodes():
+        row = [str(r)]
+        for c in g[r]:
+            row.append(str(c))
+        tbl.row(row)
+
 #######################################################################
 if __name__ == '__main__':
     """
     Need strategy for dealing with situations when pyplot not installed.
     """
-    defeat_smart_search()
-    make_sample_graph()
-    table_topological_example()
+    output_adjacency_matrix()
+    
+    output_adjacency_list()
+    #defeat_smart_search()
+    #make_sample_graph()
+    #table_topological_example()
     #make_sample_directed_graph()
     #defeat_smart_search()
     #generate_ch07()

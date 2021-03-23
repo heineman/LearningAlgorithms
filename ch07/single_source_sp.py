@@ -5,7 +5,7 @@ from ch07.indexed_pq import IndexedMinPQ
 from ch07.replacement import WEIGHT
 
 
-def bellman_ford(G, s):
+def bellman_ford(G, src):
     """
     Compute All Pairs Shortest Path using Bellman_ford and return  
     dist_to[] with results and edge_to[] to be able to recover the 
@@ -15,7 +15,7 @@ def bellman_ford(G, s):
     """
     inf = float('inf')
     dist_to = {v:inf for v in G.nodes()}
-    dist_to[s] = 0
+    dist_to[src] = 0
     edge_to = {}
 
     def relax(e):
@@ -35,21 +35,21 @@ def bellman_ford(G, s):
 
     return (dist_to, edge_to)
 
-def dijkstra_sp(G, s):
+def dijkstra_sp(G, src):
     """
-    Compute Dijkstra's algorithm using s as source and return dist_to[] with 
+    Compute Dijkstra's algorithm using src as source and return dist_to[] with 
     results and edge_to[] to be able to recover the shortest paths.
     """
     N = G.number_of_nodes()
 
     inf = float('inf')
     dist_to = {v:inf for v in G.nodes()}
-    dist_to[s] = 0
+    dist_to[src] = 0
 
     impq = IndexedMinPQ(N)
-    impq.enqueue(s, dist_to[s])
+    impq.enqueue(src, dist_to[src])
     for v in G.nodes():
-        if v != s:
+        if v != src:
             impq.enqueue(v, inf)
 
     def relax(e):
@@ -70,7 +70,7 @@ def dijkstra_sp(G, s):
 def edges_path_to(edge_to, src, target):
     """Recover path from src to target."""
     if edge_to[target] is None:
-        raise ValueError('{} is unreachable from {}'.format(target,src))
+        raise ValueError('{} is unreachable from {}'.format(target, src))
     
     path = []
     v = target

@@ -114,21 +114,21 @@ def run_trials_prepend(N, num):
     """Run a single trial."""
     return 1000*min(timeit.repeat(stmt='''
 for i in range({}):
-    alist.insert(0,i)'''.format(num), 
+    alist.insert(0,i)'''.format(num),
         setup = 'alist=list(range({}))'.format(N), repeat=5, number=1))/10
 
 def run_trials_append(N, num):
     """Run a single trial."""
     return 1000*min(timeit.repeat(stmt='''
 for i in range({}):
-    alist.append(i)'''.format(num), 
+    alist.append(i)'''.format(num),
         setup = 'alist=list(range({}))'.format(N), repeat=5, number=1))/10
 
 def run_trials_remove(N, num):
     """Run a single trial."""
     return 1000*min(timeit.repeat(stmt='''
 for i in range({}):
-    alist.pop(0)'''.format(num), 
+    alist.pop(0)'''.format(num),
         setup = 'alist=list(range({}))'.format(N), repeat=5, number=1))/10
 
 def run_trials_tree(N, num):

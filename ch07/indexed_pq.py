@@ -100,7 +100,7 @@ class IndexedMinPQ:
         self.location[self.values[1]] = 1
 
         self.values[self.N] = self.priorities[self.N] = None
-        del self.location[min_value]   # remove
+        self.location.pop(min_value)   # remove from dictionary
 
         self.N -= 1
         self.sink(1)

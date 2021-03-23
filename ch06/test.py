@@ -632,7 +632,7 @@ class TestChapter6(unittest.TestCase):
     def test_max_rotations(self):
         from ch06.challenge import find_multiple_rotations, recreate_tree, rotations, BinaryTree
         extra = 1
-        (tree_rep, to_delete) = find_multiple_rotations(extra=extra, 
+        (tree_rep, to_delete) = find_multiple_rotations(extra=extra,
                                         lo=9, hi=30, num_attempts=10000, output=False)
         bt3 = recreate_tree(tree_rep, convert=int)
         tree = BinaryTree()

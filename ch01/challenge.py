@@ -7,6 +7,7 @@ import timeit
 
 from algs.table import DataTable, ExerciseNum, captionx
 from algs.counting import RecordedItem
+from algs.modeling import Model
 
 def partition(A, lo, hi, idx):
     """
@@ -150,11 +151,13 @@ random.shuffle(a)
 
         tbl.row([n, t_med, t_sort])
 
+    return tbl
+
 def run_median_less_than_trial(max_k=20, output=True):
     """Use RecordedItem to count # of times Less-than invoked up to (but not including) max_k=20."""
-    tbl = DataTable([10,15,15],['N', 'median_time', 'sort_median'], output=output)
-    tbl.format('median_time', ',d')
-    tbl.format('sort_median', ',d')
+    tbl = DataTable([10,15,15],['N', 'median_count', 'sort_median_count'], output=output)
+    tbl.format('median_count', ',d')
+    tbl.format('sort_median_count', ',d')
 
     trials = [2**k+1 for k in range(8, max_k)]
     for n in trials:
@@ -173,6 +176,7 @@ def run_median_less_than_trial(max_k=20, output=True):
         assert med1 == med2
 
         tbl.row([n, lin_lt, sort_lt])
+
     return tbl
 
 def is_palindrome1(s):
@@ -214,19 +218,61 @@ def is_palindrome_letters_only(s):
 
     return True
 
+def tournament_allows_odd(A):
+    """
+    Returns two largest values in A. Works for odd lists
+    """
+    from ch01.largest_two import Match
+    if len(A) < 2:
+        raise ValueError('Must have at least two values')
+
+    tourn = []
+    for i in range(0, len(A)-1, 2):
+        tourn.append(Match(A[i], A[i+1]))
+    odd_one_out = None
+    if len(A) % 2 == 1:
+        odd_one_out = A[-1]
+
+    while len(tourn) > 1:
+        tourn.append(Match.advance(tourn[0], tourn[1]))
+        del tourn[0:2]
+
+    # Find where second is hiding!
+    m = tourn[0]
+    largest = m.larger
+    second = m.smaller
+
+    # Wait until the end, and see where it belongs
+    if odd_one_out:
+        if odd_one_out > largest:
+            largest,second = odd_one_out,largest
+        elif odd_one_out > second:
+            second = odd_one_out
+
+    while m.prior:
+        m = m.prior
+        if second < m.smaller:
+            second = m.smaller
+
+    return (largest,second)
+
 #######################################################################
 if __name__ == '__main__':
     chapter = 1
     with ExerciseNum(1) as exercise_number:
-        print('is_palindrome_letters_only(w)')
+        s = 'A man, a plan, a canal. Panama!'
+        print(s,'is a palindrome:', is_palindrome_letters_only(s))
         print(captionx(chapter, exercise_number),
               'Palindrome Detector')
 
-    print('Median Counting\n')
-    run_median_less_than_trial()
-
-    print('Median Questions\n')
-    run_median_trial()
-
-    print('Counting Sort Trials\n')
-    run_counting_sort_trials()
+    with ExerciseNum(2) as exercise_number:
+        run_median_less_than_trial()
+        print()
+        run_median_trial()
+        print(captionx(chapter, exercise_number),
+              'Median Counting')
+    
+    with ExerciseNum(3) as exercise_number:
+        run_counting_sort_trials()
+        print(captionx(chapter, exercise_number),
+              'Counting Sort Trials')

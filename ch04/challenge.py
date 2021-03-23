@@ -66,12 +66,12 @@ def combined_sorted():
         import numpy as np
         from scipy.optimize import curve_fit
         from scipy.stats.stats import pearsonr
-    
+
         (coeffs,_) = curve_fit(n_log_n_model, np.array(x), np.array(y))
         a = coeffs[0] / 2
 
         y_fit = [n_log_n_model(r,a) for r in [2**k for k in range(lo,hi)]]
-    
+
         print()
         print(pearsonr(y, y_fit))
         print()
@@ -82,7 +82,7 @@ def combined_sorted():
             for m in [2**k for k in range(lo,hi)]:
                 row.append(n_log_n_model(n,a) + n_log_n_model(m,a))
             model.row(row)
-    
+
         # Just do one column
         for m in best_models(x, tbl.column(comma(1024))):
             print (m)

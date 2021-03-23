@@ -131,6 +131,7 @@ class TestChapter4(unittest.TestCase):
         return result
 
     def stress_priority(self, queue, ct):
+        """Stress test for priority queue."""
         for i in range(ct//2):    # populate with half, in increasing priority
             queue.enqueue(ct)
 

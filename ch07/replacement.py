@@ -388,7 +388,7 @@ def single_source_shortest_path(self, graph, src):
     Act on Single Source Shortest Path and return path as dictionary, where
     each node is expanded to have its 
     """
-    from ch07.dijkstra_sp import dijkstra_sp
+    from ch07.single_source_sp import dijkstra_sp
     (dist_to, edge_to) = dijkstra_sp(graph, src)
     
     expanded = {}
@@ -421,6 +421,6 @@ def draw(graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
 
 def dijkstra_path(G, src, target):
     """Dijkstra delegation."""
-    from ch07.dijkstra_sp import dijkstra_sp
+    from ch07.single_source_sp import dijkstra_sp
     
     return dijkstra_sp(G, src, target)

@@ -190,6 +190,17 @@ class TestChapter1(unittest.TestCase):
         with self.assertRaises(IndexError):
             linear_median([])
 
+    def test_tournament_allows_odd(self):
+        from ch01.challenge import tournament_allows_odd
+        A = [3, 87 , 2]
+        self.assertEqual((87, 3), tournament_allows_odd(A))
+        
+        # sanity check, doesn't prove anything....
+        for _ in range(200):
+            A = list(range(11))
+            random.shuffle(A)
+            self.assertEqual((10, 9), tournament_allows_odd(A))
+            
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

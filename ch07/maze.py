@@ -5,7 +5,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-def distance_to_target(from_cell, to_cell):
+def distance_to(from_cell, to_cell):
     """Compute Manhattan distance between two cells in a rectangular maze."""
     return abs(from_cell[0] - to_cell[0]) + abs(from_cell[1] - to_cell[1])
 
