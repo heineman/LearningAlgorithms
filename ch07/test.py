@@ -7,8 +7,60 @@ try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
-    
+
 class TestChapter7(unittest.TestCase):
+
+    def assert_equal_edges(self, e1, e2):
+        """Compare edges but ignore weights."""
+        if e1[0] != e2[0]:
+            self.fail('{} not same as {}'.format(e1,e2))
+        if e1[1] != e2[1]:
+            self.fail('{} not same as {}'.format(e1,e2))
+
+    def assert_equal_edges_weights(self, e1, e2):
+        from ch07.replacement import WEIGHT
+        self.assert_equal_edges(e1, e2)
+        if e1[2][WEIGHT] != e2[2][WEIGHT]:
+            self.fail('{} not same as {}'.format(e1,e2))
+
+    def test_distance_to(self):
+        from ch07.maze import distance_to
+        one   = (2,2)
+        two   = (3,4)
+        three = (1,0)
+        self.assertEqual(3, distance_to(one, two))
+        self.assertEqual(6, distance_to(three, two))
+
+    def test_maze(self):
+        from ch07.maze import Maze, to_networkx
+        import random
+        random.seed(15)
+        m = Maze(3,5)
+        self.assertEqual((0,2), m.start())
+        self.assertEqual((2,2), m.end())
+        
+        G = to_networkx(m)
+        self.assertEqual([(0, 1), (0, 3), (1, 2)], sorted(list(G[(0,2)])))
+
+    def test_bfs_search(self):
+        from ch07.maze import Maze, to_networkx, solution_graph
+        from ch07.search import bfs_search, path_to, node_from_field
+        import random
+        random.seed(15)
+        m = Maze(3,5)
+        G = to_networkx(m)
+
+        # BFS search solution
+        node_from = bfs_search(G, m.start())
+        self.assertEqual((1,0), node_from[(2,0)])
+        
+        # Create graph resulting from the BFS search results
+        F = node_from_field(G, node_from)
+        self.assertEqual(14, len(list(F.edges())))
+        
+        # The actual solution is a two-edge, three node straight path
+        H = solution_graph(G, path_to(node_from, m.start(), m.end()))
+        self.assertEqual(2, len(list(H.edges())))
 
     def test_allpairs_sp(self):
         from ch07.all_pairs_sp import floyd_warshall, all_pairs_path_to
@@ -22,11 +74,11 @@ class TestChapter7(unittest.TestCase):
         path = all_pairs_path_to(node_from, 'b', 'c')
         self.assertEqual(3, dist_to['b']['c'])
         self.assertEqual(['b', 'd', 'c'], path)
-        
+
         path = all_pairs_path_to(node_from, 'a', 'd')
         self.assertEqual(5, dist_to['a']['d'])
         self.assertEqual(['a', 'b', 'd'], path)
-        
+
         tbl = DataTable([6,6,6,6,6], ['.', 'a', 'b', 'c', 'd'], output=False)
         tbl.format('.','s')
         for f in 'abcd':
@@ -38,7 +90,7 @@ class TestChapter7(unittest.TestCase):
             tbl.row(row)
 
         self.assertEqual('d', tbl.entry('b', 'c'))        
-        
+
     def test_allpairs_directed_sp(self):
         from ch07.all_pairs_sp import floyd_warshall, all_pairs_path_to, debug_state
         DG = nx.DiGraph()
@@ -50,15 +102,15 @@ class TestChapter7(unittest.TestCase):
         DG.add_edge('d', 'b', weight=1)
         DG.add_edge('d', 'c', weight=7)
         (dist_to, node_from) = floyd_warshall(DG)
-        
+
         path = all_pairs_path_to(node_from, 'b', 'c')
         self.assertEqual(5, dist_to['b']['c'])
         self.assertEqual(['b', 'a', 'c'], path)
-        
+
         path = all_pairs_path_to(node_from, 'd', 'c')
         self.assertEqual(6, dist_to['d']['c'])
         self.assertEqual(['d', 'b', 'a', 'c'], path)
-        
+
         (tbl, tbl_dist_to) = debug_state('test case', DG, node_from, dist_to, output=False)
 
         tbl_path = DataTable([6,12,12,12,12], ['.', 'a', 'b', 'c', 'd'], output=False)
@@ -170,21 +222,20 @@ class TestChapter7(unittest.TestCase):
         node_from = dfs_search(G, 'A2')
         self.assertEqual(['A2', 'A3', 'A4', 'A5'], path_to(node_from, 'A2', 'A5'))
         self.assertEqual(['A2', 'A3', 'A4', 'A5'], list(path_to_recursive(node_from, 'A2', 'A5')))
-        
 
     def test_small_example_stub_replacement(self):
         import ch07.replacement 
         G = ch07.replacement.Graph()
         self.small_example(G)
-        
+
     def test_representations(self):
         from ch07.replacement import MatrixUndirectedGraph, UndirectedGraph
         self.small_example(UndirectedGraph())
         self.small_example(MatrixUndirectedGraph())
 
     def test_dijkstra_replacement(self):
-        import ch07.replacement 
-        DG = ch07.replacement.DiGraph()
+        from ch07.replacement import WEIGHT, DiGraph
+        DG = DiGraph()
         DG.add_edge('a', 'b', weight=6)
         DG.add_edge('a', 'c', weight=10)
         DG.add_edge('b', 'c', weight=2)
@@ -192,10 +243,11 @@ class TestChapter7(unittest.TestCase):
         from ch07.single_source_sp import dijkstra_sp
         (dist_to, edge_to) = dijkstra_sp(DG, 'a')
         self.assertEqual(8, dist_to['c'])
+        self.assert_equal_edges_weights(('b', 'c', {WEIGHT:2}), edge_to['c'])
         
     def test_indexed_min_heap(self):
         from ch07.indexed_pq import IndexedMinPQ
-        
+
         impq = IndexedMinPQ(5)
         impq.enqueue(3, 5)
         impq.enqueue(1, 2)
@@ -208,7 +260,7 @@ class TestChapter7(unittest.TestCase):
         G.add_edge('a', 'b', weight=6)
         G.add_edge('a', 'c', weight=10)
         G.add_edge('b', 'c', weight=2)
-        
+
         (dist_to, edge_to) = dijkstra_sp(G, 'a')
         self.assertEqual(8, dist_to['c'])
         self.assertEqual('b', edge_to['c'][0])

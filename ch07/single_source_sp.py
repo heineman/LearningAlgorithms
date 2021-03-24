@@ -4,7 +4,6 @@
 from ch07.indexed_pq import IndexedMinPQ
 from ch07.replacement import WEIGHT
 
-
 def bellman_ford(G, src):
     """
     Compute All Pairs Shortest Path using Bellman_ford and return  
@@ -71,13 +70,13 @@ def edges_path_to(edge_to, src, target):
     """Recover path from src to target."""
     if edge_to[target] is None:
         raise ValueError('{} is unreachable from {}'.format(target, src))
-    
+
     path = []
     v = target
     while v != src:
         path.append(v)
         v = edge_to[v][0]
-        
+
     # last one to push is the source, which makes it
     # the first one to be retrieved
     path.append(src)

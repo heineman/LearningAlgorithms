@@ -1,5 +1,5 @@
 """
-All PairsShortest path algorithm.
+All Pairs Shortest path algorithm.
 """
 from ch07.replacement import WEIGHT
 

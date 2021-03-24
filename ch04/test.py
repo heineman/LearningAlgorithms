@@ -1,6 +1,5 @@
-"""
-Test cases for chapter 4.
-"""
+"""Test cases for Chapter 04."""
+
 import unittest
 
 class TestChapter4(unittest.TestCase):

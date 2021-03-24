@@ -1,8 +1,8 @@
-"""
-Test cases for chapter 3.
-"""
+"""Test cases for Chapter 03."""
+
 import random
 import unittest
+
 from algs.table import SKIP
 
 def key(i):

@@ -1,7 +1,7 @@
-"""Test cases for Chapter 01"""
+"""Test cases for Chapter 01."""
 
-import unittest
 import random
+import unittest
 
 from ch01.largest import largest, alternate, just_three, native_largest
 from ch01.largest_two import largest_two, tournament_two, mutable_two
@@ -174,7 +174,7 @@ class TestChapter1(unittest.TestCase):
         from ch01.challenge import run_median_less_than_trial
 
         tbl = run_median_less_than_trial(max_k=10, output=False)
-        self.assertTrue(tbl.entry(513,'median_time') < tbl.entry(513,'sort_median'))
+        self.assertTrue(tbl.entry(513,'median_count') < tbl.entry(513,'sort_median_count'))
 
     def test_run_counting_sort_trials(self):
         from ch01.challenge import run_counting_sort_trials

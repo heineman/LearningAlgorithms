@@ -1,4 +1,5 @@
-"""Test code for Chapter 05."""
+"""Test cases for Chapter 05."""
+
 import unittest
 
 BEST_CASE = list(range(10))

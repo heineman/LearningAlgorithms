@@ -1,6 +1,8 @@
-"""Test code for Chapter 06."""
-import unittest
+"""Test cases for Chapter 06."""
+
 import random
+import unittest
+
 from ch06.recursive_lists import create_linked_list, reverse, sum_list, sum_iterative
 from ch06.recursive_lists import iterate_list
 from ch06.avl import check_avl_property
