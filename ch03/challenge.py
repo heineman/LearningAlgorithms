@@ -2,6 +2,7 @@
 Challenge Exercises for Chapter 3.
 """
 
+import math
 from algs.table import DataTable
 
 class ValueBadHash:
@@ -331,3 +332,109 @@ class DynamicHashtableIncrementalResizing:
             prev, entry = entry, entry.next
 
         return None                 # Nothing was removed
+
+class PythonSimultationHashtable:
+    # highly tuned constant
+    PERTURB_SHIFT = 5
+    
+    """Simulate Open Addressing Hashtable in Python."""
+    def __init__(self, M=10):
+        self.table = [None] * M
+        if M < 8:
+            M = 8
+        else:
+            M = 2 ** int(math.log(M)/math.log(2))
+        self.M = M
+        self.N = 0
+
+        self.load_factor = 0.75
+
+        # Ensure resize event happens NO LATER than M-1, since you need at
+        # least one empty bucket
+        self.threshold = min(M * self.load_factor, M-1)
+
+    def get(self, k):
+        """Retrieve value associated with key, k."""
+        perturb = hash(k)
+        hc = perturb & (self.M-1)       # First place it could be
+        while self.table[hc]:
+            if self.table[hc].key == k:
+                return self.table[hc].value
+            perturb >>= PythonSimultationHashtable.PERTURB_SHIFT
+            hc = (hc*5 + perturb + 1) & (self.M-1)
+        return None                 # Couldn't find
+
+    def resize(self, new_size):
+        """Resize table and rehash existing entries into new table."""
+        temp = PythonSimultationHashtable(new_size)
+        for n in self.table:
+            if n:
+                temp.put(n.key, n.value)
+        self.table = temp.table
+        temp.table = None     # ensures memory is freed
+        self.M = temp.M
+        self.threshold = self.load_factor * self.M
+
+    def put(self, k, v):
+        """Associate value, v, with the key, k."""
+        perturb = hash(k)
+        hc = perturb & (self.M-1)       # First place it could be
+        while self.table[hc]:
+            if self.table[hc].key == k:     # Overwrite if already here
+                self.table[hc].value = v
+                return
+            perturb >>= PythonSimultationHashtable.PERTURB_SHIFT
+            hc = (hc*5 + perturb + 1) & (self.M-1)
+
+        # With Open Addressing, you HAVE to insert first into the
+        # empty bucket before checking whether you have hit
+        # the threshold, otherwise you have to search again to
+        # find an empty space. The impact is that this last entry
+        # is "inserted twice" on resize; small price to pay. Note
+        # That this last entry COULD be the last empty bucket, but
+        # the forced resize below will resolve that issue
+        from ch03.entry import Entry
+        self.table[hc] = Entry(k, v)
+        self.N += 1
+
+        if self.N >= self.threshold:
+            self.resize(2*self.M)
+            hc = hash(k) & (self.M-1)
+
+    def __iter__(self):
+        """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""
+        for entry in self.table:
+            if entry:
+                yield (entry.key, entry.value)
+                
+def compare_python_hashtable():
+    """Compare statistics from simulated Python Hashtable vs. existing Hashtable."""
+    import timeit
+    
+    build_dhl = min(timeit.repeat(stmt='''
+ht = DynamicHashtable(8)
+for w in words:
+    ht.put(w,w)''', setup='''
+from ch03.hashtable_open import DynamicHashtable
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+
+    build_phl = min(timeit.repeat(stmt='''
+pht = PythonSimultationHashtable(8)
+for w in words:
+    pht.put(w,w)''', setup='''
+from ch03.challenge import PythonSimultationHashtable
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+    
+    print('Open addressing Simulation build time:', build_dhl)
+    print('Python addressing HT build time:', build_phl)
+    
+    
+compare_python_hashtable()
+# pht = PythonSimultationHashtable(8)
+# 
+# from resources.english import english_words
+# for w in english_words():
+#     pht.put(w, 1)
+#     print(w)

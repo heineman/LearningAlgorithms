@@ -411,7 +411,7 @@ def topological_sort(digraph):
     from ch07.digraph_search import topological_sort
     return topological_sort(digraph)
 
-def get_node_attributes(graph):
+def get_node_attributes(graph, pos='pos'):
     """I am not going to provide this capability."""
     return graph.positions
 
