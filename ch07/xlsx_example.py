@@ -11,6 +11,8 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
+from ch07.has_tkinter import tkinter_error
+
 def load_fibonacci_from_resource(ss):
     """Load up sample XSLX Microsoft Excel file as a Spreadsheet."""
     entries = load_xlsx(os.path.join('..', 'resources', 'ch07-fibonacci-example.xlsx'))
@@ -19,7 +21,10 @@ def load_fibonacci_from_resource(ss):
 
 #######################################################################
 if __name__ == '__main__':
-    try:
+    
+    if tkinter_error:
+        print('tkinter is not installed so unable to launch spreadsheet application')
+    else:
         import tkinter
         from ch07.spreadsheet import Spreadsheet
 
@@ -31,5 +36,3 @@ if __name__ == '__main__':
         from ch07.digraph_search import topological_sort
         print (list(topological_sort(ss.digraph)))
         root.mainloop()
-    except ImportError:
-        print('tkinter is not installed so unable to launch spreadsheet application')

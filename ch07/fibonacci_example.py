@@ -1,10 +1,14 @@
 """
 Fibonacci Spreadsheet example for book.
+
+Depends on having tkinter installed.
 """
 try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
+    
+from ch07.has_tkinter import tkinter_error
 
 def fibonacci_example(ss):
     """Initialize Spreadsheet to small Fibonacci example for book."""
@@ -39,7 +43,9 @@ def fibonacci_example(ss):
 
 #######################################################################
 if __name__ == '__main__':
-    try:
+    if tkinter_error:
+        print('tkinter is not installed so unable to launch spreadsheet application')
+    else:
         import tkinter
         from ch07.spreadsheet import Spreadsheet
 
@@ -49,5 +55,3 @@ if __name__ == '__main__':
         from ch07.digraph_search import topological_sort
         print (list(topological_sort(ss.digraph)))
         root.mainloop()
-    except ImportError:
-        print('tkinter is not installed so unable to launch spreadsheet application')

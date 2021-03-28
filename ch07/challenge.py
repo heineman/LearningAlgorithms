@@ -2,7 +2,8 @@
 Challenge Exercises for Chapter 7.
 """
 from ch07.maze import Maze
-import tkinter
+
+from ch07.has_tkinter import tkinter_error
 
 def path_to_recursive(node_from, src, target):
     """
@@ -39,6 +40,14 @@ def defeat_smart_search():
         for c in range(1, m.num_cols-2):
             m.east_wall[(r,c)] = False
 
-    root = tkinter.Tk()
-    dfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
-    root.mainloop()
+    if tkinter_error:
+        print('tkinter is not installed so unable to visualize smart search being defeated.')
+    else:
+        import tkinter
+        root = tkinter.Tk()
+        SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+        root.mainloop()
+
+#######################################################################
+if __name__ == '__main__':
+    defeat_smart_search()

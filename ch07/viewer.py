@@ -1,8 +1,8 @@
 """View the contents of Maze, a rectangular maze object, scaled to cells of given size."""
 import random
-import tkinter
 
 from ch07.maze import Maze
+from ch07.has_tkinter import tkinter_error
 
 class Viewer:
     """
@@ -64,8 +64,12 @@ class Viewer:
     
 #######################################################################
 if __name__ == '__main__':
-    random.seed(15)
-    m = Maze(50,50)
-    root = tkinter.Tk()
-    canvas = Viewer(m, 15).view(root)
-    root.mainloop()
+    if tkinter_error:
+        print('Unable to visualize maze without tkinter')
+    else:
+        import tkinter
+        random.seed(15)
+        m = Maze(50,50)
+        root = tkinter.Tk()
+        canvas = Viewer(m, 15).view(root)
+        root.mainloop()

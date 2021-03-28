@@ -1,5 +1,6 @@
-import tkinter
-
+"""
+Spreadsheet application using tkinter to visualize a working spreadsheet.
+"""
 from ch06.expression import build_expression
 from ch07.digraph_search import has_cycle
 
@@ -7,6 +8,8 @@ try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
+
+from ch07.has_tkinter import tkinter_error
 
 def is_formula(s):
     """Determine if string is a formula."""
@@ -45,6 +48,9 @@ class Spreadsheet:
 
     def make_gui(self):
         """Construct the necessary widgets for spreadsheet GUI and set up the event handlers."""
+        if tkinter_error:
+            return
+        import tkinter
         self.canvas = tkinter.Canvas(self.master) 
 
         for r in range(1,self.num_rows):
@@ -138,7 +144,11 @@ class Spreadsheet:
 
 #######################################################################
 if __name__ == '__main__':
-    root = tkinter.Tk()
-    root.title('You must press ENTER to change the contents of a cell.')
-    ss = Spreadsheet(root, nx.DiGraph())
-    root.mainloop()
+    if tkinter_error:
+        print('Unable to launch spreadsheet application without access to tkinter')
+    else:
+        import tkinter
+        root = tkinter.Tk()
+        root.title('You must press ENTER to change the contents of a cell.')
+        ss = Spreadsheet(root, nx.DiGraph())
+        root.mainloop()

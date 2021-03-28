@@ -8,6 +8,8 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
+from ch07.has_tkinter import tkinter_error
+
 class TestChapter7(unittest.TestCase):
 
     def assert_equal_edges(self, e1, e2):
@@ -270,31 +272,30 @@ class TestChapter7(unittest.TestCase):
     def test_cycle_detection(self):
         from ch07.fibonacci_example import fibonacci_example
 
-        try:
+        if tkinter_error:
+            pass
+        else:
             import tkinter
             from ch07.spreadsheet import Spreadsheet
-        except ImportError:
-            print('unable to access tkinter.')
-            return
+            ss = Spreadsheet(tkinter.Tk(), nx.DiGraph())
+            fibonacci_example(ss)
+            try:
+                import networkx.algorithms.cycles
+                networkx.algorithms.cycles.find_cycle(ss.digraph)
+                self.fail('no cycle yet...')
+            except:
+                pass
+    
+            try:
+                ss.set('B2', '=C5')
+                self.fail('should have detected cycle')
+            except RuntimeError:
+                pass
 
-        ss = Spreadsheet(tkinter.Tk(), nx.DiGraph())
-        fibonacci_example(ss)
-        try:
-            import networkx.algorithms.cycles
-            networkx.algorithms.cycles.find_cycle(ss.digraph)
-            self.fail('no cycle yet...')
-        except:
-            pass
-
-        try:
-            ss.set('B2', '=C5')
-            self.fail('should have detected cycle')
-        except RuntimeError:
-            pass
-
-        # just grab the graph and hack it together
-        ss.digraph.add_edge('C5', 'B2')
-        #print(networkx.algorithms.cycles.find_cycle(ss.digraph))
+            # just grab the graph and hack it together
+            ss.digraph.add_edge('C5', 'B2')
+            acycle = networkx.algorithms.cycles.find_cycle(ss.digraph)
+            self.assertTrue(len(acycle) > 1)
 
 #######################################################################
 if __name__ == '__main__':

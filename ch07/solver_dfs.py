@@ -1,10 +1,10 @@
 """Animates the Depth First Search solution of a maze."""
-import tkinter
 import time
 import random
 
 from ch07.maze import Maze, to_networkx
 from ch07.viewer import Viewer
+from ch07.has_tkinter import tkinter_error
 
 class DepthFirstSearchSolver():    
     """
@@ -88,8 +88,12 @@ class DepthFirstSearchSolver():
 
 #######################################################################
 if __name__ == '__main__':
-    random.seed(15)
-    m = Maze(60,60)
-    root = tkinter.Tk()
-    dfs = DepthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
-    root.mainloop()
+    if tkinter_error:
+        print('tkinter is not installed so unable to launch DFS solver application')
+    else:
+        import tkinter
+        random.seed(15)
+        m = Maze(60,60)
+        root = tkinter.Tk()
+        dfs = DepthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+        root.mainloop()

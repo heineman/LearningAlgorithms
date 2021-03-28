@@ -10,7 +10,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-import tkinter
+from ch07.has_tkinter import tkinter_error
 from ch07.snapshot import tkinter_register_snapshot
 
 from algs.table import DataTable, captionx, FigureNum, TableNum, SKIP
@@ -487,11 +487,16 @@ def generate_ch07():
         random.seed(15)
         m = Maze(3,5)
         g = to_networkx(m)
-         
-        root = tkinter.Tk()
-        canvas = Viewer(m, 50).view(root)
-        tkinter_register_snapshot(root, canvas, '{}-graph.ps'.format(label))
-        root.mainloop()
+        
+        postscript_output = '{}-graph.ps'.format(label)
+        if tkinter_error:
+            print('unable to generate {}'.format(postscript_output))
+        else:
+            import tkinter
+            root = tkinter.Tk()
+            canvas = Viewer(m, 50).view(root)
+            tkinter_register_snapshot(root, canvas, postscript_output)
+            root.mainloop()
  
         # For obscure reasons, this must come AFTER root.mainloop()
         pos = nx.get_node_attributes(g, 'pos')
@@ -556,22 +561,26 @@ def generate_ch07():
 
         random.seed(15)
         m = Maze(13,13)
-        root = tkinter.Tk()
-        bfs = BreadthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
-        tkinter_register_snapshot(root, bfs.canvas, '{}-BFS.ps'.format(label))
-        root.mainloop()
+        if tkinter_error:
+            print('unable to generate {}'.format(postscript_output))
+        else:
+            import tkinter
+            root = tkinter.Tk()
+            bfs = BreadthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+            tkinter_register_snapshot(root, bfs.canvas, '{}-BFS.ps'.format(label))
+            root.mainloop()
+    
+            root = tkinter.Tk()
+            dfs = DepthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+            tkinter_register_snapshot(root, dfs.canvas, '{}-DFS.ps'.format(label))
+            root.mainloop()
+    
+            root = tkinter.Tk()
+            sfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+            tkinter_register_snapshot(root, sfs.canvas, '{}-Smart.ps'.format(label))
+            root.mainloop()
+            print('Generated BFS, DFS and Smart Postscript files for {}'.format(label))
 
-        root = tkinter.Tk()
-        dfs = DepthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
-        tkinter_register_snapshot(root, dfs.canvas, '{}-DFS.ps'.format(label))
-        root.mainloop()
-
-        root = tkinter.Tk()
-        sfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
-        tkinter_register_snapshot(root, sfs.canvas, '{}-Smart.ps'.format(label))
-        root.mainloop()
-
-        print('created {}'.format(output_file))
         print('{}. {}'.format(label, description))
         print()
 
