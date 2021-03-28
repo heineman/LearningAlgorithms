@@ -85,7 +85,7 @@ def combined_sorted():
 
         # Just do one column
         for m in best_models(x, tbl.column(comma(1024))):
-            print (m)
+            print(m)
 
 def k_smallest(A, k):
     """Super-efficient (and easy to write) k-smallest selection for an arbitrary iterable."""

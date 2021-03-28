@@ -62,7 +62,10 @@ class HeapSortCounting:
 
         for k in range(self.N//2, 0, -1):
             if output:
-                print('|'.join([' {:>2} '.format(k) for k in A]) + '\t{} comparisons'.format(self.num_comparisons))
+                if self.num_comparisons == 0:
+                    print('|'.join([' {:>2} '.format(k) for k in A]))
+                else:
+                    print('|'.join([' {:>2} '.format(k) for k in A]) + '\t{} comparisons'.format(self.num_comparisons))
             self.sink(k)
         if output:
             print('|'.join([' {:>2} '.format(k) for k in A]) + '\t{} comparisons'.format(self.num_comparisons))

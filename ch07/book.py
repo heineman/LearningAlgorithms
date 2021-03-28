@@ -179,7 +179,7 @@ def output_adjacency_matrix():
             else:
                 row.append('')
         print('\t'.join(row))
-    print (count / (N*N))
+    print(count / (N*N))
 
 def output_adjacency_list():
     """Output adjacency list for example maze."""

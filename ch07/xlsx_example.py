@@ -34,5 +34,5 @@ if __name__ == '__main__':
 
         # Might not be necessary IF entries are loaded in proper topological order!
         from ch07.digraph_search import topological_sort
-        print (list(topological_sort(ss.digraph)))
+        print(list(topological_sort(ss.digraph)))
         root.mainloop()

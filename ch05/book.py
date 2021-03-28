@@ -30,10 +30,10 @@ Quadratic IS = 4.504032979491163e-09*N*N + 1.8245472574666622e-07*N
 """
 import timeit
 import random
-from algs.table import captionx, FigureNum
+from algs.table import captionx, FigureNum, TableNum
 
 from algs.table import DataTable
-from algs.modeling import n_log_n_model, log_linear_model, linear_model, quadratic_model
+from algs.modeling import log_linear_model, linear_model, quadratic_model
 from algs.modeling import numpy_error
 
 def fact(N):
@@ -238,7 +238,7 @@ def modeling_merge_heap(max_k=5, output=True, decimals=1):
                   ])
     return tbl
 
-def timing_selection_insertion(min_k=8, max_k=13, output=True, decimals=3):
+def timing_selection_insertion(min_k=8, max_k=18, output=True, decimals=3):
     """
     Because Insertion Sort is so sensitive to its inputs, we take average time
     over all of its runs. Models first using 5 rows from [min_k .. min_k+5]
@@ -445,7 +445,24 @@ def show_heapify():
     # After a few minutes of tweaking (based on partial results from the challenge
     # problem area), I found this input that produces the Heap. nice!
     A = [14, 13, 12, 5, 10, 6, 14, 12, 9, 1, 11, 8, 15, 9, 7, 4, 8, 2]
-    heap = HeapSortCounting(A, output=True)
+    HeapSortCounting(A, output=True)
+    
+def heapsort_intuition():
+    """Show first two steps of dequeue."""
+    from ch05.heapsort import HeapSortCounting
+    
+    A = [14, 13, 12, 5, 10, 6, 14, 12, 9, 1, 11, 8, 15, 9, 7, 4, 8, 2]
+    heap = HeapSortCounting(A, output=False)
+    
+    heap.swap(1, heap.N)
+    heap.N -= 1
+    heap.sink(1)
+    print('|'.join([' {:>2} '.format(k) for k in A]))
+    
+    heap.swap(1, heap.N)
+    heap.N -= 1
+    heap.sink(1)
+    print('|'.join([' {:>2} '.format(k) for k in A]))
 
 def tim_sort_figure():
     """Recreate data for timsort figure."""
@@ -511,6 +528,7 @@ def generate_ch05():
     with FigureNum(3) as figure_number:
         description  = 'Visualizing the formula for triangle numbers: sum of 1 through 7 is 28'
         label = captionx(chapter, figure_number)
+        print('By hand')
         print('{}. {}'.format(label, description))
         print()
 
@@ -530,39 +548,79 @@ def generate_ch05():
         print('{}. {}'.format(label, description))
         print()
 
+    with TableNum(1) as table_number:
+        timing_selection_insertion()
+        description  = 'Runtime performance (in seconds) for Selection Sort and Insertion Sort'
+        label = captionx(chapter, table_number)
+        print('{}. {}'.format(label, description))
+        print()
+
     with FigureNum(5) as figure_number:
         description  = 'Visualizing the recursive invocation of fact(3)'
         label = captionx(chapter, figure_number)
+        print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
         
     with FigureNum(6) as figure_number:
         description  = 'Recursive invocation when calling rmax(0,3) on A=[15,21,20,2]'
         label = captionx(chapter, figure_number)
+        print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(7) as figure_number:
         description  = 'Complete recursive invocation of rmax'
         label = captionx(chapter, figure_number)
+        print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(8) as figure_number:
         description  = 'Merging two stacks into one'
         label = captionx(chapter, figure_number)
+        print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(9) as figure_number:
         description  = 'Step by step merge sort of two sorted sub-arrays of size 4'
         label = captionx(chapter, figure_number)
+        print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(10) as figure_number:
         show_partition()
         description  = 'Results of partition(A,0,7,0)'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(11) as figure_number:
+        heapsort_intuition()
+        description  = 'Intuition behind how a max binary heap can be used for sorting'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(12) as figure_number:
+        show_heapify()
+        description  = 'Converting array into a max binary heap requires < 2N comparisons'
+        label = captionx(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+        
+    with TableNum(2) as table_number:
+        timing_nlogn_sorting()
+        description  = 'Runtime performance (in seconds) for different sorting algorithms'
+        label = captionx(chapter, table_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(13) as figure_number:
+        tim_sort_figure()
+        description  = 'Changes to array when applying Tim Sort with initial size of 4'
         label = captionx(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()

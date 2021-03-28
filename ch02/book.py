@@ -33,7 +33,7 @@ def actual_table(output=True):
     tbl.row([1000, 0.565, linear_model(1000,a,b)])
     tbl.row([10000, 5.946, linear_model(10000,a,b)])
 
-    print (tbl.pearsonr('Actual', 'Model'))
+    print(tbl.pearsonr('Actual', 'Model'))
     return tbl
 
 def prototype_table(output=True, decimals=3):
@@ -92,10 +92,10 @@ random.shuffle(x)'''.format(n), repeat=100, number=100))
             n_log_n_model(n, nlog_n_coeffs[0])])
 
     if output:
-        print ('Linear', tbl.pearsonr('Time', 'Linear'))
-        print ('Quad', tbl.pearsonr('Time', 'Quad'))
-        print ('NLogN', tbl.pearsonr('Time', 'NLogN'))
-        print (tbl.best_model('Time'))
+        print('Linear', tbl.pearsonr('Time', 'Linear'))
+        print('Quad', tbl.pearsonr('Time', 'Quad'))
+        print('NLogN', tbl.pearsonr('Time', 'NLogN'))
+        print(tbl.best_model('Time'))
     return tbl
 
 def incremental_multiplication():
@@ -243,16 +243,16 @@ def generate_ch02():
                 'Multiplying two n-digit integers')
 
     with FigureNum(1) as figure_number:
-        print (captionx(chapter, figure_number),
+        print(captionx(chapter, figure_number),
                'Compare models against performance')
 
     with FigureNum(2) as figure_number:
         algorithms_a_b()
-        print (captionx(chapter, figure_number),
+        print(captionx(chapter, figure_number),
                'Complexity classes provide context to understand performance')
 
     with FigureNum(3) as figure_number:
-        print (captionx(chapter, figure_number),
+        print(captionx(chapter, figure_number),
                'Visualizing the numbers from Figure 2-2')
 
     with TableNum(4) as table_number:
@@ -261,7 +261,7 @@ def generate_ch02():
                 'Growth of different computations')
 
     with FigureNum(8) as figure_number:
-        print (captionx(chapter, figure_number),
+        print(captionx(chapter, figure_number),
                'Plot runtime performance against problem instance size for complexity classes')
 
 #######################################################################

@@ -122,7 +122,7 @@ def has_cycle_nr(DG):
                             return True
     return False
 
-def return_cycle_nr(DG):
+def recover_cycle_nr(DG):
     """Conduct non-recursive cycle detection over directed graph and return cycle."""
     from ch07.list_stack import Stack
     marked = {}

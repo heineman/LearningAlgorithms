@@ -53,5 +53,5 @@ if __name__ == '__main__':
         ss = Spreadsheet(root, nx.DiGraph())
         fibonacci_example(ss)
         from ch07.digraph_search import topological_sort
-        print (list(topological_sort(ss.digraph)))
+        print(list(topological_sort(ss.digraph)))
         root.mainloop()

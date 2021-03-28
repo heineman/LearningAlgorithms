@@ -190,7 +190,6 @@ def measure_performance_resize(max_d=50, output=True):
             average += (after-before)
 
         average /= len(words)
-        #print (delta,'Average is', average)
         tbl_d.row([delta, average])
 
     return (tbl, tbl_ir, tbl_d)

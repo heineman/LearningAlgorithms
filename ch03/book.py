@@ -415,7 +415,7 @@ def perfect_trial(key):
     for idx,ch in enumerate(key):
         print(comma(S1[idx]),'*',ord(ch),end='')
         total += S1[idx]*ord(ch)
-        if idx < len(key)-1: print (' + ', end='')
+        if idx < len(key)-1: print(' + ', end='')
     print(' % {0} = {1} % {0} = {2}'.format(comma(len(G)), comma(total), comma(total % len(G))))
     print()
 
@@ -425,7 +425,7 @@ def perfect_trial(key):
     for idx,ch in enumerate(key):
         print(comma(S2[idx]),'*',ord(ch),end='')
         total += S2[idx]*ord(ch)
-        if idx < len(key)-1: print (' + ', end='')
+        if idx < len(key)-1: print(' + ', end='')
     print(' % {0} = {1} % {0} = {2}'.format(comma(len(G)), comma(total), comma(total % len(G))))
 
     print('G[{}] = {}'.format(comma(hk1),G[hk1]))

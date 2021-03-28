@@ -284,15 +284,15 @@ if __name__ == '__main__':
     ohl1 = OHL(1023)
     for aw1 in random_word_list:
         ohl1.put(aw1, 1)
-    print (stats_open_addressing(ohl1))
+    print(stats_open_addressing(ohl1))
 
     hl1 = HL(1023)
     for aw1 in random_word_list:
         hl1.put(aw1, 1)
-    print (stats_linked_lists(hl1))
+    print(stats_linked_lists(hl1))
 
     from ch03.hashtable_linked import DynamicHashtable as DHL
     dl1 = DHL(1023)
     for aw1 in random_word_list:
         dl1.put(aw1, 1)
-    print (stats_linked_lists(dl1))
+    print(stats_linked_lists(dl1))

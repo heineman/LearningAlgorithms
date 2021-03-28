@@ -77,8 +77,8 @@ def average_performance(max_n=32768, output=True, decimals=2):
         N *= 2
 
     if output:
-        print ('Heap', tbl.best_model('Heap'))
-        print ('BinaryTree', tbl.best_model('BinaryTree'))
+        print('Heap', tbl.best_model('Heap'))
+        print('BinaryTree', tbl.best_model('BinaryTree'))
 
     return tbl
 

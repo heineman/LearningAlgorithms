@@ -301,6 +301,33 @@ class TestChapter7(unittest.TestCase):
             acycle = networkx.algorithms.cycles.find_cycle(ss.digraph)
             self.assertTrue(len(acycle) > 1)
 
+    def test_has_cycle(self):
+        from ch07.digraph_search import has_cycle, has_cycle_nr
+        from ch07.digraph_search import recover_cycle, recover_cycle_nr 
+        G = nx.DiGraph()
+        G.add_edge('a', 'b', weight=6)
+        G.add_edge('a', 'c', weight=10)
+        G.add_edge('b', 'c', weight=2)
+        G.add_edge('c', 'd', weight=1)
+        G.add_edge('d', 'e', weight=1)
+
+        self.assertFalse(has_cycle(G))
+        self.assertFalse(has_cycle_nr(G))
+
+        G.add_edge('e', 'a', weight=1)
+        self.assertTrue(has_cycle(G))
+        self.assertTrue(has_cycle_nr(G))
+        
+        # There are mutliple cycles, so no way to check with each other...
+        self.assertTrue(len(recover_cycle(G)) > 0)
+        self.assertTrue(len(recover_cycle_nr(G)) > 0)
+        
+        # However, both cycles contain 'e'
+        self.assertTrue('e' in recover_cycle(G))
+        self.assertTrue('e' in recover_cycle_nr(G))
+        
+        
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()
