@@ -250,6 +250,7 @@ function-naming-style=snake_case
 
 # Good variable names which should always be accepted, separated by a comma.
 good-names=bt,
+           c,
            ch,
            i,
            j,
@@ -262,7 +263,9 @@ good-names=bt,
            n,
            p,
            pq,
+           r,
            s,
+           u,
            up,
            v,
            w,

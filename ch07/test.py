@@ -18,6 +18,7 @@ class TestChapter7(unittest.TestCase):
             self.fail('{} not same as {}'.format(e1,e2))
 
     def assert_equal_edges_weights(self, e1, e2):
+        """Compare edges and also edge weights."""
         from ch07.replacement import WEIGHT
         self.assert_equal_edges(e1, e2)
         if e1[2][WEIGHT] != e2[2][WEIGHT]:
@@ -38,7 +39,7 @@ class TestChapter7(unittest.TestCase):
         m = Maze(3,5)
         self.assertEqual((0,2), m.start())
         self.assertEqual((2,2), m.end())
-        
+
         G = to_networkx(m)
         self.assertEqual([(0, 1), (0, 3), (1, 2)], sorted(list(G[(0,2)])))
 
@@ -53,11 +54,11 @@ class TestChapter7(unittest.TestCase):
         # BFS search solution
         node_from = bfs_search(G, m.start())
         self.assertEqual((1,0), node_from[(2,0)])
-        
+
         # Create graph resulting from the BFS search results
         F = node_from_field(G, node_from)
         self.assertEqual(14, len(list(F.edges())))
-        
+
         # The actual solution is a two-edge, three node straight path
         H = solution_graph(G, path_to(node_from, m.start(), m.end()))
         self.assertEqual(2, len(list(H.edges())))
@@ -129,10 +130,10 @@ class TestChapter7(unittest.TestCase):
         # edge on shortest path into 'c', when starting from 'd', came from 'a'
         self.assertEqual('d->b->a->c', tbl_path.entry('d', 'c'))
         self.assertEqual(6, tbl_dist_to.entry('d', 'c'))
-        self.assertEqual('a', tbl.entry('d', 'c'))    
+        self.assertEqual('a', tbl.entry('d', 'c'))
 
     def test_bellman_ford_negative_cycle_sp(self):
-        from ch07.single_source_sp import bellman_ford 
+        from ch07.single_source_sp import bellman_ford
 
         NegCycle = nx.DiGraph()
         NegCycle.add_edge('a', 'b', weight=3)
@@ -140,7 +141,7 @@ class TestChapter7(unittest.TestCase):
         NegCycle.add_edge('c', 'd', weight=-3)
         NegCycle.add_edge('d', 'b', weight=4)
         NegCycle.add_edge('d', 'e', weight=5)
-       
+
         with self.assertRaises(RuntimeError):
             bellman_ford(NegCycle, 'a')
 
@@ -156,7 +157,7 @@ class TestChapter7(unittest.TestCase):
             dijkstra_sp(DG, 'a')
 
     def test_dijkstra_sp(self):
-        from ch07.single_source_sp import dijkstra_sp, edges_path_to, bellman_ford 
+        from ch07.single_source_sp import dijkstra_sp, edges_path_to, bellman_ford
 
         DG = nx.DiGraph()
         DG.add_edge('a', 'b', weight=3)
@@ -168,7 +169,7 @@ class TestChapter7(unittest.TestCase):
         path = edges_path_to(edge_to, 'a', 'c')
         self.assertEqual(6, dist_to['c'])
         self.assertEqual(['a', 'b', 'd', 'c'], path)
-        
+
         (dist_to_bf, edge_to_bf) = bellman_ford(DG, 'a')
         path = edges_path_to(edge_to_bf, 'a', 'c')
         self.assertEqual(6, dist_to_bf['c'])
@@ -181,19 +182,19 @@ class TestChapter7(unittest.TestCase):
         print(list(nx.topological_sort(DG)))
         from ch07.digraph_search import topological_sort
         print(list(topological_sort(DG)))
-        
+
     def test_topological_figure(self):
         DG = nx.DiGraph()
         DG.add_edges_from([('a', 'b'), ('a', 'c'), ('b', 'c'), ('b', 'd')])
         print(list(nx.topological_sort(DG)))
         from ch07.digraph_search import topological_sort
         print(list(topological_sort(DG)))
-        
+
         DG = nx.DiGraph()
         from ch07.book import make_sample_directed_graph
         DG = make_sample_directed_graph()
         print(list(topological_sort(DG)))
-    
+
     def small_example(self, G):
         G.add_node('A2')
         G.add_nodes_from(['A3', 'A4', 'A5'])
@@ -218,13 +219,13 @@ class TestChapter7(unittest.TestCase):
         from ch07.challenge import path_to_recursive
         G = nx.Graph()
         self.small_example(G)
-        
+
         node_from = dfs_search(G, 'A2')
         self.assertEqual(['A2', 'A3', 'A4', 'A5'], path_to(node_from, 'A2', 'A5'))
         self.assertEqual(['A2', 'A3', 'A4', 'A5'], list(path_to_recursive(node_from, 'A2', 'A5')))
 
     def test_small_example_stub_replacement(self):
-        import ch07.replacement 
+        import ch07.replacement
         G = ch07.replacement.Graph()
         self.small_example(G)
 
@@ -239,12 +240,12 @@ class TestChapter7(unittest.TestCase):
         DG.add_edge('a', 'b', weight=6)
         DG.add_edge('a', 'c', weight=10)
         DG.add_edge('b', 'c', weight=2)
-        
+
         from ch07.single_source_sp import dijkstra_sp
         (dist_to, edge_to) = dijkstra_sp(DG, 'a')
         self.assertEqual(8, dist_to['c'])
         self.assert_equal_edges_weights(('b', 'c', {WEIGHT:2}), edge_to['c'])
-        
+
     def test_indexed_min_heap(self):
         from ch07.indexed_pq import IndexedMinPQ
 
@@ -272,7 +273,7 @@ class TestChapter7(unittest.TestCase):
         try:
             import tkinter
             from ch07.spreadsheet import Spreadsheet
-        except(ImportError):
+        except ImportError:
             print('unable to access tkinter.')
             return
 
@@ -288,7 +289,7 @@ class TestChapter7(unittest.TestCase):
         try:
             ss.set('B2', '=C5')
             self.fail('should have detected cycle')
-        except(RuntimeError):
+        except RuntimeError:
             pass
 
         # just grab the graph and hack it together

@@ -68,7 +68,7 @@ class UndirectedGraph:
     def edges(self, u=None, data=True):
         """Return all edges. Make sure not to double count..."""
         all_nodes = list(self.nodes())
-        
+
         if u:
             n = self.adjacency[u]
             while n:
@@ -92,12 +92,12 @@ class UndirectedGraph:
         """Return neighboring nodes."""
         for node in self.adjacency[u]:
             yield node
-    
+
     def add_edge(self, u, v):
         """Add edge (u,v) to a graph."""
         if not u in self.adjacency:
             self.adjacency[u] = None
-            
+
         if not v in self.adjacency:
             self.adjacency[v] = None
 
@@ -106,7 +106,7 @@ class UndirectedGraph:
             if n.value == v:
                 return   # already there
             n = n.next
-            
+
         self.adjacency[u] = Node(v, self.adjacency[u])
         self.adjacency[v] = Node(u, self.adjacency[v])
         self.E += 1
@@ -117,19 +117,19 @@ class UndirectedGraph:
             self.add_edge(u,v)
 
 class AdjacencyViewer:
+    """Provide object to iterate over adjacent nodes."""
     def __init__(self, mat, i, neighbors):
         self.mat = mat
         self.i = i
         self.neighbors = neighbors
-        
+
     def __getitem__(self, target):
         """Get neighboring nodes to this node by iterating over all nodes."""
         for j in self.neighbors:
             if j == target:
                 if (self.i, j) in self.mat.weights:
                     return {WEIGHT: self.mat.weights[(self.i,j)]}
-                else:
-                    return (self.mat.labels[self.i], self.mat.labels[j])
+                return (self.mat.labels[self.i], self.mat.labels[j])
 
     def __iter__(self):
         for j in self.neighbors:
@@ -139,11 +139,11 @@ class AdjacencyViewer:
                 yield self.mat.labels[j]
 
 class MatrixUndirectedGraph:
-    NO_EDGE = float('-inf')
-    
     """
     Use Two Dimensional Matrix to store whether there is an edge between U and V.
     """
+    NO_EDGE = float('-inf')
+
     def __init__(self):
         self.matrix = None
         self.positions = []
@@ -224,7 +224,7 @@ class MatrixUndirectedGraph:
         if self.matrix[i][j] == MatrixUndirectedGraph.NO_EDGE:
             return None
         return {WEIGHT: self.weights[(i,j)]}
-        
+
     def number_of_edges(self):
         """Return number of edges in graph."""
         return self.E
@@ -262,7 +262,7 @@ class MatrixUndirectedGraph:
     def add_edges_from(self, edges):
         """Add edges to graph, if not already there."""
         for u,v in edges:
-            self.add_edge(u,v)            
+            self.add_edge(u,v)
 
 class DirectedGraph:
     """
@@ -273,11 +273,11 @@ class DirectedGraph:
         self.positions = {}
         self.weights   = {}
         self.E         = 0
- 
+
     def __contains__(self, v):
         """Determine if v is in the graph."""
         return v in self.adjacency
- 
+
     def add_node(self, u, pos=None):
         """Add node to graph, if not already there."""
         if u in self.adjacency:
@@ -349,7 +349,7 @@ class DirectedGraph:
         self.E += 1
         if weight:
             self.weights[(u,v)] = weight
-            
+
     def remove_edge(self, u, v):
         """Remove edge from u => v."""
         if not u in self.adjacency:
@@ -361,11 +361,11 @@ class DirectedGraph:
         # Not present? leave now
         if not v in self.adjacency[u]:
             return
-        
+
         self.adjacency[u].remove(v)
         self.E -= 1
         if (u,v) in self.weights:
-            self.weights((u,v), None)
+            self.weights.pop((u,v), None)
 
     def add_edges_from(self, edges):
         """Add edges to graph, if not already there."""
@@ -376,21 +376,23 @@ class DirectedGraph:
                 self.add_edge(edge[0], edge[2], edge[3])    # weights
 
 class Graph(MatrixUndirectedGraph):
+    """Replacement graph structure for undirected graphs."""
     def __init__(self):
         MatrixUndirectedGraph.__init__(self)
 
 class DiGraph(DirectedGraph):
+    """Replacement graph structure for directed graphs."""
     def __init__(self):
         DirectedGraph.__init__(self)
 
 def single_source_shortest_path(self, graph, src):
     """
     Act on Single Source Shortest Path and return path as dictionary, where
-    each node is expanded to have its 
+    each node is expanded to have its
     """
     from ch07.single_source_sp import dijkstra_sp
     (dist_to, edge_to) = dijkstra_sp(graph, src)
-    
+
     expanded = {}
     for n in graph.nodes():
         if n == src:
@@ -403,13 +405,13 @@ def single_source_shortest_path(self, graph, src):
                 t = edge_to[t][0]
             path.insert(0, src)
             expanded[n] = path
-    
+
     return expanded
 
 def topological_sort(digraph):
     """Link in with Topological sort."""
-    from ch07.digraph_search import topological_sort
-    return topological_sort(digraph)
+    from ch07.digraph_search import topological_sort as ts
+    return ts(digraph)
 
 def get_node_attributes(graph, pos='pos'):
     """I am not going to provide this capability."""
@@ -422,5 +424,5 @@ def draw(graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
 def dijkstra_path(G, src, target):
     """Dijkstra delegation."""
     from ch07.single_source_sp import dijkstra_sp
-    
+
     return dijkstra_sp(G, src, target)

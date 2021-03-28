@@ -10,10 +10,11 @@ try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
-    
+
 def load_fibonacci_from_resource(ss):
+    """Load up sample XSLX Microsoft Excel file as a Spreadsheet."""
     entries = load_xlsx(os.path.join('..', 'resources', 'ch07-fibonacci-example.xlsx'))
-    for k in entries:   
+    for k in entries:
         ss.set(k,entries[k])
 
 #######################################################################
@@ -25,10 +26,10 @@ if __name__ == '__main__':
         root = tkinter.Tk()
         ss = Spreadsheet(root, nx.DiGraph())
         entries = load_fibonacci_from_resource(ss)
-       
+
         # Might not be necessary IF entries are loaded in proper topological order!
         from ch07.digraph_search import topological_sort
         print (list(topological_sort(ss.digraph)))
         root.mainloop()
-    except (ImportError):
+    except ImportError:
         print('tkinter is not installed so unable to launch spreadsheet application')

@@ -1,3 +1,4 @@
+"""Animates the Smart Search solution of a maze."""
 import tkinter
 import time
 import random
@@ -5,7 +6,7 @@ import random
 from ch07.maze import Maze, to_networkx
 from ch07.viewer import Viewer
 
-class SmartSearchSolver():    
+class SmartSearchSolver():
     """
     Solves a maze by taking advantage of Euclidean distance to solution.
     """
@@ -42,6 +43,7 @@ class SmartSearchSolver():
         self.master.update()
 
     def distance_to(self, to_cell):
+        """Return Manhattan distance between cells."""
         return abs(self.end[0] - to_cell[0]) + abs(self.end[1] - to_cell[1])
 
     def smart_search(self, pos):
@@ -52,12 +54,12 @@ class SmartSearchSolver():
         src = self.start
         dist_to = {}
         dist_to[src] = 0
-        
+
         # Using a MAX PRIORITY QUEUE means we rely on negative distance to
         # choose the one that is closest...
         self.marked[src] = True
         pq.enqueue(src, -self.distance_to(src))
-        
+
         while not pq.is_empty():
             cell = pq.dequeue()
             self.master.update()

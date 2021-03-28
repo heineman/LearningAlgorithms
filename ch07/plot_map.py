@@ -28,6 +28,10 @@ def plot_edge_path(positions, src, target, edge_to, marker='.', color='green'):
     plt.scatter(nx, ny, marker=marker, color=color)
 
 def plot_path(positions, path, marker='.', color='red'):
+    """
+    Plot path using list of nodes in path[] according to positional information
+    in positions.
+    """ 
     px = []
     py = []
     for v in path:
@@ -36,8 +40,9 @@ def plot_path(positions, path, marker='.', color='red'):
         py.append(pos[0])
     plt.plot(px, py, color=color)
     plt.scatter(px, py, marker=marker, color=color)
-    
+
 def plot_node_from(G, positions, src, target, node_from, marker='.', color='orange'):
+    """Plot path from src to target using node_from[] information."""
     nx = []
     ny = []
     v = target
@@ -48,6 +53,23 @@ def plot_node_from(G, positions, src, target, node_from, marker='.', color='oran
         v = node_from[v]
     plt.plot(nx, ny, color=color)
     plt.scatter(nx, ny, marker=marker, color=color)
+
+def plot_gps(positions, s=8, marker='.', color='blue'):
+    """Draw positions of individual nodes."""
+    x = []
+    y = []
+    for i in positions:
+        pos = positions[i]
+        x.append(pos[1])
+        y.append(pos[0])
+    plt.scatter(x, y, marker=marker, s=s, color=color)
+
+def plot_highways(positions, edges, color='gray'):
+    """Plot highways with linesegments."""
+    for e in edges:
+        head = positions[e[0]]
+        tail = positions[e[1]]
+        plt.plot([head[1], tail[1]],[head[0], tail[0]], linewidth=1, color=color)
 
 #######################################################################
 if __name__ == '__main__':

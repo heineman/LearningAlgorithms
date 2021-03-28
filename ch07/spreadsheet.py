@@ -15,7 +15,7 @@ def is_formula(s):
 class Spreadsheet:
     """
     Represents a spreadsheet.
-    
+
         Attributes
         ----------
         digraph         - A directed Graph to maintain all cell-based dependencies
@@ -30,7 +30,7 @@ class Spreadsheet:
                           an entry.
     """
     undefined = 'Undef'
-    
+
     def __init__(self, master, new_digraph, num_rows=10, num_cols=5):
         self.master   = master
         self.num_rows = num_rows
@@ -42,7 +42,7 @@ class Spreadsheet:
         self.entries          = {}
         self.string_vars      = {}
         self.canvas = self.make_gui()
-        
+
     def make_gui(self):
         """Construct the necessary widgets for spreadsheet GUI and set up the event handlers."""
         self.canvas = tkinter.Canvas(self.master) 
@@ -51,7 +51,7 @@ class Spreadsheet:
             tkinter.Label(self.master, text=str(r)).grid(row=r, column=0)
         for c in range(self.num_cols):
             tkinter.Label(self.master, text=chr(ord('A')+c)).grid(row=0, column=c+1)
-            
+
         for r in range(1, self.num_rows):
             for c in range(1, self.num_cols+1):
                 label = chr(ord('A')+c-1) + str(r)
@@ -63,7 +63,7 @@ class Spreadsheet:
                 widget.grid(row=r, column=c)
                 self.entries[label] = widget
                 self.string_vars[label] = sv        
-    
+
     def entry_update(self, label, event):
         """Updates the contents of a spreadsheet cell in response to user input."""
         try:

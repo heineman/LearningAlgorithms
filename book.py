@@ -32,6 +32,7 @@ from ch03.book import generate_ch03
 from ch04.book import generate_ch04
 from ch05.book import generate_ch05
 from ch06.book import generate_ch06
+from ch07.book import generate_ch07
 
 #######################################################################
 
@@ -41,3 +42,4 @@ generate_ch03()
 generate_ch04()
 generate_ch05()
 generate_ch06()
+generate_ch07()

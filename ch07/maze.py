@@ -1,3 +1,7 @@
+"""
+Code for constructing a rectangular maze whose entrace is in the middle of
+the top row, and the exit is in the middle of the bottom row.
+"""
 import random
 
 try:
@@ -33,30 +37,26 @@ def to_networkx(maze):
 def solution_graph(G, path):
     """
     Return a NetworkX Graph representing solution in maze.
-    Remove all vertices that are not in the path
+    Remove all vertices that are not in the path. Includes
+    positional information from G.
     """
-    
-    # Bring over positional information from G
     H = nx.DiGraph()
     pos = nx.get_node_attributes(G, 'pos') 
-    
     for n in G.nodes():
         H.add_node(n, pos=pos.get(n))
-    
+
     for idx in range(len(path)-1):
         H.add_edge(path[idx], path[idx+1])
-    
+
     return H
 
 def node_from_field(G, node_from):
     """
     Return a directed NetworkX Graph representing structure
-    of the node_from dictionary.
+    of the node_from dictionary. Includes positional information from G.
     """
-
-    # Bring over positional information from G
-    pos = nx.get_node_attributes(G, 'pos') 
     H = nx.DiGraph()
+    pos = nx.get_node_attributes(G, 'pos') 
     for n in G.nodes():
         H.add_node(n, pos=pos.get(n))
 
@@ -71,15 +71,15 @@ class Maze:
     Construct a random maze whose entrance is at the middle of the top row
     of the rectangular maze, and the exit is at the middle of the bottom 
     row.
-    
+
     The basic technique is to assemble a maze where every cell has intact walls, 
     and then conduct a depth-first-search through the maze, tearing down walls
     when heading into a new, unvisited cell.
-    
+
     To add a bit of variety, a salt parameter randomly clears additional walls,
     with a default setting of 0.05. If you salt=0, then the maze will have
     perfectly cut rooms, with a long and winding solution to the maze.
-    
+
     This implementation uses stack-based Depth First Search to handle cases
     with large mazes.
     """
@@ -178,7 +178,6 @@ if __name__ == '__main__':
     g = to_networkx(m)
     import matplotlib.pyplot as plt
 
-    pos = nx.get_node_attributes(g, 'pos') 
-    nx.draw(g, pos, with_labels = True, node_color='w', font_size=8) 
-
+    pos = nx.get_node_attributes(g, 'pos')
+    nx.draw(g, pos, with_labels = True, node_color='w', font_size=8)
     plt.show()

@@ -1,3 +1,4 @@
+"""Animates the Breadth First Search solution of a maze."""
 import tkinter
 import time
 import random
@@ -58,7 +59,7 @@ class BreadthFirstSearchSolver():
                     if self.stop_end and next_cell == self.end:
                         return True
                     queue.enqueue(next_cell)
-                
+
         return False
 
 #######################################################################

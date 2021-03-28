@@ -546,6 +546,4 @@ def generate_ch03():
 
 #######################################################################
 if __name__ == '__main__':
-    count_hash()
-    perfect_trial('by')
-    #generate_ch03()
+    generate_ch03()

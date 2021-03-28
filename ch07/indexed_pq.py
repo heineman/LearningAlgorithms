@@ -44,7 +44,7 @@ class IndexedMinPQ:
             raise ValueError('{} not in the indexed min priority queue.'.format(v))
         idx = self.location[v]
         if lower_priority >= self.priorities[idx]:
-            raise RuntimeError('Value {} has existing priority of {} which is already lower than {}'.format (v, self.priorities[idx], lower_priority))
+            raise RuntimeError('Value {} has existing priority of {} which is already lower than {}'.format(v, self.priorities[idx], lower_priority))
 
         self.priorities[idx] = lower_priority
         self.swim(idx)

@@ -18,7 +18,7 @@ def recover_cycle(DG):
             n = node_from[n]
         yield w
         yield v
-        
+
     def dfs(v):
         in_stack[v] = True
         marked[v] = True
@@ -75,7 +75,7 @@ def topological_sort(DG):
     """
     marked = {}
     postorder = []
-    
+
     def dfs(v):
         marked[v] = True
 
@@ -102,7 +102,7 @@ def has_cycle_nr(DG):
     for s in DG.nodes():
         if not s in marked:
             stack.push(s)
-    
+
             while not stack.is_empty():
                 v = stack.pop()
                 if v in marked:
@@ -111,7 +111,7 @@ def has_cycle_nr(DG):
                     marked[v] = True
                     stack.push(v)
                     in_stack[v] = True
-                
+
                 for w in DG[v]:
                     if not w in marked:
                         stack.push(w)
@@ -133,7 +133,7 @@ def return_cycle_nr(DG):
     for s in DG.nodes():
         if not s in marked:
             stack.push(s)
-    
+
             while not stack.is_empty():
                 v = stack.pop()
                 if v in marked:
@@ -142,7 +142,7 @@ def return_cycle_nr(DG):
                     marked[v] = True
                     stack.push(v)
                     in_stack[v] = True
-                
+
                 for w in DG[v]:
                     if not w in marked:
                         stack.push(w)
@@ -155,12 +155,12 @@ def return_cycle_nr(DG):
                             while n != w:
                                 cycle.append(n)
                                 n = node_from[n]
-                                
+
                             cycle.append(w)
                             cycle.append(v)
                             cycle.reverse()
                             return cycle
-    
+
     return None
 
 #######################################################################

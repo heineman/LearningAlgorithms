@@ -2,7 +2,7 @@
 Load up rudimentary XLSX file.
 
 worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
- 
+
 Note that Excel files have a space-saving device to reuse formula that are identical from 
 one cell to another within a region. I saw this in the Fibonacci Example.
 
@@ -23,10 +23,9 @@ become (A4+1) in relation to the other one above.
 <c r="A5">
   <f t="shared" si="0"/>
   <v>3</v>
-</c> 
-    
+</c>
+
 """
-import os
 from xml.dom import minidom
 
 class Cell:
@@ -46,7 +45,7 @@ def load_xlsx(file):
     def diff(cell, base):
         # quick and dirty. Only works for single letters
         return (ord(cell[0]) - ord(base[0]), int(cell[1:]) - int(base[1:]))
-    
+
     def adjust_formula(cell, si):
         """
         Adjust shared formula for new context, based on the 'base' cell. Note that the reference
@@ -126,4 +125,4 @@ def load_xlsx(file):
                         entries[cell] = adjust_formula(cell, si)
             else:
                 entries[cell] = str(value)
-    return (entries)
+    return entries

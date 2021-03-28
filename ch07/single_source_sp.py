@@ -6,10 +6,10 @@ from ch07.replacement import WEIGHT
 
 def bellman_ford(G, src):
     """
-    Compute All Pairs Shortest Path using Bellman_ford and return  
-    dist_to[] with results and edge_to[] to be able to recover the 
+    Compute Single Source Shortest Path using Bellman_ford and return
+    dist_to[] with results and edge_to[] to be able to recover the
     shortest paths. Can work even if there are negative edge weights,
-    but NOT if a negative cycle exists. Fortunately it can detect 
+    but NOT if a negative cycle exists. Fortunately it can detect
     this situation.
     """
     inf = float('inf')
@@ -25,7 +25,7 @@ def bellman_ford(G, src):
             return True
         return False
 
-    #debug_state('initialize', G, node_from, dist_to)   
+    #debug_state('initialize', G, node_from, dist_to)
     for i in range(G.number_of_nodes()+1):
         for e in G.edges(data=True):
             if relax(e):
@@ -36,7 +36,7 @@ def bellman_ford(G, src):
 
 def dijkstra_sp(G, src):
     """
-    Compute Dijkstra's algorithm using src as source and return dist_to[] with 
+    Compute Dijkstra's algorithm using src as source and return dist_to[] with
     results and edge_to[] to be able to recover the shortest paths.
     """
     N = G.number_of_nodes()

@@ -72,7 +72,10 @@ class DataTable:
         self.output = status
 
     def format(self, field, fmt):
-        """Change the format of this entry from 'f' into the given format."""
+        """
+        Change the format of this entry from 'f' into the given format.
+        Defect: If change first column to 'f', then decimals length is ignored.
+        """
         idx = self.labels.index(field)
         if idx < 0:
             raise ValueError('{} is not a valid field'.format(field))

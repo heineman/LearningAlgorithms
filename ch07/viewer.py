@@ -1,3 +1,4 @@
+"""View the contents of Maze, a rectangular maze object, scaled to cells of given size."""
 import random
 import tkinter
 
@@ -8,7 +9,7 @@ class Viewer:
     Tkinter application to view a maze generated from Maze().
     """
     # Ensure drawing is not flush against the left-edge or top-edge of window
-    OFFSET = 5
+    OFFSET = 8
 
     # inset the circles for the path so they are visible.
     INSET = 2
@@ -26,7 +27,7 @@ class Viewer:
         h = self.maze.num_rows * size
         canvas = tkinter.Canvas(master, width=w+10, height=h+10)
         canvas.pack()
-
+        
         offset = self.OFFSET
         
         # Draw Vertical border at the left edge, then the top row in two pieces to show entrance. Note that
@@ -57,14 +58,14 @@ class Viewer:
             # inset the circles for the path so they are visible.
             inset = self.INSET
             size = self.size
-            cx = self.OFFSET + cell[1]*size
-            ry = self.OFFSET + cell[0]*size
+            cx = self.OFFSET + cell[1]*size + 1   # fudge factor to move off the wall...
+            ry = self.OFFSET + cell[0]*size + 1
             self.built[cell] = self.canvas.create_oval(cx + inset, ry + inset, cx + size - 2*inset, ry + size - 2*inset, fill=color)
-
+    
 #######################################################################
 if __name__ == '__main__':
     random.seed(15)
     m = Maze(50,50)
     root = tkinter.Tk()
-    Viewer(m, 15).view(root)
+    canvas = Viewer(m, 15).view(root)
     root.mainloop()

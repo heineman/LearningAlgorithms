@@ -1,3 +1,4 @@
+"""Animates the Depth First Search solution of a maze."""
 import tkinter
 import time
 import random
