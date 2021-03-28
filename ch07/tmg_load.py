@@ -3,17 +3,16 @@ Python script to load up TMG file as a Graph.
 """
 
 from math import cos, asin, sqrt, pi
-import matplotlib.pyplot as plt
 
 from resources.highway import highway_map
 from ch07.single_source_sp import dijkstra_sp
 from ch07.replacement import WEIGHT
+from ch07.dependencies import plt_error
 
 try:
     import networkx as nx
 except ImportError:
-    from ch07.graph import Replacement
-    nx = Replacement()
+    import ch07.replacement as nx
 
 def compute_distance(positions, node_from, src, target):
     """
@@ -34,6 +33,10 @@ def compute_distance(positions, node_from, src, target):
 
 def plot_gps(positions, s=8, marker='.', color='blue'):
     """Draw positions of individual nodes."""
+    if plt_error:
+        return 
+    import matplotlib.pyplot as plt
+
     x = []
     y = []
     for i in positions:
@@ -44,6 +47,10 @@ def plot_gps(positions, s=8, marker='.', color='blue'):
 
 def plot_highways(positions, edges, color='gray'):
     """Plot highways with linesegments."""
+    if plt_error:
+        return 
+    import matplotlib.pyplot as plt
+
     for e in edges:
         head = positions[e[0]]
         tail = positions[e[1]]
@@ -107,24 +114,27 @@ def tmg_load(raw_data):
 
 #######################################################################
 if __name__ == '__main__':    
-    (G,positions) = tmg_load(highway_map())
-    print(G.number_of_nodes(), G.number_of_edges())
-
-    src = 389
-    target = 2256
-
-    paths = nx.single_source_shortest_path(G, src)
-    path = paths[target]
-
-    total = 0
-    for i in range(len(path)-1):
-        total += G[path[i]][path[i+1]][WEIGHT]
-    print(total)
-    print(G.edges(src, data=True))   # 68 -> 89
-
-    (dist_to, edge_to) = dijkstra_sp(G, src)
-    print(dist_to[target])
-
-    plot_gps(positions)
-    plot_highways(positions, G.edges())
-    plt.show()
+    if not plt_error:
+        import matplotlib.pyplot as plt
+    
+        (G,positions) = tmg_load(highway_map())
+        print(G.number_of_nodes(), G.number_of_edges())
+    
+        src = 389
+        target = 2256
+    
+        paths = nx.single_source_shortest_path(G, src)
+        path = paths[target]
+    
+        total = 0
+        for i in range(len(path)-1):
+            total += G[path[i]][path[i+1]][WEIGHT]
+        print(total)
+        print(G.edges(src, data=True))   # 68 -> 89
+    
+        (dist_to, edge_to) = dijkstra_sp(G, src)
+        print(dist_to[target])
+    
+        plot_gps(positions)
+        plot_highways(positions, G.edges())
+        plt.show()

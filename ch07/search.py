@@ -9,6 +9,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
+from ch07.dependencies import plt_error
 from ch07.maze import Maze, to_networkx, solution_graph, node_from_field
 from ch04.list_queue import Queue
 
@@ -153,6 +154,8 @@ def draw_solution(G, field, src, target, figsize=(12,6)):
     a designated target vertex; in the second graph the node_from dictionary
     is visualized.
     """
+    if plt_error:
+        return
     import matplotlib.pyplot as plt
     
     H = solution_graph(G, path_to(field, src, target))

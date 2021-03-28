@@ -1,17 +1,20 @@
-import matplotlib.pyplot as plt
+"""
+Supporting functions for plotting the latitude/longitude data.
+"""
+
 try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
 
-from ch07.single_source_sp import dijkstra_sp, edges_path_to
+from ch07.dependencies import plt_error
 from ch07.replacement import WEIGHT
 
-from ch07.tmg_load import tmg_load, plot_gps, plot_highways
-from ch07.search import bfs_search, path_to
-from resources.highway import highway_map
-
 def plot_edge_path(positions, src, target, edge_to, marker='.', color='green'):
+    if plt_error:
+        return 
+    import matplotlib.pyplot as plt
+
     nx = []
     ny = []
     e = edge_to[target]
@@ -32,6 +35,10 @@ def plot_path(positions, path, marker='.', color='red'):
     Plot path using list of nodes in path[] according to positional information
     in positions.
     """ 
+    if plt_error:
+        return 
+    import matplotlib.pyplot as plt
+
     px = []
     py = []
     for v in path:
@@ -43,6 +50,10 @@ def plot_path(positions, path, marker='.', color='red'):
 
 def plot_node_from(G, positions, src, target, node_from, marker='.', color='orange'):
     """Plot path from src to target using node_from[] information."""
+    if plt_error:
+        return 
+    import matplotlib.pyplot as plt
+
     nx = []
     ny = []
     v = target
@@ -53,51 +64,3 @@ def plot_node_from(G, positions, src, target, node_from, marker='.', color='oran
         v = node_from[v]
     plt.plot(nx, ny, color=color)
     plt.scatter(nx, ny, marker=marker, color=color)
-
-def plot_gps(positions, s=8, marker='.', color='blue'):
-    """Draw positions of individual nodes."""
-    x = []
-    y = []
-    for i in positions:
-        pos = positions[i]
-        x.append(pos[1])
-        y.append(pos[0])
-    plt.scatter(x, y, marker=marker, s=s, color=color)
-
-def plot_highways(positions, edges, color='gray'):
-    """Plot highways with linesegments."""
-    for e in edges:
-        head = positions[e[0]]
-        tail = positions[e[1]]
-        plt.plot([head[1], tail[1]],[head[0], tail[0]], linewidth=1, color=color)
-
-#######################################################################
-if __name__ == '__main__':
-    (G,positions) = tmg_load(highway_map())
-    plot_gps(positions)
-    
-    src = 389
-    target = 2256
-    
-    path = nx.dijkstra_path(G, src, target)
-    total = 0
-    for i in range(len(path)-1):
-        total += G[path[i]][path[i+1]][WEIGHT]
-    print('networkx total={}'.format(total))
-    
-    #nn = dfs_search_recursive(G, src)
-    #plot_node_from(G, positions, src, target, nn, color='orange')
-    plot_highways(positions, G.edges())
-    
-    node_from = bfs_search(G, src)
-    plot_node_from(G, positions, src, target, node_from, color='purple')
-    print('{} total steps for Breadth First Search'.format(len(path_to(node_from, src, target))))
-    
-    plot_path(positions, path)
-    
-    (dist_to, edge_to) = dijkstra_sp(G, src)
-    print('{} total steps for Dijkstra Single-source Shortest Path Search'.format(len(edges_path_to(edge_to, src, target))))
-    
-    plot_edge_path(positions, src, target, edge_to)
-    plt.axis('off')
-    plt.show()

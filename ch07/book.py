@@ -17,8 +17,8 @@ from ch07.maze import Maze, to_networkx
 from ch07.snapshot import tkinter_register_snapshot
 from ch07.search import path_to, bfs_search, dfs_search_recursive, smart_search
 from ch07.single_source_sp import dijkstra_sp, edges_path_to, bellman_ford
-from ch07.plot_map import plot_gps, plot_highways, plot_path, plot_node_from
-from ch07.tmg_load import tmg_load, compute_distance
+from ch07.plot_map import plot_path, plot_node_from
+from ch07.tmg_load import tmg_load, compute_distance, plot_gps, plot_highways
 from ch07.all_pairs_sp import floyd_warshall
 
 def make_sample_graph():
@@ -539,10 +539,14 @@ def generate_ch07():
         m = Maze(3,5)
         graph = to_networkx(m)
 
-        draw_solution(graph, dfs_search(graph, m.start()), m.start(), m.end())
-        output_file = image_file('{}-graph.svg'.format(label))
-        plt.savefig(output_file, format="svg")
-        print('created {}'.format(output_file))
+        if plt_error:
+            print('unable to draw graph')
+        else:
+            draw_solution(graph, dfs_search(graph, m.start()), m.start(), m.end())
+            output_file = image_file('{}-graph.svg'.format(label))
+            plt.savefig(output_file, format="svg")
+            print('created {}'.format(output_file))
+
         print('{}. {}'.format(label, description))
         print()
 
@@ -560,12 +564,15 @@ def generate_ch07():
         m = Maze(3,5)
         graph = to_networkx(m)
 
-        draw_solution(graph, bfs_search(graph, m.start()), m.start(), m.end())
-        output_file = image_file('{}-graph.svg'.format(label))
-        plt.savefig(output_file, format="svg")
-        print('created {}'.format(output_file))
-        print('{}. {}'.format(label, description))
-        print()
+        if plt_error:
+            print('unable to draw graph')
+        else:
+            draw_solution(graph, bfs_search(graph, m.start()), m.start(), m.end())
+            output_file = image_file('{}-graph.svg'.format(label))
+            plt.savefig(output_file, format="svg")
+            print('created {}'.format(output_file))
+            print('{}. {}'.format(label, description))
+            print()
 
     with FigureNum(7) as figure_number:
         description = 'Comparing Depth First Search, Breadth First Search, and Smart Search'
