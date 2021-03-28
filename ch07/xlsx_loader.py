@@ -3,14 +3,14 @@ Load up rudimentary XLSX file.
 
 worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 
-Note that Excel files have a space-saving device to reuse formula that are identical from 
+Note that Excel files have a space-saving device to reuse formula that are identical from
 one cell to another within a region. I saw this in the Fibonacci Example.
 
 <c r="A3">
   <f>(A2+1)</f>
   <v>1</v>
 </c>
-      
+
 <c r="A4">
   <f t="shared" ref="A4:A8" si="0">(A3+1)</f>
   <v>2</v>
@@ -29,6 +29,7 @@ become (A4+1) in relation to the other one above.
 from xml.dom import minidom
 
 class Cell:
+    """Represents a cell in the spreadsheet XML."""
     def __init__(self, label, value, formula):
         self.label = label
         self.value = value
@@ -85,11 +86,10 @@ def load_xlsx(file):
             """Grab up all text in children and make it available in one step."""
             if node.nodeType ==  node.TEXT_NODE:
                 return node.data
-            else:
-                text_string = ""
-                for child_node in node.childNodes:
-                    text_string += get_all_text( child_node )
-                return text_string
+            text_string = ""
+            for child_node in node.childNodes:
+                text_string += get_all_text( child_node )
+            return text_string
 
         doc = minidom.parseString(data)
         access_points = doc.getElementsByTagName('c')   # TAG for cell

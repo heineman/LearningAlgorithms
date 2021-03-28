@@ -9,6 +9,8 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
+from ch07.dependencies import plt_error, tkinter_error
+
 def distance_to(from_cell, to_cell):
     """Compute Manhattan distance between two cells in a rectangular maze."""
     return abs(from_cell[0] - to_cell[0]) + abs(from_cell[1] - to_cell[1])
@@ -41,7 +43,7 @@ def solution_graph(G, path):
     positional information from G.
     """
     H = nx.DiGraph()
-    pos = nx.get_node_attributes(G, 'pos') 
+    pos = nx.get_node_attributes(G, 'pos')
     for n in G.nodes():
         H.add_node(n, pos=pos.get(n))
 
@@ -56,7 +58,7 @@ def node_from_field(G, node_from):
     of the node_from dictionary. Includes positional information from G.
     """
     H = nx.DiGraph()
-    pos = nx.get_node_attributes(G, 'pos') 
+    pos = nx.get_node_attributes(G, 'pos')
     for n in G.nodes():
         H.add_node(n, pos=pos.get(n))
 
@@ -69,10 +71,10 @@ def node_from_field(G, node_from):
 class Maze:
     """
     Construct a random maze whose entrance is at the middle of the top row
-    of the rectangular maze, and the exit is at the middle of the bottom 
+    of the rectangular maze, and the exit is at the middle of the bottom
     row.
 
-    The basic technique is to assemble a maze where every cell has intact walls, 
+    The basic technique is to assemble a maze where every cell has intact walls,
     and then conduct a depth-first-search through the maze, tearing down walls
     when heading into a new, unvisited cell.
 
@@ -173,11 +175,15 @@ class Maze:
 
 #######################################################################
 if __name__ == '__main__':
-    random.seed(15)     # 28 is also good
-    m = Maze(3,5)
-    g = to_networkx(m)
-    import matplotlib.pyplot as plt
+    if plt_error or tkinter_error:
+        print('Unable to visualize maze without matplotlib and/or tkinter')
+    else:
+        import tkinter
+        random.seed(15)     # 28 is also good
+        m = Maze(3,5)
+        g = to_networkx(m)
+        import matplotlib.pyplot as plt
 
-    pos = nx.get_node_attributes(g, 'pos')
-    nx.draw(g, pos, with_labels = True, node_color='w', font_size=8)
-    plt.show()
+        pos = nx.get_node_attributes(g, 'pos')
+        nx.draw(g, pos, with_labels = True, node_color='w', font_size=8)
+        plt.show()

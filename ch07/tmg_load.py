@@ -34,7 +34,7 @@ def compute_distance(positions, node_from, src, target):
 def plot_gps(positions, s=8, marker='.', color='blue'):
     """Draw positions of individual nodes."""
     if plt_error:
-        return 
+        return
     import matplotlib.pyplot as plt
 
     x = []
@@ -48,7 +48,7 @@ def plot_gps(positions, s=8, marker='.', color='blue'):
 def plot_highways(positions, edges, color='gray'):
     """Plot highways with linesegments."""
     if plt_error:
-        return 
+        return
     import matplotlib.pyplot as plt
 
     for e in edges:
@@ -67,19 +67,19 @@ def distance(gps1, gps2):
 
     p = pi/180
     a = 0.5 - cos((lat2-lat1)*p)/2 + cos(lat1*p) * cos(lat2*p) * (1-cos((long2-long1)*p))/2
-    return 7917.509282 * asin(sqrt(a))       # convert into miles and use 12742 as earth diameter in KM
+    return 7917.509282 * asin(sqrt(a))    # convert into miles and use 12742 as earth diameter in KM
 
 def tmg_load(raw_data):
     """
     Load up a TMG 1.0 simple file into a directed weighted graph, using
     long/lat coordinate calculator for distance.
-    
+
         TMG 1.0 simple
         #N #E
         {NODE: LABEL LAT LONG}
         {EDGE: id1 id2 LABEL}
-        
-    For each edge, compute the distance     
+
+    For each edge, compute the distance
     """
     G = nx.Graph()
     line = 0
@@ -113,28 +113,28 @@ def tmg_load(raw_data):
     return (G, positions)
 
 #######################################################################
-if __name__ == '__main__':    
+if __name__ == '__main__':
     if not plt_error:
         import matplotlib.pyplot as plt
-    
+
         (G,positions) = tmg_load(highway_map())
         print(G.number_of_nodes(), G.number_of_edges())
-    
+
         src = 389
         target = 2256
-    
+
         paths = nx.single_source_shortest_path(G, src)
         path = paths[target]
-    
+
         total = 0
         for i in range(len(path)-1):
             total += G[path[i]][path[i+1]][WEIGHT]
         print(total)
-        print(G.edges(src, data=True))   # 68 -> 89
-    
+        print(G.edges(src, data=True))
+
         (dist_to, edge_to) = dijkstra_sp(G, src)
         print(dist_to[target])
-    
+
         plot_gps(positions)
         plot_highways(positions, G.edges())
         plt.show()

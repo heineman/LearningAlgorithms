@@ -2,7 +2,9 @@
  Single-source Shortest path algorithms, including Dijkstra and Bellman-Ford.
 """
 from ch07.indexed_pq import IndexedMinPQ
-from ch07.replacement import WEIGHT
+
+# data associated with an edge can contain a weight
+WEIGHT = 'weight'
 
 def bellman_ford(G, src):
     """

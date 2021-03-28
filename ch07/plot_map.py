@@ -11,32 +11,36 @@ from ch07.dependencies import plt_error
 from ch07.replacement import WEIGHT
 
 def plot_edge_path(positions, src, target, edge_to, marker='.', color='green'):
+    """
+    Plot path using list of nodes in edge_to[] according to positional information
+    in positions.
+    """
     if plt_error:
-        return 
+        return
     import matplotlib.pyplot as plt
 
-    nx = []
-    ny = []
+    nodex = []
+    nodey = []
     e = edge_to[target]
     my_total = 0
     while e[0] != src:
         pos = positions[e[0]]
-        nx.append(pos[1])
-        ny.append(pos[0])
+        nodex.append(pos[1])
+        nodey.append(pos[0])
         my_total += e[2][WEIGHT]
         e = edge_to[e[0]]
     my_total += e[2][WEIGHT]
     print('my total={}'.format(my_total))
-    plt.plot(nx, ny, color=color)
-    plt.scatter(nx, ny, marker=marker, color=color)
+    plt.plot(nodex, nodey, color=color)
+    plt.scatter(nodex, nodey, marker=marker, color=color)
 
 def plot_path(positions, path, marker='.', color='red'):
     """
     Plot path using list of nodes in path[] according to positional information
     in positions.
-    """ 
+    """
     if plt_error:
-        return 
+        return
     import matplotlib.pyplot as plt
 
     px = []
@@ -51,16 +55,16 @@ def plot_path(positions, path, marker='.', color='red'):
 def plot_node_from(G, positions, src, target, node_from, marker='.', color='orange'):
     """Plot path from src to target using node_from[] information."""
     if plt_error:
-        return 
+        return
     import matplotlib.pyplot as plt
 
-    nx = []
-    ny = []
+    nodex = []
+    nodey = []
     v = target
     while v != src:
         pos = positions[v]
-        nx.append(pos[1])
-        ny.append(pos[0])
+        nodex.append(pos[1])
+        nodey.append(pos[0])
         v = node_from[v]
-    plt.plot(nx, ny, color=color)
-    plt.scatter(nx, ny, marker=marker, color=color)
+    plt.plot(nodex, nodey, color=color)
+    plt.scatter(nodex, nodey, marker=marker, color=color)

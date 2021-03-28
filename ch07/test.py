@@ -8,7 +8,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-from ch07.has_tkinter import tkinter_error
+from ch07.dependencies import tkinter_error
 
 class TestChapter7(unittest.TestCase):
 
@@ -89,10 +89,13 @@ class TestChapter7(unittest.TestCase):
         for u in 'abcd':
             row = [u]
             for v in 'abcd':
-                row.append(node_from[u][v]) if node_from[u][v] else row.append(SKIP)
+                if node_from[u][v]:
+                    row.append(node_from[u][v])
+                else:
+                    row.append(SKIP)
             tbl.row(row)
 
-        self.assertEqual('d', tbl.entry('b', 'c'))        
+        self.assertEqual('d', tbl.entry('b', 'c'))
 
     def test_allpairs_directed_sp(self):
         from ch07.all_pairs_sp import floyd_warshall, all_pairs_path_to, debug_state
@@ -214,7 +217,8 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(12, G.number_of_nodes())
         self.assertEqual(12, G.number_of_edges())
         self.assertEqual(sorted(['C2', 'B3', 'C4']), sorted(list(G['C3'])))
-        self.assertEqual(sorted([('C3', 'C2'), ('C3', 'B3'), ('C3', 'C4')]), sorted(list(G.edges('C3'))))
+        self.assertEqual(sorted([('C3', 'C2'), ('C3', 'B3'), ('C3', 'C4')]),
+                         sorted(list(G.edges('C3'))))
 
     def test_small_example(self):
         from ch07.search import dfs_search, path_to
@@ -283,9 +287,9 @@ class TestChapter7(unittest.TestCase):
                 import networkx.algorithms.cycles
                 networkx.algorithms.cycles.find_cycle(ss.digraph)
                 self.fail('no cycle yet...')
-            except:
+            except Exception:
                 pass
-    
+
             try:
                 ss.set('B2', '=C5')
                 self.fail('should have detected cycle')

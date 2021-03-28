@@ -1,5 +1,5 @@
 """
-Convenience function for taking a snapshot of a canvas into 
+Convenience function for taking a snapshot of a canvas into
 designated file AND terminating tkinter application.
 """
 from algs.output import image_file

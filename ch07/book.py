@@ -203,7 +203,7 @@ def generate_bfs_and_dijkstra_figure(src, target):
     if plt_error:
         return None
     import matplotlib.pyplot as plt
-    
+
     (G, positions) = tmg_load(highway_map())
     (dist_to, edge_to) = dijkstra_sp(G, src)
     print('Dijkstra shortest distance is {:.1f}'.format(dist_to[target]))
@@ -229,7 +229,7 @@ def generate_dfs_figure(src, target):
     if plt_error:
         return None
     import matplotlib.pyplot as plt
-    
+
     (G, positions) = tmg_load(highway_map())
     plt.clf()
     plot_gps(positions)
@@ -237,7 +237,7 @@ def generate_dfs_figure(src, target):
 
     node_from = dfs_search_recursive(G, src)
     total = compute_distance(positions, node_from, src, target)
-    
+
     plot_node_from(G, positions, src, target, node_from, color='purple')
     print('{0} total steps for Depth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
     plt.axis('off')
@@ -252,7 +252,7 @@ def generate_smart_search_figure(G, positions, src, target):
     if plt_error:
         return None
     import matplotlib.pyplot as plt
-    
+
     (G, positions) = tmg_load(highway_map())
     plt.clf()
     plot_gps(positions)
@@ -263,7 +263,7 @@ def generate_smart_search_figure(G, positions, src, target):
         return abs(positions[from_cell][0] - positions[to_cell][0]) + abs(positions[from_cell][1] - positions[to_cell][1])
 
     node_from = smart_search(G, src, target, distance=distance_gps)
-    total = compute_distance(positions, node_from, src, target)    
+    total = compute_distance(positions, node_from, src, target)
 
     plot_node_from(G, positions, src, target, node_from, color='purple')
     print('{0} total steps for Smart Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
@@ -281,7 +281,7 @@ def visualize_dijkstra_small_graph(DG):
     """
     from ch07.indexed_pq import IndexedMinPQ
     from ch07.replacement import WEIGHT
-    
+
     N = DG.number_of_nodes()
     src = 'a'
     inf = float('inf')
@@ -316,36 +316,17 @@ def visualize_dijkstra_small_graph(DG):
     return (dist_to, edge_to)
 
 def visualize_results_floyd_warshall(DG):
+    """Output the node_from and dist_to arrays for floyd-warshall after completion."""
     from ch07.all_pairs_sp import all_pairs_path_to
-    
+
     (dist_to, node_from) = floyd_warshall(DG)
-    
-    tbl_nf = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()))
-    for n in DG.nodes():
-        tbl_nf.format(n, 's')
-        
-    for n in DG.nodes():
-        row = []
-        for v in DG.nodes():
-            if n == v:
-                row.append(SKIP)
-            else:
-                if node_from[n][v]:
-                    row.append(node_from[n][v])
-                else:
-                    row.append(SKIP)
-        tbl_nf.row(row)
+
+    output_node_from_floyd_warshall(DG, node_from)
     print()
-    
-    tbl_dt = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()), decimals=1)
-    tbl_dt.format(list(DG.nodes())[0],'f')  #  only first one, since this would have been N in tbl
-    for n in DG.nodes():
-        row = []
-        for v in DG.nodes():
-            row.append(dist_to[n][v])
-        tbl_dt.row(row)
+
+    output_dist_to_floyd_warshall(DG, dist_to)
     print()
-    
+
     tbl_path = DataTable([20] * DG.number_of_nodes(), list(DG.nodes()))
     for n in DG.nodes():
         tbl_path.format(n, 's')
@@ -365,7 +346,7 @@ def visualize_results_floyd_warshall(DG):
 
 def floyd_warshall_just_initialize(G):
     """
-    Compute All Pairs Shortest Path using Floyd Warshall and return
+    Compute All Pairs Shortest Path using Floyd-Warshall and return
     dist_to[] with results and node_from[] to be able to recover the
     shortest paths.
     """
@@ -387,12 +368,21 @@ def floyd_warshall_just_initialize(G):
     return (dist_to, node_from)
 
 def visualize_results_floyd_warshall_just_initialize(DG):
+    """Output the node_from and dist_to arrays for floyd-warshall after initialization."""
     (dist_to, node_from) = floyd_warshall_just_initialize(DG)
-    
-    tbl_nf = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()))
+
+    output_node_from_floyd_warshall(DG, node_from)
+    print()
+
+    output_dist_to_floyd_warshall(DG, dist_to)
+    print()
+
+def output_node_from_floyd_warshall(DG, node_from, output=True):
+    """Create data table for node_from."""
+    tbl_nf = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()), output=output)
     for n in DG.nodes():
         tbl_nf.format(n, 's')
-        
+
     for n in DG.nodes():
         row = []
         for v in DG.nodes():
@@ -401,20 +391,23 @@ def visualize_results_floyd_warshall_just_initialize(DG):
             else:
                 row.append(SKIP)
         tbl_nf.row(row)
-    print()
-    
-    tbl_dt = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()), decimals=1)
+    return tbl_nf
+
+def output_dist_to_floyd_warshall(DG, dist_to, output=True):
+    """Create data table for dist_to."""
+    tbl_dt = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()), output=output, decimals=1)
     tbl_dt.format(list(DG.nodes())[0],'f')  #  only first one, since this would have been N in tbl
     for n in DG.nodes():
         row = []
         for v in DG.nodes():
             row.append(dist_to[n][v])
         tbl_dt.row(row)
-    print()
+    return tbl_dt
 
 def visualize_results_floyd_warshall_two_steps(DG):
+    """Output the node_from and dist_to arrays for floyd-warshall after first two steps."""
     (dist_to, node_from) = floyd_warshall_just_initialize(DG)
-    
+
     print('changes after k=a is processed.')
     k = 'a'
     for u in DG.nodes():
@@ -423,30 +416,13 @@ def visualize_results_floyd_warshall_two_steps(DG):
             if new_len < dist_to[u][v]:
                 dist_to[u][v] = new_len
                 node_from[u][v] = node_from[k][v]
-    
-    tbl_nf = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()))
-    for n in DG.nodes():
-        tbl_nf.format(n, 's')
-        
-    for n in DG.nodes():
-        row = []
-        for v in DG.nodes():
-            if node_from[n][v]:
-                row.append(node_from[n][v])
-            else:
-                row.append(SKIP)
-        tbl_nf.row(row)
+
+    output_node_from_floyd_warshall(DG, node_from)
     print()
-    
-    tbl_dt = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()), decimals=1)
-    tbl_dt.format(list(DG.nodes())[0],'f')  #  only first one, since this would have been N in tbl
-    for n in DG.nodes():
-        row = []
-        for v in DG.nodes():
-            row.append(dist_to[n][v])
-        tbl_dt.row(row)
+
+    output_dist_to_floyd_warshall(DG, dist_to)
     print()
-    
+
     print('changes after k=b is processed.')
     k = 'b'
     for u in DG.nodes():
@@ -455,28 +431,15 @@ def visualize_results_floyd_warshall_two_steps(DG):
             if new_len < dist_to[u][v]:
                 dist_to[u][v] = new_len
                 node_from[u][v] = node_from[k][v]
-    
+
     tbl_nf = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()))
     for n in DG.nodes():
         tbl_nf.format(n, 's')
-        
-    for n in DG.nodes():
-        row = []
-        for v in DG.nodes():
-            if node_from[n][v]:
-                row.append(node_from[n][v])
-            else:
-                row.append(SKIP)
-        tbl_nf.row(row)
+
+    output_node_from_floyd_warshall(DG, node_from)
     print()
-    
-    tbl_dt = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()), decimals=1)
-    tbl_dt.format(list(DG.nodes())[0],'f')  #  only first one, since this would have been N in tbl
-    for n in DG.nodes():
-        row = []
-        for v in DG.nodes():
-            row.append(dist_to[n][v])
-        tbl_dt.row(row)
+
+    output_dist_to_floyd_warshall(DG, dist_to)
     print()
 
 def generate_ch07():
@@ -494,11 +457,11 @@ def generate_ch07():
         description = 'A graph modeling a rectangular maze'
         label = captionx(chapter, figure_number)
         from ch07.viewer import Viewer
-         
+
         random.seed(15)
         m = Maze(3,5)
         g = to_networkx(m)
-        
+
         postscript_output = '{}-graph.ps'.format(label)
         if tkinter_error:
             print('unable to generate {}'.format(postscript_output))
@@ -508,7 +471,7 @@ def generate_ch07():
             canvas = Viewer(m, 50).view(root)
             tkinter_register_snapshot(root, canvas, postscript_output)
             root.mainloop()
- 
+
         # For obscure reasons, this must come AFTER root.mainloop()
         if plt_error:
             pass
@@ -519,7 +482,7 @@ def generate_ch07():
             output_file = image_file('{}-graph.svg'.format(label))
             plt.savefig(output_file, format="svg")
             print('created {}'.format(output_file))
-        
+
         print('{}. {}'.format(label, description))
         print()
 
@@ -592,12 +555,12 @@ def generate_ch07():
             bfs = BreadthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
             tkinter_register_snapshot(root, bfs.canvas, '{}-BFS.ps'.format(label))
             root.mainloop()
-    
+
             root = tkinter.Tk()
             dfs = DepthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
             tkinter_register_snapshot(root, dfs.canvas, '{}-DFS.ps'.format(label))
             root.mainloop()
-    
+
             root = tkinter.Tk()
             sfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
             tkinter_register_snapshot(root, sfs.canvas, '{}-Smart.ps'.format(label))
@@ -666,14 +629,14 @@ def generate_ch07():
         print()
 
     with FigureNum(15) as figure_number:
-        description = 'The shortest path from a to c has accumulated total of 8' 
+        description = 'The shortest path from a to c has accumulated total of 8'
         label = captionx(chapter, figure_number)
         print('Done by hand.')
         print('{}. {}'.format(label, description))
         print()
 
     with TableNum(1) as table_number:
-        description = "Executing Dijkstra's algorithm on small graph" 
+        description = "Executing Dijkstra's algorithm on small graph"
         label = captionx(chapter, table_number)
         DG_GOOD = nx.DiGraph()
         DG_GOOD.add_edge('a', 'b', weight=3)
@@ -686,7 +649,7 @@ def generate_ch07():
         print()
 
     with TableNum(2) as table_number:
-        description = "A negative edge weight in the wrong place breaks Dijkstra's algorithm" 
+        description = "A negative edge weight in the wrong place breaks Dijkstra's algorithm"
         label = captionx(chapter, table_number)
         DG_GOOD = nx.DiGraph()
         DG_GOOD.add_edge('a', 'b', weight=3)
@@ -761,7 +724,7 @@ def generate_ch07():
         visualize_results_floyd_warshall(DG_TABLE)
         print('{}. {}'.format(label, description))
         print()
-        
+
     with FigureNum(19) as figure_number:
         description = 'Initialize dist_to[][] and node_from[][] based on G'
         label = captionx(chapter, figure_number)
@@ -776,7 +739,7 @@ def generate_ch07():
         visualize_results_floyd_warshall_just_initialize(DG_TABLE)
         print('{}. {}'.format(label, description))
         print()
-        
+
     with FigureNum(20) as figure_number:
         description = 'Changes to node_from[][] and dist_to[][] after k processes a and b'
         label = captionx(chapter, figure_number)

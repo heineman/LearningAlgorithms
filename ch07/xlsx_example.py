@@ -21,7 +21,7 @@ def load_fibonacci_from_resource(ss):
 
 #######################################################################
 if __name__ == '__main__':
-    
+
     if tkinter_error:
         print('tkinter is not installed so unable to launch spreadsheet application')
     else:
@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
         root = tkinter.Tk()
         ss = Spreadsheet(root, nx.DiGraph())
-        entries = load_fibonacci_from_resource(ss)
+        load_fibonacci_from_resource(ss)
 
         # Might not be necessary IF entries are loaded in proper topological order!
         from ch07.digraph_search import topological_sort

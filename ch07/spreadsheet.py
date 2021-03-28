@@ -29,7 +29,7 @@ class Spreadsheet:
         expressions     - When a cell contains a formula, this maintains the expression tree
         expressions_raw - When a cell contains a formula, this is its initial string contents
         entries         - For the tkinter GUI, this is text widget for given cell
-        string_vars     - For the tkinter GUI, this is StringVar containing the value backing 
+        string_vars     - For the tkinter GUI, this is StringVar containing the value backing
                           an entry.
     """
     undefined = 'Undef'
@@ -44,14 +44,14 @@ class Spreadsheet:
         self.expressions_raw  = {}
         self.entries          = {}
         self.string_vars      = {}
-        self.canvas = self.make_gui()
+        self.make_gui()
 
     def make_gui(self):
         """Construct the necessary widgets for spreadsheet GUI and set up the event handlers."""
         if tkinter_error:
             return
         import tkinter
-        self.canvas = tkinter.Canvas(self.master) 
+        self.canvas = tkinter.Canvas(self.master)
 
         for r in range(1,self.num_rows):
             tkinter.Label(self.master, text=str(r)).grid(row=r, column=0)
@@ -68,7 +68,7 @@ class Spreadsheet:
                 widget.bind('<FocusOut>', lambda s=sv, lab=label: self.show_value(lab, s))
                 widget.grid(row=r, column=c)
                 self.entries[label] = widget
-                self.string_vars[label] = sv        
+                self.string_vars[label] = sv
 
     def entry_update(self, label, event):
         """Updates the contents of a spreadsheet cell in response to user input."""
@@ -120,7 +120,7 @@ class Spreadsheet:
                 raise RuntimeError('Changing {} to {} creates cycle.'.format(cell, sval))
         else:
             self.expressions.pop(cell, None)          # Pythonic way of deleting key
-            self.expressions_raw.pop(cell, None)      # Pythonic way of deleting key  
+            self.expressions_raw.pop(cell, None)      # Pythonic way of deleting key
 
         self._recompute(cell)                         # now recompute dependencies
 
@@ -135,10 +135,10 @@ class Spreadsheet:
         else:
             try:
                 self.values[cell] = float(self.string_vars[cell].get())
-            except:
+            except ValueError:
                 self.values[cell] = self.string_vars[cell].get()
 
-        if cell in self.digraph:    
+        if cell in self.digraph:
             for w in self.digraph[cell]:
                 self._recompute(w)
 

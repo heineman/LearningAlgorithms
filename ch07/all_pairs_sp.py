@@ -12,12 +12,15 @@ def debug_state(title, G, node_from, dist_to, output=True):
 
     tbl = DataTable([6] + [6]*len(labels), ['.'] + labels, output=output)
     tbl.format('.','s')
-    for f in labels:
-        tbl.format(f, 's')
+    for field in labels:
+        tbl.format(field, 's')
     for u in labels:
         row = [u]
         for v in labels:
-            row.append(node_from[u][v]) if node_from[u][v] else row.append('.')
+            if node_from[u][v]:
+                row.append(node_from[u][v])
+            else:
+                row.append('.')
         tbl.row(row)
     print()
 
@@ -27,7 +30,7 @@ def debug_state(title, G, node_from, dist_to, output=True):
         row = [u]
         for v in labels:
             if u == v:
-                row.append(0) 
+                row.append(0)
             else:
                 row.append(dist_to[u][v])
         tbl_dist_to.row(row)
@@ -49,9 +52,9 @@ def floyd_warshall(G):
 
         dist_to[u][u] = 0
 
-        for e in G.edges(u, data=True):
-            v = e[1]
-            dist_to[u][v] = e[2][WEIGHT]
+        for edge in G.edges(u, data=True):
+            v = edge[1]
+            dist_to[u][v] = edge[2][WEIGHT]
             node_from[u][v] = u
 
     for k in G.nodes():

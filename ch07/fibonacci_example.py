@@ -7,10 +7,10 @@ try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
-    
+
 from ch07.dependencies import tkinter_error
 
-def fibonacci_example(ss):
+def fibonacci_example(spreadsheet):
     """Initialize Spreadsheet to small Fibonacci example for book."""
     entries = {
         'A1': 'N',
@@ -39,7 +39,7 @@ def fibonacci_example(ss):
 #         'C8': '=(B8+C7)'
     }
     for k in entries:
-        ss.set(k,entries[k])
+        spreadsheet.set(k,entries[k])
 
 #######################################################################
 if __name__ == '__main__':

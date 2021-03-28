@@ -157,7 +157,7 @@ def draw_solution(G, field, src, target, figsize=(12,6)):
     if plt_error:
         return
     import matplotlib.pyplot as plt
-    
+
     H = solution_graph(G, path_to(field, src, target))
     F = node_from_field(G, field)
 
@@ -169,7 +169,7 @@ def draw_solution(G, field, src, target, figsize=(12,6)):
     nx.draw(H, pos_h, with_labels = True, node_color='w', font_size=8, ax=ax[0])
     pos_f = nx.get_node_attributes(F, 'pos')
     nx.draw(F, pos_f, with_labels = True, node_color='w', font_size=8, ax=ax[1])
-    
+
 #######################################################################
 if __name__ == '__main__':
     random.seed(15)

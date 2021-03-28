@@ -6,7 +6,7 @@ from ch07.maze import Maze, to_networkx
 from ch07.viewer import Viewer
 from ch07.dependencies import tkinter_error
 
-class DepthFirstSearchSolver():    
+class DepthFirstSearchSolver():
     """
     Solves a maze using Depth First Search, showing results graphically.
     """

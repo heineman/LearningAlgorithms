@@ -23,19 +23,19 @@ class Viewer:
     def view(self, master):
         """Show window with maze and return constructed tkinter canvas into which it was drawn."""
         if tkinter_error:
-            return
+            return None
         import tkinter
-        
+
         size = self.size
         w = self.maze.num_cols * size
         h = self.maze.num_rows * size
         canvas = tkinter.Canvas(master, width=w+10, height=h+10)
         canvas.pack()
-        
+
         offset = self.OFFSET
-        
+
         # Draw Vertical border at the left edge, then the top row in two pieces to show entrance. Note that
-        # the other borders of the maze are drawn as part of each individual cell 
+        # the other borders of the maze are drawn as part of each individual cell
         canvas.create_line(offset,                        offset, offset,                    offset+h, width=3)
         canvas.create_line(offset,                        offset, offset + (w/size//2)*size, offset,   width=3)
         canvas.create_line(offset + size*(1+(w/size)//2), offset, offset + (w/size)*size,    offset,   width=3)
@@ -65,7 +65,7 @@ class Viewer:
             cx = self.OFFSET + cell[1]*size + 1   # fudge factor to move off the wall...
             ry = self.OFFSET + cell[0]*size + 1
             self.built[cell] = self.canvas.create_oval(cx + inset, ry + inset, cx + size - 2*inset, ry + size - 2*inset, fill=color)
-    
+
 #######################################################################
 if __name__ == '__main__':
     if tkinter_error:
@@ -75,5 +75,5 @@ if __name__ == '__main__':
         random.seed(15)
         m = Maze(50,50)
         root = tkinter.Tk()
-        canvas = Viewer(m, 15).view(root)
+        Viewer(m, 15).view(root)
         root.mainloop()

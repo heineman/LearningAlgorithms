@@ -11,7 +11,7 @@ def recover_cycle(DG):
     node_from = {}
     cycle = []
 
-    def recover_cycle(w, v):
+    def _recover_cycle(w, v):
         n = v
         while n != w:
             yield n
@@ -32,7 +32,7 @@ def recover_cycle(DG):
             else:
                 # Check to make sure it's not in stack -- CYCLE if so!
                 if w in in_stack and in_stack[w]:
-                    cycle.extend(reversed(list(recover_cycle(w, v))))
+                    cycle.extend(reversed(list(_recover_cycle(w, v))))
 
         in_stack[v] = False
 
@@ -162,10 +162,3 @@ def return_cycle_nr(DG):
                             return cycle
 
     return None
-
-#######################################################################
-if __name__ == '__main__':
-    from ch07.book import make_sample_directed_graph
-    DG = make_sample_directed_graph()
-    #DG.add_edge('B2', 'C5')
-    print('well:',has_cycle(DG))

@@ -7,6 +7,7 @@ Note: Doesn't offer capability to draw graphs.
 """
 from algs.node import Node
 
+# data associated with an edge can contain a weight
 WEIGHT = 'weight'
 
 class Edge:
@@ -27,8 +28,7 @@ class Edge:
     def __str__(self):
         if self.weight:
             return '{} -> {} ({})'.format(self.head, self.tail, self.weight)
-        else:
-            return '{} -> {}'.format(self.head, self.tail)
+        return '{} -> {}'.format(self.head, self.tail)
 
 class UndirectedGraph:
     """
@@ -130,6 +130,7 @@ class AdjacencyViewer:
                 if (self.i, j) in self.mat.weights:
                     return {WEIGHT: self.mat.weights[(self.i,j)]}
                 return (self.mat.labels[self.i], self.mat.labels[j])
+        return None
 
     def __iter__(self):
         for j in self.neighbors:
@@ -146,7 +147,7 @@ class MatrixUndirectedGraph:
 
     def __init__(self):
         self.matrix = None
-        self.positions = []
+        self.positions = {}
         self.labels    = []
         self.weights   = {}
         self.E         = 0
@@ -156,7 +157,7 @@ class MatrixUndirectedGraph:
         if u in self.labels:
             return
         self.labels.append(u)
-        self.positions.append(pos)
+        self.positions[u] = pos
         N = len(self.labels)
 
         # Either initialize 1x1 matrix or extend with new column and one new '0' in each column.
