@@ -11,7 +11,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-from ch07.has_tkinter import tkinter_error
+from ch07.dependencies import tkinter_error
 
 def load_fibonacci_from_resource(ss):
     """Load up sample XSLX Microsoft Excel file as a Spreadsheet."""

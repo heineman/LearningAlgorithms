@@ -4,7 +4,7 @@ import random
 
 from ch07.maze import Maze, to_networkx
 from ch07.viewer import Viewer
-from ch07.has_tkinter import tkinter_error
+from ch07.dependencies import tkinter_error
 
 class BreadthFirstSearchSolver():
     """

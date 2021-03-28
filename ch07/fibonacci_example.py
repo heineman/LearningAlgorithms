@@ -8,7 +8,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
     
-from ch07.has_tkinter import tkinter_error
+from ch07.dependencies import tkinter_error
 
 def fibonacci_example(ss):
     """Initialize Spreadsheet to small Fibonacci example for book."""

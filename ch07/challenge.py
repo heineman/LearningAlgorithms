@@ -3,7 +3,7 @@ Challenge Exercises for Chapter 7.
 """
 from ch07.maze import Maze
 
-from ch07.has_tkinter import tkinter_error
+from ch07.dependencies import tkinter_error
 
 def path_to_recursive(node_from, src, target):
     """

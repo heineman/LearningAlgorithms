@@ -9,7 +9,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-from ch07.has_tkinter import tkinter_error
+from ch07.dependencies import tkinter_error
 
 def is_formula(s):
     """Determine if string is a formula."""

@@ -2,7 +2,7 @@
 import random
 
 from ch07.maze import Maze
-from ch07.has_tkinter import tkinter_error
+from ch07.dependencies import tkinter_error
 
 class Viewer:
     """
@@ -22,6 +22,10 @@ class Viewer:
 
     def view(self, master):
         """Show window with maze and return constructed tkinter canvas into which it was drawn."""
+        if tkinter_error:
+            return
+        import tkinter
+        
         size = self.size
         w = self.maze.num_cols * size
         h = self.maze.num_rows * size

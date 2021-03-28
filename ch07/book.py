@@ -2,25 +2,24 @@
 
 import timeit
 import random
-import matplotlib.pyplot as plt
-from ch07.all_pairs_sp import floyd_warshall
 
 try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
 
-from ch07.has_tkinter import tkinter_error
-from ch07.snapshot import tkinter_register_snapshot
-
 from algs.table import DataTable, captionx, FigureNum, TableNum, SKIP
 from algs.output import image_file
 from resources.highway import highway_map
+
+from ch07.dependencies import tkinter_error, plt_error
 from ch07.maze import Maze, to_networkx
+from ch07.snapshot import tkinter_register_snapshot
 from ch07.search import path_to, bfs_search, dfs_search_recursive, smart_search
 from ch07.single_source_sp import dijkstra_sp, edges_path_to, bellman_ford
 from ch07.plot_map import plot_gps, plot_highways, plot_path, plot_node_from
 from ch07.tmg_load import tmg_load, compute_distance
+from ch07.all_pairs_sp import floyd_warshall
 
 def make_sample_graph():
     """Create sample graph."""
@@ -201,6 +200,10 @@ def output_adjacency_list():
 
 def generate_bfs_and_dijkstra_figure(src, target):
     """Generate BFS solution overlaying Massachusetts highway."""
+    if plt_error:
+        return None
+    import matplotlib.pyplot as plt
+    
     (G, positions) = tmg_load(highway_map())
     (dist_to, edge_to) = dijkstra_sp(G, src)
     print('Dijkstra shortest distance is {:.1f}'.format(dist_to[target]))
@@ -223,6 +226,10 @@ def generate_bfs_and_dijkstra_figure(src, target):
 
 def generate_dfs_figure(src, target):
     """Generate DFS solution overlaying Massachusetts highway."""
+    if plt_error:
+        return None
+    import matplotlib.pyplot as plt
+    
     (G, positions) = tmg_load(highway_map())
     plt.clf()
     plot_gps(positions)
@@ -242,6 +249,10 @@ def generate_dfs_figure(src, target):
 
 def generate_smart_search_figure(G, positions, src, target):
     """Generate Smart Search solution .. ultimately omitted from book."""
+    if plt_error:
+        return None
+    import matplotlib.pyplot as plt
+    
     (G, positions) = tmg_load(highway_map())
     plt.clf()
     plot_gps(positions)
@@ -499,11 +510,16 @@ def generate_ch07():
             root.mainloop()
  
         # For obscure reasons, this must come AFTER root.mainloop()
-        pos = nx.get_node_attributes(g, 'pos')
-        nx.draw(g, pos, with_labels = True, node_color='w', font_size=8)
-        output_file = image_file('{}-graph.svg'.format(label))
-        plt.savefig(output_file, format="svg")
-        print('created {}'.format(output_file))
+        if plt_error:
+            pass
+        else:
+            import matplotlib.pyplot as plt
+            pos = nx.get_node_attributes(g, 'pos')
+            nx.draw(g, pos, with_labels = True, node_color='w', font_size=8)
+            output_file = image_file('{}-graph.svg'.format(label))
+            plt.savefig(output_file, format="svg")
+            print('created {}'.format(output_file))
+        
         print('{}. {}'.format(label, description))
         print()
 
