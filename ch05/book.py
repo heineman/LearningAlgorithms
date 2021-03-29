@@ -238,11 +238,13 @@ def modeling_merge_heap(max_k=5, output=True, decimals=1):
                   ])
     return tbl
 
-def timing_selection_insertion(min_k=8, max_k=18, output=True, decimals=3):
+def timing_selection_insertion(min_k=8, max_k=16, output=True, decimals=3):
     """
     Because Insertion Sort is so sensitive to its inputs, we take average time
     over all of its runs. Models first using 5 rows from [min_k .. min_k+5]
     and then presents information up to (but not including) max_k.
+    
+    Takes hours to run. In the book, the table goes up to max_k=18.
     """
     if output:
         print('Building models for Insertion Sort. This may take awhile...')
@@ -549,6 +551,7 @@ def generate_ch05():
         print()
 
     with TableNum(1) as table_number:
+        # for actual results from book, use max_k=18 as an argument, but it will take hours. 
         timing_selection_insertion()
         description  = 'Runtime performance (in seconds) for Selection Sort and Insertion Sort'
         label = captionx(chapter, table_number)

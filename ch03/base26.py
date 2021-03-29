@@ -50,3 +50,7 @@ def search_for_base():
 
     # failed...
     raise RuntimeError('search_for_base() failed')
+
+#######################################################################
+if __name__ == '__main__':
+    print('base26 of June is', base26('june'))

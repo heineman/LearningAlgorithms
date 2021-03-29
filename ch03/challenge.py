@@ -429,8 +429,9 @@ words = english_words()''', repeat=7, number=5))/5
     print('Open addressing Simulation build time:', build_dhl)
     print('Python addressing HT build time:', build_phl)
     
-    
-compare_python_hashtable()
+#######################################################################
+if __name__ == '__main__':
+    compare_python_hashtable()
 # pht = PythonSimultationHashtable(8)
 # 
 # from resources.english import english_words
