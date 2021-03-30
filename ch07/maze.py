@@ -179,11 +179,10 @@ if __name__ == '__main__':
         print('Unable to visualize maze without matplotlib and/or tkinter')
     else:
         import tkinter
-        random.seed(15)     # 28 is also good
-        m = Maze(3,5)
-        g = to_networkx(m)
         import matplotlib.pyplot as plt
+        random.seed(15)     # 28 is also good
+        G = to_networkx(Maze(3,5))
 
-        pos = nx.get_node_attributes(g, 'pos')
-        nx.draw(g, pos, with_labels = True, node_color='w', font_size=8)
+        pos = nx.get_node_attributes(G, 'pos')
+        nx.draw(G, pos, with_labels = True, node_color='w', font_size=8)
         plt.show()

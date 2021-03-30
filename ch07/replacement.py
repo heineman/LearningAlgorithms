@@ -386,7 +386,7 @@ class DiGraph(DirectedGraph):
     def __init__(self):
         DirectedGraph.__init__(self)
 
-def single_source_shortest_path(self, graph, src):
+def single_source_shortest_path(graph, src):
     """
     Act on Single Source Shortest Path and return path as dictionary, where
     each node is expanded to have its
