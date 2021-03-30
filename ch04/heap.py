@@ -28,8 +28,8 @@ class PQ:
         """Enqueue (v, p) entry into priority queue."""
         if self.N == self.size:
             raise RuntimeError('Priority Queue is full!')
-        self.N += 1
 
+        self.N += 1
         self.storage[self.N] = Entry(v, p)
         self.swim(self.N)
 
