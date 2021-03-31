@@ -52,19 +52,21 @@ not have administrator privileges:
 
 	1. Download MSI file from python web site
 	
-	https://www.python.org/ftp/python/3.3.0/python-3.3.0.amd64.msi
+	   https://www.python.org/ftp/python/3.3.0/python-3.3.0.amd64.msi for example is
+	   what you would do to install Python 3.3.0, which is the earliest version for
+	   which this code base is compatible
 	
 	2. Invoke MSI installer from command line
 	
-	https://www.python.org/download/releases/2.4/msi/
+	   https://www.python.org/download/releases/2.4/msi/
 	
-	msiexec /a python-3.3.0.amd64.msi TARGETDIR=C:\users\heineman\Desktop\Python33
+	   msiexec /a python-3.3.0.amd64.msi TARGETDIR=C:\YOUR\DESTINATION\FILE
 	
 	3. Now switch to the directory which contains the LearningAlgorithms code base.
 	
 	4. modify launch.bat to update proper location for 'python3'
 	
-	c:\users\heineman\Desktop\Python33\python.exe
+	   C:\YOUR\DESTINATION\FILE\Python33\python.exe
 
 ## Dependencies
 
