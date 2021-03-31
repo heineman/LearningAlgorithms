@@ -44,6 +44,28 @@ file and is used to provide sample inputs throughout the book.
 A TMG graph file containing a representation of highways in Massachusetts is 
 graciously provided by James Teresco from https://travelmapping.net/graphs
 
+## Installation
+
+First make sure Python3 is installed on your system. The following steps
+show how to install Python on a windows operating system even if you do
+not have administrator privileges:
+
+	1. Download MSI file from python web site
+	
+	https://www.python.org/ftp/python/3.3.0/python-3.3.0.amd64.msi
+	
+	2. Invoke MSI installer from command line
+	
+	https://www.python.org/download/releases/2.4/msi/
+	
+	msiexec /a python-3.3.0.amd64.msi TARGETDIR=C:\users\heineman\Desktop\Python33
+	
+	3. Now switch to the directory which contains the LearningAlgorithms code base.
+	
+	4. modify launch.bat to update proper location for 'python3'
+	
+	c:\users\heineman\Desktop\Python33\python.exe
+
 ## Dependencies
 
 The code depends on [numpy](https://numpy.org/), [scipy](https://www.scipy.org/)
