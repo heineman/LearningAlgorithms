@@ -44,8 +44,10 @@ def defeat_smart_search():
         print('tkinter is not installed so unable to visualize smart search being defeated.')
     else:
         import tkinter
+        from ch07.snapshot import tkinter_register_snapshot
         root = tkinter.Tk()
-        SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+        sss = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+        tkinter_register_snapshot(root, sss.canvas, 'Ch07-Defeat-Smart-Search.ps')
         root.mainloop()
 
 #######################################################################

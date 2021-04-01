@@ -260,6 +260,27 @@ class MatrixUndirectedGraph:
             self.weights[(i,j)] = weight
             self.weights[(j,i)] = weight
 
+    def remove_edge(self, u, v):
+        """Remove edge from u => v."""
+        if not u in self.labels:
+            return
+
+        if not v in self.labels:
+            return
+
+        # Not present? leave now
+        i = self.labels.index(u)
+        j = self.labels.index(v)
+        if self.matrix[i][j] == MatrixUndirectedGraph.NO_EDGE:
+            return
+
+        self.matrix[i][j] = MatrixUndirectedGraph.NO_EDGE
+        self.matrix[j][i] = MatrixUndirectedGraph.NO_EDGE
+        self.E -= 1
+        if (i,j) in self.weights:
+            self.weights.pop((i,j), None)
+            self.weights.pop((j,i), None)
+
     def add_edges_from(self, edges):
         """Add edges to graph, if not already there."""
         for u,v in edges:
@@ -427,3 +448,80 @@ def dijkstra_path(G, src, target):
     from ch07.single_source_sp import dijkstra_sp
 
     return dijkstra_sp(G, src, target)
+
+    
+#######################################################################
+# Test case is here so replacement can be tested independently of whether
+# networkx is installed on your computer or not.    
+#######################################################################
+import unittest
+
+class TestChapter7(unittest.TestCase):
+    def test_directed_graph(self):
+        DG = DirectedGraph()
+
+        DG.add_edge('A2', 'A3')
+        DG.add_edges_from([('A3', 'A4'), ('A4', 'A5')])
+
+        edge_list = [ ('B{}'.format(i), 'C{}'.format(i)) for i in range(2,6)]
+        DG.add_edges_from(edge_list)    
+        for i in range(2, 6):
+            if 2 < i < 5:
+                DG.add_edge('B{}'.format(i), 'B{}'.format(i+1))
+            if i < 5:
+                DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
+                
+        self.assertEqual(12, DG.number_of_nodes())
+        self.assertEqual(12, DG.number_of_edges())
+        self.assertEqual(sorted(['B5', 'C4']), sorted(list(DG['B4'])))
+        self.assertEqual(sorted([('C3', 'C4')]),
+                         sorted(list(DG.edges('C3'))))
+        
+        DG.remove_edge('C3', 'C4')
+        self.assertEqual(12, DG.number_of_nodes())
+        self.assertEqual(11, DG.number_of_edges())
+        self.assertEqual(sorted(['B4', 'C3']), sorted(list(DG['B3'])))
+        self.assertEqual(sorted([('B3', 'B4'), ('B3', 'C3')]),
+                         sorted(list(DG.edges('B3'))))
+
+    def test_matrix_undirected_graph(self):
+        DG = MatrixUndirectedGraph()
+
+        DG.add_edge('A2', 'A3')
+        DG.add_edges_from([('A3', 'A4'), ('A4', 'A5')])
+
+        edge_list = [ ('B{}'.format(i), 'C{}'.format(i)) for i in range(2,6)]
+        DG.add_edges_from(edge_list)    
+        for i in range(2, 6):
+            if 2 < i < 5:
+                DG.add_edge('B{}'.format(i), 'B{}'.format(i+1))
+            if i < 5:
+                DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
+                
+        self.assertEqual(12, DG.number_of_nodes())
+        self.assertEqual(12, DG.number_of_edges())
+        self.assertEqual(sorted(['B3', 'B5', 'C4']), sorted(list(DG['B4'])))
+        self.assertEqual(sorted([('C3', 'B3'), ('C3', 'C2'), ('C3', 'C4')]),
+                         sorted(list(DG.edges('C3'))))
+        
+        DG.remove_edge('C3', 'C4')
+        self.assertEqual(12, DG.number_of_nodes())
+        self.assertEqual(11, DG.number_of_edges())
+        self.assertEqual(sorted(['B4', 'C3']), sorted(list(DG['B3'])))
+        self.assertEqual(sorted([('B3', 'B4'), ('B3', 'C3')]),
+                         sorted(list(DG.edges('B3'))))
+
+    def test_dijkstra_sp(self):
+        DG = DirectedGraph()
+        DG.add_edge('a', 'b', weight=3)
+        DG.add_edge('a', 'c', weight=9)
+        DG.add_edge('b', 'c', weight=4)
+        DG.add_edge('b', 'd', weight=2)
+        DG.add_edge('d', 'c', weight=1)
+        expanded = single_source_shortest_path(DG, 'a')
+        path = expanded['c']
+        self.assertEqual(['a', 'b', 'd', 'c'], path)
+        
+#######################################################################
+if __name__ == '__main__':
+    unittest.main()
