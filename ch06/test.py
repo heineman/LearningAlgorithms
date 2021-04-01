@@ -9,6 +9,19 @@ from ch06.avl import check_avl_property
 
 class TestChapter6(unittest.TestCase):
 
+    def test_baseline_expression(self):
+        from ch06.expression import Value, add_operator, build_expression
+        num1 = Value(17)
+        self.assertEqual(17, num1.eval())
+
+        def exp(left, right):
+            """^"""
+            return left ** right
+
+        add_operator('^', exp)
+        expr = build_expression('((8^2)*(7/4))')
+        self.assertEqual(112, expr.eval())
+
     def test_expression(self):
         from ch06.book import expression_tree, debug_expression
         from ch06.expression import build_expression, add_operator

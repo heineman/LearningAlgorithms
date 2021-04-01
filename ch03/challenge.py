@@ -13,9 +13,6 @@ class ValueBadHash:
     def __init__(self, v):
         self.v = v
 
-    def __repr__(self):
-        return 'ValueBadHash({})'.format(self.v)
-
     def __hash__(self):
         """only four different values."""
         return hash(self.v) % 4
@@ -332,7 +329,7 @@ class DynamicHashtableIncrementalResizing:
 
         return None                 # Nothing was removed
 
-class PythonSimultationHashtable:
+class PythonSimulationHashtable:
     # highly tuned constant
     PERTURB_SHIFT = 5
     
@@ -359,13 +356,13 @@ class PythonSimultationHashtable:
         while self.table[hc]:
             if self.table[hc].key == k:
                 return self.table[hc].value
-            perturb >>= PythonSimultationHashtable.PERTURB_SHIFT
+            perturb >>= PythonSimulationHashtable.PERTURB_SHIFT
             hc = (hc*5 + perturb + 1) & (self.M-1)
         return None                 # Couldn't find
 
     def resize(self, new_size):
         """Resize table and rehash existing entries into new table."""
-        temp = PythonSimultationHashtable(new_size)
+        temp = PythonSimulationHashtable(new_size)
         for n in self.table:
             if n:
                 temp.put(n.key, n.value)
@@ -382,7 +379,7 @@ class PythonSimultationHashtable:
             if self.table[hc].key == k:     # Overwrite if already here
                 self.table[hc].value = v
                 return
-            perturb >>= PythonSimultationHashtable.PERTURB_SHIFT
+            perturb >>= PythonSimulationHashtable.PERTURB_SHIFT
             hc = (hc*5 + perturb + 1) & (self.M-1)
 
         # With Open Addressing, you HAVE to insert first into the
@@ -419,10 +416,10 @@ from resources.english import english_words
 words = english_words()''', repeat=7, number=5))/5
 
     build_phl = min(timeit.repeat(stmt='''
-pht = PythonSimultationHashtable(8)
+pht = PythonSimulationHashtable(8)
 for w in words:
     pht.put(w,w)''', setup='''
-from ch03.challenge import PythonSimultationHashtable
+from ch03.challenge import PythonSimulationHashtable
 from resources.english import english_words
 words = english_words()''', repeat=7, number=5))/5
     
@@ -432,7 +429,7 @@ words = english_words()''', repeat=7, number=5))/5
 #######################################################################
 if __name__ == '__main__':
     compare_python_hashtable()
-# pht = PythonSimultationHashtable(8)
+# pht = PythonSimulationHashtable(8)
 # 
 # from resources.english import english_words
 # for w in english_words():

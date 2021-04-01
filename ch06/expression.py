@@ -162,28 +162,3 @@ def build_expression(s, environment=None):
                 expressions.push(Reference(token, environment))
 
     return expressions.pop()           # If parens balance, then left with expression
-
-#######################################################################
-if __name__ == '__main__':
-    # Base case
-    num1 = Value(17)
-    print(num1)
-    print(num1.eval())
-
-    expr = build_expression('(((3 + 1)/4) * (((1 + 5)* 9) - (2*6)))')
-    print(expr)
-    print(expr.eval())
-
-    def exp(left, right):
-        """^"""
-        return left ** right
-
-    add_operator('^', exp)
-
-    expr = build_expression('((8^2)*(7/4))')
-    print(expr)
-    print(expr.eval())
-
-    add1 = Expression(add, Value(1), Value(5))
-    mult2 = Expression(mult, add1, Value(9))
-    print(mult2,'=',mult2.eval())
