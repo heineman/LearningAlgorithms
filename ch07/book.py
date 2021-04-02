@@ -758,5 +758,4 @@ def generate_ch07():
 
 #######################################################################
 if __name__ == '__main__':
-    table_topological_example()
-    #generate_ch07()
+    generate_ch07()

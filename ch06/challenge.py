@@ -363,6 +363,7 @@ def recreate_tree(expr, convert=lambda x: x):
             subgroup = extract(expr,comma2+1)
             right = recreate_tree(subgroup, convert)
         else:
+            # I have yet to find a case that requires this statement. Might not be necessary?
             right = BinaryNode(convert(expr[comma2+1:-1]))
 
     node = BinaryNode(convert(root_value))

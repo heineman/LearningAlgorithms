@@ -616,7 +616,8 @@ class TestChapter6(unittest.TestCase):
         self.assertTrue(access > 0)
 
     def test_recreate_tree(self):
-        from ch06.challenge import recreate_tree
+        from ch06.challenge import recreate_tree, tree_structure
+        from ch06.tree import BinaryTree
 
         root = recreate_tree('(19,,)')
         self.assertEqual('19', root.value)
@@ -636,7 +637,74 @@ class TestChapter6(unittest.TestCase):
         root = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
         self.assertEqual('19', root.value)
         self.assertEqual(8, root.size())
+        
+        # create and flatten again.
+        bt1 = BinaryTree()
+        bt1.insert(10)
+        bt1.insert(15)
+        bt1.insert(13)
+        bt1.insert(11)
+        s = tree_structure(bt1.root)
+        self.assertEqual('(10,,(15,(13,(11,,),),))', s)
+        n = recreate_tree(s)
+        self.assertEqual(s, tree_structure(n))
+        
+        bt1 = BinaryTree()
+        bt1.insert(12)
+        bt1.insert(5)
+        s = tree_structure(bt1.root)
+        self.assertEqual('(12,(5,,),)', s)
+        n = recreate_tree(s)
+        self.assertEqual(s, tree_structure(n))
+        
+        root = recreate_tree('(26,(23,,),)')
+        self.assertEqual('26', root.value)
+        
+        root = recreate_tree('(23,5,(30,29,))')
+        self.assertEqual('23', root.value)
+        
+    def test_speaking_tree(self):
+        from ch06.speaking import BinaryTree
 
+        bt = BinaryTree()
+        self.assertEqual('To insert `5`, create a new subtree with root of `5`.', bt.insert(5))
+        self.assertEqual('To insert `3`, `3` is smaller than or equal to `5`, so insert `3` into the left subtree of `5` but there is no left subtree, so create a new subtree with root of `3`.', bt.insert(3))
+        self.assertEqual('To insert `1`, `1` is smaller than or equal to `5`, so insert `1` into the left subtree of `5` rooted at `3`. Now `1` is smaller than or equal to `3`, so insert `1` into the left subtree of `3` but there is no left subtree, so create a new subtree with root of `1`.', bt.insert(1))
+
+    def test_stress_recreate(self):
+        from ch06.tree import BinaryTree
+        from ch06.challenge import tree_structure, recreate_tree
+       
+        # create all subsets of 1..7
+        groups = [[1], [2], [3], [4], [5], [6], [7]]
+        for _ in range(6):
+            # Create complete tree with three levels.
+            for group in groups:
+                bt = BinaryTree()
+                for x in [4, 2, 6, 1, 3, 5, 7]:
+                    bt.insert(x)
+
+                for s in group:
+                    bt.remove(s)
+
+                s = tree_structure(bt.root)
+                n = recreate_tree(s, int)    # recreate and convert to int
+                bt.root = n
+
+                # validate all values BUT in set are found
+                for i in range(1, 8):
+                    if not i in group:
+                        self.assertTrue(i in bt)
+
+            # expand deletions
+            new_groups = []
+            for group in groups:
+                for i in range(1,8):
+                    if not i in group:
+                        new_groups.append(group + [i])
+
+            groups = new_groups
+    
     def test_produce_height_stats_balanced_integers(self):
         from ch06.challenge import produce_height_stats_balanced_integers
 
@@ -655,6 +723,14 @@ class TestChapter6(unittest.TestCase):
         tree.remove(to_delete)
         check_avl_property(tree.root)
         self.assertEqual(num_rotations + extra + 1, rotations[0])  # This exceeds #rotations
+        
+    def test_fibonacci_avl(self):
+        from ch06.challenge import fibonacci_avl_tree_up_to_2k
+        from ch06.challenge import tree_structure
+       
+        bt1 = fibonacci_avl_tree_up_to_2k(4)
+        self.assertEqual('(3,(2,(1,,),),(5,(4,,),(6,,(7,,))))', tree_structure(bt1.root))
+        
 
 #######################################################################
 if __name__ == '__main__':

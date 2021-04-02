@@ -444,6 +444,9 @@ def generate_ch03():
     """Generate Tables and Figures for chapter 03."""
     chapter = 3
 
+    from ch03.months import print_month
+    print_month('February', 2024)
+    
     with FigureNum(1) as figure_number:
         description  = 'Array containing month lengths interspersed with unneeded -1 values'
         label = captionx(chapter, figure_number)
