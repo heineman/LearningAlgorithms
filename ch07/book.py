@@ -92,14 +92,15 @@ def topological_example(G, N):
                 v = label + str(k+1)
                 G.add_edge(u, v)
 
-def table_topological_example():
+def table_topological_example(max_k=8, output=True, decimals=4):
     """Compare Topological sort performance."""
     DG = nx.DiGraph()
     topological_example(DG,4)
 
-    tbl = DataTable([8, 8, 12, 12], ['N', 'E', 'Built-In', 'Topological Sort'], decimals=4)
+    tbl = DataTable([8, 10, 12, 12], ['N', 'E', 'Built-In', 'Topological Sort'],
+                    output=output, decimals=decimals)
     tbl.format('E', ',d')
-    for N in [2**k for k in range(1, 8)]:
+    for N in [2**k for k in range(1, max_k)]:
         built_in = 1000*min(timeit.repeat(stmt='''nx.topological_sort(DG)''', setup='''
 from ch07.book import topological_example
 try:
@@ -757,4 +758,5 @@ def generate_ch07():
 
 #######################################################################
 if __name__ == '__main__':
-    generate_ch07()
+    table_topological_example()
+    #generate_ch07()

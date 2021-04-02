@@ -332,14 +332,14 @@ class DynamicHashtableIncrementalResizing:
 class PythonSimulationHashtable:
     # highly tuned constant
     PERTURB_SHIFT = 5
-    
+
     """Simulate Open Addressing Hashtable in Python."""
     def __init__(self, M=10):
-        self.table = [None] * M
         if M < 8:
             M = 8
         else:
             M = 2 ** int(math.log(M)/math.log(2))
+        self.table = [None] * M
         self.M = M
         self.N = 0
 
@@ -375,6 +375,7 @@ class PythonSimulationHashtable:
         """Associate value, v, with the key, k."""
         perturb = hash(k)
         hc = perturb & (self.M-1)       # First place it could be
+       
         while self.table[hc]:
             if self.table[hc].key == k:     # Overwrite if already here
                 self.table[hc].value = v

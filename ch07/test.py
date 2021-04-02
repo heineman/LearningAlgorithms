@@ -325,6 +325,11 @@ class TestChapter7(unittest.TestCase):
         # However, both cycles contain 'e'
         self.assertTrue('e' in recover_cycle(G))
         self.assertTrue('e' in recover_cycle_nr(G))
+        
+    def test_topological_table(self):
+        from ch07.book import table_topological_example
+        tbl = table_topological_example(max_k=4, output=False)
+        self.assertEqual(336, tbl.entry(64, 'E'))
 
 #######################################################################
 if __name__ == '__main__':

@@ -367,6 +367,56 @@ class TestChapter3(unittest.TestCase):
         for i in [1,2,3,12]:
             self.assertEqual(i, ht.get(i))
 
+    def test_dynamic_resizing_valid(self):
+        from ch03.challenge import DynamicHashtableIncrementalResizing as Hashtable
+        
+        with self.assertRaises(ValueError):
+            Hashtable(0, 10)
+
+        with self.assertRaises(ValueError):
+            Hashtable(10, 0)
+
+        ht = Hashtable(7, 5)
+        self.assertTrue(None == ht.get(99))
+        self.assertTrue(None == ht.remove(99))
+        ht.put(5, 10)
+        self.assertEqual(10, ht.get(5))
+        ht.put(5, 11)
+        self.assertEqual(11, ht.get(5))
+        self.assertEqual(11, ht.remove(5))
+        
+        # Harder to get dynamic resizing
+        ht = Hashtable(10, 3)
+        for i in range(12):
+            ht.put(i, i)
+            
+        for i in range(12):
+            self.assertEqual(i, ht.get(i))
+            
+        for i in range(12):
+            ht.put(i, i+1)
+            
+        for i in range(12):
+            self.assertEqual(i+1, ht.get(i))
+
+    def test_simulation(self):
+        from ch03.challenge import PythonSimulationHashtable as Hashtable
+        
+        ht = Hashtable(5)
+        for i in range(12):
+            ht.put('key{}'.format(i), i)
+            
+        for i in range(12):
+            self.assertEqual(i, ht.get('key{}'.format(i)))
+            
+        for i in range(12):
+            ht.put('key{}'.format(i), i+1)
+            
+        for i in range(12):
+            self.assertEqual(i+1, ht.get('key{}'.format(i)))
+
+        self.assertEqual(list(range(1,13)), sorted([e[1] for e in ht]))     
+
     def test_challenge_small(self):
         from ch03.challenge import DynamicHashtableIncrementalResizing as Hashtable
         values = list(['val{}'.format(k) for k in range(55)])
