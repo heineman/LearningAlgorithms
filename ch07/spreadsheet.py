@@ -108,7 +108,7 @@ class Spreadsheet:
         if is_formula(sval):
             self.values[cell] = self.undefined
             self.expressions_raw[cell] = sval
-            self.expressions[cell] = build_expression(self.expressions_raw[cell][1:], self.values)
+            self.expressions[cell] = build_expression(self.expressions_raw[cell][1:], environment=self.values)
             for v in set(self.expressions[cell].references()):     # convert to set to eliminate duplicates
                 self.digraph.add_edge(v, cell)
 
