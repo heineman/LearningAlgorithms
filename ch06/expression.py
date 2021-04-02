@@ -118,35 +118,42 @@ def sub(left, right):
     """-"""
     return left - right
 
-# Register operators here.
+# Built in operators here.
 _operators = { '+' : add, '-' : sub, '*' : mult, '/' : divide }
 
-def add_operator(op, func):
-    """Add an operator to the known operators."""
-    if op in _operators:
-        raise ValueError('Attempting to overwrite existing operator: {}'.format(op))
-
-    _operators[op] = func
-
-def build_expression(s, environment=None):
+def build_expression(s, new_operators=None, environment=None):
     """
     Given a string consisting of numeric values, parentheses and
     mathematical operators, return Expression tree using a stack-based
-    algorithm developed by Dijskstra.
+    algorithm developed by Dijkstra. To parse new operations, simply 
+    pass them in as a dict where key is the symbol for the new operator and 
+    its value is a function that takes in two arguments (left, right) for 
+    the operands to the binary function.
     """
 
     # Match open- and close- parens, any sequence of digits, and
     # known operators, using backslash notation. Limited to only special characters
     # but still quite nice...
-    pattern = re.compile('(\(|\)|[a-zA-Z.0-9_]+|[{}])'.format('\\'.join(_operators.keys())))
+    known_operators = {}
+    for op in _operators:
+        known_operators[op] = _operators[op]
+
+    if new_operators:
+        for op in new_operators:
+            if op in _operators:
+                raise ValueError('Attempting to overwrite existing operator: {}'.format(op))
+
+            known_operators[op] = new_operators[op]
+
+    pattern = re.compile('(\(|\)|[a-zA-Z.0-9_]+|[{}])'.format('\\'.join(known_operators.keys())))
 
     from ch07.list_stack import Stack
     ops = Stack()
     expressions = Stack()
 
     for token in pattern.findall(s):
-        if token in _operators:
-            ops.push(_operators[token])            # Push each operator found for later
+        if token in known_operators:
+            ops.push(known_operators[token])            # Push each operator found for later
         elif token == '(':
             pass                       # You seriously do not need to do anything!
         elif token == ')':

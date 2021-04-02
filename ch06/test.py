@@ -10,7 +10,7 @@ from ch06.avl import check_avl_property
 class TestChapter6(unittest.TestCase):
 
     def test_baseline_expression(self):
-        from ch06.expression import Value, add_operator, build_expression
+        from ch06.expression import Value, build_expression
         num1 = Value(17)
         self.assertEqual(17, num1.eval())
 
@@ -18,13 +18,13 @@ class TestChapter6(unittest.TestCase):
             """^"""
             return left ** right
 
-        add_operator('^', exp)
-        expr = build_expression('((8^2)*(7/4))')
+        #add_operator('^', exp)
+        expr = build_expression('((8^2)*(7/4))', new_operators={'^' : exp})
         self.assertEqual(112, expr.eval())
 
     def test_expression(self):
         from ch06.book import expression_tree, debug_expression
-        from ch06.expression import build_expression, add_operator
+        from ch06.expression import build_expression
 
         mult7 = expression_tree()
         self.assertEqual(42.0, mult7.eval())
@@ -43,8 +43,7 @@ class TestChapter6(unittest.TestCase):
             """%"""
             return a % b
 
-        add_operator('%', mod)
-        expr = build_expression('((9 % 2) * 5)')
+        expr = build_expression('((9 % 2) * 5)', new_operators = {'%' : mod})
         self.assertEqual(5.0, expr.eval())
         self.assertEqual([9.0, 2.0, '%', 5.0, '*'], list(expr.postfix()))
 
