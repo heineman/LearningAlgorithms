@@ -1,4 +1,15 @@
-"""Animates the Depth First Search solution of a maze."""
+"""
+Animates the Depth First Search solution of a maze.
+
+The Depth First Search implementation is non-recursive, since mazes can grow quite 
+large. I have provided the recursive variation as well, which you can switch within
+the `animate()` method below.
+
+If you set `refresh_rate` to zero, then it will remove all delays. As it is, the 
+small 0.01 refresh rate shows the progress of the seach.
+
+if you set `stop_end` to be True, the search will terminate at the target 
+"""
 import time
 import random
 

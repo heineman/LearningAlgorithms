@@ -65,6 +65,26 @@ class TestChapter7(unittest.TestCase):
         H = solution_graph(G, path_to(node_from, m.start(), m.end()))
         self.assertEqual(2, len(list(H.edges())))
 
+    def test_smart_search(self):
+        from ch07.maze import Maze, to_networkx, solution_graph, distance_to
+        from ch07.search import smart_search, path_to, node_from_field
+        import random
+        random.seed(15)
+        m = Maze(3,5)
+        G = to_networkx(m)
+
+        # BFS search solution
+        node_from = smart_search(G, m.start(), m.end(), distance_to)
+        self.assertEqual((1,0), node_from[(2,0)])
+
+        # Create graph resulting from the BFS search results
+        F = node_from_field(G, node_from)
+        self.assertEqual(14, len(list(F.edges())))
+
+        # The actual solution is a two-edge, three node straight path
+        H = solution_graph(G, path_to(node_from, m.start(), m.end()))
+        self.assertEqual(2, len(list(H.edges())))
+
     def test_allpairs_sp(self):
         from ch07.all_pairs_sp import floyd_warshall, all_pairs_path_to
         G = nx.Graph()

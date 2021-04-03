@@ -7,7 +7,6 @@ import timeit
 
 from algs.table import DataTable, ExerciseNum, captionx
 from algs.counting import RecordedItem
-from algs.modeling import Model
 
 def partition(A, lo, hi, idx):
     """
@@ -271,7 +270,7 @@ if __name__ == '__main__':
         run_median_trial()
         print(captionx(chapter, exercise_number),
               'Median Counting')
-    
+
     with ExerciseNum(3) as exercise_number:
         run_counting_sort_trials()
         print(captionx(chapter, exercise_number),

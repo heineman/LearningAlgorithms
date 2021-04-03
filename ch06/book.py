@@ -4,6 +4,7 @@ import timeit
 import math
 from algs.table import DataTable, captionx, FigureNum, TableNum, process
 from ch02.bas import binary_array_search
+from ch06.challenge import speaking_tree
 
 def insert_value(A, val):
     """Return new list with val in its proper location."""
@@ -262,6 +263,7 @@ def generate_ch06():
 
     with TableNum(2) as table_number:
         description  = 'Creating a binary search tree by inserting (in order) 19,14,15,53,58,3,26'
+        speaking_tree()
         label = captionx(chapter, table_number)
         print('{}. {}'.format(label, description))
         print()

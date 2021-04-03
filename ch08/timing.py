@@ -39,7 +39,7 @@ from collections import deque
 q = deque()
 for i in range({}):
     q.append(i)'''.format(N), repeat=5, number=1))
-    
+
 def queue_enqueue(N, num):
     """Run a single trial of num enqueue requests."""
     return 1000*min(timeit.repeat(stmt='''
@@ -104,7 +104,7 @@ def generate_queue_table(max_k=18, output=True, decimals=3):
                  dequeue_enqueue(n, 1000),
                  queue_enqueue(n, 1000),
                  simple_queue_enqueue(n, 1000)])
-        
+
     deq_tbl = DataTable([8,8,8,8,8], ['N','list','Dequeue', 'SimpleQueue', 'Queue'],
                     output=output, decimals=decimals)
 
@@ -113,7 +113,7 @@ def generate_queue_table(max_k=18, output=True, decimals=3):
                  dequeue_dequeue(n, 1000),
                  queue_dequeue(n, 1000),
                  simple_queue_dequeue(n, 1000)])
-           
+
     return (enq_tbl, deq_tbl)
 
 def list_push(N, num):
@@ -186,7 +186,7 @@ def generate_stack_table(max_k=18, output=True, decimals=3):
         push_tbl.row([n,list_push(n, 1000),
                  dequeue_push(n, 1000),
                  queue_push(n, 1000)])
-        
+
     pop_tbl = DataTable([8,8,8,8], ['N','list','Dequeue', 'LifoQueue'],
                     output=output, decimals=decimals)
 
@@ -194,7 +194,7 @@ def generate_stack_table(max_k=18, output=True, decimals=3):
         pop_tbl.row([n,list_pop(n, 1000),
                  dequeue_pop(n, 1000),
                  queue_pop(n, 1000)])
-           
+
     return (push_tbl, pop_tbl)
 
 def heap_add(N, num):
@@ -220,7 +220,7 @@ import heapq
 h = []
 for i in range(0,2*{},2):
     heapq.heappush(h, i)'''.format(N), repeat=5, number=1))
-    
+
 def pq_add(N, num):
     """Run a single trial of num heap add requests."""
     return 1000*min(timeit.repeat(stmt='''
@@ -256,24 +256,23 @@ def generate_heap_table(max_k=18, output=True, decimals=3):
     for n in [2**k for k in range(10, max_k)]:
         add_tbl.row([n,heap_add(n, 1000),
                  pq_add(n, 1000)])
-        
+
     remove_tbl = DataTable([8,8,8], ['N','heapq','PriorityQueue'],
                     output=output, decimals=decimals)
 
     for n in [2**k for k in range(10, max_k)]:
         remove_tbl.row([n,heap_remove(n, 1000),
                  pq_remove(n, 1000)])
-           
+
     return (add_tbl, remove_tbl)
 
 #######################################################################
 if __name__ == '__main__':
     print('Stack Tables')
     generate_stack_table()
-    
+
     print('Queue Tables')
-    generate_queue_table
-    
+    generate_queue_table()
+
     print('Heap Tables')
     generate_heap_table()
-    

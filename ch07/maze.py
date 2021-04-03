@@ -178,7 +178,6 @@ if __name__ == '__main__':
     if plt_error or tkinter_error:
         print('Unable to visualize maze without matplotlib and/or tkinter')
     else:
-        import tkinter
         import matplotlib.pyplot as plt
         random.seed(15)     # 28 is also good
         G = to_networkx(Maze(3,5))

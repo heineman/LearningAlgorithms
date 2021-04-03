@@ -104,6 +104,10 @@ class TestChapter6(unittest.TestCase):
         from ch06.tree import BinaryTree
 
         bt1 = BinaryTree()
+        self.assertTrue(bt1.remove(7))    # can work even when empy
+        self.assertTrue(bt1.min() is None)
+        self.assertTrue(bt1.max() is None)
+
         bt1.insert(5)
         self.assertTrue(5 in bt1)
 

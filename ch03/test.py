@@ -87,7 +87,7 @@ class TestChapter3(unittest.TestCase):
 
     def test_open_addressing_table(self):
         """The order of values in table is irrelevant."""
-        from ch03.hashtable_open import Hashtable
+        from ch03.hashtable_open import Hashtable, stats_open_addressing
 
         # Need M > 1
         with self.assertRaises(ValueError):
@@ -95,10 +95,13 @@ class TestChapter3(unittest.TestCase):
 
         S = 100
         ht = Hashtable(S)
+        self.assertEqual((0,0), stats_open_addressing(ht))   # empty hash table
         for i in range(S-1):
             ht.put(key(i), sample(i))
         for i in range(S-1):
             self.assertEqual(sample(i), ht.get(key(i)))
+        for i in range(S-1):
+            ht.put(key(i), sample(i+1))  # replace
         self.assertEqual(S-1, ht.N)
         self.assertTrue(ht.get(key(-999)) is None)
 
@@ -296,11 +299,13 @@ class TestChapter3(unittest.TestCase):
 
         for size in range(1,10):
             ht = DynamicHashtable(size)
-            for val in range(1,10):
+            for val in range(1,10*size):
                 ht.put(val, val)
                 ht.put(val, val+1)  # make sure we validate put as well
             for i in range(1,10):
                 self.assertEqual(i+1, ht.get(i))
+                
+            self.assertEqual(list(range(1, 10*size)), sorted([i[0] for i in ht]))
 
     def test_resize_hash_small_open_addressing_remove(self):
         from ch03.hashtable_open import DynamicHashtablePlusRemove
@@ -317,6 +322,8 @@ class TestChapter3(unittest.TestCase):
                 self.assertEqual(i+1, ht.get(i))
             for i in range(1,20):
                 self.assertEqual(i+1, ht.remove(i))
+            for i in range(1,20):
+                self.assertTrue(ht.remove(i) is None)   # double remove should return None
             self.assertEqual(0, ht.N)
             self.assertEqual(19, ht.deleted)
             for val in range(1,100):
@@ -328,18 +335,25 @@ class TestChapter3(unittest.TestCase):
             for val in range(300,400):
                 ht.put(val, val)
             self.assertEqual(100, ht.N)
+            for val in range(1,100):
+                self.assertTrue(ht.get(val) is None)
 
     def test_resize_hash_small_linked(self):
         from ch03.hashtable_linked import DynamicHashtable
         for size in range(1,10):
             ht = DynamicHashtable(size)
-            for val in range(1,10):
+            for val in range(1,50):
                 ht.put(val, val)
                 ht.put(val, val+1)   # make sure we validate put as well
-            for i in range(1,10):
+            for i in range(1,50):
                 self.assertEqual(i+1, ht.get(i))
             ht.put(99, 101)
             self.assertEqual(101, ht.remove(99))
+            self.assertTrue(ht.remove(99) is None)
+            for i in range(1,25):
+                self.assertEquals(i+1, ht.remove(i))
+                
+            self.assertEqual(list(range(26,51)), sorted([i[1] for i in ht]))
 
     def test_resize_open_addressing(self):
         from ch03.hashtable_open import DynamicHashtable
