@@ -322,7 +322,7 @@ for w in words:
 class CountableHash:
     """Class Wrapper to count number of times a value is hashed."""
     hash_count = 0
-    
+
     def __init__(self, w):
         self.word = w
 
@@ -368,7 +368,8 @@ def count_hash(output=True, decimals=2):
         last = CountableHash.hash_count
         ht.put(CountableHash(last_word + str(i)), last_word)
         if CountableHash.hash_count != last + 1:
-            tbl.row([last_word + str(i), ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])
+            tbl.row([last_word + str(i), ht.N,
+                     CountableHash.hash_count, CountableHash.hash_count/ht.N])
             break
 
     return tbl
@@ -446,7 +447,7 @@ def generate_ch03():
 
     from ch03.months import print_month
     print_month('February', 2024)
-    
+
     with FigureNum(1) as figure_number:
         description  = 'Array containing month lengths interspersed with unneeded -1 values'
         label = captionx(chapter, figure_number)
@@ -458,7 +459,8 @@ def generate_ch03():
     with TableNum(1) as table_number:
         process(generate_hash(),
                 chapter, table_number,
-                'Example hash() and hash code expressions for a table of size 15', create_image=False)
+                'Example hash() and hash code expressions for a table of size 15',
+                create_image=False)
 
     with FigureNum(2) as figure_number:
         description  = 'Structure of Hashtable storage after adding five (key, value) pairs'

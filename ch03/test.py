@@ -369,7 +369,7 @@ class TestChapter3(unittest.TestCase):
 
     def test_dynamic_resizing_valid(self):
         from ch03.challenge import DynamicHashtableIncrementalResizing as Hashtable
-        
+
         with self.assertRaises(ValueError):
             Hashtable(0, 10)
 
@@ -377,41 +377,41 @@ class TestChapter3(unittest.TestCase):
             Hashtable(10, 0)
 
         ht = Hashtable(7, 5)
-        self.assertTrue(None == ht.get(99))
-        self.assertTrue(None == ht.remove(99))
+        self.assertTrue(ht.get(99) is None)
+        self.assertTrue(ht.remove(99) is None)
         ht.put(5, 10)
         self.assertEqual(10, ht.get(5))
         ht.put(5, 11)
         self.assertEqual(11, ht.get(5))
         self.assertEqual(11, ht.remove(5))
-        
+
         # Harder to get dynamic resizing
         ht = Hashtable(10, 3)
         for i in range(12):
             ht.put(i, i)
-            
+
         for i in range(12):
             self.assertEqual(i, ht.get(i))
-            
+
         for i in range(12):
             ht.put(i, i+1)
-            
+
         for i in range(12):
             self.assertEqual(i+1, ht.get(i))
 
     def test_simulation(self):
         from ch03.challenge import PythonSimulationHashtable as Hashtable
-        
+
         ht = Hashtable(5)
         for i in range(12):
             ht.put('key{}'.format(i), i)
-            
+
         for i in range(12):
             self.assertEqual(i, ht.get('key{}'.format(i)))
-            
+
         for i in range(12):
             ht.put('key{}'.format(i), i+1)
-            
+
         for i in range(12):
             self.assertEqual(i+1, ht.get('key{}'.format(i)))
 
@@ -474,7 +474,8 @@ class TestChapter3(unittest.TestCase):
     def test_run_access_trials(self):
         from ch03.growth_test import run_access_trials
 
-        run_access_trials(max_trials=100, output=False)
+        tbl = run_access_trials(max_trials=100, output=False)
+        self.assertEqual('Dict', tbl.labels[0])
 
     def test_time_results_open(self):
         from ch03.growth_test import time_results_open

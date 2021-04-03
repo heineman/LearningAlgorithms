@@ -316,19 +316,19 @@ def visualize_dijkstra_small_graph(DG):
 
     return (dist_to, edge_to)
 
-def visualize_results_floyd_warshall(DG):
+def visualize_results_floyd_warshall(DG, output=True):
     """Output the node_from and dist_to arrays for floyd-warshall after completion."""
     from ch07.all_pairs_sp import all_pairs_path_to
 
     (dist_to, node_from) = floyd_warshall(DG)
 
-    output_node_from_floyd_warshall(DG, node_from)
-    print()
+    if output:
+        output_node_from_floyd_warshall(DG, node_from)
+        print()
+        output_dist_to_floyd_warshall(DG, dist_to)
+        print()
 
-    output_dist_to_floyd_warshall(DG, dist_to)
-    print()
-
-    tbl_path = DataTable([20] * DG.number_of_nodes(), list(DG.nodes()))
+    tbl_path = DataTable([20] * DG.number_of_nodes(), list(DG.nodes()), output=output)
     for n in DG.nodes():
         tbl_path.format(n, 's')
     for n in DG.nodes():
@@ -338,12 +338,14 @@ def visualize_results_floyd_warshall(DG):
                 row.append(SKIP)
             else:
                 if node_from[n][v]:
-                    ep = all_pairs_path_to(node_from, n, v)
-                    row.append(' -> '.join(ep))
+                    nodes = all_pairs_path_to(node_from, n, v)
+                    row.append(' -> '.join(nodes))
                 else:
                     row.append(SKIP)
         tbl_path.row(row)
-    print()
+
+    if output:
+        print()
 
 def floyd_warshall_just_initialize(G):
     """

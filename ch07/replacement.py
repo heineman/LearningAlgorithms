@@ -6,6 +6,7 @@ a stub object that provides a reasonable implementation.
 Note: Doesn't offer capability to draw graphs.
 """
 from algs.node import Node
+import unittest
 
 # data associated with an edge can contain a weight
 WEIGHT = 'weight'
@@ -66,7 +67,10 @@ class UndirectedGraph:
         return self.adjacency.keys()
 
     def edges(self, u=None, data=True):
-        """Return all edges. Make sure not to double count..."""
+        """
+        Return all edges. Make sure not to double count. data argument is present
+        to align with networkx, and it must be here to provide a suitable replacement.
+        """
         all_nodes = list(self.nodes())
 
         if u:
@@ -413,7 +417,7 @@ def single_source_shortest_path(graph, src):
     each node is expanded to have its
     """
     from ch07.single_source_sp import dijkstra_sp
-    (dist_to, edge_to) = dijkstra_sp(graph, src)
+    (_, edge_to) = dijkstra_sp(graph, src)
 
     expanded = {}
     for n in graph.nodes():
@@ -436,12 +440,12 @@ def topological_sort(digraph):
     return ts(digraph)
 
 def get_node_attributes(graph, pos='pos'):
-    """I am not going to provide this capability."""
+    """I am not going to provide this capability; must have 'pos' to conform to networkx."""
     return graph.positions
 
 def draw(graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
     """I am not going to provide this capability."""
-    pass
+    return
 
 def dijkstra_path(G, src, target):
     """Dijkstra delegation."""
@@ -449,12 +453,10 @@ def dijkstra_path(G, src, target):
 
     return dijkstra_sp(G, src, target)
 
-    
 #######################################################################
 # Test case is here so replacement can be tested independently of whether
 # networkx is installed on your computer or not.    
 #######################################################################
-import unittest
 
 class TestChapter7(unittest.TestCase):
     def test_directed_graph(self):
@@ -470,13 +472,13 @@ class TestChapter7(unittest.TestCase):
                 DG.add_edge('B{}'.format(i), 'B{}'.format(i+1))
             if i < 5:
                 DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
-                
+
         self.assertEqual(12, DG.number_of_nodes())
         self.assertEqual(12, DG.number_of_edges())
         self.assertEqual(sorted(['B5', 'C4']), sorted(list(DG['B4'])))
         self.assertEqual(sorted([('C3', 'C4')]),
                          sorted(list(DG.edges('C3'))))
-        
+
         DG.remove_edge('C3', 'C4')
         self.assertEqual(12, DG.number_of_nodes())
         self.assertEqual(11, DG.number_of_edges())
@@ -497,13 +499,13 @@ class TestChapter7(unittest.TestCase):
                 DG.add_edge('B{}'.format(i), 'B{}'.format(i+1))
             if i < 5:
                 DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
-                
+
         self.assertEqual(12, DG.number_of_nodes())
         self.assertEqual(12, DG.number_of_edges())
         self.assertEqual(sorted(['B3', 'B5', 'C4']), sorted(list(DG['B4'])))
         self.assertEqual(sorted([('C3', 'B3'), ('C3', 'C2'), ('C3', 'C4')]),
                          sorted(list(DG.edges('C3'))))
-        
+
         DG.remove_edge('C3', 'C4')
         self.assertEqual(12, DG.number_of_nodes())
         self.assertEqual(11, DG.number_of_edges())
@@ -521,7 +523,7 @@ class TestChapter7(unittest.TestCase):
         expanded = single_source_shortest_path(DG, 'a')
         path = expanded['c']
         self.assertEqual(['a', 'b', 'd', 'c'], path)
-        
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

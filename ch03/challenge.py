@@ -7,7 +7,7 @@ from algs.table import DataTable
 
 class ValueBadHash:
     """
-    Class with horrendous hash() method (just four possible values) to 
+    Class with horrendous hash() method (just four possible values) to
     ensure clashes.
     """
     def __init__(self, v):
@@ -330,10 +330,11 @@ class DynamicHashtableIncrementalResizing:
         return None                 # Nothing was removed
 
 class PythonSimulationHashtable:
+    """Simulate Open Addressing Hashtable in Python."""
+
     # highly tuned constant
     PERTURB_SHIFT = 5
 
-    """Simulate Open Addressing Hashtable in Python."""
     def __init__(self, M=10):
         if M < 8:
             M = 8
@@ -375,7 +376,7 @@ class PythonSimulationHashtable:
         """Associate value, v, with the key, k."""
         perturb = hash(k)
         hc = perturb & (self.M-1)       # First place it could be
-       
+
         while self.table[hc]:
             if self.table[hc].key == k:     # Overwrite if already here
                 self.table[hc].value = v
@@ -403,11 +404,11 @@ class PythonSimulationHashtable:
         for entry in self.table:
             if entry:
                 yield (entry.key, entry.value)
-                
+
 def compare_python_hashtable():
     """Compare statistics from simulated Python Hashtable vs. existing Hashtable."""
     import timeit
-    
+
     build_dhl = min(timeit.repeat(stmt='''
 ht = DynamicHashtable(8)
 for w in words:
@@ -423,16 +424,10 @@ for w in words:
 from ch03.challenge import PythonSimulationHashtable
 from resources.english import english_words
 words = english_words()''', repeat=7, number=5))/5
-    
+
     print('Open addressing Simulation build time:', build_dhl)
     print('Python addressing HT build time:', build_phl)
-    
+
 #######################################################################
 if __name__ == '__main__':
     compare_python_hashtable()
-# pht = PythonSimulationHashtable(8)
-# 
-# from resources.english import english_words
-# for w in english_words():
-#     pht.put(w, 1)
-#     print(w)
