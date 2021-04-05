@@ -106,8 +106,7 @@ from ch07.book import topological_example
 try:
     import networkx as nx
 except ImportError:
-    from ch07.replacement import Replacement
-    nx = Replacement()
+    import ch07.replacement as nx
 DG = nx.DiGraph()    
 topological_example(DG,{})'''.format(N), repeat=5, number=3))
 
@@ -117,8 +116,7 @@ from ch07.book import topological_example
 try:
     import networkx as nx
 except ImportError:
-    from ch07.replacement import Replacement
-    nx = Replacement()
+    import ch07.replacement as nx
 DG = nx.DiGraph()    
 topological_example(DG,{})'''.format(N), repeat=5, number=3))
         DG = nx.DiGraph()
@@ -126,11 +124,14 @@ topological_example(DG,{})'''.format(N), repeat=5, number=3))
         tbl.row([len(list(DG.nodes())), len(list(DG.edges())), built_in, mtime])
     return tbl
 
-def table_compare_graph_structures():
-    """Compare Matrix implementation vs. Adjacency list implementation vs. NetworkX."""
+def table_compare_graph_structures(max_k=15, output=True):
+    """
+    Compare Matrix implementation vs. Adjacency list implementation vs. NetworkX up to
+    but not including max_k=15.
+    """
 
-    tbl = DataTable([8, 10, 10, 10], ['N', 'NetworkX', 'Adjacency List', 'Adjacency Matrix'])
-    for N in [2**k for k in range(8, 20)]:
+    tbl = DataTable([8, 10, 10, 10], ['N', 'NetworkX', 'Adjacency List', 'Adjacency Matrix'], output=output)
+    for N in [2**k for k in range(8, max_k)]:
         undirect_mtime = 1000*min(timeit.repeat(stmt='''
 total=0
 for w in G[0]:

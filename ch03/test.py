@@ -402,8 +402,12 @@ class TestChapter3(unittest.TestCase):
         # Harder to get dynamic resizing
         ht = Hashtable(10, 3)
         for i in range(12):
+            # at i=8, the move happens / old table has 3,4,5,6,7 and the 
+            # new table has 0,1,2,8
             ht.put(i, i)
+            ht.put(3, 99)    # this validates that you can change value in OLD table 
 
+        ht.put(3, 3)
         for i in range(12):
             self.assertEqual(i, ht.get(i))
 

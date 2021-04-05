@@ -44,7 +44,7 @@ def dfs_search_recursive(G, src):
     graph and twice for an undirected graph.
 
     Warning: This code is likely to cause a RecursionError when applied
-    to a graph with thousands of nodes, because Python sets the reecursion
+    to a graph with thousands of nodes, because Python sets the recursion
     limit to about 1000.
     """
     marked = {}
@@ -63,7 +63,7 @@ def dfs_search_recursive(G, src):
 
 def dfs_search(G, src):
     """
-    Apply non-recurisve Depth First Search to a graph from src. Return
+    Apply non-recursive Depth First Search to a graph from src. Return
     dictionary of explored trail.
 
     Performance is O(N+E) since every edge is visited once for a directed

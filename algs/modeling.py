@@ -3,7 +3,7 @@ Contains all numpy/scipy-dependent code, in case user is unable
 to install these packages.
 
 If numpy_error contains [1] there was a problem in loading numpy. This can easily
-be detected by the coad that imports this file as follows:
+be detected by the code that imports this file as follows:
 
     if numpy_error:
         pass

@@ -1,6 +1,7 @@
 """Testing for Chapter 07."""
 
 import unittest
+from os import path
 from algs.table import DataTable, SKIP
 
 try:
@@ -347,7 +348,7 @@ class TestChapter7(unittest.TestCase):
         self.assertTrue(has_cycle(G))
         self.assertTrue(has_cycle_nr(G))
 
-        # There are mutliple cycles, so no way to check with each other...
+        # There are multiple cycles, so no way to check with each other...
         self.assertTrue(len(recover_cycle(G)) > 0)
         self.assertTrue(len(recover_cycle_nr(G)) > 0)
 
@@ -359,6 +360,22 @@ class TestChapter7(unittest.TestCase):
         from ch07.book import table_topological_example
         tbl = table_topological_example(max_k=4, output=False)
         self.assertEqual(336, tbl.entry(64, 'E'))
+
+    def test_table_compare_graph_structures(self):
+        from ch07.book import table_compare_graph_structures
+
+        tbl = table_compare_graph_structures(max_k=12)
+        self.assertTrue(tbl.entry(2048, 'NetworkX') < tbl.entry(2048, 'Adjacency Matrix'))
+
+    def test_generate_smart_search_figure(self):
+        from ch07.book import generate_smart_search_figure
+        from ch07.tmg_load import tmg_load, highway_map
+
+        SRC = 389
+        TARGET = 2256
+        (G, positions) = tmg_load(highway_map())
+        output_file = generate_smart_search_figure(G, positions, SRC, TARGET)
+        self.assertTrue(path.exists(output_file))
 
 #######################################################################
 if __name__ == '__main__':

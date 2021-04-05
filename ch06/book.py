@@ -281,7 +281,7 @@ def generate_ch06():
         print()
 
     with FigureNum(6) as figure_number:
-        description  = 'Two possible binary search trees afte removing 19 from Figure 6-4'
+        description  = 'Two possible binary search trees after removing 19 from Figure 6-4'
         label = captionx(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()

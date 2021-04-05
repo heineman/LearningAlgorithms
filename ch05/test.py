@@ -7,6 +7,13 @@ WORST_CASE = list(range(10,0,-1))
 
 class TestChapter5(unittest.TestCase):
 
+    def test_challenge_fib(self):
+        from ch05.challenge import fib_profile
+        
+        self.assertEqual(0, fib_profile(0))
+        self.assertEqual(1, fib_profile(1))
+        self.assertEqual(13, fib_profile(7))
+
     def test_merge_sort(self):
         from ch05.merge import merge_sort
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
@@ -173,7 +180,8 @@ class TestChapter5(unittest.TestCase):
 
         # edge cases
         self.assertEqual(recursive_two([1,2]), (2,1))
-
+        self.assertEqual(recursive_two([5]), (5, None))
+        
         # mutable
         my_list = [9, 1, 8, 2, 3, 6]
         my_copy = list(my_list)
@@ -267,6 +275,12 @@ class TestChapter5(unittest.TestCase):
         
         tbl = insertion_sort_bas(max_k=14, output=False)
         self.assertTrue(tbl.entry(4096, 'Time') <= tbl.entry(8192, 'Time'))
+
+    def test_timing_nlogn_sorting_real_world(self):
+        from ch05.timsort import timing_nlogn_sorting_real_world
+
+        tbl = timing_nlogn_sorting_real_world(max_k=15, output=False)
+        self.assertTrue(tbl.entry(16384, 'PythonSort') < tbl.entry(16384, 'MergeSort'))
 
 #######################################################################
 if __name__ == '__main__':

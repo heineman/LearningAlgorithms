@@ -111,13 +111,13 @@ def recursive_two(A):
         L = rtwo(lo, mid)
         R = rtwo(mid+1, hi)
 
-        # Recursive case: Find largest of the possible four values.
+        # Recursive case: Find largest of the possible four values. Note
+        # That L[1] can never be None since that would have been handled 
+        # By the special case above where lo+1 == hi
         if L[0] < R[0]:
             if R[1] is None:
                 return (R[0], L[0])
             return (R[0], R[1]) if L[0] < R[1] else (R[0], L[0])
-        if L[1] is None:
-            return (L[0], R[0])
         return (L[0], L[1]) if R[0] < L[1] else (L[0], R[0])
 
     return rtwo(0, len(A)-1)

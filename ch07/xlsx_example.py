@@ -1,7 +1,7 @@
 """
 Load up XLSX Fibonacci file.
 
-This is only a proof of concept and not meant to work for arbitray XLSX files!
+This is only a proof of concept and not meant to work for arbitrary XLSX files!
 """
 import os
 from ch07.xlsx_loader import load_xlsx
@@ -14,7 +14,7 @@ except ImportError:
 from ch07.dependencies import tkinter_error
 
 def load_fibonacci_from_resource(ss):
-    """Load up sample XSLX Microsoft Excel file as a Spreadsheet."""
+    """Load up sample XLSX Microsoft Excel file as a Spreadsheet."""
     entries = load_xlsx(os.path.join('..', 'resources', 'ch07-fibonacci-example.xlsx'))
     for k in entries:
         ss.set(k,entries[k])

@@ -40,7 +40,7 @@ def stats_linked_lists(ht, output=False):
             max_length = num
 
     if output:
-        print('nLinked List ({} total entries in base size of {})'.format(ht.N, size))
+        print('Linked List ({} total entries in base size of {})'.format(ht.N, size))
         for i in range(size):
             if i in sizes:
                 print('{} linked lists have size of {}'.format(sizes[i], i))
@@ -107,7 +107,7 @@ class Hashtable:
                 entry = entry.next
 
 class DynamicHashtable:
-    """Hashtable usingn array of M linked lists that can resize over time."""
+    """Hashtable using array of M linked lists that can resize over time."""
     def __init__(self, M=10):
         self.table = [None] * M
         if M < 1:

@@ -133,7 +133,7 @@ class DataTable:
         return None
 
     def column(self, column):
-        """Return array of values in given column. Elminate 'SKIP' and remaining."""
+        """Return array of values in given column. Eliminate 'SKIP' and remaining."""
         cols = []
         for row in range(self.num_rows):
             label = self.row_index[row]

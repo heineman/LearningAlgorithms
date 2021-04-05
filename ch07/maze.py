@@ -1,5 +1,5 @@
 """
-Code for constructing a rectangular maze whose entrace is in the middle of
+Code for constructing a rectangular maze whose entrance is in the middle of
 the top row, and the exit is in the middle of the bottom row.
 """
 import random

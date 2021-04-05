@@ -2,7 +2,7 @@
 
 This repository contains the Python code for:
 
-	Learning ALgorithms: A Programmer's Guide to Writing Better Code
+	Learning Algorithms: A Programmer's Guide to Writing Better Code
 	George T. Heineman
 	ISBN: 978-1-49-209106-6
 	

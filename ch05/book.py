@@ -327,7 +327,7 @@ def timing_nlogn_sorting(max_k=21, output=True, decimals=3):
     """
     # Build model from Generate 5 data points
     tbl = DataTable([12,10,10,10,10,10],
-                    ['N','MergeSort', 'QuickSort', 'HeapSort', 'TimSort', 'PythonSort'],
+                    ['N','MergeSort', 'Quicksort', 'HeapSort', 'TimSort', 'PythonSort'],
                     output=output, decimals=decimals)
 
     x = []
