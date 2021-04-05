@@ -104,9 +104,8 @@ class TestChapter6(unittest.TestCase):
         from ch06.tree import BinaryTree
 
         bt1 = BinaryTree()
-        self.assertTrue(bt1.remove(7))    # can work even when empy
+        self.assertTrue(bt1.remove(7) is None)    # can work even when empty
         self.assertTrue(bt1.min() is None)
-        self.assertTrue(bt1.max() is None)
 
         bt1.insert(5)
         self.assertTrue(5 in bt1)
@@ -325,6 +324,7 @@ class TestChapter6(unittest.TestCase):
         from ch06.balanced import BinaryTree
         bt1 = BinaryTree()
         bt1.insert(7)
+        self.assertEquals(7, bt1.min())
         bt1.insert(4)
         bt1.insert(10)
         bt1.insert(8)
@@ -335,6 +335,11 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual(3, bt1.root.size())
         self.assertEqual(1, bt1.root.height)
         check_avl_property(bt1.root)
+        self.assertEquals(4, bt1.min())
+        self.assertTrue(4 in bt1)
+        self.assertTrue(10 in bt1)
+        self.assertTrue(8 in bt1)
+        self.assertFalse(7 in bt1)
 
     def test_avl_stress(self):
         from ch06.balanced import BinaryTree

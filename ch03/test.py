@@ -351,7 +351,7 @@ class TestChapter3(unittest.TestCase):
             self.assertEqual(101, ht.remove(99))
             self.assertTrue(ht.remove(99) is None)
             for i in range(1,25):
-                self.assertEquals(i+1, ht.remove(i))
+                self.assertEqual(i+1, ht.remove(i))
                 
             self.assertEqual(list(range(26,51)), sorted([i[1] for i in ht]))
 

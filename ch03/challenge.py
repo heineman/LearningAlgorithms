@@ -3,6 +3,7 @@ Challenge Exercises for Chapter 3.
 """
 
 import math
+import sys
 from algs.table import DataTable
 
 class ValueBadHash:
@@ -330,7 +331,14 @@ class DynamicHashtableIncrementalResizing:
         return None                 # Nothing was removed
 
 class PythonSimulationHashtable:
-    """Simulate Open Addressing Hashtable in Python."""
+    """
+    Simulate Open Addressing Hashtable in Python.
+    Because we are not using modulo (%) but & (bitwise and) we have to make
+    sure that the computed hash(k) is positive. If it becomes negative,
+    the the while loops may not complete, among other disasters.
+    
+    To prevent this, simply use bitwise and (&) with each hash() invocation
+    """
 
     # highly tuned constant
     PERTURB_SHIFT = 5
@@ -352,7 +360,7 @@ class PythonSimulationHashtable:
 
     def get(self, k):
         """Retrieve value associated with key, k."""
-        perturb = hash(k)
+        perturb = hash(k) & sys.maxsize
         hc = perturb & (self.M-1)       # First place it could be
         while self.table[hc]:
             if self.table[hc].key == k:
@@ -374,7 +382,7 @@ class PythonSimulationHashtable:
 
     def put(self, k, v):
         """Associate value, v, with the key, k."""
-        perturb = hash(k)
+        perturb = hash(k) & sys.maxsize
         hc = perturb & (self.M-1)       # First place it could be
 
         while self.table[hc]:
@@ -383,7 +391,7 @@ class PythonSimulationHashtable:
                 return
             perturb >>= PythonSimulationHashtable.PERTURB_SHIFT
             hc = (hc*5 + perturb + 1) & (self.M-1)
-
+        
         # With Open Addressing, you HAVE to insert first into the
         # empty bucket before checking whether you have hit
         # the threshold, otherwise you have to search again to
@@ -397,7 +405,6 @@ class PythonSimulationHashtable:
 
         if self.N >= self.threshold:
             self.resize(2*self.M)
-            hc = hash(k) & (self.M-1)
 
     def __iter__(self):
         """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""

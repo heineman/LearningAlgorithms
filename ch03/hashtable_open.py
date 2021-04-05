@@ -108,7 +108,6 @@ class DynamicHashtable:
 
         if self.N >= self.threshold:
             self.resize(2*self.M + 1)
-            hc = hash(k) % self.M
 
     def __iter__(self):
         """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""
@@ -199,7 +198,6 @@ class DynamicHashtablePlusRemove:
 
         if (self.N + self.deleted) >= self.threshold:
             self.resize(2*self.M + 1)
-            hc = hash(k) % self.M
 
     def __iter__(self):
         """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""
