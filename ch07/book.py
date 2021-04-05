@@ -106,7 +106,7 @@ from ch07.book import topological_example
 try:
     import networkx as nx
 except ImportError:
-    from ch07.graph import Replacement
+    from ch07.replacement import Replacement
     nx = Replacement()
 DG = nx.DiGraph()    
 topological_example(DG,{})'''.format(N), repeat=5, number=3))
@@ -117,7 +117,7 @@ from ch07.book import topological_example
 try:
     import networkx as nx
 except ImportError:
-    from ch07.graph import Replacement
+    from ch07.replacement import Replacement
     nx = Replacement()
 DG = nx.DiGraph()    
 topological_example(DG,{})'''.format(N), repeat=5, number=3))
@@ -135,7 +135,7 @@ def table_compare_graph_structures():
 total=0
 for w in G[0]:
     total += w''', setup='''
-from ch07.graph import UndirectedGraph
+from ch07.replacement import UndirectedGraph
 G = UndirectedGraph()
 G.add_nodes_from(list(range({0})))
 for o in range(10):
@@ -145,7 +145,7 @@ for o in range(10):
 total=0
 for w in G[0]:
     total += w''', setup='''
-from ch07.graph import UndirectedGraph
+from ch07.replacement import UndirectedGraph
 G = UndirectedGraph()
 G.add_nodes_from(list(range({0})))
 for o in range(10):
@@ -155,7 +155,7 @@ for o in range(10):
 total=0
 for w in G[0]:
     total += w''', setup='''
-from ch07.graph import MatrixUndirectedGraph
+from ch07.replacement import MatrixUndirectedGraph
 G = MatrixUndirectedGraph()
 G.add_nodes_from(list(range({0})))
 for o in range(10):

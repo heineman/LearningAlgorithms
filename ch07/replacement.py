@@ -11,6 +11,9 @@ import unittest
 # data associated with an edge can contain a weight
 WEIGHT = 'weight'
 
+# Used to declare (if needed) that we are providing stub replacement for networkx.
+__version__ = 'replacement'
+
 class Edge:
     """
     Replacement edge in case networkx is not available. Stores optional weight
@@ -238,7 +241,7 @@ class MatrixUndirectedGraph:
         """Return neighboring nodes."""
         idx = self.labels.index(u)
         for j in range(len(self.labels)):
-            if self.matrix[idx][j]:
+            if self.matrix[idx][j] != MatrixUndirectedGraph.NO_EDGE:
                 yield self.labels[j]
 
     def add_edge(self, u, v, weight=None):

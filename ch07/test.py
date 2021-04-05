@@ -75,7 +75,7 @@ class TestChapter7(unittest.TestCase):
 
         # BFS search solution
         node_from = smart_search(G, m.start(), m.end(), distance_to)
-        self.assertEqual((1,0), node_from[(2,0)])
+        self.assertEqual((1,2), node_from[(2,2)])
 
         # Create graph resulting from the BFS search results
         F = node_from_field(G, node_from)
@@ -294,6 +294,7 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual('a', edge_to['b'][0])
 
     def test_cycle_detection(self):
+        """Deal with inability to have replacement cycle detection."""
         from ch07.fibonacci_example import fibonacci_example
 
         if tkinter_error:
@@ -303,12 +304,15 @@ class TestChapter7(unittest.TestCase):
             from ch07.spreadsheet import Spreadsheet
             ss = Spreadsheet(tkinter.Tk(), nx.DiGraph())
             fibonacci_example(ss)
-            try:
-                import networkx.algorithms.cycles
-                networkx.algorithms.cycles.find_cycle(ss.digraph)
-                self.fail('no cycle yet...')
-            except Exception:
+            if nx.__version__ == 'replacement':
                 pass
+            else:
+                import networkx.algorithms.cycles
+                try:
+                    networkx.algorithms.cycles.find_cycle(ss.digraph)
+                    self.fail('no cycle yet...')
+                except networkx.exception.NetworkXNoCycle:
+                    pass
 
             try:
                 ss.set('B2', '=C5')
@@ -318,8 +322,13 @@ class TestChapter7(unittest.TestCase):
 
             # just grab the graph and hack it together
             ss.digraph.add_edge('C5', 'B2')
-            acycle = networkx.algorithms.cycles.find_cycle(ss.digraph)
-            self.assertTrue(len(acycle) > 1)
+            if nx.__version__ == 'replacement':
+                pass
+            else:
+                import networkx.algorithms.cycles
+                networkx.algorithms.cycles.find_cycle(ss.digraph)
+                acycle = networkx.algorithms.cycles.find_cycle(ss.digraph)
+                self.assertTrue(len(acycle) > 1)
 
     def test_has_cycle(self):
         from ch07.digraph_search import has_cycle, has_cycle_nr
