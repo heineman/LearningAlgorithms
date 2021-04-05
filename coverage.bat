@@ -9,7 +9,7 @@ echo "Running test cases -- should take about 15 minutes."
 %COVERAGE3% run -m unittest discover > tests.txt
 
 echo "Generating figures and tables for the book. This will take about six hours"
-%COVERAGE3% -a book.py > book.txt
+%COVERAGE3% run -a book.py > book.txt
 
 echo "Generating Timing results for each chapter. Should take about two hours"
 %COVERAGE3% run -a algs\timing.py > algs.txt
