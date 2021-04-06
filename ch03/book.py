@@ -2,7 +2,7 @@
 
 """
 import timeit
-from algs.table import DataTable, captionx, SKIP, comma, process, TableNum, FigureNum
+from algs.table import DataTable, caption, SKIP, comma, process, TableNum, FigureNum
 from resources.english import english_words
 from ch03.base26 import search_for_base
 
@@ -450,7 +450,7 @@ def generate_ch03():
 
     with FigureNum(1) as figure_number:
         description  = 'Array containing month lengths interspersed with unneeded -1 values'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         (_, day_array) = search_for_base()
         print('day_array =', day_array)
         print('{}. {}'.format(label, description))
@@ -464,7 +464,7 @@ def generate_ch03():
 
     with FigureNum(2) as figure_number:
         description  = 'Structure of Hashtable storage after adding five (key, value) pairs'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         sample_hashtable()
         print('{}. {}'.format(label, description))
         print()
@@ -477,21 +477,21 @@ def generate_ch03():
 
     with FigureNum(3) as figure_number:
         description  = 'Structure of Hashtable linked list storage after adding five (key, value) pairs'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         sample_separate_chaining_hashtable()
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(4) as figure_number:
         description  = 'Removing the first node in a linked list'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('hand-drawn image')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(5) as figure_number:
         description  = 'Removing any other node in a linked list'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('hand-drawn image')
         print('{}. {}'.format(label, description))
         print()
@@ -503,14 +503,14 @@ def generate_ch03():
 
     with FigureNum(6) as figure_number:
         description  = 'For a fixed number of elements, N, the average and maximum chain length follow predictable paths'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('The result of plotting Table 3-3')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(7) as figure_number:
         description  = 'Increasing M means existing entries can become "lost" since computed hash code depends on M'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         sample_hashtable()
         sample_separate_chaining_hashtable()
         print('The above are original before resize.')
@@ -519,7 +519,7 @@ def generate_ch03():
 
     with FigureNum(8) as figure_number:
         description  = 'Resulting Hashtable storage after successful resizing'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         sample_hashtable_resize()
         sample_separate_chaining_hashtable_resize()
         print('The above are original before resize.')

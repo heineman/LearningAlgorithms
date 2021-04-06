@@ -2,7 +2,7 @@
 
 import timeit
 import math
-from algs.table import DataTable, captionx, FigureNum, TableNum, process
+from algs.table import DataTable, caption, FigureNum, TableNum, process
 from ch02.bas import binary_array_search
 from ch06.challenge import speaking_tree
 
@@ -235,7 +235,7 @@ def generate_ch06():
 
     with FigureNum(1) as figure_number:
         description  = 'Representing mathematical expressions using expression trees'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         mult7 = expression_tree()
         print(mult7,'=',mult7.eval())
         print('in postfix:', ' '.join(str(k) for k in mult7.postfix()))
@@ -244,7 +244,7 @@ def generate_ch06():
 
     with FigureNum(2) as figure_number:
         description  = 'Visualizing recursive evaluation of ((1+5)*9)'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         mult2 = debug_expression()
         print(mult2,'=',mult2.eval())
         print('{}. {}'.format(label, description))
@@ -257,56 +257,56 @@ def generate_ch06():
 
     with FigureNum(3) as figure_number:
         description  = 'Binary Search Tree containing seven values'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
     with TableNum(2) as table_number:
         description  = 'Creating a binary search tree by inserting (in order) 19,14,15,53,58,3,26'
         speaking_tree()
-        label = captionx(chapter, table_number)
+        label = caption(chapter, table_number)
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(4) as figure_number:
         description  = 'Insert 29 into the binary search tree example'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(5) as figure_number:
         description = 'Different binary search trees when same values are inserted in different order'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(6) as figure_number:
         description  = 'Two possible binary search trees after removing 19 from Figure 6-4'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(7) as figure_number:
         description  = 'Removing minimum value in a subtree'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
     with TableNum(3) as table_number:
         description  = 'Demonstrating how node is removed from binary search tree'
-        label = captionx(chapter, table_number)
+        label = caption(chapter, table_number)
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(8) as figure_number:
         description  = 'Iterating over the values in a binary search tree in ascending order'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(9) as figure_number:
         description  = 'A complete binary tree stores the most values with the least height'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 

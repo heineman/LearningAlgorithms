@@ -5,68 +5,107 @@ Challenge Exercises for Chapter 2.
 import timeit
 import math
 
-from algs.table import DataTable
+from algs.table import DataTable, ExerciseNum, caption
 from algs.modeling import quadratic_model, log_model, numpy_error
 
-def log_log_model(n, a):
-    """Formula for A*Log_2(N) with single coefficient."""
+def fragment_1(N):
+    """Fragment-1 for exercise."""
+    ct = 0
+    for _ in range(100):
+        for _ in range(N):
+            for _ in range(10000):
+                ct += 1
+    return ct
+
+def fragment_2(N):
+    """Fragment-2 for exercise."""
+    ct = 0
+    for _ in range(N):
+        for _ in range(N):
+            for _ in range(100):
+                ct += 1
+    return ct
+
+def fragment_3(N):
+    """Fragment-3 for exercise."""
+    ct = 0
+    for _ in range(0,N,2):
+        for _ in range(0,N,2):
+            ct += 1
+    return ct
+
+def fragment_4(N):
+    """Fragment-4 for exercise."""
+    ct = 0
+    while N > 1:
+        ct += 1
+        N = N // 2
+    return ct
+
+def fragment_5(N):
+    """Fragment-5 for exercise."""
+    ct = 0
+    for _ in range(2,N,3):
+        for _ in range(3,N,2):
+            ct += 1
+    return ct
+
+def f4(N):
+    """Fragment for exercise."""
+    ct = 1
+    while N >= 2:
+        ct = ct + 1
+        N = N ** 0.5
+    return ct
+
+def fragment_counting(max_k=10, output=True):
+    """Generate table for counts of fragments up to (but including) 2**max_k."""
+    trials = [2**k for k in range(5,max_k)]
+    tbl = DataTable([8,15,8,8,8,8],['N', 'F1', 'F2', 'F3', 'F4', 'F5'], output=output)
+    for i in range(1,6):
+        tbl.format('F{}'.format(i), 'd')
+    for N in trials:
+        tbl.row([N, fragment_1(N), fragment_2(N), fragment_3(N), fragment_4(N), fragment_5(N)])
+    return tbl
+
+def another_fragment_counting(max_k=20, output=True):
+    """Generate table for counts of fragments up to (but including) 2**max_k."""
     if numpy_error:
-        logn = math.log(n)/math.log(2)
-        return a*logn
+        a = 0,0
     else:
         import numpy as np
-        logn = np.log(n)/np.log(2)
-        return a*logn
+        from scipy.optimize import curve_fit
+
+        def log_log_model(n, a):
+            """Formula for A*Log_2(Log_2(N)) with single coefficient."""
+            logn = np.log2(n)
+            return a*np.log2(logn)
+
+        # Train Model
+        trials = [2**k for k in range(5,15)]
+        nvals = []
+        yvals = []
+        for N in trials:
+            nvals.append(N)
+            yvals.append(f4(N))
+
+        [a, _] = curve_fit(log_log_model, np.array(nvals), np.array(yvals))
+        if output:
+            print('LOG_LOG_MODEL = {}*log(log(N))'.format(a))
+
+    trials = [2**k for k in range(5, max_k)]
+    tbl = DataTable([8,8,8],['N', 'F4', 'Model'], output=output)
+    tbl.format('F4', 'd')
+    for N in trials:
+        tbl.row([N, f4(N), a[0]*math.log2(math.log2(N))])
+    return tbl
 
 def factorial_model(n, a):
     """Formula for A*N! with single coefficient."""
     if numpy_error:
         return a*math.factorial(n)
-    else:
-        from scipy.special import factorial
-        return a*factorial(n)
-
-def log_log_table(max_k=55, output=True, decimals=3):
-    """
-    Generate Log(Log(N)) table and model up to (but not including) 2**max_k.
-    Model is defined based on first 30 values.
-    """
-    trials = [2**k for k in range(5,30)]
-    xvals = []
-    yvals = []
-    for n in trials:
-        num_sqrts = 0
-        tmp = n
-        while tmp >= 2:
-            num_sqrts += 1
-            tmp = tmp ** 0.5
-
-        xvals.append(n)
-        yvals.append(num_sqrts)
-
-    if numpy_error:
-        log_log_coeff = [0]
-    else:
-        import numpy as np
-        from scipy.optimize import curve_fit
-
-        [log_log_coeff, _] = curve_fit(log_log_model, np.array(xvals), np.array(yvals))
-        if output:
-            print('Log Log N  = {:.12f}*log2((log2(N))'.format(log_log_coeff[0]))
-
-    tbl = DataTable([30, 10, 10], ['N', 'NumSqrt', 'Model'], decimals=decimals, output=output)
-    tbl.format('NumSqrt', 'd')
-    trials = [2**k for k in range(5,max_k)]
-    for n in trials:
-        num_sqrts = 0
-        tmp = n
-        while tmp >= 2:
-            num_sqrts += 1
-            tmp = tmp ** 0.5
-
-        tbl.row([n, num_sqrts, log_log_model(n, log_log_coeff[0])])
-
-    return tbl
+    from scipy.special import factorial
+    return a*factorial(n)
 
 def max_sort(A):
     """Evaluate the space complexity of this sorting algorithm."""
@@ -74,7 +113,7 @@ def max_sort(A):
     while len(A) > 1:
         index_max = max(range(len(A)), key=A.__getitem__)
         result.insert(0, A[index_max])
-        A = A[:index_max] + A[index_max+1:]
+        A = list(A[:index_max]) + list(A[index_max+1:])
     return A + result
 
 def run_max_sort_worst_case(max_k=14, output=True, decimals=4):
@@ -187,10 +226,29 @@ x=sorted(random.sample(range({0}*4), {0}))'''.format(n), number=num)
 
 #######################################################################
 if __name__ == '__main__':
-    print('log log results')
-    log_log_table()
-    run_permutation_sort()
-    print()
+    chapter = 2
+    with ExerciseNum(1) as exercise_number:
+        fragment_counting()
+        print(caption(chapter, exercise_number),
+              'Fragment Evaluation')
+
+    with ExerciseNum(2) as exercise_number:
+        another_fragment_counting()
+        print(caption(chapter, exercise_number),
+              'Second Fragment Evaluation')
+        print()
+
+    with ExerciseNum(3) as exercise_number:
+        run_permutation_sort()
+        print(caption(chapter, exercise_number),
+              'Permutation Sort Exercise')
+        print()
+
+    with ExerciseNum(4) as exercise_number:
+        performance_bas()
+        print(caption(chapter, exercise_number),
+              'Binary Array Search Evidence')
+        print()
 
     run_max_sort_worst_case()
     print()

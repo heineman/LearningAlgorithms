@@ -8,7 +8,7 @@ Python environment you are running this script in.
 import timeit
 import math
 
-from algs.table import DataTable, TableNum, FigureNum, captionx, process, SKIP
+from algs.table import DataTable, TableNum, FigureNum, caption, process, SKIP
 from algs.modeling import n_log_n_model, quadratic_model, linear_model, numpy_error
 
 def actual_table(output=True):
@@ -73,7 +73,8 @@ random.shuffle(x)'''.format(n), repeat=100, number=100))
         print('N Log N   = {:.12f}*N*log2(N)'.format(nlog_n_coeffs[0]))
         print()
 
-    tbl = DataTable([12,10,10,10,10],['N','Time','Linear','Quad','NLogN'], output=output, decimals=decimals)
+    tbl = DataTable([12,10,10,10,10],['N','Time','Linear','Quad','NLogN'],
+                    output=output, decimals=decimals)
 
     for n,p in zip(nvals,yvals):
         tbl.row([n, p,
@@ -172,7 +173,7 @@ x=create_pair({})'''.format(n), number=num)
 
 def algorithms_a_b():
     """Generate table for estimates of time for three computers and two algorithms."""
-    
+
     def alg_a(n):
         """Number of operations for algorithm A."""
         return 5*n
@@ -181,7 +182,8 @@ def algorithms_a_b():
         """Number of operations for algorithm B."""
         return 2020*math.log(n)/math.log(2)
 
-    tbl = DataTable([15,15,8,8,8,8,8], ['N', 'A', 'B', 'A_slow', 'A_fast', 'B_fast', 'A_fastest'], decimals=1)
+    tbl = DataTable([15,15,8,8,8,8,8], ['N', 'A', 'B', 'A_slow', 'A_fast', 'B_fast', 'A_fastest'],
+                    decimals=1)
     tbl.format('A', ',d')
     tbl.format('B', ',d')
     for n in [2**k for k in range(2, 24)]:
@@ -198,7 +200,7 @@ def growth_table(output=True):
     def fact(n):
         try:
             return int(math.factorial(n))
-        except (ValueError):
+        except ValueError:
             return float('inf')
 
     for n in [2**k for k in range(2, 12)]:
@@ -229,39 +231,39 @@ def generate_ch02():
 
     with TableNum(1) as table_number:
         process(actual_table(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Prototype run-time performance')
 
     with TableNum(2) as table_number:
         process(prototype_table(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Comparing different mathematical models with actual performance')
 
     with TableNum(3) as table_number:
         process(large_multiplication(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Multiplying two n-digit integers')
 
     with FigureNum(1) as figure_number:
-        print(captionx(chapter, figure_number),
+        print(caption(chapter, figure_number),
                'Compare models against performance')
 
     with FigureNum(2) as figure_number:
         algorithms_a_b()
-        print(captionx(chapter, figure_number),
+        print(caption(chapter, figure_number),
                'Complexity classes provide context to understand performance')
 
     with FigureNum(3) as figure_number:
-        print(captionx(chapter, figure_number),
+        print(caption(chapter, figure_number),
                'Visualizing the numbers from Figure 2-2')
 
     with TableNum(4) as table_number:
         process(growth_table(),
-                chapter, table_number, 
+                chapter, table_number,
                 'Growth of different computations')
 
     with FigureNum(8) as figure_number:
-        print(captionx(chapter, figure_number),
+        print(caption(chapter, figure_number),
                'Plot runtime performance against problem instance size for complexity classes')
 
 #######################################################################

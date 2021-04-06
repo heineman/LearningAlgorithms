@@ -22,7 +22,7 @@ class TestChapter2(unittest.TestCase):
         (up, down) = create_random_pair(12)
         self.assertTrue(100000000000 < up < 999999999999)
         self.assertTrue(100000000000 < down < 999999999999)
-        
+
     def test_valid(self):
         from ch02.bas import binary_array_search
         A = []
@@ -59,10 +59,7 @@ class TestChapter2(unittest.TestCase):
         self.assertTrue(check_sorted(A))
 
     def test_challenge(self):
-        from ch02.challenge import log_log_table, run_max_sort_worst_case, run_permutation_sort
-
-        tbl = log_log_table(output=False)
-        self.assertEqual(4, tbl.entry(1024, 'NumSqrt'))
+        from ch02.challenge import run_max_sort_worst_case, run_permutation_sort
 
         tbl = run_permutation_sort(max_n=8, output=False)
         self.assertTrue(tbl.entry(2, 'PermutationSort') >= 0)

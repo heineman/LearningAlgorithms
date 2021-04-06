@@ -205,29 +205,16 @@ def process(table, chapter, number, description, create_image=True, xaxis='Probl
         visualize(table, description, label, xaxis=xaxis, yaxis=yaxis)
     print()
 
-def captionx(chapter, number):
+def caption(chapter, number):
     """
     Return string for 'element chapter-number. description'.
     number is either a TableNum or a FigureNum.
     """
     return '{} {}-{}'.format(number.args[0].element(), chapter, number.args[0])
 
-def caption(chapter, labels, element, title):
-    """
-    Given a chapter and a dict{} containing [element -> index] and element,
-    return string and, more importantly, advance the counter for the type.
-    """
-    if element in labels:
-        labels[element] += 1
-    else:
-        labels[element] = 1
-
-    return '{} {}-{}. {}'.format(element, chapter, labels[element], title)
-
 def comma(n):
     """Return string for integer n with commas at thousands, i.e., '2,345,217'."""
     return '{:,}'.format(n)
-
 
 class Chapter:
     """Represents a chapter."""

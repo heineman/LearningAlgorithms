@@ -8,7 +8,7 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-from algs.table import DataTable, captionx, FigureNum, TableNum, SKIP
+from algs.table import DataTable, caption, FigureNum, TableNum, SKIP
 from algs.output import image_file
 from resources.highway import highway_map
 
@@ -453,13 +453,13 @@ def generate_ch07():
     with FigureNum(1) as figure_number:
         description  = 'An undirected graph of 12 vertices and 12 edges'
         make_sample_graph()
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(2) as figure_number:
         description = 'A graph modeling a rectangular maze'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         from ch07.viewer import Viewer
 
         random.seed(15)
@@ -493,7 +493,7 @@ def generate_ch07():
     with FigureNum(3) as figure_number:
         description  = 'Hitting a dead end while exploring a maze'
         print('Hand drawn overlay to Figure 7-2.')
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
@@ -501,7 +501,7 @@ def generate_ch07():
         from ch07.search import dfs_search, draw_solution
 
         description  = 'Depth First Search will eventually locate the target if maze is connected'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         random.seed(15)
         m = Maze(3,5)
         graph = to_networkx(m)
@@ -520,13 +520,13 @@ def generate_ch07():
     with FigureNum(5) as figure_number:
         description  = 'Breadth First Search will locate shortest path to target, if reachable from source'
         print('Hand drawn overlay to Figure 7-2.')
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(6) as figure_number:
         description  = 'Breadth First Search finds shortest path to each node'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         random.seed(15)
         m = Maze(3,5)
         graph = to_networkx(m)
@@ -543,7 +543,7 @@ def generate_ch07():
 
     with FigureNum(7) as figure_number:
         description = 'Comparing Depth First Search, Breadth First Search, and Smart Search'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
 
         from ch07.solver_bfs import BreadthFirstSearchSolver
         from ch07.solver_dfs import DepthFirstSearchSolver
@@ -576,7 +576,7 @@ def generate_ch07():
 
     with FigureNum(8) as figure_number:
         description = 'Adjacency Matrix vs. Adjacency List representation'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         output_adjacency_matrix()
         output_adjacency_list()
         print('{}. {}'.format(label, description))
@@ -584,35 +584,35 @@ def generate_ch07():
 
     with FigureNum(9) as figure_number:
         description = 'Sample directed graph with 12 nodes and 14 edges.'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         make_sample_directed_graph()
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(10) as figure_number:
         description = 'Sample spreadsheet with underlying directed graph.'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('Screen shots from Excel, together with graph from Figure 7-9')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(11) as figure_number:
         description = 'Visualizing execution of Depth First Search for Cycle Detection.'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('Done by hand.')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(12) as figure_number:
         description = 'Visualizing execution of Depth First Search for Topological Sort.'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('Done by hand.')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(13) as figure_number:
         description = 'Modeling highway infrastructure in Massachusetts.'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         SRC = 389
         TARGET = 2256
         output_file = generate_bfs_and_dijkstra_figure(SRC, TARGET)
@@ -623,7 +623,7 @@ def generate_ch07():
 
     with FigureNum(14) as figure_number:
         description = 'Modeling highway infrastructure in Massachusetts.'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         SRC = 389
         TARGET = 2256
         output_file = generate_dfs_figure(SRC, TARGET)
@@ -634,14 +634,14 @@ def generate_ch07():
 
     with FigureNum(15) as figure_number:
         description = 'The shortest path from a to c has accumulated total of 8'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         print('Done by hand.')
         print('{}. {}'.format(label, description))
         print()
 
     with TableNum(1) as table_number:
         description = "Executing Dijkstra's algorithm on small graph"
-        label = captionx(chapter, table_number)
+        label = caption(chapter, table_number)
         DG_GOOD = nx.DiGraph()
         DG_GOOD.add_edge('a', 'b', weight=3)
         DG_GOOD.add_edge('a', 'c', weight=9)
@@ -654,7 +654,7 @@ def generate_ch07():
 
     with TableNum(2) as table_number:
         description = "A negative edge weight in the wrong place breaks Dijkstra's algorithm"
-        label = captionx(chapter, table_number)
+        label = caption(chapter, table_number)
         DG_GOOD = nx.DiGraph()
         DG_GOOD.add_edge('a', 'b', weight=3)
         DG_GOOD.add_edge('a', 'c', weight=1)
@@ -671,7 +671,7 @@ def generate_ch07():
 
     with FigureNum(16) as figure_number:
         description = 'Two graphs with negative edge weights, but only one has a negative cycle'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         DG_GOOD = nx.DiGraph()
         DG_GOOD.add_edge('a', 'b', weight=1)
         DG_GOOD.add_edge('b', 'd', weight=-3)
@@ -699,7 +699,7 @@ def generate_ch07():
 
     with FigureNum(17) as figure_number:
         description = 'Example for all-pairs shortest path problem'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         DG_AP = nx.DiGraph()
         DG_AP.add_edge('a', 'b', weight=4)
         DG_AP.add_edge('b', 'a', weight=2)
@@ -716,7 +716,7 @@ def generate_ch07():
 
     with FigureNum(18) as figure_number:
         description = 'Actual shortest paths, dist_to[][], and node_from[][] for example'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()
         DG_TABLE.add_edge('a', 'b', weight=4)
         DG_TABLE.add_edge('b', 'a', weight=2)
@@ -731,7 +731,7 @@ def generate_ch07():
 
     with FigureNum(19) as figure_number:
         description = 'Initialize dist_to[][] and node_from[][] based on G'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()
         DG_TABLE.add_edge('a', 'b', weight=4)
         DG_TABLE.add_edge('b', 'a', weight=2)
@@ -746,7 +746,7 @@ def generate_ch07():
 
     with FigureNum(20) as figure_number:
         description = 'Changes to node_from[][] and dist_to[][] after k processes a and b'
-        label = captionx(chapter, figure_number)
+        label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()
         DG_TABLE.add_edge('a', 'b', weight=4)
         DG_TABLE.add_edge('b', 'a', weight=2)

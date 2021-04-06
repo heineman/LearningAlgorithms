@@ -5,7 +5,7 @@ Challenge Exercises for Chapter 1.
 import random
 import timeit
 
-from algs.table import DataTable, ExerciseNum, captionx
+from algs.table import DataTable, ExerciseNum, caption
 from algs.counting import RecordedItem
 
 def partition(A, lo, hi, idx):
@@ -261,17 +261,17 @@ if __name__ == '__main__':
     with ExerciseNum(1) as exercise_number:
         s = 'A man, a plan, a canal. Panama!'
         print(s,'is a palindrome:', is_palindrome_letters_only(s))
-        print(captionx(chapter, exercise_number),
+        print(caption(chapter, exercise_number),
               'Palindrome Detector')
 
     with ExerciseNum(2) as exercise_number:
         run_median_less_than_trial()
         print()
         run_median_trial()
-        print(captionx(chapter, exercise_number),
+        print(caption(chapter, exercise_number),
               'Median Counting')
 
     with ExerciseNum(3) as exercise_number:
         run_counting_sort_trials()
-        print(captionx(chapter, exercise_number),
+        print(caption(chapter, exercise_number),
               'Counting Sort Trials')

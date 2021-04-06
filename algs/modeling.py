@@ -22,7 +22,7 @@ try:
 
     def log_model(n, a):
         """Formula for A*Log_2(N) with single coefficient."""
-        return a*np.log(n)/np.log(2)
+        return a*np.log2(n)
 
     def linear_model(n, a, b):
         """Formula for A*N + B linear model with two coefficients."""
@@ -30,11 +30,11 @@ try:
 
     def n_log_n_model(n, a):
         """Formula for A*N*Log_2(N) with single coefficient."""
-        return a*n*np.log(n)/np.log(2)
+        return a*n*np.log2(n)
 
     def log_linear_model(n, a, b):
         """Formula for A*N*Log_2(N) + B*N with two coefficients."""
-        return a*n*np.log(n)/np.log(2) + b*n
+        return a*n*np.log2(n) + b*n
 
     def quadratic_model(n, a, b):
         """Formula for A*N*N + B*N quadratic model with three coefficients."""
@@ -51,7 +51,7 @@ except ImportError:
 
     def log_model(n, a):
         """Formula for A*Log_2(N) with single coefficient."""
-        return a*math.log(n)/math.log(2)
+        return a*math.log2(n)
 
     def linear_model(n, a, b):
         """Formula for A*N + B linear model with two coefficients."""
@@ -59,11 +59,11 @@ except ImportError:
 
     def n_log_n_model(n, a):
         """Formula for A*N*Log_2(N) with single coefficient."""
-        return a*n*math.log(n)/math.log(2)
+        return a*n*math.log2(n)
 
     def log_linear_model(n, a, b):
         """Formula for A*N*Log_2(N) + B*N with two coefficients."""
-        return a*n*math.log(n)/math.log(2) + b*n
+        return a*n*math.log2(n) + b*n
 
     def quadratic_model(n, a, b):
         """Formula for A*N*N + B*N quadratic model with three coefficients."""

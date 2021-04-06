@@ -5,7 +5,7 @@ Sample output for this execution.
 """
 import timeit
 import itertools
-from algs.table import DataTable, TableNum, FigureNum, process, captionx
+from algs.table import DataTable, TableNum, FigureNum, process, caption
 from algs.modeling import Model
 from algs.counting import RecordedItem
 from ch01.largest import largest, alternate
@@ -275,7 +275,7 @@ def generate_ch01():
         print(pi1, '->', max(pi1))
         print(pi2, '->', max(pi2))
         print(pi3[:5]+['...'] + pi3[-3:], '->', max(pi3))
-        print(captionx(chapter, figure_number),
+        print(caption(chapter, figure_number),
               'Three different problem instances processed by an algorithm')
         print()
 
@@ -290,7 +290,7 @@ def generate_ch01():
             return max(A)
         dis.dis(f)
         print()
-        print(captionx(chapter, figure_number),
+        print(caption(chapter, figure_number),
               'Counting operations or instructions is complicated.')
 
     with TableNum(1) as table_number:
@@ -307,7 +307,7 @@ def generate_ch01():
 
     # Take results and plot #LessA on left-axis as line, and TimesA on right axis as column
     with FigureNum(6) as figure_number:
-        print(captionx(chapter, figure_number),
+        print(caption(chapter, figure_number),
               'Visualizing relationship between #Less-Than and runtime performance')
 
     with TableNum(3) as table_number:
@@ -329,7 +329,7 @@ def generate_ch01():
 
     # Taken from table
     with FigureNum(10) as figure_number:
-        print(captionx(chapter, figure_number),
+        print(caption(chapter, figure_number),
               'Runtime performance comparison')
 
     with TableNum(6) as table_number:

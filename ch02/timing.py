@@ -5,34 +5,34 @@ Generate timing results for inefficient sorting algorithms.
 
     Permutation Sort Trials (up to N=12): These can take Unusually Long.
     Factorial    = 3.7490738642164824e-07*N!
-           N    TimeToSort       Model    
-           1      0.0000      0.0000    
-           2      0.0000      0.0000    
-           3      0.0000      0.0000    
-           4      0.0000      0.0000    
-           5      0.0000      0.0000    
-           6      0.0003      0.0003    
-           7      0.0018      0.0019    
-           8      0.0149      0.0151    
-           9      0.1350      0.1360    
-          10      1.3777      1.3605    
-          11     15.7066     14.9651    
-          12    194.1625    179.5812    
+           N    TimeToSort       Model
+           1      0.0000      0.0000
+           2      0.0000      0.0000
+           3      0.0000      0.0000
+           4      0.0000      0.0000
+           5      0.0000      0.0000
+           6      0.0003      0.0003
+           7      0.0018      0.0019
+           8      0.0149      0.0151
+           9      0.1350      0.1360
+          10      1.3777      1.3605
+          11     15.7066     14.9651
+          12    194.1625    179.5812
 
     Random Sort Trials (up to N=11): These can take Unusually Long.
     Factorial    = 5.975750448109412e-07*N!
-           N    TimeToSort       Model    
-           1      0.0000      0.0000    
-           2      0.0000      0.0000    
-           3      0.0000      0.0000    
-           4      0.0000      0.0000    
-           5      0.0000      0.0001    
-           6      0.0012      0.0004    
-           7      0.0011      0.0030    
-           8      0.1574      0.0241    
-           9      0.1935      0.2168    
-          10     21.2817      2.1685    
-          11    137.0447     23.8533    
+           N    TimeToSort       Model
+           1      0.0000      0.0000
+           2      0.0000      0.0000
+           3      0.0000      0.0000
+           4      0.0000      0.0000
+           5      0.0000      0.0001
+           6      0.0012      0.0004
+           7      0.0011      0.0030
+           8      0.1574      0.0241
+           9      0.1935      0.2168
+          10     21.2817      2.1685
+          11    137.0447     23.8533
 """
 
 import timeit
@@ -41,7 +41,7 @@ from algs.modeling import numpy_error, factorial_model
 
 def run_permutation_sort_worst_case(top=11, output=True, decimals=4):
     """Generate table for permutation sort from 1 up to and not including top."""
-    
+
     # Build model for runs of size 1 through 9.
     x = []
     y = []
@@ -72,7 +72,7 @@ x=list(range({},0,-1))'''.format(n), number=1)
 
 def run_random_sort(top=12, output=True):
     """Generate table for random sort."""
-    
+
     # Build model for runs of size 1 through 9.
     x = []
     y = []
