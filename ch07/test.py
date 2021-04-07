@@ -370,12 +370,14 @@ class TestChapter7(unittest.TestCase):
     def test_generate_smart_search_figure(self):
         from ch07.book import generate_smart_search_figure
         from ch07.tmg_load import tmg_load, highway_map
+        from ch07.dependencies import plt_error
 
-        SRC = 389
-        TARGET = 2256
-        (G, positions) = tmg_load(highway_map())
-        output_file = generate_smart_search_figure(G, positions, SRC, TARGET)
-        self.assertTrue(path.exists(output_file))
+        if not plt_error:
+            SRC = 389
+            TARGET = 2256
+            (G, positions) = tmg_load(highway_map())
+            output_file = generate_smart_search_figure(G, positions, SRC, TARGET)
+            self.assertTrue(path.isfile(output_file))
 
 #######################################################################
 if __name__ == '__main__':
