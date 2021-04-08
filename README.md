@@ -54,11 +54,10 @@ not have administrator privileges:
 	
 	   https://www.python.org/ftp/python/3.3.0/python-3.3.0.amd64.msi for example is
 	   what you would do to install Python 3.3.0, which is the earliest version for
-	   which this code base is compatible
+	   which this code base is compatible. Please consider using the latest version
 	
-	2. Invoke MSI installer from command line
-	
-	   https://www.python.org/download/releases/2.4/msi/
+	2. Invoke MSI installer from command line, using the command as suggested by the
+	   older Python2.4 documentation (https://www.python.org/download/releases/2.4/msi/)
 	
 	   msiexec /a python-3.3.0.amd64.msi TARGETDIR=C:\YOUR\DESTINATION\FILE
 	
@@ -112,3 +111,6 @@ If you want to complete all timing results, then add those as well:
 
 Each chapter has challenge exercises that have been completely solved, these
 can be executed from each chNN/challenge.py file.
+
+The `coverage.bat` executable performs full coverage and takes about eight
+hours to complete. 

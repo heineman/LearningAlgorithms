@@ -194,12 +194,18 @@ class TestChapter1(unittest.TestCase):
         from ch01.challenge import tournament_allows_odd
         A = [3, 87 , 2]
         self.assertEqual((87, 3), tournament_allows_odd(A))
-        
+
         # sanity check, doesn't prove anything....
         for _ in range(200):
             A = list(range(11))
             random.shuffle(A)
             self.assertEqual((10, 9), tournament_allows_odd(A))
+
+    def test_just_compare_sort_tournament_two(self):
+        from ch01.book import just_compare_sort_tournament_two
+        
+        tbl = just_compare_sort_tournament_two(max_k=15, output=False)
+        self.assertTrue(tbl.entry(8192, "sorting_two") < tbl.entry(16384, "sorting_two"))
             
 #######################################################################
 if __name__ == '__main__':
