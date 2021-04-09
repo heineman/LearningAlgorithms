@@ -421,6 +421,7 @@ class TestChapter3(unittest.TestCase):
         from ch03.challenge import PythonSimulationHashtable as Hashtable
 
         ht = Hashtable(5)
+        self.assertTrue(ht.get(99) is None)
         for i in range(12):
             ht.put('key{}'.format(i), i)
 

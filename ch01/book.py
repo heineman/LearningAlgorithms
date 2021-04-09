@@ -322,7 +322,7 @@ def generate_ch01():
                 create_image = False)
 
     with TableNum(5) as table_number:
-        process(run_best_worst(),
+        process(just_compare_sort_tournament_two(),
                 chapter, table_number,
                 'Comparing runtime performance (in ms) of all four algorithms',
                 yaxis = 'Time (in ms)')
