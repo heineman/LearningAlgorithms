@@ -43,11 +43,11 @@ def fact(N):
 
     return N * fact(N-1)
 
-def modeling_insertion_worst_case():
+def modeling_insertion_worst_case(output=True):
     """Generate table for worst case of Insertion Sort."""
     from ch05.sorting import insertion_sort_counting
 
-    tbl = DataTable([8,12,12],['N', 'Swaps', 'Comparisons'])
+    tbl = DataTable([8,12,12],['N', 'Swaps', 'Comparisons'], output=output)
     tbl.format('Swaps', ',d')
     tbl.format('Comparisons', ',d')
 
@@ -57,6 +57,7 @@ def modeling_insertion_worst_case():
         (num_swaps, num_compares) = insertion_sort_counting(A)
 
         tbl.row([n, num_swaps, num_compares])
+    return tbl
 
 def modeling_insertion_selection(output=True, decimals=1):
     """Generate table for Insertion Sort."""

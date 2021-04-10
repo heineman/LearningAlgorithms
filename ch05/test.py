@@ -282,6 +282,12 @@ class TestChapter5(unittest.TestCase):
         tbl = timing_nlogn_sorting_real_world(max_k=15, output=False)
         self.assertTrue(tbl.entry(16384, 'PythonSort') < tbl.entry(16384, 'MergeSort'))
 
+    def test_modeling_insertion_worst_case(self):
+        from ch05.book import modeling_insertion_worst_case
+        
+        tbl = modeling_insertion_worst_case(output=False)
+        self.assertEqual(tbl.entry(128, 'Swaps'), tbl.entry(128, 'Comparisons'))
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

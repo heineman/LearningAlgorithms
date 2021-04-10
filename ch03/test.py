@@ -338,6 +338,17 @@ class TestChapter3(unittest.TestCase):
             for val in range(1,100):
                 self.assertTrue(ht.get(val) is None)
 
+    def test_resize_hash_small_linked_remove(self):
+        from ch03.hashtable_linked import DynamicHashtable
+        from ch03.challenge import ValueBadHash
+
+        # Forces long chains.
+        ht = DynamicHashtable(20)
+        for i in range(10):
+            ht.put(ValueBadHash(i), i)
+        for i in range(10):
+            self.assertEqual(i, ht.remove(ValueBadHash(i)))
+
     def test_resize_hash_small_linked(self):
         from ch03.hashtable_linked import DynamicHashtable
         for size in range(1,10):

@@ -277,10 +277,31 @@ class TestChapter7(unittest.TestCase):
         from ch07.indexed_pq import IndexedMinPQ
 
         impq = IndexedMinPQ(5)
+        with self.assertRaises(RuntimeError):
+            impq.peek()
+        with self.assertRaises(RuntimeError):
+            impq.dequeue()
         impq.enqueue(3, 5)
+
+        # can't increase priority
+        with self.assertRaises(RuntimeError):
+            impq.decrease_priority(3, 999)
+        
+        self.assertEqual(3, impq.peek())
         impq.enqueue(1, 2)
+        self.assertEqual(2, len(impq))
+        self.assertFalse(impq.is_full())
+        self.assertTrue(3 in impq)
+        self.assertFalse(999 in impq)
         self.assertEqual(1, impq.dequeue())
         self.assertEqual(3, impq.dequeue())
+        self.assertTrue(impq.is_empty())
+        for i in range(5):
+            impq.enqueue(i, i+10)
+        self.assertTrue(impq.is_full())
+        
+        with self.assertRaises(RuntimeError):
+            impq.enqueue(98, 999)
 
     def test_imqp_example(self):
         from ch07.single_source_sp import dijkstra_sp

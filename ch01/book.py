@@ -102,8 +102,8 @@ x=list(range({}))'''.format(n), number=num)
             print(header, tbl.best_model(header))
     return tbl
 
-def run_largest_two_trials(mode, output=True, decimals=2):
-    """Mode is either REVERSED or SHUFFLED."""
+def run_largest_two_trials(mode, max_k=22, output=True, decimals=2):
+    """Mode is either Order.REVERSED or Order.SHUFFLED for 2**k up to (but not including) max_k."""
     tbl = DataTable([10,15,15,10,10,15],
         ['N','double_two','mutable_two','largest_two','sorting_two','tournament_two'],
         output=output, decimals=decimals)
@@ -113,7 +113,7 @@ def run_largest_two_trials(mode, output=True, decimals=2):
     if mode is Order.SHUFFLED:
         prepare = 'random.shuffle(x)'
 
-    trials = [2**k for k in range(10,22)]
+    trials = [2**k for k in range(10,max_k)]
     num = 100
     for n in trials:
         if mode is Order.ALTERNATING:
