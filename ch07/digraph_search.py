@@ -161,4 +161,4 @@ def recover_cycle_nr(DG):
                             cycle.reverse()
                             return cycle
 
-    return None
+    return []

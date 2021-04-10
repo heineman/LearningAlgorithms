@@ -42,6 +42,13 @@ class TestAlgs(unittest.TestCase):
         n = Node('sample')
         self.assertEqual('[sample]', str(n))
 
+    def test_is_sorted(self):
+        from algs.sorting import is_sorted
+
+        is_sorted([2, 9, 55])
+        with self.assertRaises(ValueError):
+            is_sorted([55, 9, 2])
+
     def test_node_2(self):
         node1 = Node('sample')
         node2 = Node('other', node1)

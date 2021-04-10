@@ -135,14 +135,14 @@ class AdjacencyViewer:
         for j in self.neighbors:
             if j == target:
                 if (self.i, j) in self.mat.weights:
-                    return {WEIGHT: self.mat.weights[(self.i,j)]}
+                    return (self.mat.labels[self.i], self.mat.labels[j], {WEIGHT: self.mat.weights[(self.i,j)]})
                 return (self.mat.labels[self.i], self.mat.labels[j])
         return None
 
     def __iter__(self):
         for j in self.neighbors:
             if (self.i, j) in self.mat.weights:
-                yield {WEIGHT: self.mat.weights[(self.i,j)]}
+                yield (self.mat.labels[j], {WEIGHT: self.mat.weights[(self.i,j)]})
             else:
                 yield self.mat.labels[j]
 
@@ -568,55 +568,55 @@ class TestChapter7(unittest.TestCase):
                          sorted(list(G.edges('B3'))))
         
     def test_matrix_undirected_graph_weighted(self):
-        DG = MatrixUndirectedGraph()
+        G = MatrixUndirectedGraph()
 
         with self.assertRaises(ValueError):
-            DG.add_edge('A2', 'A3', weight=MatrixUndirectedGraph.NO_EDGE)
+            G.add_edge('A2', 'A3', weight=MatrixUndirectedGraph.NO_EDGE)
 
-        DG.add_edge('A2', 'A3', weight=1)
-        self.assertEqual([('A2', 'A3', {'weight': 1})], list(DG.edges()))
+        G.add_edge('A2', 'A3', weight=1)
+        self.assertEqual([('A2', 'A3', {'weight': 1})], list(G.edges()))
         
-        self.assertEqual(1, DG.get_edge_data('A2', 'A3')[WEIGHT])
-        self.assertTrue(DG.get_edge_data('A2', 'Nothing') is None)
-        self.assertTrue(DG.get_edge_data('Nothing', 'A2') is None)
+        self.assertEqual(1, G.get_edge_data('A2', 'A3')[WEIGHT])
+        self.assertTrue(G.get_edge_data('A2', 'Nothing') is None)
+        self.assertTrue(G.get_edge_data('Nothing', 'A2') is None)
         
-        DG.add_edge('A2', 'A3', weight=2)   # confirm doesn't have an effect. First one there gets it.
-        self.assertEqual([('A2', 'A3', {'weight': 1})], list(DG.edges()))
+        G.add_edge('A2', 'A3', weight=2)   # confirm doesn't have an effect. First one there gets it.
+        self.assertEqual([('A2', 'A3', {'weight': 1})], list(G.edges()))
         
-        self.assertEqual(['A2', 'A3'], sorted(list(DG.nodes())))
-        DG.add_edges_from([('A3', 'A4', {'weight': 2}), ('A4', 'A5', {'weight': 3})])
+        self.assertEqual(['A2', 'A3'], sorted(list(G.nodes())))
+        G.add_edges_from([('A3', 'A4', {'weight': 2}), ('A4', 'A5', {'weight': 3})])
        
-        self.assertTrue(DG.get_edge_data('A2', 'A4') is None)
-        self.assertEqual(['A3'], list(DG.neighbors('A2')))
+        self.assertTrue(G.get_edge_data('A2', 'A4') is None)
+        self.assertEqual(['A3'], list(G.neighbors('A2')))
 
-        edge_list = [ ('B{}'.format(i), 'C{}'.format(i)) for i in range(2,6)]
-        DG.add_edges_from(edge_list)
-        self.assertEqual(sorted(edge_list + [('A2', 'A3', {'weight': 1}), ('A3', 'A4', {'weight': 2}), ('A4', 'A5', {'weight': 3})]), sorted(list(DG.edges())))
+        edge_list = [ ('B{}'.format(i), 'C{}'.format(i), {'weight': 2}) for i in range(2,6)]
+        G.add_edges_from(edge_list)
+        self.assertEqual(sorted(edge_list + [('A2', 'A3', {'weight': 1}), ('A3', 'A4', {'weight': 2}), ('A4', 'A5', {'weight': 3})]), sorted(list(G.edges())))
         for i in range(2, 6):
             if 2 < i < 5:
-                DG.add_edge('B{}'.format(i), 'B{}'.format(i+1))
+                G.add_edge('B{}'.format(i), 'B{}'.format(i+1), weight=i)
             if i < 5:
-                DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
+                G.add_edge('C{}'.format(i), 'C{}'.format(i+1), weight=1)
 
-        self.assertEqual(12, DG.number_of_nodes())
-        self.assertEqual(12, DG.number_of_edges())
-        self.assertEqual(sorted(['B3', 'B5', 'C4']), sorted(list(DG['B4'])))
-        self.assertEqual(sorted([('C3', 'B3'), ('C3', 'C2'), ('C3', 'C4')]),
-                         sorted(list(DG.edges('C3'))))
+        self.assertEqual(12, G.number_of_nodes())
+        self.assertEqual(12, G.number_of_edges())
+        self.assertEqual([('B3', {'weight': 3}), ('B5', {'weight': 4}), ('C4', {'weight': 2})], sorted(list(G['B4'])))
+        self.assertEqual(sorted([('C3', 'B3', {'weight': 2}), ('C3', 'C2', {'weight': 1}), ('C3', 'C4', {'weight': 1})]),
+                         sorted(list(G.edges('C3'))))
 
-        DG.remove_edge('C3', 'C4')
-        self.assertEqual(12, DG.number_of_nodes())
-        self.assertEqual(11, DG.number_of_edges())
-        self.assertEqual(sorted(['B4', 'C3']), sorted(list(DG['B3'])))
-        self.assertEqual(sorted([('B3', 'B4'), ('B3', 'C3')]),
-                         sorted(list(DG.edges('B3'))))
+        G.remove_edge('C3', 'C4')
+        self.assertEqual(12, G.number_of_nodes())
+        self.assertEqual(11, G.number_of_edges())
+        self.assertEqual(sorted([('C3', {'weight': 2}), ('B4', {'weight': 3})]), sorted(list(G['B3'])))
+        self.assertEqual(sorted([('B3', 'B4', {'weight': 3}), ('B3', 'C3', {'weight': 2})]),
+                         sorted(list(G.edges('B3'))))
 
-        self.assertEqual(11, len(list(DG.edges())))
-        DG.remove_edge('A2', 'nothing')  # NO IMPACT
-        DG.remove_edge('nothing', 'A2')  # NO IMPACT
+        self.assertEqual(11, len(list(G.edges())))
+        G.remove_edge('A2', 'nothing')  # NO IMPACT
+        G.remove_edge('nothing', 'A2')  # NO IMPACT
         
-        DG.remove_edge('A2', 'A3')
-        self.assertEqual(10, len(list(DG.edges())))
+        G.remove_edge('A2', 'A3')
+        self.assertEqual(10, len(list(G.edges())))
         
     def test_matrix_directed_graph_weighted(self):
         DG = DirectedGraph()

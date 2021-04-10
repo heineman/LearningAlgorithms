@@ -19,7 +19,7 @@ class Hashtable:
     def get(self, k):
         """Retrieve value associated with key, k."""
         hc = perfect_hash(k)
-        if self.table[hc].key == k:
+        if self.table[hc] and self.table[hc].key == k:
             return self.table[hc].value
         return None
 

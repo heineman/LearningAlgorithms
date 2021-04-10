@@ -281,6 +281,7 @@ class TestChapter3(unittest.TestCase):
     def test_perfect(self):
         from ch03.hashtable_open_perfect import Hashtable
         ht = Hashtable()
+        self.assertTrue(ht.get('zyzzyvas') is None)
         ht.put('a', 99)
         ht.put('zyzzyvas', 101)
         self.assertEqual('a', ht.table[0].key)
@@ -344,6 +345,7 @@ class TestChapter3(unittest.TestCase):
 
         # Forces long chains.
         ht = DynamicHashtable(20)
+        self.assertTrue(ht.get(99) is None)
         for i in range(10):
             ht.put(ValueBadHash(i), i)
         for i in range(10):

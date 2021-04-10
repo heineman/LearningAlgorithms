@@ -19,16 +19,6 @@ def sum_list(node):
 
     return node.value + sum_list(node.next)
 
-def print_table_list_sum(node, total=0):
-    """Given a Python list, print table."""
-    if node is None:
-        return
-
-    total += node.value
-    print(node.value, total)
-
-    print_table_list_sum(node.next, total)
-
 def iterate_list(node):
     """
     Python Generator for a linked list.

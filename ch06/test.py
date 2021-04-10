@@ -252,7 +252,15 @@ class TestChapter6(unittest.TestCase):
         from ch06.symbol import BinaryTree
 
         bt1 = BinaryTree()
+        with self.assertRaises(ValueError):
+            bt1.put(None, 99)
+
+        self.assertTrue(bt1.remove(None) is None)   # harmless
+
+        self.assertTrue(bt1.is_empty())
         bt1.put(5,5)
+        self.assertFalse(bt1.is_empty())
+        self.assertEqual("5 -> 5 [0]", str(bt1.root))
         self.assertTrue(5 in bt1)
 
         bt1.put(3,3)
@@ -265,6 +273,8 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual(3, bt1.root.key)    # rotate!
         self.assertTrue(1 in bt1)
         self.assertEqual([1, 3, 5], [key for key,_ in list(bt1)])
+
+        self.assertTrue(bt1.get(9999) is None)  # not present
 
     def test_avl_bt2(self):
         from ch06.symbol import BinaryTree
@@ -393,6 +403,13 @@ class TestChapter6(unittest.TestCase):
 
         pq1 = PQ()
         self.assertTrue(pq1.is_empty())
+        self.assertFalse(pq1.is_full())
+        with self.assertRaises(ValueError):
+            pq1.enqueue(999, None)
+
+        with self.assertRaises(RuntimeError):
+            pq1.peek()
+
         self.assertFalse(9 in pq1)
         N = 31
         keys = list(range(N))
@@ -494,6 +511,7 @@ class TestChapter6(unittest.TestCase):
         from ch06.balanced import BinaryTree
 
         bt1 = BinaryTree()
+        self.assertTrue(bt1.min() is None)
         for i in [50, 30, 70, 20, 40, 60, 10, 45]:
             bt1.insert(i)
         self.assertEqual(50, bt1.root.value)
@@ -506,6 +524,7 @@ class TestChapter6(unittest.TestCase):
         from ch06.tree import BinaryTree
         from ch06.challenge import tree_structure
         bt1 = BinaryTree()
+        self.assertFalse(99 in bt1)
         bt1.insert(5)
         bt1.insert(4)
         bt1.insert(6)

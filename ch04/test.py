@@ -75,6 +75,38 @@ class TestChapter4(unittest.TestCase):
         # Note: we cannot guarantee individual words BUT we can guarantee length
         self.assertEqual((len('acetylphenylhydrazine'), len('a')), (len(pair[0]), len(pair[1])))
 
+    def test_just_ordered(self):
+        from ch04.ordered import PQ
+        pq = PQ(4)
+        for i in range(4):
+            pq.enqueue(i,i)
+        with self.assertRaises(RuntimeError):
+            pq.enqueue(99,99)
+
+    def test_just_array(self):
+        from ch04.array import PQ
+        pq = PQ(4)
+        for i in range(4):
+            pq.enqueue(i,i)
+        with self.assertRaises(RuntimeError):
+            pq.enqueue(99,99)
+
+    def test_just_builtin(self):
+        from ch04.builtin import PQ
+        pq = PQ(4)
+        for i in range(4):
+            pq.enqueue(i,i)
+        with self.assertRaises(RuntimeError):
+            pq.enqueue(99,99)
+
+    def test_just_ordered_list(self):
+        from ch04.ordered_list import PQ
+        pq = PQ(4)
+        for i in range(4):
+            pq.enqueue(i,i)
+        with self.assertRaises(RuntimeError):
+            pq.enqueue(99,99)
+
     def test_ordered_pq(self):
         from ch04.ordered import PQ
         from resources.english import english_words
@@ -187,6 +219,8 @@ class TestChapter4(unittest.TestCase):
         self.assertFalse(pq.is_full())
         for v,p in [(1,1), (2,2), (3, 3), (4,4), (5,5)]:
             pq.enqueue(v, p)
+        with self.assertRaises(RuntimeError):
+            pq.enqueue(99,99)
         val = 5
         while pq:
             self.assertEqual(val, pq.dequeue())
@@ -231,6 +265,35 @@ class TestChapter4(unittest.TestCase):
         self.assertEqual(2, pq.dequeue())
         self.assertEqual(1, pq.dequeue())
         self.assertEqual(0, pq.dequeue())
+
+    def test_linked_entry(self):
+        from ch04.linked_entry import LinkedEntry
+        e = LinkedEntry('99', 101)
+        self.assertEqual('[99 p=101]', str(e))
+
+    def test_linked_pq(self):
+        from ch04.linked import PQ
+        pq = PQ(3)
+        self.assertFalse(pq.is_full())
+        with self.assertRaises(RuntimeError):
+            pq.dequeue()
+        for i in range(3):
+            pq.enqueue(i,i)
+        self.assertTrue(pq.is_full())
+        with self.assertRaises(RuntimeError):
+            pq.enqueue(99,99)
+            
+    def test_heap_pq_edge_cases(self):
+        from ch04.heap import PQ
+        pq = PQ(3)
+        self.assertFalse(pq.is_full())
+        with self.assertRaises(RuntimeError):
+            pq.dequeue()
+        for i in range(3):
+            pq.enqueue(i,i)
+        self.assertTrue(pq.is_full())
+        with self.assertRaises(RuntimeError):
+            pq.enqueue(99,99)
 
     def test_entry(self):
         from ch04.entry import Entry

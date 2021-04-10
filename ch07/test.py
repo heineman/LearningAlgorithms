@@ -240,6 +240,7 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(sorted(['C2', 'B3', 'C4']), sorted(list(G['C3'])))
         self.assertEqual(sorted([('C3', 'C2'), ('C3', 'B3'), ('C3', 'C4')]),
                          sorted(list(G.edges('C3'))))
+        return G
 
     def test_small_example(self):
         from ch07.search import dfs_search, path_to
@@ -256,10 +257,22 @@ class TestChapter7(unittest.TestCase):
         G = ch07.replacement.Graph()
         self.small_example(G)
 
+    def test_list_stack(self):
+        from ch07.list_stack import Stack
+        
+        stack = Stack()
+        self.assertTrue(stack.is_empty())
+        with self.assertRaises(RuntimeError):
+            stack.pop()
+        stack.push(5)
+        self.assertFalse(stack.is_empty())
+        self.assertEqual(5, stack.pop())
+
     def test_representations(self):
         from ch07.replacement import MatrixUndirectedGraph, UndirectedGraph
         self.small_example(UndirectedGraph())
-        self.small_example(MatrixUndirectedGraph())
+        G = self.small_example(MatrixUndirectedGraph())
+        self.assertEqual(['A3'], list(G['A2']))
 
     def test_dijkstra_replacement(self):
         from ch07.replacement import WEIGHT, DiGraph
@@ -352,6 +365,21 @@ class TestChapter7(unittest.TestCase):
                 acycle = networkx.algorithms.cycles.find_cycle(ss.digraph)
                 self.assertTrue(len(acycle) > 1)
 
+    def test_has_cycle_none_exists(self):
+        from ch07.digraph_search import has_cycle, has_cycle_nr
+        from ch07.digraph_search import recover_cycle, recover_cycle_nr
+        G = nx.DiGraph()
+        G.add_edge('a', 'b', weight=6)
+        G.add_edge('a', 'c', weight=10)
+        G.add_edge('b', 'c', weight=2)
+
+        self.assertFalse(has_cycle(G))
+        self.assertFalse(has_cycle_nr(G))
+
+        # There are multiple cycles, so no way to check with each other...
+        self.assertTrue(len(recover_cycle(G)) is 0)
+        self.assertTrue(len(recover_cycle_nr(G)) is 0)
+        
     def test_has_cycle(self):
         from ch07.digraph_search import has_cycle, has_cycle_nr
         from ch07.digraph_search import recover_cycle, recover_cycle_nr
