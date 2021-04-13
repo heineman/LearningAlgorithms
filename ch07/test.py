@@ -94,6 +94,7 @@ class TestChapter7(unittest.TestCase):
         G.add_edge('b', 'c', weight=9)
         G.add_edge('b', 'd', weight=2)
         G.add_edge('d', 'c', weight=1)
+        G.add_edge('e', 'f', weight=1)   # separate and disconnected edge...
         (dist_to, node_from) = floyd_warshall(G)
         path = all_pairs_path_to(node_from, 'b', 'c')
         self.assertEqual(3, dist_to['b']['c'])
@@ -102,6 +103,9 @@ class TestChapter7(unittest.TestCase):
         path = all_pairs_path_to(node_from, 'a', 'd')
         self.assertEqual(5, dist_to['a']['d'])
         self.assertEqual(['a', 'b', 'd'], path)
+
+        with self.assertRaises(ValueError):
+            all_pairs_path_to(node_from, 'a', 'e')
 
         tbl = DataTable([6,6,6,6,6], ['.', 'a', 'b', 'c', 'd'], output=False)
         tbl.format('.','s')
@@ -191,10 +195,14 @@ class TestChapter7(unittest.TestCase):
         DG.add_edge('b', 'c', weight=4)
         DG.add_edge('b', 'd', weight=2)
         DG.add_edge('d', 'c', weight=1)
+        DG.add_edge('e', 'f', weight=1)   # separate and disconnected edge...
         (dist_to, edge_to) = dijkstra_sp(DG, 'a')
         path = edges_path_to(edge_to, 'a', 'c')
         self.assertEqual(6, dist_to['c'])
         self.assertEqual(['a', 'b', 'd', 'c'], path)
+
+        with self.assertRaises(ValueError):  # NO PATH!
+            edges_path_to(edge_to, 'a', 'f')
 
         (dist_to_bf, edge_to_bf) = bellman_ford(DG, 'a')
         path = edges_path_to(edge_to_bf, 'a', 'c')
@@ -222,6 +230,7 @@ class TestChapter7(unittest.TestCase):
         print(list(topological_sort(DG)))
 
     def small_example(self, G):
+        """Common example used in chapter 07."""
         G.add_node('A2')
         G.add_nodes_from(['A3', 'A4', 'A5'])
 
@@ -252,6 +261,9 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(['A2', 'A3', 'A4', 'A5'], path_to(node_from, 'A2', 'A5'))
         self.assertEqual(['A2', 'A3', 'A4', 'A5'], list(path_to_recursive(node_from, 'A2', 'A5')))
 
+        with self.assertRaises(ValueError):
+            path_to(node_from, 'A2', 'B2')    # No path exists
+
     def test_small_example_stub_replacement(self):
         import ch07.replacement
         G = ch07.replacement.Graph()
@@ -259,7 +271,7 @@ class TestChapter7(unittest.TestCase):
 
     def test_list_stack(self):
         from ch07.list_stack import Stack
-        
+
         stack = Stack()
         self.assertTrue(stack.is_empty())
         with self.assertRaises(RuntimeError):
@@ -299,7 +311,7 @@ class TestChapter7(unittest.TestCase):
         # can't increase priority
         with self.assertRaises(RuntimeError):
             impq.decrease_priority(3, 999)
-        
+
         self.assertEqual(3, impq.peek())
         impq.enqueue(1, 2)
         self.assertEqual(2, len(impq))
@@ -312,7 +324,7 @@ class TestChapter7(unittest.TestCase):
         for i in range(5):
             impq.enqueue(i, i+10)
         self.assertTrue(impq.is_full())
-        
+
         with self.assertRaises(RuntimeError):
             impq.enqueue(98, 999)
 
@@ -377,9 +389,9 @@ class TestChapter7(unittest.TestCase):
         self.assertFalse(has_cycle_nr(G))
 
         # There are multiple cycles, so no way to check with each other...
-        self.assertTrue(len(recover_cycle(G)) is 0)
-        self.assertTrue(len(recover_cycle_nr(G)) is 0)
-        
+        self.assertTrue(len(recover_cycle(G)) == 0)
+        self.assertTrue(len(recover_cycle_nr(G)) == 0)
+
     def test_has_cycle(self):
         from ch07.digraph_search import has_cycle, has_cycle_nr
         from ch07.digraph_search import recover_cycle, recover_cycle_nr
@@ -404,7 +416,7 @@ class TestChapter7(unittest.TestCase):
         # However, both cycles contain 'e'
         self.assertTrue('e' in recover_cycle(G))
         self.assertTrue('e' in recover_cycle_nr(G))
-        
+
     def test_topological_table(self):
         from ch07.book import table_topological_example
         tbl = table_topological_example(max_k=4, output=False)

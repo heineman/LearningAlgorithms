@@ -21,7 +21,7 @@ def path_to(node_from, src, target):
 
     Performance is O(N) since a path could involve all nodes, in the worst case.
     """
-    if node_from[target] is None:
+    if not target in node_from:
         raise ValueError('{} is unreachable from {}'.format(target,src))
 
     path = []

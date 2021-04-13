@@ -286,6 +286,8 @@ class TestChapter4(unittest.TestCase):
     def test_heap_pq_edge_cases(self):
         from ch04.heap import PQ
         pq = PQ(3)
+        with self.assertRaises(RuntimeError):
+            pq.peek()
         self.assertFalse(pq.is_full())
         with self.assertRaises(RuntimeError):
             pq.dequeue()

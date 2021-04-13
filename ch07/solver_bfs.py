@@ -1,10 +1,10 @@
 """
 Animates the Breadth First Search solution of a maze.
 
-If you set `refresh_rate` to zero, then it will remove all delays. As it is, the 
+If you set `refresh_rate` to zero, then it will remove all delays. As it is, the
 small 0.01 refresh rate shows the progress of the search.
 
-if you set `stop_end` to be True, the search will terminate at the target 
+if you set `stop_end` to be True, the search will terminate at the target
 """
 import time
 import random

@@ -130,9 +130,15 @@ class TestChapter1(unittest.TestCase):
             just_three([])
 
     def test_median(self):
+        from ch01.challenge import partition
         random.seed(10)
         a = [2, 3, 1]
         self.assertEqual(2, linear_median(a))
+        self.assertEqual(2, linear_median([2,3]))
+        self.assertEqual(2, linear_median([2]))
+        
+        a = [1]
+        self.assertEqual(0, partition(a, 0, 0, 0))
 
         # For even numbered, lists, choose the value just to the left of middle.
         for m in range(5, 100, 1):
@@ -200,6 +206,9 @@ class TestChapter1(unittest.TestCase):
             A = list(range(11))
             random.shuffle(A)
             self.assertEqual((10, 9), tournament_allows_odd(A))
+
+        with self.assertRaises(ValueError):
+            tournament_allows_odd([2])
 
     def test_just_compare_sort_tournament_two(self):
         from ch01.book import just_compare_sort_tournament_two

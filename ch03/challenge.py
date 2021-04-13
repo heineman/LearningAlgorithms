@@ -4,7 +4,66 @@ Challenge Exercises for Chapter 3.
 
 import math
 import sys
-from algs.table import DataTable
+import timeit
+
+from algs.table import DataTable, ExerciseNum, caption
+from ch03.entry import Entry
+
+class HashtableTriangleNumbers:
+    """Open Addressing Hashtable using Triangle Number probing. make sure M is power of 2."""
+    def __init__(self, M=10):
+        self.table = [None] * M
+        if M < 2:
+            raise ValueError('HashtableTriangleNumbers must contain space for at least two (key, value) pairs.')
+        exp = int(math.log2(M))
+
+        if M != 2 ** exp:
+            raise ValueError('HashtableTriangleNumbers requires M to be a power of 2.') 
+
+        self.M = M
+        self.N = 0
+
+    def get(self, k):
+        """Retrieve value associated with key, k, using delta=Tn probing."""
+        hc = hash(k) % self.M       # First place it could be
+        delta = 0
+        idx = 0
+        while self.table[hc]:
+            idx += 1
+            if self.table[hc].key == k:
+                return self.table[hc].value
+            delta += idx
+            hc = (hc + delta) % self.M
+        return None                 # Couldn't find
+
+    def is_full(self):
+        """Determine if Hashtable is full."""
+        return self.N >= self.M - 1
+
+    def put(self, k, v):
+        """Associate value, v, with the key, k."""
+        hc = hash(k) % self.M       # First place it could be
+        delta = 0
+        idx = 0
+        while self.table[hc]:
+            idx += 1
+            if self.table[hc].key == k:     # Overwrite if already here
+                self.table[hc].value = v
+                return
+            delta += idx
+            hc = (hc + delta) % self.M
+
+        if self.N >= self.M - 1:
+            raise RuntimeError('Table is Full: cannot store {} -> {}'.format(k, v))
+
+        self.table[hc] = Entry(k, v)
+        self.N += 1
+
+    def __iter__(self):
+        """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""
+        for entry in self.table:
+            if entry:
+                yield (entry.key, entry.value)
 
 class ValueBadHash:
     """
@@ -399,7 +458,6 @@ class PythonSimulationHashtable:
         # is "inserted twice" on resize; small price to pay. Note
         # That this last entry COULD be the last empty bucket, but
         # the forced resize below will resolve that issue
-        from ch03.entry import Entry
         self.table[hc] = Entry(k, v)
         self.N += 1
 
@@ -414,8 +472,7 @@ class PythonSimulationHashtable:
 
 def compare_python_hashtable():
     """Compare statistics from simulated Python Hashtable vs. existing Hashtable."""
-    import timeit
-
+    
     build_dhl = min(timeit.repeat(stmt='''
 ht = DynamicHashtable(8)
 for w in words:
@@ -435,6 +492,52 @@ words = english_words()''', repeat=7, number=5))/5
     print('Open addressing Simulation build time:', build_dhl)
     print('Python addressing HT build time:', build_phl)
 
+def exercise_triangle_number_probing(output=True, decimals=4):
+    """Compare triangle number probing with M=powers of 2."""
+    
+    tbl = DataTable([20,8], ['Type', 'Time to Search'], output=output, decimals=decimals)
+    tbl.format('Type', 's')
+    timing_oa = min(timeit.repeat(stmt='''
+for w in words:
+    ht.get(w)''', setup='''
+from ch03.hashtable_open import Hashtable
+from resources.english import english_words
+words = english_words()
+ht = Hashtable(524288)
+for w in words[:160564]:
+    ht.put(w,w)''', repeat=7, number=5))/5
+    tbl.row(['Open Addressing', timing_oa])
+    
+    timing_sc = min(timeit.repeat(stmt='''
+for w in words:
+    ht.get(w)''', setup='''
+from ch03.hashtable_linked import Hashtable
+from resources.english import english_words
+words = english_words()
+ht = Hashtable(524288)
+for w in words[:160564]:
+    ht.put(w,w)''', repeat=7, number=5))/5
+    tbl.row(['Separate Chaining', timing_sc])
+    
+    timing_tn = min(timeit.repeat(stmt='''
+for w in words:
+    ht.get(w)''', setup='''
+from ch03.challenge import HashtableTriangleNumbers
+from resources.english import english_words
+words = english_words()
+ht = HashtableTriangleNumbers(524288)
+for w in words[:160564]:
+    ht.put(w,w)''', repeat=7, number=5))/5
+    tbl.row(['Triangle Probing', timing_tn])
+
+
+
 #######################################################################
 if __name__ == '__main__':
-    compare_python_hashtable()
+    chapter = 3
+    with ExerciseNum(1) as exercise_number:
+        exercise_triangle_number_probing()
+        print(caption(chapter, exercise_number),
+              'Fragment Evaluation')
+
+    #compare_python_hashtable()

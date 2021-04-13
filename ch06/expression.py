@@ -145,6 +145,7 @@ def build_expression(s, new_operators=None, environment=None):
 
             known_operators[op] = new_operators[op]
 
+    # In Python 3.3, this regular expression generates a Deprecation Warning
     pattern = re.compile('(\(|\)|[a-zA-Z.0-9_]+|[{}])'.format('\\'.join(known_operators.keys())))
 
     from ch07.list_stack import Stack

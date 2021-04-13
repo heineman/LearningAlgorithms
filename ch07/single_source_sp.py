@@ -20,9 +20,9 @@ def bellman_ford(G, src):
     edge_to = {}
 
     def relax(e):
-        n, v, weight = e[0], e[1], e[2][WEIGHT]
-        if dist_to[n] + weight < dist_to[v]:
-            dist_to[v] = dist_to[n] + weight
+        u, v, weight = e[0], e[1], e[2][WEIGHT]
+        if dist_to[u] + weight < dist_to[v]:
+            dist_to[v] = dist_to[u] + weight
             edge_to[v] = e
             return True
         return False
@@ -54,9 +54,9 @@ def dijkstra_sp(G, src):
             impq.enqueue(v, inf)
 
     def relax(e):
-        n, v, weight = e[0], e[1], e[2][WEIGHT]
-        if dist_to[n] + weight < dist_to[v]:
-            dist_to[v] = dist_to[n] + weight
+        u, v, weight = e[0], e[1], e[2][WEIGHT]
+        if dist_to[u] + weight < dist_to[v]:
+            dist_to[v] = dist_to[u] + weight
             edge_to[v] = e
             impq.decrease_priority(v, dist_to[v])
 
@@ -70,7 +70,7 @@ def dijkstra_sp(G, src):
 
 def edges_path_to(edge_to, src, target):
     """Recover path from src to target."""
-    if edge_to[target] is None:
+    if not target in edge_to:
         raise ValueError('{} is unreachable from {}'.format(target, src))
 
     path = []

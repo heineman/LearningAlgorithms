@@ -14,26 +14,6 @@ WEIGHT = 'weight'
 # Used to declare (if needed) that we are providing stub replacement for networkx.
 __version__ = 'replacement'
 
-# class Edge:
-#     """
-#     Replacement edge in case networkx is not available. Stores optional weight
-#     """
-#     def __init__(self, head, tail, weight=None):
-#         self.head = head
-#         self.tail = tail
-#         self.weight = weight
-# 
-#     def __item__(self, tag):
-#         """Use to get weight from edge."""
-#         if tag == 'weight':
-#             return self.weight
-#         return None
-# 
-#     def __str__(self):
-#         if self.weight:
-#             return '{} -> {} ({})'.format(self.head, self.tail, self.weight)
-#         return '{} -> {}'.format(self.head, self.tail)
-
 class UndirectedGraph:
     """
     Use Dictionary to store all vertices. Values are lists of neighboring nodes.
@@ -468,7 +448,7 @@ def dijkstra_path(G, src, target):
 
 #######################################################################
 # Test case is here so replacement can be tested independently of whether
-# networkx is installed on your computer or not.    
+# networkx is installed on your computer or not.
 #######################################################################
 
 class TestChapter7(unittest.TestCase):
@@ -479,7 +459,7 @@ class TestChapter7(unittest.TestCase):
         DG.add_edges_from([('A3', 'A4'), ('A4', 'A5')])
 
         edge_list = [ ('B{}'.format(i), 'C{}'.format(i)) for i in range(2,6)]
-        DG.add_edges_from(edge_list)    
+        DG.add_edges_from(edge_list)
         for i in range(2, 6):
             if 2 < i < 5:
                 DG.add_edge('B{}'.format(i), 'B{}'.format(i+1))
@@ -506,16 +486,16 @@ class TestChapter7(unittest.TestCase):
         G.add_node('A2')   # has no effect
         self.assertEqual(2, len(list(G.nodes())))
         G.add_edge('A2', 'A3')   # confirm doesn't have an effect...
-        
+
         self.assertEqual(['A2', 'A3'], sorted(list(G.nodes())))
         G.add_edges_from([('A3', 'A4'), ('A4', 'A5')])
 
         self.assertEqual(['A2', 'A4'], sorted(list(G.neighbors('A3'))))
-        
+
         self.assertEqual([('A2', 'A3'), ('A3', 'A4'), ('A4', 'A5')], sorted(list(G.edges())))
 
         edge_list = [ ('B{}'.format(i), 'C{}'.format(i)) for i in range(2,6)]
-        G.add_edges_from(edge_list)    
+        G.add_edges_from(edge_list)
         self.assertEqual(sorted(edge_list + [('A2', 'A3'), ('A3', 'A4'), ('A4', 'A5')]), sorted(list(G.edges())))
         for i in range(2, 6):
             if 2 < i < 5:
@@ -537,16 +517,16 @@ class TestChapter7(unittest.TestCase):
         G.add_node('A2')   # has no effect
         self.assertEqual(2, len(list(G.nodes())))
         G.add_edge('A2', 'A3')   # confirm doesn't have an effect...
-        
+
         self.assertEqual(['A2', 'A3'], sorted(list(G.nodes())))
         G.add_edges_from([('A3', 'A4'), ('A4', 'A5')])
 
         self.assertEqual(['A2', 'A4'], sorted(list(G.neighbors('A3'))))
-        
+
         self.assertEqual([('A2', 'A3'), ('A3', 'A4'), ('A4', 'A5')], sorted(list(G.edges())))
 
         edge_list = [ ('B{}'.format(i), 'C{}'.format(i)) for i in range(2,6)]
-        G.add_edges_from(edge_list)    
+        G.add_edges_from(edge_list)
         self.assertEqual(sorted(edge_list + [('A2', 'A3'), ('A3', 'A4'), ('A4', 'A5')]), sorted(list(G.edges())))
         for i in range(2, 6):
             if 2 < i < 5:
@@ -566,7 +546,7 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(sorted(['B4', 'C3']), sorted(list(G['B3'])))
         self.assertEqual(sorted([('B3', 'B4'), ('B3', 'C3')]),
                          sorted(list(G.edges('B3'))))
-        
+
     def test_matrix_undirected_graph_weighted(self):
         G = MatrixUndirectedGraph()
 
@@ -575,17 +555,17 @@ class TestChapter7(unittest.TestCase):
 
         G.add_edge('A2', 'A3', weight=1)
         self.assertEqual([('A2', 'A3', {'weight': 1})], list(G.edges()))
-        
+
         self.assertEqual(1, G.get_edge_data('A2', 'A3')[WEIGHT])
         self.assertTrue(G.get_edge_data('A2', 'Nothing') is None)
         self.assertTrue(G.get_edge_data('Nothing', 'A2') is None)
-        
+
         G.add_edge('A2', 'A3', weight=2)   # confirm doesn't have an effect. First one there gets it.
         self.assertEqual([('A2', 'A3', {'weight': 1})], list(G.edges()))
-        
+
         self.assertEqual(['A2', 'A3'], sorted(list(G.nodes())))
         G.add_edges_from([('A3', 'A4', {'weight': 2}), ('A4', 'A5', {'weight': 3})])
-       
+
         self.assertTrue(G.get_edge_data('A2', 'A4') is None)
         self.assertEqual(['A3'], list(G.neighbors('A2')))
 
@@ -614,26 +594,26 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(11, len(list(G.edges())))
         G.remove_edge('A2', 'nothing')  # NO IMPACT
         G.remove_edge('nothing', 'A2')  # NO IMPACT
-        
+
         G.remove_edge('A2', 'A3')
         self.assertEqual(10, len(list(G.edges())))
-        
+
     def test_matrix_directed_graph_weighted(self):
         DG = DirectedGraph()
 
         DG.add_edge('A2', 'A3', 1)
         self.assertEqual([('A2', 'A3', {'weight': 1})], list(DG.edges()))
-        
+
         self.assertEqual(1, DG.get_edge_data('A2', 'A3')[WEIGHT])
         self.assertTrue(DG.get_edge_data('A2', 'Nothing') is None)
         self.assertTrue(DG.get_edge_data('Nothing', 'A2') is None)
-        
-        DG.add_edge('A2', 'A3', weight=2)   # confirm doesn't have an effect. First one there gets it.
+
+        DG.add_edge('A2', 'A3', weight=2)   # confirm doesn't have an effect.
         self.assertEqual([('A2', 'A3', {'weight': 1})], list(DG.edges()))
-        
+
         self.assertEqual(['A2', 'A3'], sorted(list(DG.nodes())))
         DG.add_edges_from([('A3', 'A4', 2), ('A4', 'A5', 3)])
-       
+
         self.assertTrue(DG.get_edge_data('A2', 'A4') is None)
 
         edge_list = [ ('B{}'.format(i), 'C{}'.format(i)) for i in range(2,6)]
@@ -660,7 +640,7 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(11, len(list(DG.edges())))
         DG.remove_edge('A2', 'nothing')  # NO IMPACT
         DG.remove_edge('nothing', 'A2')  # NO IMPACT
-        
+
         DG.remove_edge('A2', 'A3')
         self.assertEqual(10, len(list(DG.edges())))
 
