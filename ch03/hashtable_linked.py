@@ -15,8 +15,6 @@ def stats_linked_lists(ht, output=False):
     Produce statistics on the linked-list implemented table. Returns
     (average chain length for non-empty buckets, max chain length)
     """
-#     for w in words:
-#         table.put(w, 1)
     size = len(ht.table)
     sizes = {}                      # record how many chains of given size exist
     total_search = 0

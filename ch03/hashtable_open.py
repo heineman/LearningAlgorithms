@@ -211,9 +211,6 @@ def stats_open_addressing(ht, output=False):
     Returns (average chain length for non-empty buckets, max chain length)
     """
     original_size = len(ht.table)
-#     for w in words:
-#         table.put(w, 1)
-
     size = len(ht.table)
     sizes = {}                      # record how many chains of given size exist
     max_length = 0

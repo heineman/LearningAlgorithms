@@ -4,10 +4,11 @@ Challenge Exercises for Chapter 3.
 
 import math
 import sys
+import time
 import timeit
 
 from algs.table import DataTable, ExerciseNum, caption
-from ch03.entry import Entry
+from ch03.entry import Entry, LinkedEntry
 
 class HashtableTriangleNumbers:
     """Open Addressing Hashtable using Triangle Number probing. make sure M is power of 2."""
@@ -324,7 +325,6 @@ class DynamicHashtableIncrementalResizing:
                 entry = entry.next
 
         # insert, and then trigger resize if hit threshold.
-        from ch03.entry import LinkedEntry
         self.table[hc] = LinkedEntry(k, v, self.table[hc])
         self.N += 1
 
@@ -530,14 +530,330 @@ for w in words[:160564]:
     ht.put(w,w)''', repeat=7, number=5))/5
     tbl.row(['Triangle Probing', timing_tn])
 
+class HashtableSortedLinkedLists:
+    """Hashtable using array of M linked lists where keys appear in sorted order."""
+    def __init__(self, M=10):
+        self.table = [None] * M
+        if M < 1:
+            raise ValueError('Hashtable storage must be at least 1.')
+        self.M = M
+        self.N = 0
 
+    def get(self, k):
+        """Retrieve value associated with key, k. STOP when entry is bigger than key."""
+        hc = hash(k) % self.M       # First place it could be
+        entry = self.table[hc]
+        while entry:
+            if entry.key > k:     # Doesn't exist since keys in sorted order
+                return None
+            if entry.key == k:
+                return entry.value
+            entry = entry.next
+        return None                 # Couldn't find
 
+    def put(self, k, v):
+        """Associate value, v, with the key, k."""
+        hc = hash(k) % self.M       # First place it could be
+        entry = self.table[hc]
+        if entry is None:
+            self.N = 1
+            self.table[hc] = LinkedEntry(k, v, self.table[hc])
+            return 
+
+        prev = None
+        while entry:
+            if entry.key > k:       # Can insert since we didn't find
+                self.N += 1
+                if prev is None:    # new First
+                    self.table[hc] = LinkedEntry(k, v, entry)            
+                else:
+                    prev.next = LinkedEntry(k, v, entry)
+                return
+
+            if entry.key == k:      # Overwrite if already here
+                entry.value = v
+                return
+            
+            prev = entry
+            entry = entry.next
+
+        # If we get here, key is largest among all, so append to end
+        prev.next = LinkedEntry(k, v)
+        self.N += 1
+
+    def remove(self, k):
+        """Remove (k,v) entry associated with k."""
+        hc = hash(k) % self.M       # First place it could be
+        entry = self.table[hc]
+        prev = None
+        while entry:
+            if entry.key == k:
+                if prev:
+                    prev.next = entry.next
+                else:
+                    self.table[hc] = entry.next
+                self.N -= 1
+                return entry.value
+
+            prev, entry = entry, entry.next
+
+        return None                 # Nothing was removed
+
+    def __iter__(self):
+        """Generate all (k, v) tuples for entries in all linked lists table."""
+        for entry in self.table:
+            while entry:
+                yield (entry.key, entry.value)
+                entry = entry.next
+
+def evaluate_hashtable_sorted_chains(output=True, decimals=4):
+    """Evaluate performance of separate chaining Hashtable with sorted entries."""
+
+    print('Best Case Build Time')
+    tbl = DataTable([8,20,20,20], ['M', 'Open Addressing', 'Separate Chaining', 'Sorted Chains'], output=output, decimals=decimals)
+
+    for size in [214129, 524287, 999983]:
+        timing_oa = min(timeit.repeat(stmt='''
+ht = Hashtable({})
+for w in reversed(words[:160564]):
+    ht.put(w,w)'''.format(size), setup='''
+from ch03.hashtable_open import Hashtable
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+
+        timing_sc = min(timeit.repeat(stmt='''
+ht = Hashtable({})
+for w in reversed(words[:160564]):
+    ht.put(w,w)'''.format(size), setup='''
+from ch03.hashtable_linked import Hashtable
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+
+        timing_sorted = min(timeit.repeat(stmt='''
+ht = HashtableSortedLinkedLists({})
+for w in reversed(words[:160564]):
+    ht.put(w,w)'''.format(size), setup='''
+from ch03.challenge import HashtableSortedLinkedLists
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+        tbl.row([size, timing_oa, timing_sc, timing_sorted])
+
+    print('Worst Case Build Time')
+    tbl = DataTable([8,20,20,20], ['M', 'Open Addressing', 'Separate Chaining', 'Sorted Chains'], output=output, decimals=decimals)
+
+    for size in [214129, 524287, 999983]:
+        timing_oa = min(timeit.repeat(stmt='''
+ht = Hashtable({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), setup='''
+from ch03.hashtable_open import Hashtable
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+
+        timing_sc = min(timeit.repeat(stmt='''
+ht = Hashtable({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), setup='''
+from ch03.hashtable_linked import Hashtable
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+       
+        timing_sorted = min(timeit.repeat(stmt='''
+ht = HashtableSortedLinkedLists({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), setup='''
+from ch03.challenge import HashtableSortedLinkedLists
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+        tbl.row([size, timing_oa, timing_sc, timing_sorted])
+    
+    print('Search First Half')
+    tbl = DataTable([8,20,20,20], ['M', 'Open Addressing', 'Separate Chaining', 'Sorted Chains'], output=output, decimals=decimals)
+    
+    for size in [214129, 524287, 999983]:
+        search_oa = min(timeit.repeat(stmt='''
+for w in words[:160564]:
+    ht.get(w)''', setup='''
+from ch03.hashtable_open import Hashtable
+from resources.english import english_words
+words = english_words()
+ht = Hashtable({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), repeat=7, number=5))/5
+
+        search_sc = min(timeit.repeat(stmt='''
+for w in words[:160564]:
+    ht.get(w)''', setup='''
+from ch03.hashtable_linked import Hashtable
+from resources.english import english_words
+words = english_words()
+ht = Hashtable({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), repeat=7, number=5))/5
+
+        search_sorted = min(timeit.repeat(stmt='''
+for w in words[:160564]:
+    ht.get(w)''', setup='''
+from ch03.challenge import HashtableSortedLinkedLists
+from resources.english import english_words
+words = english_words()
+ht = HashtableSortedLinkedLists({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), repeat=7, number=5))/5
+        tbl.row([size, search_oa, search_sc, search_sorted])
+        
+    print('Search Back Half')
+    tbl = DataTable([8,20,20,20], ['M', 'Open Addressing', 'Separate Chaining', 'Sorted Chains'], output=output, decimals=decimals)
+    
+    for size in [214129, 524287, 999983]:
+        search_oa = min(timeit.repeat(stmt='''
+for w in words[160564:]:
+    ht.get(w)''', setup='''
+from ch03.hashtable_open import Hashtable
+from resources.english import english_words
+words = english_words()
+ht = Hashtable({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), repeat=7, number=5))/5
+
+        search_sc = min(timeit.repeat(stmt='''
+for w in words[160564:]:
+    ht.get(w)'''.format(size), setup='''
+from ch03.hashtable_linked import Hashtable
+from resources.english import english_words
+words = english_words()
+ht = Hashtable({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), repeat=7, number=5))/5
+
+        search_sorted = min(timeit.repeat(stmt='''
+for w in words[160564:]:
+    ht.get(w)''', setup='''
+from ch03.challenge import HashtableSortedLinkedLists
+from resources.english import english_words
+words = english_words()
+ht = HashtableSortedLinkedLists({})
+for w in words[:160564]:
+    ht.put(w,w)'''.format(size), repeat=7, number=5))/5
+        tbl.row([size, search_oa, search_sc, search_sorted])
+
+def flip_every_k(ht, k, n):
+    """Starting from 1 to n in steps of k, flip every one."""
+    for i in range(0, n, k):
+        if ht.get(i):
+            ht.remove(i)
+        else:
+            ht.put(i,i+1)
+
+def evaluate_DynamicHashtablePlusRemove(output=True):
+    """
+    Compare performance using ability in open addressing to mark deleted values.
+    Nifty trick to produce just the squares as keys in the hashtable.
+    """
+    # If you want to compare, then add following to end of executable statements:
+    #    print([e[0] for e in ht])
+    
+    tbl = DataTable([8,20,20], ['M', 'Separate Chaining', 'Open Addressing w/ Remove'], output=output)
+    for size in [512, 1024, 2048]:
+        linked_list = min(timeit.repeat(stmt='''
+ht = Hashtable({0})
+N = {0} // 4
+for i in range(1, N, 1):
+    flip_every_k(ht, i, N)'''.format(size), setup='''
+from ch03.hashtable_linked import Hashtable
+from ch03.challenge import flip_every_k'''.format(size), repeat=7, number=5))/5
+    
+        hashtable_plus = min(timeit.repeat(stmt='''
+ht = DynamicHashtablePlusRemove({0})
+N = {0} // 4
+for i in range(1, N, 1):
+    flip_every_k(ht, i, N)'''.format(size), setup='''
+from ch03.hashtable_open import DynamicHashtablePlusRemove
+from ch03.challenge import flip_every_k'''.format(size), repeat=7, number=5))/5
+        tbl.row([size, linked_list, hashtable_plus])
+    return tbl
+
+def count_hash_incremental_move(output=True, decimals=4):
+    """
+    For all English words, starting with a hashtable of size 1,024 and
+    a load factor of 0.75, count how many times the hash code (i.e., %)
+    is invoked.
+    """
+    from ch03.book import CountableHash
+    from resources.english import english_words
+    from ch03.hashtable_linked import DynamicHashtable
+
+    print('Each emitted row contains an operation more costly than any before...')
+    ht_dynamic = DynamicHashtable(1023)
+    tbl = DataTable([20,10,10],['Word', 'N', 'cost'],
+                    output=output, decimals=decimals)
+    tbl.format('Word', 's')
+    tbl.format('N', ',d')
+
+    max_cost = 0
+    now = time.time()
+    for w in english_words():
+        before = time.time()
+        ht_dynamic.put(CountableHash(w), w)
+        cost = time.time() - before
+        if cost > max_cost:
+            max_cost = cost
+            tbl.row([w, ht_dynamic.N, cost])
+    total_normal = time.time() - now
+    print('Normal:{}'.format(total_normal))
+
+    for delta in [512, 256, 128, 64, 32, 16, 8, 4]:
+        ht = DynamicHashtableIncrementalResizing(1023, delta=delta)
+       
+        tbl = DataTable([20,10,10],['Word', 'N', 'cost'],
+                        output=output, decimals=decimals)
+        tbl.format('Word', 's')
+        tbl.format('N', ',d')
+    
+        max_cost = 0
+        now =  time.time()
+        for w in english_words():
+            before = time.time()
+            ht.put(CountableHash(w), w)
+            cost = time.time() - before
+            if cost > max_cost:
+                max_cost = cost
+                tbl.row([w, ht.N, cost])
+        total_delta = time.time() - now
+        print('delta={}, Normal:{}'.format(delta, total_delta))
+    
 #######################################################################
 if __name__ == '__main__':
     chapter = 3
+    count_hash_incremental_move()
+    
     with ExerciseNum(1) as exercise_number:
         exercise_triangle_number_probing()
         print(caption(chapter, exercise_number),
-              'Fragment Evaluation')
+              'Fragment evaluation')
 
-    #compare_python_hashtable()
+    with ExerciseNum(2) as exercise_number:
+        evaluate_hashtable_sorted_chains()
+        print(caption(chapter, exercise_number),
+              'Hashtable with sorted linked list chains')
+    
+    with ExerciseNum(3) as exercise_number:
+        bad_timing()
+        print(caption(chapter, exercise_number),
+              'ValueBadHash exercise')
+    
+    with ExerciseNum(4) as exercise_number:
+        from resources.english import english_words
+        prime_number_difference(english_words())
+        print(caption(chapter, exercise_number),
+              'Prime Number exercise')
+        
+    with ExerciseNum(5) as exercise_number:
+        evaluate_DynamicHashtablePlusRemove
+        print(caption(chapter, exercise_number),
+              'Open Addressing with Marked Elements as deleted.')
+        
+    with ExerciseNum(6) as exercise_number:
+        count_hash_incremental_move()
+        print(caption(chapter, exercise_number),
+              'Compare incremental resize strategy against geometric resizing.')
