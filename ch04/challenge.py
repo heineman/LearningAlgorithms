@@ -5,7 +5,7 @@ Challenge Exercises for Chapter 4.
 import timeit
 from algs.modeling import numpy_error
 
-from algs.table import DataTable, comma, best_models
+from algs.table import DataTable, ExerciseNum, comma, best_models, caption
 from algs.modeling import n_log_n_model
 
 def merged_arrays(heap1, heap2):
@@ -151,8 +151,48 @@ def iterator_trial():
         print(list(iterator(pq)))
         print(pq.dequeue())
 
+def inspect_heap_array():
+    """
+    After inserting N elements in ascending order, is there a pattern in the
+    values in the arrays in the heap? Same for inserting in descending order. 
+    """
+    from ch04.heap import PQ
+    
+    num=31
+    pq = PQ(num)
+    for i in range(1,num+1):
+        pq.enqueue(i, i)
+    
+    i = 1
+    rights = []
+    while i <= num:
+        rights.append(pq.storage[i].value)
+        i = (i*2) + 1
+    print(rights)
+    print([i.value for i in pq.storage[1:]])
+    
+    pq = PQ(num)
+    for i in range(num, 0, -1):
+        pq.enqueue(i, i)
+
+    
 #######################################################################
 if __name__ == '__main__':
+    chapter = 4
+    
+    with ExerciseNum(1) as exercise_number:
+        print('implementation in ch04.circular_queue')
+        print(caption(chapter, exercise_number),
+              'Circular Queue')
+
+    with ExerciseNum(2) as exercise_number:
+        inspect_heap_array()
+        print('When inserting N=2^k-1 values in ascending order, right most values')
+        print('in each of the k levels contains largest. When inserting in reverse')
+        print('order, each value remains where it was inserted, so all are descending.')
+        print(caption(chapter, exercise_number),
+              'Values in heap')
+    
     iterator_trial()
 
     t = list(range(100000))

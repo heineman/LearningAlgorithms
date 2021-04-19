@@ -278,23 +278,32 @@ def produce_table(max_k=15, output=True):
         tbl.row([k, run, n])
     return tbl
 
-def worst_heights(max_n=50, output=True):
+def worst_heights(max_n=40, output=True):
     """
     Generate random AVL trees of n Nodes to find which ones have greatest height.
     Purely speculative and not definitive exploration of potential trees.
     """
     from ch06.balanced import BinaryTree
-    tbl = DataTable([8,8],['N', 'WorstHeight'], output=output)
+    tbl = DataTable([8,8,8],['N', 'WorstHeight', 'NumberFound'], output=output)
     tbl.format('WorstHeight', 'd')
-    max_height = -1
+    tbl.format('NumberFound', ',d')
+    table_max_height = -1
     for n in range(1,max_n):
-        for _ in range(10000):
+        number_found = 0
+        max_height = -1
+        for _ in range(10001):
             avl = BinaryTree()
             for _ in range(n):
                 avl.insert(random.random())
             if avl.root.height > max_height:
                 max_height = avl.root.height
-                tbl.row([n, max_height])        # Unorthodox to call inside loop, but works.
+                number_found = 0
+            elif avl.root.height == max_height:
+                number_found += 1
+            
+        if max_height > table_max_height:
+            tbl.row([n, max_height, number_found])
+            table_max_height = max_height
     return tbl
 
 def tree_structure(n):
@@ -492,6 +501,7 @@ def fibonacci_avl_tree_up_to_2k(N):
 
 #######################################################################
 if __name__ == '__main__':
+    worst_heights()
     #find_multiple_rotations()
     bt2 = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
     #print(tree_structure(bt2))

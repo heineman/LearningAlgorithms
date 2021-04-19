@@ -4,7 +4,7 @@ Challenge Exercises for Chapter 5.
 
 import timeit
 
-from algs.table import DataTable
+from algs.table import DataTable, ExerciseNum, caption
 from algs.modeling import n_log_n_model, quadratic_model, numpy_error
 
 numRecursiveImproved = [0]
@@ -277,6 +277,8 @@ random.shuffle(A)'''.format(n), repeat=10, number=10))
 
 #######################################################################
 if __name__ == '__main__':
+    chapter = 5
+    
     print('Attempting to rediscover heap. This might take unusually long time')
     print(rediscover_heap())
 

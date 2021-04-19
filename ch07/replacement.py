@@ -5,8 +5,8 @@ a stub object that provides a reasonable implementation.
 
 Note: Doesn't offer capability to draw graphs.
 """
-from algs.node import Node
 import unittest
+from algs.node import Node
 
 # data associated with an edge can contain a weight
 WEIGHT = 'weight'

@@ -825,7 +825,6 @@ def count_hash_incremental_move(output=True, decimals=4):
 #######################################################################
 if __name__ == '__main__':
     chapter = 3
-    count_hash_incremental_move()
     
     with ExerciseNum(1) as exercise_number:
         exercise_triangle_number_probing()

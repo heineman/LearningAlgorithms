@@ -53,10 +53,10 @@ def compute_min_run(n):
     return n + r
 
 def insertion_sort(A, lo, hi):
-    """Sort A[lo .. hi] using Insertion Sort."""
+    """Sort A[lo .. hi] using Insertion Sort. Stable sort demands Ai <= Aj. """
     for i in range(lo+1,hi+1):
         for j in range(i,lo,-1):
-            if A[j-1] < A[j]:
+            if A[j-1] <= A[j]:
                 break
             A[j],A[j-1] = A[j-1],A[j]
 

@@ -14,16 +14,16 @@ def selection_sort(A):
         A[i],A[min_index] = A[min_index],A[i]
 
 def insertion_sort(A):
-    """Sort A using Insertion Sort."""
+    """Sort A using Insertion Sort. Use Aj-1 <= Aj to ensure stable sort."""
     N = len(A)
     for i in range(1,N):
         for j in range(i,0,-1):
-            if A[j-1] < A[j]:
+            if A[j-1] <= A[j]:
                 break
 
             A[j],A[j-1] = A[j-1],A[j]
 
-def insertion_sort_cmp(A, cmp=lambda one,two: one < two):
+def insertion_sort_cmp(A, cmp=lambda one,two: one <= two):
     """Sort A using Insertion Sort."""
     N = len(A)
     for i in range(1,N):
@@ -54,7 +54,8 @@ def insertion_sort_bas(A):
     """
     Sort A using Insertion Sort using Binary Array Search to insert
     value. This code takes advantage of Python ability to insert value
-    into an array since Python lists can dynamically resize.
+    into an array since Python lists can dynamically resize. Will
+    no longer be able to guarantee resulting sort is stable.
     """
     N = len(A)
     for i in range(1,N):
@@ -99,7 +100,7 @@ def insertion_sort_counting(A):
     for i in range(N):
         for j in range(i,0,-1):
             num_compare += 1
-            if A[j-1] < A[j]:
+            if A[j-1] <= A[j]:
                 break
             num_swap += 1
             A[j],A[j-1] = A[j-1],A[j]
