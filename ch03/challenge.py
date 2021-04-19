@@ -9,6 +9,7 @@ import timeit
 
 from algs.table import DataTable, ExerciseNum, caption
 from ch03.entry import Entry, LinkedEntry
+from resources.english import english_words
 
 class HashtableTriangleNumbers:
     """Open Addressing Hashtable using Triangle Number probing. make sure M is power of 2."""
@@ -156,7 +157,6 @@ def prime_number_difference(words, output=True, decimals=2):
 def measure_performance_resize(max_d=50, output=True):
     """Generate table of statistics for table resizing up to (but not including maxd=50)."""
     from ch03.hashtable_linked import DynamicHashtable
-    from resources.english import english_words
 
     try:
         # Added in Python 3.7
@@ -780,7 +780,6 @@ def count_hash_incremental_move(output=True, decimals=4):
     is invoked.
     """
     from ch03.book import CountableHash
-    from resources.english import english_words
     from ch03.hashtable_linked import DynamicHashtable
 
     print('Each emitted row contains an operation more costly than any before...')
@@ -837,12 +836,11 @@ if __name__ == '__main__':
               'Hashtable with sorted linked list chains')
     
     with ExerciseNum(3) as exercise_number:
-        bad_timing()
+        bad_timing(english_words())
         print(caption(chapter, exercise_number),
               'ValueBadHash exercise')
     
     with ExerciseNum(4) as exercise_number:
-        from resources.english import english_words
         prime_number_difference(english_words())
         print(caption(chapter, exercise_number),
               'Prime Number exercise')
