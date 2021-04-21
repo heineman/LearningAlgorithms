@@ -1,6 +1,7 @@
 """
 max Heap where each successive level has one more child, which leads to levels
-containing k! elements, where k is the level.
+containing k! elements, where k is the level. This code provides the implementation
+to a challenge exercise.
 """
 from ch04.entry import Entry
 
@@ -14,12 +15,12 @@ _constants =  [0, 2, 6, 16, 50, 204, 1078, 6992, 53226, 462340, 4500254, 4845496
 def fh_parent(k,lev):
     """Return index of parent for index k on level lev."""
     if lev <= 0:
-        return 1    # HACK. Covers base case inelegantly
-    return (k + _constants[lev-1]) // (lev+1)    # was firsts[lev-1]*lev
+        return 1    # Covers base case inelegantly
+    return (k + _constants[lev-1]) // (lev+1)
 
 def fh_child(k,lev):
     """Return index of first child of index k on level lev."""
-    return k*(lev+2) - _constants[lev]      # was firsts[lev]*(lev+1)
+    return k*(lev+2) - _constants[lev]
 
 def validate_level(pq, lev, k):
     """Validate node k on a given level."""
@@ -94,7 +95,7 @@ class PQ:
 
     def sink(self, k):
         """Reestablish heap-order property from storage[parent] down."""
-        lev = 0             # always starts at 1 on level 0
+        lev = 0
 
         # If no child possible leave
         fc = fh_child(k,lev)

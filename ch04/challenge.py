@@ -5,7 +5,7 @@ Challenge Exercises for Chapter 4.
 import timeit
 from algs.modeling import numpy_error
 
-from algs.table import DataTable, ExerciseNum, comma, best_models, caption
+from algs.table import DataTable, ExerciseNum, comma, caption
 from algs.modeling import n_log_n_model
 
 def merged_arrays(heap1, heap2):
@@ -44,11 +44,9 @@ for _ in range({1}):
     r2 = random.randint(0,16777216)
     heap2.enqueue(r2,r2)'''.format(m,n), repeat=5, number=1))
 
-def combined_sorted():
+def combined_sorted(lo=8, hi=12, output=True):
     """Generate results for different sorting trials."""
-    lo = 8 # 16   #16
-    hi = 12 # 21   # 23
-    tbl = DataTable([8] * (hi-lo+1), ['N'] + [comma(2**k) for k in range(lo,hi)])
+    tbl = DataTable([8] * (hi-lo+1), ['N'] + [comma(2**k) for k in range(lo,hi)], output=output)
 
     for n in [2**k for k in range(lo,hi)]:
         row = [n]
@@ -57,9 +55,9 @@ def combined_sorted():
         tbl.row(row)
 
     # Diagonal values are for 2*M*log(M) so divide in HALF for accurate one
-    x = [2**k for k in range(lo,hi)]
-    y = [tbl.entry(r,comma(r)) for r in [2**k for k in range(lo,hi)]]
-
+    # build model ONLY for first five values
+    x = [2**k for k in range(lo,min(lo+5,hi))]
+    y = [tbl.entry(r,comma(r)) for r in [2**k for k in range(lo,min(lo+5,hi))]]
     if numpy_error:
         a = 0
     else:
@@ -70,29 +68,31 @@ def combined_sorted():
         (coeffs,_) = curve_fit(n_log_n_model, np.array(x), np.array(y))
         a = coeffs[0] / 2
 
-        y_fit = [n_log_n_model(r,a) for r in [2**k for k in range(lo,hi)]]
+        y_fit = [n_log_n_model(r,a) for r in [2**k for k in range(lo,min(lo+5,hi))]]
 
         print()
         print(pearsonr(y, y_fit))
         print()
         print('Prediction')
-        model = DataTable([8] * (hi-lo+1), ['N'] + [comma(2**k) for k in range(lo,hi)])
+        model = DataTable([8] * (hi-lo+1), ['N'] + [comma(2**k) for k in range(lo,hi)], output=output)
         for n in [2**k for k in range(lo,hi)]:
             row = [n]
             for m in [2**k for k in range(lo,hi)]:
                 row.append(n_log_n_model(n,a) + n_log_n_model(m,a))
             model.row(row)
-
-        # Just do one column
-        for m in best_models(x, tbl.column(comma(1024))):
-            print(m)
+    return tbl
 
 def k_smallest(A, k):
-    """Super-efficient (and easy to write) k-smallest selection for an arbitrary iterable."""
+    """
+    Super-efficient (and easy to write) k-smallest selection for an arbitrary iterable.
+    Time (and space) will be proportional to O(log k).
+    """
     from ch04.heap import PQ
     pq = PQ(k)
 
-    # pq is a regular Max Binary Heap. Enqueue first k elements
+    # pq is a regular Max Binary Heap. Enqueue first k elements. If any 
+    # subsequent value is LARGER than our largest, it can be ignored, otherwise
+    # remove the largest (since one is now smaller) and enqueue it.
     for v in A:
         if pq.N < k:
             pq.enqueue(v, v)
@@ -108,6 +108,13 @@ def k_smallest(A, k):
 
     return list(reversed(result))
 
+def random_trial_k_smallest(n, k):
+    """Conduct a random k_smallest trial."""
+    from random import shuffle
+    vals = list(range(n))
+    shuffle(vals)
+    return k_smallest(vals, k)
+
 def iterator(pq):
     """
     Provides a Python-generator over a PQ, using a PQ to do it!
@@ -118,6 +125,8 @@ def iterator(pq):
 
     You can add capability for fail-fast iterators IF the heap actively
     increments a count in its pq.storage[0] which is unused anyway.
+    
+    Returned values include both the (value, priority) for maximum flexibility.
     """
     from ch04.heap import PQ
     N = len(pq)
@@ -130,10 +139,10 @@ def iterator(pq):
         yield (pq.storage[idx].value, pq.storage[idx].priority)
 
         child = 2*idx
-        if child < pq.N:
+        if child <= pq.N:
             pqit.enqueue(child, pq.storage[child].priority)
         child += 1
-        if child < pq.N:
+        if child <= pq.N:
             pqit.enqueue(child, pq.storage[child].priority)
 
 def iterator_trial():
@@ -142,14 +151,17 @@ def iterator_trial():
     import random
 
     # populate
-    pq = PQ(20)
-    for _ in range(20):
+    pq = PQ(63)
+    pq2 = PQ(63)
+    for _ in range(63):
         prior = random.randint(0, 100)
         pq.enqueue(prior, prior)
+        pq2.enqueue(prior, prior)
 
-    while pq:
-        print(list(iterator(pq)))
-        print(pq.dequeue())
+    for p in iterator(pq2):
+        vp = pq.dequeue()
+        if p[0] != vp:
+            raise RuntimeError('Unexpected that iterator is different.')
 
 def inspect_heap_array():
     """
@@ -157,12 +169,12 @@ def inspect_heap_array():
     values in the arrays in the heap? Same for inserting in descending order. 
     """
     from ch04.heap import PQ
-    
+
     num=31
     pq = PQ(num)
     for i in range(1,num+1):
         pq.enqueue(i, i)
-    
+
     i = 1
     rights = []
     while i <= num:
@@ -170,34 +182,54 @@ def inspect_heap_array():
         i = (i*2) + 1
     print(rights)
     print([i.value for i in pq.storage[1:]])
-    
+
     pq = PQ(num)
     for i in range(num, 0, -1):
         pq.enqueue(i, i)
 
-    
 #######################################################################
 if __name__ == '__main__':
     chapter = 4
-    
+
     with ExerciseNum(1) as exercise_number:
         print('implementation in ch04.circular_queue')
-        print(caption(chapter, exercise_number),
-              'Circular Queue')
+        print(caption(chapter, exercise_number), 'Circular Queue')
+        print()
 
     with ExerciseNum(2) as exercise_number:
         inspect_heap_array()
         print('When inserting N=2^k-1 values in ascending order, right most values')
         print('in each of the k levels contains largest. When inserting in reverse')
         print('order, each value remains where it was inserted, so all are descending.')
+        print(caption(chapter, exercise_number),'Values in heap')
+        print()
+
+    with ExerciseNum(3) as exercise_number:
+        combined_sorted(hi=16)
         print(caption(chapter, exercise_number),
-              'Values in heap')
-    
-    iterator_trial()
+              'Merging two heaps in O(M*log(M) + N*log(N)')
+        print()
 
-    t = list(range(100000))
-    from random import shuffle
-    shuffle(t)
-    print(k_smallest(t, 7))
+    with ExerciseNum(4) as exercise_number:
+        print(random_trial_k_smallest(5, 2**20), 'are the 5 smallest values in 0 .. 2**20')
+        print(caption(chapter, exercise_number),
+              'Find k smallest values from a collection in time O(log k).')
+        print()
 
-    combined_sorted()
+    with ExerciseNum(5) as exercise_number:
+        from ch04.timing import trial_factorial_heap
+        trial_factorial_heap()
+        print(caption(chapter, exercise_number),
+              'Factorial Heap.')
+        print()
+
+    with ExerciseNum(6) as exercise_number:
+        print(caption(chapter, exercise_number),
+              'standard extension of Heap to dynamically resize.')
+        print()
+
+    with ExerciseNum(7) as exercise_number:
+        iterator_trial()
+        print(caption(chapter, exercise_number),
+              'Non-destructive iterator for a max binary heap.')
+        print()
