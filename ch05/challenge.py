@@ -6,7 +6,8 @@ import timeit
 
 from algs.table import DataTable, ExerciseNum, caption
 from algs.modeling import n_log_n_model, quadratic_model, numpy_error
-
+from ch01.book import Order
+    
 numRecursiveImproved = [0]
 
 def num_swaps(A):
@@ -122,6 +123,73 @@ def recursive_two(A):
 
     return rtwo(0, len(A)-1)
 
+def run_largest_two_trials_with_recursive(mode, max_k=22, output=True, decimals=2):
+    """Mode is either Order.REVERSED or Order.SHUFFLED for 2**k up to (but not including) max_k."""
+    tbl = DataTable([10,15,15,10,10,15,15],
+        ['N','double_two','mutable_two','largest_two','sorting_two','tournament_two','recursive_two'],
+        output=output, decimals=decimals)
+
+    if mode is Order.REVERSED:
+        prepare = 'list(reversed(x))'
+    if mode is Order.SHUFFLED:
+        prepare = 'random.shuffle(x)'
+
+    trials = [2**k for k in range(10,max_k)]
+    num = 100
+    for n in trials:
+        if mode is Order.ALTERNATING:
+            prepare = '''
+up_down = zip(range(0,{0},2),range({0}-1,0,-2))
+x=[i for i in itertools.chain(*up_down)]
+'''.format(n)
+        m_dt = timeit.timeit(stmt='double_two(x)', setup='''
+import random
+from ch01.largest_two import double_two
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
+
+        m_mt = timeit.timeit(stmt='mutable_two(x)', setup='''
+import random
+from ch01.largest_two import mutable_two
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
+
+        m_lt = timeit.timeit(stmt='largest_two(x)', setup='''
+import random
+from ch01.largest_two import largest_two
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
+
+        # hard-code these values since take too long to compute...
+        if n > 1048576:
+            m_tt = None
+        else:
+            m_tt = timeit.timeit(stmt='tournament_two(x)', setup='''
+import random
+from ch01.largest_two import tournament_two
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
+
+        m_st = timeit.timeit(stmt='sorting_two(x)', setup='''
+import random
+from ch01.largest_two import sorting_two
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
+        
+        m_rt = timeit.timeit(stmt='recursive_two(x)', setup='''
+import random
+from ch05.challenge import recursive_two
+x=list(range({}))
+{}'''.format(n,prepare), number=num)
+
+        # Skip runs that are going to be too expensive
+        if m_tt:
+            tbl.row([n, m_dt, m_mt, m_lt, m_st, m_tt, m_rt])
+        else:
+            tbl.row([n, m_dt, m_mt, m_lt, m_st ])
+
+    return tbl
+
 def fib(n):
     """Inefficient Fibonacci recurive implementation."""
     if n <= 0: return 0
@@ -189,8 +257,12 @@ def fib_table(output=True, decimals=3):
         x_arr = np.array(tbl.column(tbl.labels[0]))
         y_arr = np.array(tbl.column(tbl.labels[1]))
 
+        def np_exp_model(n, a, b):
+            """Formula for A*N^B ."""
+            return a*np.power(n, b)
+
         if output:
-            [exp_coeffs, _]        = curve_fit(exp_model, x_arr, y_arr)
+            [exp_coeffs, _]        = curve_fit(np_exp_model, x_arr, y_arr)
             print('A*N^B  = {:.12f}*N^{:f} '.format(exp_coeffs[0], exp_coeffs[1]))
 
     return tbl
@@ -275,24 +347,57 @@ random.shuffle(A)'''.format(n), repeat=10, number=10))
             n_log_n_model(n, log_coeffs[0])])
     return tbl
 
+def trial_merge_sort_python_style(max_k=15, output=True, decimals=3):
+    tbl = DataTable([8, 8, 8], ['N', 'merge', 'mergeSlice'])
+    for n in [2**k for k in range(8, max_k)]:
+        m_slice = 1000*min(timeit.repeat(stmt='slice_merge_sort(A)', setup='''
+import random
+from ch05.challenge import slice_merge_sort
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=10))
+       
+        m_merge = 1000*min(timeit.repeat(stmt='merge_sort(A)', setup='''
+import random
+from ch05.merge import merge_sort
+A=list(range({}))
+random.shuffle(A)'''.format(n), repeat=10, number=10))
+       
+        tbl.row([n, m_merge, m_slice])
+    return tbl
+
 #######################################################################
 if __name__ == '__main__':
     chapter = 5
     
+    with ExerciseNum(1) as exercise_number:
+        print('find count() in ch05.recursion')
+        print(caption(chapter, exercise_number), 'Recursive count method')
+        print()
+
+    with ExerciseNum(2) as exercise_number:
+        print('find num_swaps() in ch05.challenge')
+        print(caption(chapter, exercise_number), 'Compute number of swaps in array with 0 .. N-1')
+        print()
+
+    with ExerciseNum(3) as exercise_number:
+        from ch05.recursion import find_max_with_count
+        print('how many comparisons to find max in array of size N=15:', find_max_with_count(list(range(15)))[0], 'or N-1')
+        print()
+
+    with ExerciseNum(4) as exercise_number:
+        trial_merge_sort_python_style()
+        print('Merge Sort with Python slice improves performance of MergeSort.')
+        print()
+
+    with ExerciseNum(5) as exercise_number:
+        run_largest_two_trials_with_recursive(Order.REVERSED)
+        print('find recursive_two() in ch05.challenge.')
+        print()
+
+    with ExerciseNum(6) as exercise_number:
+        fib_table()
+        print('find recursive_two() in ch05.challenge.')
+        print()
+
     print('Attempting to rediscover heap. This might take unusually long time')
     print(rediscover_heap())
-
-    print('12th Fibonacci number is 144.')
-    print(fib_with_lucas(12))
-
-    print('Number of swaps in sample hashtable')
-    print(num_swaps_hashable(['15', '21', '20', '2', '15', '24', '5', '19']))
-
-    # Construct an array with UP-DOWN-UP structure.
-    VALS = list(range(137))
-    VALS.extend(list(range(300,200,-1)))
-    VALS.extend(range(400,500))
-
-    from algs.sorting import check_sorted
-    slice_merge_sort(VALS)
-    print('VALS should is sorted:', check_sorted(VALS))

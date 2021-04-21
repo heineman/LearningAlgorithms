@@ -6,7 +6,7 @@ When the BST hits depth K what is the value of (a) the root; (b) and N
 """
 import random
 from ch06.avl import check_avl_property
-from algs.table import DataTable
+from algs.table import DataTable, ExerciseNum
 
 class BinaryNode:
     """

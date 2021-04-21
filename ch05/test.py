@@ -97,8 +97,13 @@ class TestChapter5(unittest.TestCase):
         self.assertEqual(4, num_swaps_hashable(['B', 'C', 'D', 'E', 'A']))
 
     def test_find_max(self):
-        from ch05.max import find_max
+        from ch05.recursion import find_max
         self.assertEqual(9, find_max([9, 3, 0, 4, 1, 2, 6, 8, 7, 5]))
+
+    def test_count(self):
+        from ch05.recursion import count
+        self.assertEqual(2, count([3, 1, 4, 1, 5, 9, 2, 6, 3, 5], 1))
+        self.assertEqual(0, count([3, 1, 4, 1, 5, 9, 2, 6, 3, 5], 8))
 
     def test_heap_sort(self):
         from ch05.heapsort import HeapSort, heap_sort, HeapSortCounting
