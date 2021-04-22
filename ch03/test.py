@@ -551,6 +551,31 @@ class TestChapter3(unittest.TestCase):
         tbl = time_results_open_addressing(num_rows=2, output=False)
         self.assertTrue(tbl.entry(32,'8,192') < tbl.entry(64,'8,192'))
 
+    def test_triangle_number_hash(self):
+        from ch03.challenge import HashtableTriangleNumbers
+        
+        with self.assertRaises(ValueError):
+            HashtableTriangleNumbers(-2)
+        with self.assertRaises(ValueError):
+            HashtableTriangleNumbers(3)
+
+        ht = HashtableTriangleNumbers(16)
+        self.assertFalse(ht.is_full())
+        ht.put(77, 99)
+        ht.put(77, 101)
+        self.assertEqual(101, ht.get(77))
+        self.assertEqual([(77,101)], list([k for k in ht]))
+        
+        # place 14 more values until full (since must leave ONE empty).
+        for k in range(14):
+            ht.put(k, k)
+        for k in range(14):
+            self.assertEqual(k, ht.get(k))
+        self.assertTrue(ht.get(1010) is None)
+        
+        with self.assertRaises(RuntimeError):
+            ht.put(999,99)
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

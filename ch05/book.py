@@ -440,6 +440,12 @@ def show_partition():
     idx = partition(A, 0, len(A)-1, 0)
     print('|'.join([' {:>2} '.format(k) for k in A]))
     print('pivot=A[{}]={}'.format(idx, A[idx]))
+    
+    # continue on with the right side.
+    
+    idx = partition(A, 3, len(A)-1, 3)
+    print('|'.join([' {:>2} '.format(k) for k in A]))
+    print('pivot=A[{}]={}'.format(idx, A[idx]))
 
 def show_heapify():
     """Show how array is turned into a heap, step by step."""
@@ -499,6 +505,7 @@ def tim_sort_figure():
 def generate_ch05():
     """Generate Tables and Figures for chapter 05."""
     chapter = 5
+    show_partition()
 
     with FigureNum(1) as figure_number:
         description  = 'Sample array, A, to sort'

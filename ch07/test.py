@@ -263,6 +263,9 @@ class TestChapter7(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             path_to(node_from, 'A2', 'B2')    # No path exists
+        with self.assertRaises(ValueError):
+            # No path exists: force issue by list(...)
+            list(path_to_recursive(node_from, 'A2', 'B2'))   
 
     def test_small_example_stub_replacement(self):
         import ch07.replacement
