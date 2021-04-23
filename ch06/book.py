@@ -229,9 +229,29 @@ import random''', repeat=repeat, number=num))/num
 
     return tbl
 
+def sample_binary_tree_as_pq():
+    from ch06.pq import PQ
+    
+    def structure(n):
+        """Return structure of binary tree using parentheses to show nodes with left/right subtrees."""
+        if n is None:
+            return ''
+    
+        return '({},{},{})'.format(n.priority, structure(n.left), structure(n.right))
+    
+    # priorities from the Chapter 4 max binary heap example, in some random order.
+    priorities = [9, 13, 4, 10, 8, 12, 14, 2, 11, 5, 9, 14, 7, 6, 15, 1, 8]
+    pq = PQ()
+    for p in priorities:
+        pq.enqueue('some_value{}'.format(p), p)
+
+    # (9,(5,(2,(1,,),(4,,)),(8,(7,(6,,),(8,,)),(9,,))),(12,(10,,(11,,)),(14,(13,,),(14,,(15,,)))))
+    return structure(pq.tree.root)
+    
 def generate_ch06():
     """Generate Tables and Figures for chapter 06."""
     chapter = 6
+    sample_binary_tree_as_pq()
 
     with FigureNum(1) as figure_number:
         description  = 'Representing mathematical expressions using expression trees'

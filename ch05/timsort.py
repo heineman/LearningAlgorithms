@@ -128,13 +128,3 @@ A.extend(B)'''.format(n), repeat=10, number=1))
 
         tbl.row([n, t_ms, t_qs, t_ts, t_ps])
     return tbl
-
-#######################################################################
-if __name__ == '__main__':
-    from random import shuffle
-    from algs.sorting import is_sorted
-    arr=list(range(22))
-    shuffle(arr)
-    tim_sort(arr)
-    print(arr[:100])
-    is_sorted(arr)

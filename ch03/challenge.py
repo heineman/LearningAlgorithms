@@ -539,6 +539,9 @@ class HashtableSortedLinkedLists:
         self.M = M
         self.N = 0
 
+    def __len__(self):
+        return self.N
+
     def get(self, k):
         """Retrieve value associated with key, k. STOP when entry is bigger than key."""
         hc = hash(k) % self.M       # First place it could be
@@ -556,7 +559,7 @@ class HashtableSortedLinkedLists:
         hc = hash(k) % self.M       # First place it could be
         entry = self.table[hc]
         if entry is None:
-            self.N = 1
+            self.N += 1
             self.table[hc] = LinkedEntry(k, v, self.table[hc])
             return 
 

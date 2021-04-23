@@ -3,6 +3,7 @@ Data Structure for non-balancing Binary Search Tree.
 
 The tree can contain duplicate values.
 """
+
 class BinaryNode:
     """
     Node structure to use in a binary tree.
@@ -129,3 +130,20 @@ class BinaryTree:
 
         for v in self._inorder(node.right):
             yield v
+
+    def copy(self):
+        """Return a copy of the binary tree using preorder traversal."""
+        duplicate = BinaryTree()
+        duplicate.root = self._copy(self.root)
+        return duplicate
+
+    def _copy(self, node):
+        """Preorder traversal of tree to copy the tree."""
+        if node is None:
+            return None
+
+        p = BinaryNode(node.value)
+        p.left = self._copy(node.left)
+        p.right = self._copy(node.right)
+
+        return p

@@ -308,8 +308,24 @@ class TestChapter3(unittest.TestCase):
                 
             self.assertEqual(list(range(1, 10*size)), sorted([i[0] for i in ht]))
 
+    def test_resize_validate_chain_remove(self):
+        from ch03.hashtable_open import DynamicHashtablePlusRemove
+
+        ht = DynamicHashtablePlusRemove(50)
+        for i in range(100):
+            ht.put('sample{}'.format(i), i)
+        self.assertEqual(100, len(ht))
+        for i in range(99, -1, -1):
+            ht.remove('sample{}'.format(i))
+        self.assertEqual(0, len(ht))
+        ht.remove('samplenotthere')
+        self.assertEqual(0, len(ht))
+
     def test_resize_hash_small_open_addressing_remove(self):
         from ch03.hashtable_open import DynamicHashtablePlusRemove
+
+        with self.assertRaises(ValueError):
+            DynamicHashtablePlusRemove(-2)
 
         # Intricate test that uncovered some subtle defects when
         # reusing MarkedEntry objects...
@@ -576,6 +592,42 @@ class TestChapter3(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             ht.put(999,99)
 
+    def test_sorted_linked_list_hash_table(self):
+        from ch03.challenge import HashtableSortedLinkedLists
+        
+        with self.assertRaises(ValueError):
+            HashtableSortedLinkedLists(-2)
+
+        ht = HashtableSortedLinkedLists()
+        self.assertEqual(0, len(ht))
+        ht.put(10, 10)
+        self.assertEqual(1, len(ht))
+        self.assertTrue(ht.get(5) is None)
+        ht.put(5, 5)
+        self.assertEqual(2, len(ht))
+        self.assertEqual(5, ht.get(5))
+        ht.put(15, 15)
+        self.assertEqual(15, ht.get(15))
+        self.assertEqual(3, len(ht))
+        
+        ht.put(10, 20)
+        ht.put(5, 10)
+        ht.put(15, 30)
+        ht.remove(5)
+        self.assertEqual([(10, 20), (15, 30)], sorted(list(ht)))
+        self.assertEqual(2, len(ht))
+        self.assertEqual(30, ht.remove(15))
+        self.assertEqual(1, len(ht))
+        ht.remove(10)
+        self.assertEqual(0, len(ht))
+        self.assertTrue(ht.remove(25) is None)
+
+    def test_evaluate_DynamicHashtablePlusRemove(self):
+        from ch03.challenge import evaluate_DynamicHashtablePlusRemove
+        
+        tbl = evaluate_DynamicHashtablePlusRemove(output=False)
+        self.assertTrue(tbl.entry(512, 'Separate Chaining') <= tbl.entry(2048, 'Separate Chaining'))
+        
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

@@ -220,6 +220,22 @@ class TestChapter6(unittest.TestCase):
         for v in bt1:
             total += v
         self.assertEqual(110, total)
+        
+    def test_copy(self):
+        from ch06.tree import BinaryTree
+
+        bt1 = BinaryTree()
+        bt1.insert(23)
+        bt1.insert(17)
+        bt1.insert(40)
+        bt1.insert(30)
+
+        bt2 = bt1.copy()
+
+        total = 0
+        for v in bt2:
+            total += v
+        self.assertEqual(110, total)
 
     def test_bt_stress(self):
         from ch06.tree import BinaryTree
@@ -397,6 +413,16 @@ class TestChapter6(unittest.TestCase):
             check_avl_property(bt1.root)
 
         self.assertTrue(bt1.is_empty())
+
+    def test_binary_tree_from_chapter_06(self):
+        from ch06.pq import PQ
+        from ch04.test import TestChapter4
+        
+        from resources.english import english_words
+        words = english_words()
+        pair = TestChapter4().priority_queue_stress_test(PQ(), len(words))
+        # Note: we cannot guarantee individual words BUT we can guarantee length
+        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
 
     def test_pq_stress(self):
         from ch06.pq import PQ

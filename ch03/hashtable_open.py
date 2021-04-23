@@ -136,6 +136,9 @@ class DynamicHashtablePlusRemove:
         # least one empty bucket
         self.threshold = min(M * self.load_factor, M-1)
 
+    def __len__(self):
+        return self.N
+
     def get(self, k):
         """Retrieve value associated with key, k."""
         hc = hash(k) % self.M

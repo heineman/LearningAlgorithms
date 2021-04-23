@@ -137,14 +137,6 @@ class TestChapter4(unittest.TestCase):
         # Note: we cannot guarantee individual words BUT we can guarantee length
         self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
 
-    def test_binary_tree_from_chapter_06(self):
-        from ch06.pq import PQ
-        from resources.english import english_words
-        words = english_words()
-        pair = self.priority_queue_stress_test(PQ(), len(words))
-        # Note: we cannot guarantee individual words BUT we can guarantee length
-        self.assertEqual((len('formaldehydesulphoxylate'), len('a')), (len(pair[0]), len(pair[1])))
-
     def stress(self, queue, ct):
         """Stress test queue with valid sequence of operations."""
         result = []
