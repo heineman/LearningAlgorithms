@@ -83,10 +83,6 @@ def average_performance(max_n=32768, output=True, decimals=2):
 
     return tbl
 
-def generate_ch06_old():
-    """Generate tables/figures for chapter 06."""
-    average_performance()
-
 def expression_tree():
     """Build expression tree."""
     from ch06.expression import Value, Expression, add, mult, sub, divide

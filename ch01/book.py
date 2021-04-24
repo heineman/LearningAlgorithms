@@ -289,7 +289,7 @@ def generate_ch01():
                 return None
             return max(A)
         dis.dis(f)
-        print()
+        print('max of [13, 2, 18, 7, 50] is', f())
         print(caption(chapter, figure_number),
               'Counting operations or instructions is complicated.')
 

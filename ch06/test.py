@@ -9,6 +9,8 @@ from ch06.avl import check_avl_property
 
 class TestChapter6(unittest.TestCase):
 
+    # In Python 3.3, this regular expression generates a Deprecation Warning and yields a unit
+    # test failure in test_baseline_expression for the "^" operator representing exponentiation
     def test_baseline_expression(self):
         from ch06.expression import Value, build_expression
         num1 = Value(17)
@@ -18,7 +20,6 @@ class TestChapter6(unittest.TestCase):
             """^"""
             return left ** right
 
-        #add_operator('^', exp)
         expr = build_expression('((8^2)*(7/4))', new_operators={'^' : exp})
         self.assertEqual(112, expr.eval())
 
@@ -276,7 +277,7 @@ class TestChapter6(unittest.TestCase):
         self.assertTrue(bt1.is_empty())
         bt1.put(5,5)
         self.assertFalse(bt1.is_empty())
-        self.assertEqual("5 -> 5 [0]", str(bt1.root))
+        self.assertEqual('5 -> 5 [0]', str(bt1.root))
         self.assertTrue(5 in bt1)
 
         bt1.put(3,3)
@@ -565,6 +566,10 @@ class TestChapter6(unittest.TestCase):
     def test_all_rotations_challenge(self):
         from ch06.challenge import BinaryTree
         bt1 = BinaryTree()
+        self.assertTrue(bt1.max_value() is None)
+        self.assertTrue(bt1.min_value() is None)
+        self.assertTrue(bt1.remove(99) is None)
+        
         vals = list(range(201))
         random.shuffle(vals)
         for v in vals:
@@ -784,7 +789,17 @@ class TestChapter6(unittest.TestCase):
        
         bt1 = fibonacci_avl_tree_up_to_2k(4)
         self.assertEqual('(3,(2,(1,,),),(5,(4,,),(6,,(7,,))))', tree_structure(bt1.root))
-        
+
+    def test_extract(self):
+        from ch06.challenge import extract
+
+        s = extract('this is a (test)', 10)
+        self.assertEqual('(test)', s)
+        s = extract('this is a (test(bigger))', 10)
+        self.assertEqual('(test(bigger))', s)
+
+        with self.assertRaises(ValueError):
+            extract('badness', 5)
 
 #######################################################################
 if __name__ == '__main__':

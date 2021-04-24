@@ -145,9 +145,11 @@ def build_expression(s, new_operators=None, environment=None):
 
             known_operators[op] = new_operators[op]
 
-    # In Python 3.3, this regular expression generates a Deprecation Warning
+    # In Python 3.3, this regular expression generates a Deprecation Warning and yields a unit
+    # test failure in test_baseline_expression for the "^" operator representing exponentiation
     pattern = re.compile('(\(|\)|[a-zA-Z.0-9_]+|[{}])'.format('\\'.join(known_operators.keys())))
 
+    # A bit out of place, but the stack was introduced in Chapter 07
     from ch07.list_stack import Stack
     ops = Stack()
     expressions = Stack()

@@ -569,7 +569,7 @@ def generate_ch05():
     with FigureNum(5) as figure_number:
         description  = 'Visualizing the recursive invocation of fact(3)'
         label = caption(chapter, figure_number)
-        print("Fact(3) = ", fact(3))
+        print('Fact(3) = ', fact(3))
         print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
