@@ -15,7 +15,7 @@ def fibonacci_example(spreadsheet):
     entries = {
         'A1': 'N',
         'B1': 'Fibn',
-        'C1': 'Sn',
+        'C1': 'Sum',
         'A2': '0',
         'A3': '=(A2+1)',
         'A4': '=(A3+1)',
