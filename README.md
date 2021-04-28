@@ -122,24 +122,21 @@ The following code statistics are generated using the cloc tool
 directory which contains the generated Python code for perfect
 hashtables.
 
-perl cloc-1.86.pl LearningAlgorithms --exclude-dir=perfect
-     269 text files.
-     268 unique files.
+`perl cloc-1.86.pl LearningAlgorithms --exclude-dir=perfect,htmlcov`
+
+     148 text files.
+     147 unique files.
       32 files ignored.
 
 
 | Language      |              files     |     blank   |     comment    |    code |
 | ------------- | ---------------------- | ----------- | -------------- | ------- |
-| HTML          |                107     |        0    |         0      |   74134 |
 | Python        |                112     |     2789    |      3137      |   10602 |
-| JavaScript    |                  6     |      101    |       120      |     535 |
-| CSS           |                  1     |      143    |         3      |     145 |
 | Markdown      |                  1     |       34    |         0      |      82 |
 | DOS Batch     |                  3     |       16    |         9      |      63 |
 | XML           |                  2     |        0    |         0      |      25 |
 | Bourne Shell  |                  1     |        6    |         2      |      24 |
-| JSON          |                  1     |        0    |         0      |       1 |
-| ------------- | ---------------------- | ----------- | -------------- | ------- | 
-| SUM:          |               234      |   3089      |   3271         | 85611   |
+||
+| SUM:          |               119      |   2845      |   3148         | 10796   |
 
 github.com/AlDanial/cloc v 1.86  T=1.74 s (137.9 files/s, 83921.3 lines/s)
