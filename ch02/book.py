@@ -159,7 +159,7 @@ x=create_pair({})'''.format(n), number=num)
               karatsuba(n, karatsuba_coeffs[0]),
               tkn(n, tkn_coeffs[0], tkn_coeffs[1])])
 
-    for n in [2**k for k in range(13,20)]:
+    for n in [2**k for k in range(13,192)]:
         mult_time = timeit.timeit(stmt='mult_pair(x)', setup='''
 from ch02.mult import create_pair, mult_pair 
 x=create_pair({})'''.format(n), number=num)

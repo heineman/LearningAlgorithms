@@ -78,6 +78,13 @@ and runtime performance. networkx is used to construct graphs, and if
 this library is not installed, a replacement graph structure is used which 
 is not efficient or suitable for production use.
 
+## Images
+
+All of the tables in the book are reproducible from the Python scripts 
+found in each chapter. Many of the images will also be generated from
+these tables: these generates files are placed (by chapter number) 
+within the `images` directory.
+
 ## Testing
 
 You can generate code coverage reports for the test cases after you install
