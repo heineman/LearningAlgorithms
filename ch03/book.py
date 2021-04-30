@@ -347,28 +347,31 @@ def count_hash(output=True, decimals=2):
     from ch03.hashtable_linked import DynamicHashtable
 
     ht = DynamicHashtable(1023)
-    tbl = DataTable([20,10,10,10],['Word', 'N', '#insert', 'average'],
+    tbl = DataTable([20,10,10,10,10],['Word', 'M', 'N', '#insert', 'average'],
                     output=output, decimals=decimals)
     tbl.format('Word', 's')
     tbl.format('N', ',d')
+    tbl.format('M', ',d')
     tbl.format('#insert', ',d')
 
     last_word = None
     for w in english_words():
         last_word = w
+        last_m = ht.M
         last = CountableHash.hash_count
         ht.put(CountableHash(w), w)
         if CountableHash.hash_count != last + 1:
-            tbl.row([w, ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])
+            tbl.row([w, last_m, ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])
 
-    tbl.row([last_word, ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])
+    tbl.row([last_word, last_m, ht.N, CountableHash.hash_count, CountableHash.hash_count/ht.N])
 
     # determine when next resize event would occur...
     for i in range(1, 200000):
         last = CountableHash.hash_count
+        last_m = ht.M
         ht.put(CountableHash(last_word + str(i)), last_word)
         if CountableHash.hash_count != last + 1:
-            tbl.row([last_word + str(i), ht.N,
+            tbl.row([last_word + str(i), last_m, ht.N,
                      CountableHash.hash_count, CountableHash.hash_count/ht.N])
             break
 
