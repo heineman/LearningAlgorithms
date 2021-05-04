@@ -18,7 +18,7 @@ from ch07.snapshot import tkinter_register_snapshot
 from ch07.search import path_to, bfs_search, dfs_search_recursive, smart_search
 from ch07.single_source_sp import dijkstra_sp, edges_path_to, bellman_ford
 from ch07.plot_map import plot_path, plot_node_from
-from ch07.tmg_load import tmg_load, compute_distance, plot_gps, plot_highways
+from ch07.tmg_load import tmg_load, compute_distance, plot_gps, plot_highways, bounding_ids
 from ch07.all_pairs_sp import floyd_warshall
 
 def make_sample_graph():
@@ -451,13 +451,20 @@ def generate_ch07():
     chapter = 7
 
     with FigureNum(1) as figure_number:
+        description  = 'Modeling different problems using graphs'
+        print('by hand')
+        label = caption(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(2) as figure_number:
         description  = 'An undirected graph of 12 vertices and 12 edges'
         make_sample_graph()
         label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(2) as figure_number:
+    with FigureNum(3) as figure_number:
         description = 'A graph modeling a rectangular maze'
         label = caption(chapter, figure_number)
         from ch07.viewer import Viewer
@@ -490,14 +497,14 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(3) as figure_number:
+    with FigureNum(4) as figure_number:
         description  = 'Hitting a dead end while exploring a maze'
         print('Hand drawn overlay to Figure 7-2.')
         label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(4) as figure_number:
+    with FigureNum(5) as figure_number:
         from ch07.search import dfs_search, draw_solution
 
         description  = 'Depth First Search will eventually locate the target if maze is connected'
@@ -517,14 +524,14 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(5) as figure_number:
+    with FigureNum(6) as figure_number:
         description  = 'Breadth First Search will locate shortest path to target, if reachable from source'
         print('Hand drawn overlay to Figure 7-2.')
         label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(6) as figure_number:
+    with FigureNum(7) as figure_number:
         description  = 'Breadth First Search finds shortest path to each node'
         label = caption(chapter, figure_number)
         random.seed(15)
@@ -541,7 +548,7 @@ def generate_ch07():
             print('{}. {}'.format(label, description))
             print()
 
-    with FigureNum(7) as figure_number:
+    with FigureNum(8) as figure_number:
         description = 'Comparing Depth First Search, Breadth First Search, and Smart Search'
         label = caption(chapter, figure_number)
 
@@ -574,7 +581,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(8) as figure_number:
+    with FigureNum(9) as figure_number:
         description = 'Adjacency Matrix vs. Adjacency List representation'
         label = caption(chapter, figure_number)
         output_adjacency_matrix()
@@ -582,57 +589,57 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(9) as figure_number:
+    with FigureNum(10) as figure_number:
         description = 'Sample directed graph with 12 nodes and 14 edges.'
         label = caption(chapter, figure_number)
         make_sample_directed_graph()
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(10) as figure_number:
+    with FigureNum(11) as figure_number:
         description = 'Sample spreadsheet with underlying directed graph.'
         label = caption(chapter, figure_number)
         print('Screen shots from Excel, together with graph from Figure 7-9')
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(11) as figure_number:
+    with FigureNum(12) as figure_number:
         description = 'Visualizing execution of Depth First Search for Cycle Detection.'
         label = caption(chapter, figure_number)
         print('Done by hand.')
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(12) as figure_number:
+    with FigureNum(13) as figure_number:
         description = 'Visualizing execution of Depth First Search for Topological Sort.'
         label = caption(chapter, figure_number)
         print('Done by hand.')
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(13) as figure_number:
-        description = 'Modeling highway infrastructure in Massachusetts.'
-        label = caption(chapter, figure_number)
-        SRC = 389
-        TARGET = 2256
-        output_file = generate_bfs_and_dijkstra_figure(SRC, TARGET)
-        print('Generated {}'.format(output_file))
-        print('Augmented by hand in SVG')
-        print('{}. {}'.format(label, description))
-        print()
-
     with FigureNum(14) as figure_number:
         description = 'Modeling highway infrastructure in Massachusetts.'
         label = caption(chapter, figure_number)
-        SRC = 389
-        TARGET = 2256
-        output_file = generate_dfs_figure(SRC, TARGET)
+        (_, mapPositions) = tmg_load(highway_map())
+        (_,EAST,_,WEST) = bounding_ids(mapPositions)
+        output_file = generate_bfs_and_dijkstra_figure(WEST, EAST)
         print('Generated {}'.format(output_file))
         print('Augmented by hand in SVG')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(15) as figure_number:
+        description = 'Modeling highway infrastructure in Massachusetts.'
+        label = caption(chapter, figure_number)
+        (_, mapPositions) = tmg_load(highway_map())
+        (_,EAST,_,WEST) = bounding_ids(mapPositions)
+        output_file = generate_dfs_figure(WEST, EAST)
+        print('Generated {}'.format(output_file))
+        print('Augmented by hand in SVG')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(16) as figure_number:
         description = 'The shortest path from a to c has accumulated total of 8'
         label = caption(chapter, figure_number)
         print('Done by hand.')
@@ -669,7 +676,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(16) as figure_number:
+    with FigureNum(17) as figure_number:
         description = 'Two graphs with negative edge weights, but only one has a negative cycle'
         label = caption(chapter, figure_number)
         DG_GOOD = nx.DiGraph()
@@ -697,7 +704,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(17) as figure_number:
+    with FigureNum(18) as figure_number:
         description = 'Example for all-pairs shortest path problem'
         label = caption(chapter, figure_number)
         DG_AP = nx.DiGraph()
@@ -714,7 +721,14 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(18) as figure_number:
+    with FigureNum(19) as figure_number:
+        description = 'Intuition behind the all-pairs shortest path problem'
+        label = caption(chapter, figure_number)
+        print('by hand')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(20) as figure_number:
         description = 'Actual shortest paths, dist_to[][], and node_from[][] for example'
         label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()
@@ -729,7 +743,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(19) as figure_number:
+    with FigureNum(21) as figure_number:
         description = 'Initialize dist_to[][] and node_from[][] based on G'
         label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()
@@ -744,7 +758,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(20) as figure_number:
+    with FigureNum(22) as figure_number:
         description = 'Changes to node_from[][] and dist_to[][] after k processes a and b'
         label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()

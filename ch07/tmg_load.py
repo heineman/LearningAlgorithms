@@ -45,6 +45,33 @@ def plot_gps(positions, s=8, marker='.', color='blue'):
         y.append(pos[0])
     plt.scatter(x, y, marker=marker, s=s, color=color)
 
+def bounding_ids(positions):
+    """Compute the distant borders via GPS in the positions. [NORTH, EAST, SOUTH, WEST]."""
+    north = -360
+    east  = -360
+    south = 360
+    west  = 360
+    north_id = -1
+    east_id = -1
+    south_id = -1
+    west_id = -1
+
+    for node in positions:
+        gps = positions[node]
+        if gps[0] > north:
+            north = gps[0]
+            north_id = node
+        if gps[0] < south:
+            south = gps[0]
+            south_id = node
+        if gps[1] > east:
+            east = gps[1]
+            east_id = node
+        if gps[1] < west:
+            west = gps[1]
+            west_id = node
+    return (north_id, east_id, south_id, west_id)
+
 def plot_highways(positions, edges, color='gray'):
     """Plot highways with linesegments."""
     if plt_error:
@@ -119,6 +146,7 @@ if __name__ == '__main__':
 
         (G,positions) = tmg_load(highway_map())
         print(G.number_of_nodes(), G.number_of_edges())
+        print(bounding_ids(positions))
 
         src = 389
         target = 2256

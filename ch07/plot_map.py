@@ -66,5 +66,8 @@ def plot_node_from(G, positions, src, target, node_from, marker='.', color='oran
         nodex.append(pos[1])
         nodey.append(pos[0])
         v = node_from[v]
+    pos = positions[src]
+    nodex.append(pos[1])
+    nodey.append(pos[0])
     plt.plot(nodex, nodey, color=color)
     plt.scatter(nodex, nodey, marker=marker, color=color)
