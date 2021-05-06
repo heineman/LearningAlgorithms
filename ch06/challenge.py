@@ -7,7 +7,6 @@ When the BST hits depth K what is the value of (a) the root; (b) and N
 import random
 from ch06.avl import check_avl_property
 from algs.table import DataTable, ExerciseNum, caption
-from pandas.util.testing import _network_errno_vals
 
 class BinaryNode:
     """
