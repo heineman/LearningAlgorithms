@@ -7,7 +7,7 @@ from algs.table import DataTable
 def table_trials(max_k=15, output=True, decimals=3):
     """Compare Merge Sort against built in Python sort up to, but not including 2**max_k."""
     tbl = DataTable([8,10,10], ['N', 'MergeSort', 'Built-In Sort'], output=output, decimals=decimals)
-    
+
     for n in [2**k for k in range(8, max_k)]:
         msort = 1000*min(timeit.repeat(stmt='merge_sort(x)', setup='''
 import random
@@ -26,7 +26,7 @@ random.shuffle(x)'''.format(n), repeat=20, number=15))/15
 def quadratic_sort_trials(max_k=12, output=True, decimals=2):
     """Compare Selection Sort against two flavors of Insertion Sort up to (but not including) 2^max_k."""
     tbl = DataTable([8,8,8,8], ['N', 'Select', 'Insert', 'InsertBAS'], output=output, decimals=decimals)
-    
+
     for n in [2**k for k in range(8, max_k)]:
         if n > 2048:
             m_select = -1
@@ -60,7 +60,6 @@ if __name__ == '__main__':
     print('Compare Merge Sort against built in Python sort. This takes unusually long.')
     table_trials()
     print()
-    
+
     print('Compare Selection Sort against two flavors of Insertion Sort. This takes unusually long.')
     quadratic_sort_trials()
-    

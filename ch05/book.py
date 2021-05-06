@@ -106,7 +106,7 @@ def modeling_insertion_selection(output=True, decimals=1):
     if output:
         print('Swap SS Linear    = {:f}*N + {:f}'.format(linear_swap_ss[0], linear_swap_ss[1]))
         print('Comp SS Quadratic = {}*N*N + {}*N'.format(quadratic_comp_ss[0], quadratic_comp_ss[1]))
-    
+
         print('Swap IS Quadratic = {}*N*N + {}*N'.format(quadratic_swap_is[0], quadratic_swap_is[1]))
         print('Comp IS Quadratic = {}*N*N + {}*N'.format(quadratic_comp_is[0], quadratic_comp_is[1]))
         print()
@@ -244,7 +244,7 @@ def timing_selection_insertion(min_k=8, max_k=16, output=True, decimals=3):
     Because Insertion Sort is so sensitive to its inputs, we take average time
     over all of its runs. Models first using 5 rows from [min_k .. min_k+5]
     and then presents information up to (but not including) max_k.
-    
+
     Takes hours to run. In the book, the table goes up to max_k=18.
     """
     if output:
@@ -440,9 +440,9 @@ def show_partition():
     idx = partition(A, 0, len(A)-1, 0)
     print('|'.join([' {:>2} '.format(k) for k in A]))
     print('pivot=A[{}]={}'.format(idx, A[idx]))
-    
+
     # continue on with the right side.
-    
+
     idx = partition(A, 3, len(A)-1, 3)
     print('|'.join([' {:>2} '.format(k) for k in A]))
     print('pivot=A[{}]={}'.format(idx, A[idx]))
@@ -455,19 +455,19 @@ def show_heapify():
     # problem area), I found this input that produces the Heap. nice!
     A = [14, 13, 12, 5, 10, 6, 14, 12, 9, 1, 11, 8, 15, 9, 7, 4, 8, 2]
     HeapSortCounting(A, output=True)
-    
+
 def heapsort_intuition():
     """Show first two steps of dequeue."""
     from ch05.heapsort import HeapSortCounting
-    
+
     A = [14, 13, 12, 5, 10, 6, 14, 12, 9, 1, 11, 8, 15, 9, 7, 4, 8, 2]
     heap = HeapSortCounting(A, output=False)
-    
+
     heap.swap(1, heap.N)
     heap.N -= 1
     heap.sink(1)
     print('|'.join([' {:>2} '.format(k) for k in A]))
-    
+
     heap.swap(1, heap.N)
     heap.N -= 1
     heap.sink(1)
@@ -559,7 +559,7 @@ def generate_ch05():
         print()
 
     with TableNum(1) as table_number:
-        # for actual results from book, use max_k=18 as an argument, but it will take hours. 
+        # for actual results from book, use max_k=18 as an argument, but it will take hours.
         timing_selection_insertion()
         description  = 'Runtime performance (in seconds) for Selection Sort and Insertion Sort'
         label = caption(chapter, table_number)
@@ -573,7 +573,7 @@ def generate_ch05():
         print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
-        
+
     with FigureNum(6) as figure_number:
         description  = 'Recursive invocation when calling rmax(0,3) on A=[15,21,20,2]'
         label = caption(chapter, figure_number)
@@ -622,7 +622,7 @@ def generate_ch05():
         label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
-        
+
     with TableNum(2) as table_number:
         timing_nlogn_sorting()
         description  = 'Runtime performance (in seconds) for different sorting algorithms'

@@ -1,6 +1,6 @@
 """
 Code to blindly search through a Graph in Depth First and Breadth First strategies. Also
-contains a rudimentary Smart Search for undirected graphs when there is a metric showing
+contains a rudimentary Guided Search for undirected graphs when there is a metric showing
 how far a node is from the target.
 """
 import random
@@ -112,7 +112,7 @@ def bfs_search(G, src):
 
     return node_from
 
-def smart_search(G, src, target, distance):
+def guided_search(G, src, target, distance):
     """
     Non-recursive depth-first search investigating given position. Needs
     a distance (node1, node2) function to determine distance between two nodes.
@@ -176,9 +176,8 @@ if __name__ == '__main__':
     m = Maze(3,5)    # Anything bigger and these are too small to read
     graph = to_networkx(m)
 
-    #draw_solution(graph, dfs_search(graph, m.start()), m.start(), m.end())
+    # Choose whether to use dfs_search, bfs_search, or guided_search
     draw_solution(graph, bfs_search(graph, m.start()), m.start(), m.end())
-    #draw_solution(graph, smart_search(graph, m.start(), m.end()), m.start(), m.end())
 
     import matplotlib.pyplot as plt
     plt.show()

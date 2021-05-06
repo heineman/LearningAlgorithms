@@ -274,7 +274,7 @@ class TestChapter4(unittest.TestCase):
         self.assertTrue(pq.is_full())
         with self.assertRaises(RuntimeError):
             pq.enqueue(99,99)
-            
+
     def test_heap_pq_edge_cases(self):
         from ch04.heap import PQ
         pq = PQ(3)

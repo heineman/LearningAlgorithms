@@ -125,9 +125,9 @@ def build_expression(s, new_operators=None, environment=None):
     """
     Given a string consisting of numeric values, parentheses and
     mathematical operators, return Expression tree using a stack-based
-    algorithm developed by Dijkstra. To parse new operations, simply 
-    pass them in as a dict where key is the symbol for the new operator and 
-    its value is a function that takes in two arguments (left, right) for 
+    algorithm developed by Dijkstra. To parse new operations, simply
+    pass them in as a dict where key is the symbol for the new operator and
+    its value is a function that takes in two arguments (left, right) for
     the operands to the binary function.
     """
 

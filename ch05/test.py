@@ -9,7 +9,7 @@ class TestChapter5(unittest.TestCase):
 
     def test_challenge_fib(self):
         from ch05.challenge import fib_profile
-        
+
         self.assertEqual(0, fib_profile(0))
         self.assertEqual(1, fib_profile(1))
         self.assertEqual(13, fib_profile(7))
@@ -186,7 +186,7 @@ class TestChapter5(unittest.TestCase):
         # edge cases
         self.assertEqual(recursive_two([1,2]), (2,1))
         self.assertEqual(recursive_two([5]), (5, None))
-        
+
         # mutable
         my_list = [9, 1, 8, 2, 3, 6]
         my_copy = list(my_list)
@@ -230,7 +230,7 @@ class TestChapter5(unittest.TestCase):
         random.shuffle(A)
         tim_sort(A)
         self.assertEqual(list(range(100)), A)
-        
+
     def test_rediscover_heap(self):
         from ch05.challenge import rediscover_heap
 
@@ -268,16 +268,16 @@ class TestChapter5(unittest.TestCase):
 
         # More than doubles...
         self.assertTrue(tbl.entry(16, 'AvgSwapMS')*2 < tbl.entry(32, 'AvgSwapMS'))
-        
+
     def test_timing_selection_insertion(self):
         from ch05.book import timing_selection_insertion
-        
+
         tbl = timing_selection_insertion(min_k=3, max_k=11, output=False)
         self.assertTrue(tbl.entry(8, 'MinIS') < tbl.entry(1024, 'MinIS'))
 
     def test_insertion_sort_bas_table(self):
         from ch05.challenge import insertion_sort_bas
-        
+
         tbl = insertion_sort_bas(max_k=14, output=False)
         self.assertTrue(tbl.entry(4096, 'Time') <= tbl.entry(8192, 'Time'))
 
@@ -289,7 +289,7 @@ class TestChapter5(unittest.TestCase):
 
     def test_modeling_insertion_worst_case(self):
         from ch05.book import modeling_insertion_worst_case
-        
+
         tbl = modeling_insertion_worst_case(output=False)
         self.assertEqual(tbl.entry(128, 'Swaps'), tbl.entry(128, 'Comparisons'))
 

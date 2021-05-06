@@ -7,7 +7,7 @@ import timeit
 from algs.table import DataTable, ExerciseNum, caption
 from algs.modeling import n_log_n_model, quadratic_model, numpy_error
 from ch01.book import Order
-    
+
 numRecursiveImproved = [0]
 
 def num_swaps(A):
@@ -113,7 +113,7 @@ def recursive_two(A):
         R = rtwo(mid+1, hi)
 
         # Recursive case: Find largest of the possible four values. Note
-        # That L[1] can never be None since that would have been handled 
+        # That L[1] can never be None since that would have been handled
         # By the special case above where lo+1 == hi
         if L[0] < R[0]:
             if R[1] is None:
@@ -175,7 +175,7 @@ import random
 from ch01.largest_two import sorting_two
 x=list(range({}))
 {}'''.format(n,prepare), number=num)
-        
+
         m_rt = timeit.timeit(stmt='recursive_two(x)', setup='''
 import random
 from ch05.challenge import recursive_two
@@ -235,7 +235,7 @@ def lucas_with_fib(n):
 def fib_table(output=True, decimals=3):
     """Generate table showing reduced recursive invocations of fibonacci."""
     import math
-    
+
     tbl = DataTable([8,12,12],['N', 'FiRec', 'Model'], output=output, decimals=decimals)
     tbl.format('FiRec', 'd')
     def exp_model(n, a, b):
@@ -348,27 +348,28 @@ random.shuffle(A)'''.format(n), repeat=10, number=10))
     return tbl
 
 def trial_merge_sort_python_style(max_k=15, output=True, decimals=3):
-    tbl = DataTable([8, 8, 8], ['N', 'merge', 'mergeSlice'])
+    """Empirical trial for merge sort using slicing."""
+    tbl = DataTable([8, 8, 8], ['N', 'merge', 'mergeSlice'], output=output, decimals=decimals)
     for n in [2**k for k in range(8, max_k)]:
         m_slice = 1000*min(timeit.repeat(stmt='slice_merge_sort(A)', setup='''
 import random
 from ch05.challenge import slice_merge_sort
 A=list(range({}))
 random.shuffle(A)'''.format(n), repeat=10, number=10))
-       
+
         m_merge = 1000*min(timeit.repeat(stmt='merge_sort(A)', setup='''
 import random
 from ch05.merge import merge_sort
 A=list(range({}))
 random.shuffle(A)'''.format(n), repeat=10, number=10))
-       
+
         tbl.row([n, m_merge, m_slice])
     return tbl
 
 #######################################################################
 if __name__ == '__main__':
     chapter = 5
-    
+
     with ExerciseNum(1) as exercise_number:
         print('find count() in ch05.recursion')
         print(caption(chapter, exercise_number), 'Recursive count method')

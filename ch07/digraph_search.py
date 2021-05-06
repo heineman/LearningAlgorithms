@@ -1,6 +1,6 @@
 """
 Code to blindly search through a Graph in Depth First and Breadth First strategies. Also
-contains a rudimentary Smart Search for undirected graphs when there is a metric showing
+contains a rudimentary Guided Search for undirected graphs when there is a metric showing
 how far a node is from the target.
 """
 

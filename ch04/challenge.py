@@ -74,7 +74,8 @@ def combined_sorted(lo=8, hi=12, output=True):
         print(pearsonr(y, y_fit))
         print()
         print('Prediction')
-        model = DataTable([8] * (hi-lo+1), ['N'] + [comma(2**k) for k in range(lo,hi)], output=output)
+        model = DataTable([8] * (hi-lo+1), ['N'] + [comma(2**k) for k in range(lo,hi)],
+                          output=output)
         for n in [2**k for k in range(lo,hi)]:
             row = [n]
             for m in [2**k for k in range(lo,hi)]:
@@ -90,7 +91,7 @@ def k_smallest(A, k):
     from ch04.heap import PQ
     pq = PQ(k)
 
-    # pq is a regular Max Binary Heap. Enqueue first k elements. If any 
+    # pq is a regular Max Binary Heap. Enqueue first k elements. If any
     # subsequent value is LARGER than our largest, it can be ignored, otherwise
     # remove the largest (since one is now smaller) and enqueue it.
     for v in A:
@@ -125,7 +126,7 @@ def iterator(pq):
 
     You can add capability for fail-fast iterators IF the heap actively
     increments a count in its pq.storage[0] which is unused anyway.
-    
+
     Returned values include both the (value, priority) for maximum flexibility.
     """
     from ch04.heap import PQ
@@ -166,7 +167,7 @@ def iterator_trial():
 def inspect_heap_array():
     """
     After inserting N elements in ascending order, is there a pattern in the
-    values in the arrays in the heap? Same for inserting in descending order. 
+    values in the arrays in the heap? Same for inserting in descending order.
     """
     from ch04.heap import PQ
 

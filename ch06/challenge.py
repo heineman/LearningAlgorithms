@@ -6,7 +6,8 @@ When the BST hits depth K what is the value of (a) the root; (b) and N
 """
 import random
 from ch06.avl import check_avl_property
-from algs.table import DataTable, ExerciseNum
+from algs.table import DataTable, ExerciseNum, caption
+from pandas.util.testing import _network_errno_vals
 
 class BinaryNode:
     """
@@ -300,7 +301,7 @@ def worst_heights(max_n=40, output=True):
                 number_found = 0
             elif avl.root.height == max_height:
                 number_found += 1
-            
+
         if max_height > table_max_height:
             tbl.row([n, max_height, number_found])
             table_max_height = max_height
@@ -499,9 +500,143 @@ def fibonacci_avl_tree_up_to_2k(N):
     check_avl_property(tree.root)
     return tree
 
+def count(n, target):
+    """Count # of times non-None target exists in linked list, n."""
+    ct = 0
+    if n is None:
+        return 0
+    if n.value == target:
+        ct = 1
+    return ct + count(n.next, target)
+
+class RankBinaryNode:
+    """
+    Demonstration of challenge exercise
+    """
+    def __init__(self, key):
+        self.key = key
+        self.left  = None
+        self.right = None
+        self.N = 1
+        self.height = 0
+
+class RankBinaryTree:
+    """
+    Demonstration of challenge exercise. Only supports insert
+    """
+    def __init__(self):
+        self.root = None
+    
+    def insert(self, key):
+        """Insert value into Binary Tree."""
+        self.root = self._insert(self.root, key)
+
+    def _insert(self, node, key):
+        """Inserts a new BinaryNode to the tree containing this key."""
+        if node is None:
+            return RankBinaryNode(key)
+
+        if key <= node.key:
+            node.left = self._insert(node.left, key)
+        else:
+            node.right = self._insert(node.right, key)
+
+        node.N = 1
+        ht = -1
+        if node.left:  
+            node.N += node.left.N
+            ht = max(ht, node.left.height)
+        if node.right: 
+            node.N += node.right.N
+            ht = max(ht, node.right.height)
+        node.height = ht + 1
+        return node
+
+    def _count(self, node):
+        """Return count of the nodes in the subtree rooted at node or 0 if None."""
+        return 0 if node is None else node.N
+
+    def select(self, k):
+        """Return kth smallest value in the tree."""
+        return self._select(self.root, k)
+
+    def _select(self, node, k):
+        if node is None:
+            return None
+        leftN = self._count(node.left)
+
+        if leftN > k:
+            return self._select(node.left, k)
+        if leftN < k:
+            return self._select(node.right, k - leftN - 1)
+        return node.key
+
+    def rank(self, key):
+        """Return rank (or -1 if it doesn't exist) of key in the tree. min() = 0"""
+        return self._rank(self.root, key)
+
+    def _rank(self, node, key):
+        if node is None:
+            return 0
+
+        if key == node.key:
+            return self._count(node.left)
+        if key < node.key:
+            return self._rank(node.left, key)
+        return 1 + self._count(node.left) + self._rank(node.right, key)
+
+def manually_build(vals, height):
+    """
+    Manually produce permutations of vals to build tree. Count how many have given height.
+    Only call with vals <= 7, since 15 requires 1,307,674,368,000 possible arrangements.
+    """
+    import itertools
+    count = 0
+    for val in itertools.permutations(vals):
+        rbt = RankBinaryTree()
+        for v in val:
+            rbt.insert(v)
+        if rbt.root.height == height:
+            count += 1
+    return count
+
+def compute_perfect_tree(total):
+    """
+    Determine # of ways complete tree would be constructed from 2^k - 1 values.
+    Still waiting for confirmation.
+    """
+    import math
+    if total == 1:
+        return 1
+    half = total // 2
+    return (math.factorial(2*half) / (2 * math.factorial(half))) * 2*compute_perfect_tree(half)
+
 #######################################################################
 if __name__ == '__main__':
+    chapter = 6
+
+    with ExerciseNum(1) as exercise_number:
+        print('find count() in ch05.challenge')
+        print(caption(chapter, exercise_number), 'Recursive count method')
+        print()
+
+    with ExerciseNum(2) as exercise_number:
+        print('A binary tree that only has right children.')
+        print(caption(chapter, exercise_number), 'What binary tree has O(N) to find two largest?')
+        print()
+
+    with ExerciseNum(3) as exercise_number:
+        print('RankBinaryTree in ch06.challenge')
+        print(caption(chapter, exercise_number), 'select() and rank() methods')
+        print()
+
+    with ExerciseNum(4) as exercise_number:
+        compute_perfect_tree(3)
+        print(caption(chapter, exercise_number), 'select() and rank() methods')
+        print()
+
     worst_heights()
+
     #find_multiple_rotations()
     bt2 = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
     #print(tree_structure(bt2))

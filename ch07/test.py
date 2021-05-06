@@ -66,16 +66,16 @@ class TestChapter7(unittest.TestCase):
         H = solution_graph(G, path_to(node_from, m.start(), m.end()))
         self.assertEqual(2, len(list(H.edges())))
 
-    def test_smart_search(self):
+    def test_guided_search(self):
         from ch07.maze import Maze, to_networkx, solution_graph, distance_to
-        from ch07.search import smart_search, path_to, node_from_field
+        from ch07.search import guided_search, path_to, node_from_field
         import random
         random.seed(15)
         m = Maze(3,5)
         G = to_networkx(m)
 
         # BFS search solution
-        node_from = smart_search(G, m.start(), m.end(), distance_to)
+        node_from = guided_search(G, m.start(), m.end(), distance_to)
         self.assertEqual((1,2), node_from[(2,2)])
 
         # Create graph resulting from the BFS search results
@@ -431,17 +431,24 @@ class TestChapter7(unittest.TestCase):
         tbl = table_compare_graph_structures(max_k=12)
         self.assertTrue(tbl.entry(2048, 'NetworkX') < tbl.entry(2048, 'Adjacency Matrix'))
 
-    def test_generate_smart_search_figure(self):
-        from ch07.book import generate_smart_search_figure
-        from ch07.tmg_load import tmg_load, highway_map
+    def test_generate_guided_search_figure(self):
+        from ch07.book import generate_guided_search_figure
+        from ch07.tmg_load import tmg_load, highway_map, bounding_ids
         from ch07.dependencies import plt_error
 
         if not plt_error:
-            SRC = 389
-            TARGET = 2256
             (G, positions) = tmg_load(highway_map())
-            output_file = generate_smart_search_figure(G, positions, SRC, TARGET)
+            (_,EAST,_,WEST) = bounding_ids(positions)
+            output_file = generate_guided_search_figure(G, positions, WEST, EAST)
             self.assertTrue(path.isfile(output_file))
+
+    def test_bounding(self):
+        from ch07.tmg_load import tmg_load, highway_map, bounding_ids
+        (_,positions) = tmg_load(highway_map())
+        [NORTH,EAST,SOUTH,WEST] = bounding_ids(positions)
+        self.assertTrue(positions[NORTH][0] > positions[SOUTH][0])   # LAT Is higher for north
+        self.assertTrue(positions[EAST][1] > positions[WEST][1])     # LONG is higher for east
+
 
 #######################################################################
 if __name__ == '__main__':

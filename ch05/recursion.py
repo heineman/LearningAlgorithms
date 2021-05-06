@@ -33,7 +33,7 @@ def count(A,target):
 
     def rcount(lo, hi, target):
         """Use recursion to find maximum value in A[lo:hi+1]."""
-        if lo == hi: 
+        if lo == hi:
             return 1 if A[lo] == target else 0
 
         mid = (lo+hi)//2

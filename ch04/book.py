@@ -180,7 +180,7 @@ def generate_ch04():
         print('Hand drawn')
         print('{}. {}'.format(label, description))
         print()
-        
+
     with FigureNum(12) as figure_number:
         description  = 'The first step is to remove bottommost entry'
         label = caption(chapter, figure_number)
@@ -220,7 +220,7 @@ def generate_ch04():
         print('Hand drawn')
         print('{}. {}'.format(label, description))
         print()
-    
+
     with FigureNum(17) as figure_number:
         description  = 'Storing a max binary heap in an array'
         label = caption(chapter, figure_number)

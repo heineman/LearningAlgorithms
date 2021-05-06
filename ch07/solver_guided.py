@@ -1,5 +1,5 @@
 """
-Animates the Smart Search solution of a maze.
+Animates the Guided Search solution of a maze.
 
 If you set `refresh_rate` to zero, then it will remove all delays. As it is, the
 small 0.01 refresh rate shows the progress of the search.
@@ -13,7 +13,7 @@ from ch07.maze import Maze, to_networkx
 from ch07.viewer import Viewer
 from ch07.dependencies import tkinter_error
 
-class SmartSearchSolver():
+class GuidedSearchSolver():
     """
     Solves a maze by taking advantage of Euclidean distance to solution.
     """
@@ -36,7 +36,7 @@ class SmartSearchSolver():
 
     def animate(self):
         """Start animation by initiating DFS."""
-        self.smart_search(self.start)
+        self.guided_search(self.start)
 
         # draw BACK edges to solution
         pos = self.end
@@ -53,7 +53,7 @@ class SmartSearchSolver():
         """Return Manhattan distance between cells."""
         return abs(self.end[0] - to_cell[0]) + abs(self.end[1] - to_cell[1])
 
-    def smart_search(self, pos):
+    def guided_search(self, pos):
         """use Manhattan distance to maze end as priority in PQ to guide search."""
         from ch04.heap import PQ
         pq = PQ(self.size)
@@ -91,11 +91,11 @@ class SmartSearchSolver():
 #######################################################################
 if __name__ == '__main__':
     if tkinter_error:
-        print('tkinter is not installed so unable to launch Smart solver application')
+        print('tkinter is not installed so unable to launch Guided solver application')
     else:
         import tkinter
         random.seed(15)
         m = Maze(60,60)
         root = tkinter.Tk()
-        dfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+        dfs = GuidedSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
         root.mainloop()

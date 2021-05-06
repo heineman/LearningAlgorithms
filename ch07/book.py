@@ -15,7 +15,7 @@ from resources.highway import highway_map
 from ch07.dependencies import tkinter_error, plt_error
 from ch07.maze import Maze, to_networkx
 from ch07.snapshot import tkinter_register_snapshot
-from ch07.search import path_to, bfs_search, dfs_search_recursive, smart_search
+from ch07.search import path_to, bfs_search, dfs_search_recursive, guided_search
 from ch07.single_source_sp import dijkstra_sp, edges_path_to, bellman_ford
 from ch07.plot_map import plot_path, plot_node_from
 from ch07.tmg_load import tmg_load, compute_distance, plot_gps, plot_highways, bounding_ids
@@ -208,7 +208,7 @@ def generate_bfs_and_dijkstra_figure(src, target):
 
     (G, positions) = tmg_load(highway_map())
     (dist_to, edge_to) = dijkstra_sp(G, src)
-    print('Dijkstra shortest distance is {:.1f}'.format(dist_to[target]))
+    print('Dijkstra shortest distance is {} total steps with distance={:.1f}'.format(len(edges_path_to(edge_to, src, target))-1, dist_to[target]))
     path = edges_path_to(edge_to, src, target)
     plt.clf()
     plot_gps(positions)
@@ -218,7 +218,7 @@ def generate_bfs_and_dijkstra_figure(src, target):
     total = compute_distance(positions, node_from, src, target)
 
     plot_node_from(G, positions, src, target, node_from, color='purple')
-    print('{0} total steps for Breadth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
+    print('{0} total steps for Breadth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target))-1, total))
     plt.axis('off')
     output_file = image_file('figure-mass-highway-bfs.svg')
     plt.savefig(output_file, format="svg")
@@ -241,7 +241,7 @@ def generate_dfs_figure(src, target):
     total = compute_distance(positions, node_from, src, target)
 
     plot_node_from(G, positions, src, target, node_from, color='purple')
-    print('{0} total steps for Depth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
+    print('{0} total steps for Depth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target))-1, total))
     plt.axis('off')
     output_file = image_file('figure-mass-highway-dfs.svg')
     plt.savefig(output_file, format="svg")
@@ -249,8 +249,8 @@ def generate_dfs_figure(src, target):
     plt.clf()
     return output_file
 
-def generate_smart_search_figure(G, positions, src, target):
-    """Generate Smart Search solution .. ultimately omitted from book."""
+def generate_guided_search_figure(G, positions, src, target):
+    """Generate Guided Search solution .. ultimately omitted from book."""
     if plt_error:
         return None
     import matplotlib.pyplot as plt
@@ -261,16 +261,16 @@ def generate_smart_search_figure(G, positions, src, target):
     plot_highways(positions, G.edges())
 
     def distance_gps(from_cell, to_cell):
-        """These ids are indexed into positions to get gps coordinates."""
+        """These ids are indexed into positions to get GPS coordinates."""
         return abs(positions[from_cell][0] - positions[to_cell][0]) + abs(positions[from_cell][1] - positions[to_cell][1])
 
-    node_from = smart_search(G, src, target, distance=distance_gps)
+    node_from = guided_search(G, src, target, distance=distance_gps)
     total = compute_distance(positions, node_from, src, target)
 
     plot_node_from(G, positions, src, target, node_from, color='purple')
-    print('{0} total steps for Smart Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target)), total))
+    print('{0} total steps for Guided Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target))-1, total))
     plt.axis('off')
-    output_file = image_file('figure-mass-highway-smart.svg')
+    output_file = image_file('figure-mass-highway-guided.svg')
     plt.savefig(output_file, format="svg")
     print(output_file)
     plt.clf()
@@ -549,12 +549,12 @@ def generate_ch07():
             print()
 
     with FigureNum(8) as figure_number:
-        description = 'Comparing Depth First Search, Breadth First Search, and Smart Search'
+        description = 'Comparing Depth First Search, Breadth First Search, and Guided Search'
         label = caption(chapter, figure_number)
 
         from ch07.solver_bfs import BreadthFirstSearchSolver
         from ch07.solver_dfs import DepthFirstSearchSolver
-        from ch07.solver_smart import SmartSearchSolver
+        from ch07.solver_guided import GuidedSearchSolver
 
         random.seed(15)
         m = Maze(13,13)
@@ -573,10 +573,10 @@ def generate_ch07():
             root.mainloop()
 
             root = tkinter.Tk()
-            sfs = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
-            tkinter_register_snapshot(root, sfs.canvas, '{}-Smart.ps'.format(label))
+            sfs = GuidedSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+            tkinter_register_snapshot(root, sfs.canvas, '{}-Guided.ps'.format(label))
             root.mainloop()
-            print('Generated BFS, DFS and Smart Postscript files for {}'.format(label))
+            print('Generated BFS, DFS and Guided Postscript files for {}'.format(label))
 
         print('{}. {}'.format(label, description))
         print()

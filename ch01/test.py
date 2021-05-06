@@ -136,7 +136,7 @@ class TestChapter1(unittest.TestCase):
         self.assertEqual(2, linear_median(a))
         self.assertEqual(2, linear_median([2,3]))
         self.assertEqual(2, linear_median([2]))
-        
+
         a = [1]
         self.assertEqual(0, partition(a, 0, 0, 0))
 
@@ -212,16 +212,16 @@ class TestChapter1(unittest.TestCase):
 
     def test_just_compare_sort_tournament_two(self):
         from ch01.book import just_compare_sort_tournament_two
-        
+
         tbl = just_compare_sort_tournament_two(max_k=15, output=False)
         self.assertTrue(tbl.entry(8192, "sorting_two") < tbl.entry(16384, "sorting_two"))
 
     def test_run_largest_two_trials(self):
         from ch01.book import run_largest_two_trials, Order
-        
+
         tbl = run_largest_two_trials(Order.REVERSED, max_k=15, output=False)
         self.assertTrue(tbl.entry(8192, 'double_two') < tbl.entry(16384, 'double_two'))
-            
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

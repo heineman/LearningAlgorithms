@@ -89,7 +89,9 @@ class TestChapter6(unittest.TestCase):
             sum_list(first)
 
     def test_reverse(self):
+        from ch06.challenge import count
         alist = create_linked_list([4, 3, 2, 1])
+        self.assertEqual(1, count(alist, 2))
         (R, _) = reverse(alist)
         self.assertEqual(1, R.value)
         self.assertEqual(2, R.next.value)
@@ -100,6 +102,9 @@ class TestChapter6(unittest.TestCase):
 
         with self.assertRaises(AttributeError):
             reverse(None)
+
+        alist = create_linked_list([4, 4, 0, 4])
+        self.assertEqual(3, count(alist, 4))
 
     def test_bt(self):
         from ch06.tree import BinaryTree
@@ -221,7 +226,7 @@ class TestChapter6(unittest.TestCase):
         for v in bt1:
             total += v
         self.assertEqual(110, total)
-        
+
     def test_copy(self):
         from ch06.tree import BinaryTree
 
@@ -418,7 +423,7 @@ class TestChapter6(unittest.TestCase):
     def test_binary_tree_from_chapter_06(self):
         from ch06.pq import PQ
         from ch04.test import TestChapter4
-        
+
         from resources.english import english_words
         words = english_words()
         pair = TestChapter4().priority_queue_stress_test(PQ(), len(words))
@@ -569,7 +574,7 @@ class TestChapter6(unittest.TestCase):
         self.assertTrue(bt1.max_value() is None)
         self.assertTrue(bt1.min_value() is None)
         self.assertTrue(bt1.remove(99) is None)
-        
+
         vals = list(range(201))
         random.shuffle(vals)
         for v in vals:
@@ -696,7 +701,7 @@ class TestChapter6(unittest.TestCase):
         root = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
         self.assertEqual('19', root.value)
         self.assertEqual(8, root.size())
-        
+
         # create and flatten again.
         bt1 = BinaryTree()
         bt1.insert(10)
@@ -707,7 +712,7 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual('(10,,(15,(13,(11,,),),))', s)
         n = recreate_tree(s)
         self.assertEqual(s, tree_structure(n))
-        
+
         bt1 = BinaryTree()
         bt1.insert(12)
         bt1.insert(5)
@@ -715,13 +720,13 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual('(12,(5,,),)', s)
         n = recreate_tree(s)
         self.assertEqual(s, tree_structure(n))
-        
+
         root = recreate_tree('(26,(23,,),)')
         self.assertEqual('26', root.value)
         
         root = recreate_tree('(23,5,(30,29,))')
         self.assertEqual('23', root.value)
-        
+
     def test_speaking_tree(self):
         from ch06.speaking import BinaryTree
 
@@ -763,7 +768,7 @@ class TestChapter6(unittest.TestCase):
                         new_groups.append(group + [i])
 
             groups = new_groups
-    
+
     def test_produce_height_stats_balanced_integers(self):
         from ch06.challenge import produce_height_stats_balanced_integers
 
@@ -782,11 +787,11 @@ class TestChapter6(unittest.TestCase):
         tree.remove(to_delete)
         check_avl_property(tree.root)
         self.assertEqual(num_rotations + extra + 1, rotations[0])  # This exceeds #rotations
-        
+
     def test_fibonacci_avl(self):
         from ch06.challenge import fibonacci_avl_tree_up_to_2k
         from ch06.challenge import tree_structure
-       
+
         bt1 = fibonacci_avl_tree_up_to_2k(4)
         self.assertEqual('(3,(2,(1,,),),(5,(4,,),(6,,(7,,))))', tree_structure(bt1.root))
 
@@ -801,6 +806,33 @@ class TestChapter6(unittest.TestCase):
         with self.assertRaises(ValueError):
             extract('badness', 5)
 
+    def test_challenge_tree(self):
+        from ch06.challenge import RankBinaryTree
+        
+        rbt = RankBinaryTree()
+        rbt.insert(8)
+        rbt.insert(4)
+        rbt.insert(14)
+        rbt.insert(5)
+        rbt.insert(10)
+        
+        self.assertEqual(4, rbt.select(0))
+        self.assertEqual(5, rbt.select(1))
+        self.assertEqual(8, rbt.select(2))
+        self.assertEqual(10, rbt.select(3))
+        self.assertEqual(14, rbt.select(4))
+        
+        self.assertEqual(0, rbt.rank(0))    # smaller than all
+        self.assertEqual(0, rbt.rank(4))
+        self.assertEqual(1, rbt.rank(5))
+        self.assertEqual(2, rbt.rank(8))
+        self.assertEqual(3, rbt.rank(10))
+        self.assertEqual(4, rbt.rank(14))
+        self.assertEqual(5, rbt.rank(22))   # bigger than all
+        
+        
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()
+

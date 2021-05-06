@@ -305,7 +305,7 @@ class TestChapter3(unittest.TestCase):
                 ht.put(val, val+1)  # make sure we validate put as well
             for i in range(1,10):
                 self.assertEqual(i+1, ht.get(i))
-                
+
             self.assertEqual(list(range(1, 10*size)), sorted([i[0] for i in ht]))
 
     def test_resize_validate_chain_remove(self):
@@ -381,7 +381,7 @@ class TestChapter3(unittest.TestCase):
             self.assertTrue(ht.remove(99) is None)
             for i in range(1,25):
                 self.assertEqual(i+1, ht.remove(i))
-                
+
             self.assertEqual(list(range(26,51)), sorted([i[1] for i in ht]))
 
     def test_resize_open_addressing(self):
@@ -431,10 +431,10 @@ class TestChapter3(unittest.TestCase):
         # Harder to get dynamic resizing
         ht = Hashtable(10, 3)
         for i in range(12):
-            # at i=8, the move happens / old table has 3,4,5,6,7 and the 
+            # at i=8, the move happens / old table has 3,4,5,6,7 and the
             # new table has 0,1,2,8
             ht.put(i, i)
-            ht.put(3, 99)    # this validates that you can change value in OLD table 
+            ht.put(3, 99)    # this validates that you can change value in OLD table
 
         ht.put(3, 3)
         for i in range(12):
@@ -463,7 +463,7 @@ class TestChapter3(unittest.TestCase):
         for i in range(12):
             self.assertEqual(i+1, ht.get('key{}'.format(i)))
 
-        self.assertEqual(list(range(1,13)), sorted([e[1] for e in ht]))     
+        self.assertEqual(list(range(1,13)), sorted([e[1] for e in ht]))
 
     def test_challenge_small(self):
         from ch03.challenge import DynamicHashtableIncrementalResizing as Hashtable
@@ -569,7 +569,7 @@ class TestChapter3(unittest.TestCase):
 
     def test_triangle_number_hash(self):
         from ch03.challenge import HashtableTriangleNumbers
-        
+
         with self.assertRaises(ValueError):
             HashtableTriangleNumbers(-2)
         with self.assertRaises(ValueError):
@@ -580,15 +580,15 @@ class TestChapter3(unittest.TestCase):
         ht.put(77, 99)
         ht.put(77, 101)
         self.assertEqual(101, ht.get(77))
-        self.assertEqual([(77,101)], list([k for k in ht]))
-        
+        self.assertEqual([(77,101)], [k for k in ht])
+
         # place 14 more values until full (since must leave ONE empty).
         for k in range(14):
             ht.put(k, k)
         for k in range(14):
             self.assertEqual(k, ht.get(k))
         self.assertTrue(ht.get(1010) is None)
-        
+
         with self.assertRaises(RuntimeError):
             ht.put(999,99)
 
@@ -609,7 +609,7 @@ class TestChapter3(unittest.TestCase):
         ht.put(15, 15)
         self.assertEqual(15, ht.get(15))
         self.assertEqual(3, len(ht))
-        
+
         ht.put(10, 20)
         ht.put(5, 10)
         ht.put(15, 30)
@@ -622,12 +622,12 @@ class TestChapter3(unittest.TestCase):
         self.assertEqual(0, len(ht))
         self.assertTrue(ht.remove(25) is None)
 
-    def test_evaluate_DynamicHashtablePlusRemove(self):
+    def test_evaluate_dynamic_plus_remove(self):
         from ch03.challenge import evaluate_DynamicHashtablePlusRemove
-        
+
         tbl = evaluate_DynamicHashtablePlusRemove(output=False)
         self.assertTrue(tbl.entry(512, 'Separate Chaining') <= tbl.entry(2048, 'Separate Chaining'))
-        
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

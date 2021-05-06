@@ -20,9 +20,9 @@ def path_to_recursive(node_from, src, target):
             yield n
         yield target
 
-def defeat_smart_search():
-    """Construct a rectangular maze graph that thwarts smart search."""
-    from ch07.solver_smart import SmartSearchSolver
+def defeat_guided_search():
+    """Construct a rectangular maze graph that thwarts guided search."""
+    from ch07.solver_guided import GuidedSearchSolver
     m = Maze(13,13)
     m.initialize()    # back to scratch WITH ALL WALLS
 
@@ -41,15 +41,15 @@ def defeat_smart_search():
             m.east_wall[(r,c)] = False
 
     if tkinter_error:
-        print('tkinter is not installed so unable to visualize smart search being defeated.')
+        print('tkinter is not installed so unable to visualize Guided search being defeated.')
     else:
         import tkinter
         from ch07.snapshot import tkinter_register_snapshot
         root = tkinter.Tk()
-        sss = SmartSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
-        tkinter_register_snapshot(root, sss.canvas, 'Ch07-Defeat-Smart-Search.ps')
+        sss = GuidedSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
+        tkinter_register_snapshot(root, sss.canvas, 'Ch07-Defeat-Guided-Search.ps')
         root.mainloop()
 
 #######################################################################
 if __name__ == '__main__':
-    defeat_smart_search()
+    defeat_guided_search()
