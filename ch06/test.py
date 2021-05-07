@@ -830,6 +830,17 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual(4, rbt.rank(14))
         self.assertEqual(5, rbt.rank(22))   # bigger than all
         
+        self.assertFalse(0 in rbt)
+        self.assertTrue(4 in rbt)
+        self.assertTrue(5 in rbt)
+        self.assertTrue(8 in rbt)
+        self.assertTrue(10 in rbt)
+        self.assertTrue(14 in rbt)
+        self.assertFalse(22 in rbt)
+
+                
+
+        
         
 
 #######################################################################
