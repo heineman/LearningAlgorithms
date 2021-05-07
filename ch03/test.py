@@ -603,6 +603,7 @@ class TestChapter3(unittest.TestCase):
         ht.put(10, 10)
         self.assertEqual(1, len(ht))
         self.assertTrue(ht.get(5) is None)
+        self.assertTrue(ht.get(20) is None)
         ht.put(5, 5)
         self.assertEqual(2, len(ht))
         self.assertEqual(5, ht.get(5))
@@ -621,6 +622,18 @@ class TestChapter3(unittest.TestCase):
         ht.remove(10)
         self.assertEqual(0, len(ht))
         self.assertTrue(ht.remove(25) is None)
+
+        ht.put(30, 60)
+        ht.put(40, 70)
+        ht.put(10, 50)
+        ht.put(20, 80)
+        self.assertEqual(4, len(ht))
+        ht.remove(40)
+        ht.remove(30)
+        ht.remove(20)
+        ht.remove(10)
+        self.assertEqual(0, len(ht))
+
 
     def test_evaluate_dynamic_plus_remove(self):
         from ch03.challenge import evaluate_DynamicHashtablePlusRemove

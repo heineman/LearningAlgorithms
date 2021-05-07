@@ -577,8 +577,7 @@ class HashtableSortedLinkedLists:
                 entry.value = v
                 return
             
-            prev = entry
-            entry = entry.next
+            prev,entry = entry, entry.next
 
         # If we get here, key is largest among all, so append to end
         prev.next = LinkedEntry(k, v)

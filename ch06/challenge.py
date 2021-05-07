@@ -203,7 +203,7 @@ class ObservableBinaryTree:
         self.root = self._insert(self.root, val)
 
     def _insert(self, node, val):
-        """Inserts a new BinaryNode to the tree containing this value."""
+        """Inserts a new ObservableBinaryNode to the tree containing this value."""
         if node is None:
             return ObservableBinaryNode(val)
 
@@ -338,14 +338,14 @@ def recreate_tree(expr, convert=lambda x: x):
     Convert function takes string and reproduces actual value. Use to convert str into numeric
     values.
     """
-    from ch06.tree import BinaryNode
+    
     # Base case
     if expr[0] == '(' and expr[-1] == ')' and not '(' in expr[1:-1]:
         # (Root, Left-Value, Right-Value)
         elements = expr[1:-1].split(',')
-        node = BinaryNode(convert(elements[0]))
-        node.left = BinaryNode(convert(elements[1])) if elements[1] else None
-        node.right = BinaryNode(convert(elements[2])) if elements[2] else None
+        node = ObservableBinaryNode(convert(elements[0]))
+        node.left = ObservableBinaryNode(convert(elements[1])) if elements[1] else None
+        node.right = ObservableBinaryNode(convert(elements[2])) if elements[2] else None
         return node
 
     # More complicated structures... Could either be (Val,(....),(....)) or
@@ -362,11 +362,11 @@ def recreate_tree(expr, convert=lambda x: x):
             right = recreate_tree(subgroup, convert)
         else:
             entry = expr[comma2+1:-1]
-            right = BinaryNode(convert(entry)) if entry else None
+            right = ObservableBinaryNode(convert(entry)) if entry else None
     else:
         # Left side is a value
         comma2 = expr.index(',', comma1+1)
-        left = BinaryNode(expr[comma1+1:comma2]) if comma1+1 < comma2 else None
+        left = ObservableBinaryNode(expr[comma1+1:comma2]) if comma1+1 < comma2 else None
 
         if expr[comma2+1] == '(':
             # Right side need to be extracted as a group
@@ -374,11 +374,12 @@ def recreate_tree(expr, convert=lambda x: x):
             right = recreate_tree(subgroup, convert)
         else:
             # I have yet to find a case that requires this statement. Might not be necessary?
-            right = BinaryNode(convert(expr[comma2+1:-1]))
+            right = ObservableBinaryNode(convert(expr[comma2+1:-1]))
 
-    node = BinaryNode(convert(root_value))
+    node = ObservableBinaryNode(convert(root_value))
     node.left = left
     node.right = right
+    node.compute_height()
     return node
 
 def find_multiple_rotations(extra, lo=4, hi=15, num_attempts=10000, output=True):
@@ -462,15 +463,14 @@ def fibonacci_avl(N, lo=1):
     should force most rotations. Note that this node must be hacked into a BinaryTree.
     """
     from ch05.challenge import fib
-    from ch06.balanced import BinaryNode
     if N < 2:
         return None
 
     if N == 2:
-        return BinaryNode(lo)
+        return ObservableBinaryNode(lo)
 
     val = fib(N)
-    n = BinaryNode(lo+val-1)
+    n = ObservableBinaryNode(lo+val-1)
     n.left = fibonacci_avl(N-1, lo)
     n.right = fibonacci_avl(N-2, lo+fib(N))
     n.compute_height()
@@ -478,7 +478,7 @@ def fibonacci_avl(N, lo=1):
 
 def fibonacci_avl_tree(N):
     """Return AVL tree for Fibonacci AVL Binary Tree."""
-    tree = BinaryTree()
+    tree = ObservableBinaryTree()
     tree.root = fibonacci_avl(N)
     return tree
 
@@ -490,7 +490,8 @@ def fibonacci_avl_tree_up_to_2k(N):
     you would have in a completed tree, with |Left| + |Right-Grandchild| = |left-child-of-Right|
     """
     from ch05.challenge import fib
-    tree = BinaryTree()
+    
+    tree = ObservableBinaryTree()
     tree.root = fibonacci_avl(N)
 
     for i in range(fib(N+1), 2**(tree.root.height+1)):     # up to a complete tree...

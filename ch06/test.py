@@ -569,8 +569,8 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual('(5,(4,(2,(1,,),(3,,)),),(6,,(7,,)))', tree_structure(bt1.root))
 
     def test_all_rotations_challenge(self):
-        from ch06.challenge import BinaryTree
-        bt1 = BinaryTree()
+        from ch06.challenge import ObservableBinaryTree
+        bt1 = ObservableBinaryTree()
         self.assertTrue(bt1.max_value() is None)
         self.assertTrue(bt1.min_value() is None)
         self.assertTrue(bt1.remove(99) is None)
@@ -776,12 +776,12 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual(7, tbl.entry(128, 'height'))
 
     def test_max_rotations(self):
-        from ch06.challenge import find_multiple_rotations, recreate_tree, rotations, BinaryTree
+        from ch06.challenge import find_multiple_rotations, recreate_tree, rotations, ObservableBinaryTree
         extra = 1
         (tree_rep, to_delete) = find_multiple_rotations(extra=extra,
                                         lo=9, hi=30, num_attempts=10000, output=False)
         bt3 = recreate_tree(tree_rep, convert=int)
-        tree = BinaryTree()
+        tree = ObservableBinaryTree()
         tree.root = bt3
         num_rotations = rotations[0]
         tree.remove(to_delete)
