@@ -449,6 +449,16 @@ class TestChapter7(unittest.TestCase):
         self.assertTrue(positions[NORTH][0] > positions[SOUTH][0])   # LAT Is higher for north
         self.assertTrue(positions[EAST][1] > positions[WEST][1])     # LONG is higher for east
 
+    def test_recursive_dfs(self):
+        from ch07.challenge import dfs_search_recursive, path_to_recursive
+        G = nx.Graph()
+        for i in range(100):
+            G.add_edge(i,i+1)
+
+        node_from = dfs_search_recursive(G, 0)
+        self.assertEqual(98, node_from[99])
+        path = path_to_recursive(node_from, 0, 99)
+        self.assertEqual(list(range(100)), list(path))
 
 #######################################################################
 if __name__ == '__main__':

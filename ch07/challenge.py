@@ -1,9 +1,25 @@
 """
 Challenge Exercises for Chapter 7.
 """
-from ch07.maze import Maze
+from algs.table import DataTable, ExerciseNum, caption
 
+from ch07.maze import Maze
 from ch07.dependencies import tkinter_error
+
+def dfs_search_recursive(G, src):
+    marked = {}
+    node_from = {}
+ 
+    def dfs(v):
+        """Recursive DFS."""
+        marked[v] = True
+        for w in G[v]:
+            if not w in marked:
+                node_from[w] = v
+                dfs(w)
+
+    dfs(src)
+    return node_from
 
 def path_to_recursive(node_from, src, target):
     """
@@ -52,4 +68,11 @@ def defeat_guided_search():
 
 #######################################################################
 if __name__ == '__main__':
-    defeat_guided_search()
+    chapter = 7
+
+    with ExerciseNum(1) as exercise_number:
+        print('dfs_search_recursive in ch07.challenge')
+        print(caption(chapter, exercise_number), 'Recursive depth first search')
+        print()
+    
+    #defeat_guided_search()
