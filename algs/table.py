@@ -216,21 +216,6 @@ def comma(n):
     """Return string for integer n with commas at thousands, i.e., '2,345,217'."""
     return '{:,}'.format(n)
 
-class Chapter:
-    """Represents a chapter."""
-    def __init__(self, num):
-        self.number = num
-
-    @contextmanager
-    def __enter__(self):
-        return self.number
-
-    def __exit__(self, arg1, arg2, arg3):
-        self.number = -1
-
-    def __str__(self):
-        return '{}'.format(self.number)
-
 class FigureNum:
     """Represents a figure number in a chapter."""
     def __init__(self, num):

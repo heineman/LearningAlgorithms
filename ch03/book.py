@@ -529,9 +529,9 @@ def generate_ch03():
         print('{}. {}'.format(label, description))
         print()
 
-    print('The following table takes hours to generate.')
+    print('The following table takes hours to generate. Remove arguments for full table shown in book.')
     with TableNum(4) as table_number:
-        process(compare_dynamic_build_and_access_time(),
+        process(compare_dynamic_build_and_access_time(repeat=1, num=5),
                 chapter, table_number,
                 'Comparing growing tables against fixed-size construction',
                 yaxis = 'Time (in ms)')
