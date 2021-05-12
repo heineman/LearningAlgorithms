@@ -110,8 +110,9 @@ def generate_ch04():
         print('{}. {}'.format(label, description))
         print()
 
+    # For full book output, remove "max_n=16384". Added to reduce time to generate all.
     with TableNum(1) as table_number:
-        process(average_performance(),
+        process(average_performance(max_n=16384),
                 chapter, table_number,
                 'Average operation performance (time in ns) on problem instances of size N',
                 yaxis='Time (in nanoseconds)')
