@@ -826,7 +826,7 @@ def count_hash_incremental_move(output=True, decimals=4):
 #######################################################################
 if __name__ == '__main__':
     chapter = 3
-    
+
     with ExerciseNum(1) as exercise_number:
         exercise_triangle_number_probing()
         print(caption(chapter, exercise_number),
@@ -837,8 +837,9 @@ if __name__ == '__main__':
         print(caption(chapter, exercise_number),
               'Hashtable with sorted linked list chains')
     
+    # To provide a full exercise, remove the "[:5000]" from below
     with ExerciseNum(3) as exercise_number:
-        bad_timing(english_words())
+        bad_timing(english_words()[:5000])
         print(caption(chapter, exercise_number),
               'ValueBadHash exercise')
     
