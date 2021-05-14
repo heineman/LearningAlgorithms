@@ -35,11 +35,19 @@ from ch06.book import generate_ch06
 from ch07.book import generate_ch07
 
 #######################################################################
+from datetime import datetime
 
+print("ch01:", datetime.now())
 generate_ch01()
+print("ch02:", datetime.now())
 generate_ch02()
+print("ch03:", datetime.now())
 generate_ch03()
+print("ch04:", datetime.now())
 generate_ch04()
+print("ch05:", datetime.now())
 generate_ch05()
+print("ch06:", datetime.now())
 generate_ch06()
+print("ch07:", datetime.now())
 generate_ch07()

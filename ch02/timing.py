@@ -1,4 +1,5 @@
-"""
+"""Timing results for chapter 2.
+
 Generate timing results for inefficient sorting algorithms.
 
     :Sample Output:

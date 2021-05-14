@@ -520,13 +520,13 @@ class TestChapter3(unittest.TestCase):
         self.assertEqual(321129, tbl.entry('zyzzyvas', 'N'))
 
     def test_run_access_trials(self):
-        from ch03.growth_test import run_access_trials
+        from ch03.timing import run_access_trials
 
         tbl = run_access_trials(max_trials=100, output=False)
         self.assertEqual('Dict', tbl.labels[0])
 
     def test_time_results_open(self):
-        from ch03.growth_test import time_results_open
+        from ch03.timing import time_results_open
 
         words = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
         tbl = time_results_open(words, output=False)

@@ -1,5 +1,23 @@
 """
 Timing Results for chapter 5.
+
+Compare Merge Sort against built in Python sort. This takes unusually long.
+       N     MergeSort    Built-In Sort    
+     256         0.371         0.002    
+     512         0.825         0.003    
+   1,024         1.839         0.007    
+   2,048         3.958         0.015    
+   4,096         8.455         0.032    
+   8,192        17.843         0.070    
+  16,384        37.647         0.153    
+
+Compare Selection Sort against two flavors of Insertion Sort. This takes unusually long.
+       N      Select      Insert    InsertBAS    
+     256        1.28        0.20        0.23    
+     512        5.86        0.77        0.56    
+   1,024       23.66        3.10        1.33    
+   2,048       94.52       12.33        3.08    
+
 """
 import timeit
 from algs.table import DataTable

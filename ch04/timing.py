@@ -6,6 +6,18 @@ Results from runTrials divided by T*N because the number of statements executed
 is directly proportional to that, and we are trying to find the average
 operational cost (of both enqueue and dequeue).
 
+Compare performance of resizable hashtables.
+       N        Heap       DHeap    
+     256        2.87        3.00    
+     512        3.23        3.34    
+   1,024        3.46        3.64    
+   2,048        3.87        4.02    
+   4,096        4.33        4.52    
+   8,192        4.69        4.86    
+  16,384        5.10        5.44    
+  32,768        6.55        6.88    
+
+
 """
 import timeit
 from algs.table import DataTable
@@ -95,4 +107,5 @@ def dynamic_comparison(max_n=32768, output=True, decimals=2):
 
 #######################################################################
 if __name__ == '__main__':
+    print('Compare performance of resizable Heaps.')
     dynamic_comparison()
