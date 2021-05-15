@@ -461,11 +461,18 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(list(range(100)), list(path))
 
     def test_xslx_loading(self):
-        """Load up sample XLSX Microsoft Excel file as a Spreadsheet."""
+        """
+        Load up sample XLSX Microsoft Excel file as a Spreadsheet. Check for resource
+        file either in parent/resources our current resources/
+        """
         import os
         from ch07.xlsx_loader import load_xlsx
-        entries = load_xlsx(os.path.join('..', 'resources', 'ch07-fibonacci-example.xlsx'))
-        self.assertEqual('=(B5 + B6)', entries.get('B7'))
+        try:
+            entries = load_xlsx(os.path.join('..', 'resources', 'ch07-fibonacci-example.xlsx'))
+            self.assertEqual('=(B5 + B6)', entries.get('B7'))
+        except RuntimeError:
+            entries = load_xlsx(os.path.join('resources', 'ch07-fibonacci-example.xlsx'))
+            self.assertEqual('=(B5 + B6)', entries.get('B7'))
 
 #######################################################################
 if __name__ == '__main__':
