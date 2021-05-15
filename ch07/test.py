@@ -460,6 +460,13 @@ class TestChapter7(unittest.TestCase):
         path = path_to_recursive(node_from, 0, 99)
         self.assertEqual(list(range(100)), list(path))
 
+    def test_xslx_loading(self):
+        """Load up sample XLSX Microsoft Excel file as a Spreadsheet."""
+        import os
+        from ch07.xlsx_loader import load_xlsx
+        entries = load_xlsx(os.path.join('..', 'resources', 'ch07-fibonacci-example.xlsx'))
+        self.assertEqual('=(B5 + B6)', entries.get('B7'))
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

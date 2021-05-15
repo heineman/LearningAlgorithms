@@ -9,7 +9,7 @@ from ch07.dependencies import tkinter_error
 def dfs_search_recursive(G, src):
     marked = {}
     node_from = {}
- 
+
     def dfs(v):
         """Recursive DFS."""
         marked[v] = True
@@ -74,5 +74,15 @@ if __name__ == '__main__':
         print('dfs_search_recursive in ch07.challenge')
         print(caption(chapter, exercise_number), 'Recursive depth first search')
         print()
+
+    with ExerciseNum(2) as exercise_number:
+        print('path_to_recursive implementation')
+        print(caption(chapter, exercise_number), 'Recursive Path_to')
+        print()
+        
+    with ExerciseNum(3) as exercise_number:
+        print('recover_cycle in ch07.digraph_search')
+        print()
+        print(caption(chapter, exercise_number), 'Recover cycle')
     
     #defeat_guided_search()

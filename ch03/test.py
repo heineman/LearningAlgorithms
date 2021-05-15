@@ -634,7 +634,6 @@ class TestChapter3(unittest.TestCase):
         ht.remove(10)
         self.assertEqual(0, len(ht))
 
-
     def test_evaluate_dynamic_plus_remove(self):
         from ch03.challenge import evaluate_DynamicHashtablePlusRemove
 

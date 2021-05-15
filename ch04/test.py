@@ -2,6 +2,48 @@
 
 import unittest
 
+class Item:
+    """Represents an item that is comparable by priority."""
+    def __init__(self, v, p):
+        """An entry in priority queue."""
+        self.val = v
+        self.priority = p
+
+    def __lt__(self, other):
+        """Needed for Item to be in a heap."""
+        return self.priority < other.priority
+
+    def __str__(self):
+        """return string representation."""
+        return '[value={}, priority={}]'.format(self.val, self.priority)
+
+class TimeSpecifiedItem:
+    """
+    Build in timestamp when an item is enqueued to be able to break
+    ties by oldest timestamp.
+    """
+    ctr = [0]
+
+    def __init__(self, v, p):
+        """
+        An entry in priority queue with counter since timestamp is
+        not precise enough, even with nanosec.
+        """
+        self.val = v
+        self.priority = p
+        self.timestamp = TimeSpecifiedItem.ctr[0]
+        TimeSpecifiedItem.ctr[0] += 1
+
+    def __lt__(self, other):
+        """Needed for Item to be in a heap."""
+        if self.priority == other.priority:
+            return self.timestamp < other.timestamp
+        return self.priority < other.priority
+
+    def __str__(self):
+        """return string representation."""
+        return '[value={}, priority={}]'.format(self.val, self.priority)
+
 class TestChapter4(unittest.TestCase):
 
     def validate(self, queue):
@@ -299,6 +341,41 @@ class TestChapter4(unittest.TestCase):
 
         tbl = trial_factorial_heap(max_n=2048, output=False)
         self.assertTrue(tbl.entry(1024, 'Heap') <= tbl.entry(1024, 'FactHeap'))
+
+    def test_native(self):
+        """
+        Heapq is min heap provided by Python libraries.
+
+        In some Heap implementations, two elements with the same priority are
+        removed from the PQ in the order in which they had been inserted,
+        but this is not the case for Python Heapq. You actually have to do
+        the work yourself, which is commonly done by adding an incrementing
+        counter to the item so it can be used for comparison.
+        """
+        import heapq
+        X = []
+        heapq.heappush(X, Item('A', 5))
+        heapq.heappush(X, Item('B', 5))
+        heapq.heappush(X, Item('C', 5))
+        heapq.heappush(X, Item('D', 5))
+        heapq.heappush(X, Item('E', 5))
+        heapq.heappush(X, Item('F', 5))
+        itemOrdered = []
+        while X:
+            itemOrdered.append(heapq.heappop(X).val)
+        self.assertEqual(['A', 'C', 'F', 'E', 'B', 'D'], itemOrdered)
+
+        X = []
+        heapq.heappush(X, TimeSpecifiedItem('A', 5))
+        heapq.heappush(X, TimeSpecifiedItem('B', 5))
+        heapq.heappush(X, TimeSpecifiedItem('C', 5))
+        heapq.heappush(X, TimeSpecifiedItem('D', 5))
+        heapq.heappush(X, TimeSpecifiedItem('E', 5))
+        heapq.heappush(X, TimeSpecifiedItem('F', 5))
+        ordered = []
+        while X:
+            ordered.append(heapq.heappop(X).val)
+        self.assertEqual(['A', 'B', 'C', 'D', 'E', 'F'], ordered)
 
 #######################################################################
 if __name__ == '__main__':
