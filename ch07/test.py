@@ -470,7 +470,7 @@ class TestChapter7(unittest.TestCase):
         try:
             entries = load_xlsx(os.path.join('..', 'resources', 'ch07-fibonacci-example.xlsx'))
             self.assertEqual('=(B5 + B6)', entries.get('B7'))
-        except RuntimeError:
+        except FileNotFoundError:
             entries = load_xlsx(os.path.join('resources', 'ch07-fibonacci-example.xlsx'))
             self.assertEqual('=(B5 + B6)', entries.get('B7'))
 
