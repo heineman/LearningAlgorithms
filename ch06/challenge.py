@@ -632,7 +632,15 @@ def demonstrate_tree_structure():
     print(tree_structure(recreate_tree(result)))     # must be same as result
     bt10 = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
     print('another one', tree_structure(bt10))
-    
+
+def speaking_tree_demonstration():
+    """Small example of inserting three values into Speaking Tree."""
+    from ch06.speaking import SpeakingBinaryTree
+    bt = SpeakingBinaryTree()
+    print(bt.insert(5))
+    print(bt.insert(3))
+    print(bt.insert(1))
+
 def compute_perfect_tree(total):
     """
     Determine # of ways complete tree would be constructed from 2^k - 1 values.
@@ -690,11 +698,7 @@ if __name__ == '__main__':
         print()
 
     with ExerciseNum(7) as exercise_number:
-        from ch06.speaking import SpeakingBinaryTree
-        bt = SpeakingBinaryTree()
-        print(bt.insert(5))
-        print(bt.insert(3))
-        print(bt.insert(1))
+        speaking_tree_demonstration()
         print(caption(chapter, exercise_number), 'Speaking binary tree after inserting three values')
         print()
 

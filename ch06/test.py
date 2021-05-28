@@ -738,7 +738,7 @@ class TestChapter6(unittest.TestCase):
     def test_stress_recreate(self):
         from ch06.tree import BinaryTree
         from ch06.challenge import tree_structure, recreate_tree
-       
+
         # create all subsets of 1..7
         groups = [[1], [2], [3], [4], [5], [6], [7]]
         for _ in range(6):
