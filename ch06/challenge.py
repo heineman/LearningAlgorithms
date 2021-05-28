@@ -338,7 +338,7 @@ def recreate_tree(expr, convert=lambda x: x):
     Convert function takes string and reproduces actual value. Use to convert str into numeric
     values.
     """
-    
+
     # Base case
     if expr[0] == '(' and expr[-1] == ')' and not '(' in expr[1:-1]:
         # (Root, Left-Value, Right-Value)
@@ -429,8 +429,8 @@ def find_multiple_rotations(extra, lo=4, hi=15, num_attempts=10000, output=True)
 
 def speaking_tree():
     """Generate strings representing insert behavior in Binary Tree."""
-    from ch06.speaking import BinaryTree
-    bt = BinaryTree()
+    from ch06.speaking import SpeakingBinaryTree
+    bt = SpeakingBinaryTree()
 
     # Table 6-2
     print(bt.insert(19))
@@ -446,7 +446,7 @@ def speaking_tree():
     print(bt.insert(29))
 
     # Figure 6-5
-    bt = BinaryTree()
+    bt = SpeakingBinaryTree()
     bt.insert(5)
     bt.insert(4)
     bt.insert(6)
@@ -490,7 +490,7 @@ def fibonacci_avl_tree_up_to_2k(N):
     you would have in a completed tree, with |Left| + |Right-Grandchild| = |left-child-of-Right|
     """
     from ch05.challenge import fib
-    
+
     tree = ObservableBinaryTree()
     tree.root = fibonacci_avl(N)
 
@@ -541,7 +541,7 @@ class RankBinaryTree:
     """
     def __init__(self):
         self.root = None
-    
+
     def insert(self, key):
         """Insert value into Binary Tree."""
         self.root = self._insert(self.root, key)
@@ -558,10 +558,10 @@ class RankBinaryTree:
 
         node.N = 1
         ht = -1
-        if node.left:  
+        if node.left:
             node.N += node.left.N
             ht = max(ht, node.left.height)
-        if node.right: 
+        if node.right:
             node.N += node.right.N
             ht = max(ht, node.right.height)
         node.height = ht + 1
@@ -621,18 +621,30 @@ def manually_build(vals, height):
             count += 1
     return count
 
+def demonstrate_tree_structure():
+    """compute tree_structure for a sample tree."""
+    from ch06.tree import BinaryTree
+    bt9 = BinaryTree()
+    for i in [19, 14, 53, 3, 15, 26, 58]:
+        bt9.insert(i)
+    result = tree_structure(bt9.root)
+    print(result)
+    print(tree_structure(recreate_tree(result)))     # must be same as result
+    bt10 = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
+    print('another one', tree_structure(bt10))
+    
 def compute_perfect_tree(total):
     """
     Determine # of ways complete tree would be constructed from 2^k - 1 values.
     This is a really subtle problem to solve. One hopes for a recursive solution,
-    because it is binary trees, and the surprisingly simple equation results 
+    because it is binary trees, and the surprisingly simple equation results
     from the fact that it is a complete tree. It comes down to the number of
     ways you can independently interleave the sequential values from two subsequences.
     The total of the subsequences is (total - 1), because you leave out the subtree root.
-    Each of the (total // 2) half sequences are then interleaved. To properly count 
+    Each of the (total // 2) half sequences are then interleaved. To properly count
     the number of possibilities, you need to multiply by the ways you can create
     subtrees of half the side (one for the left and one for the right).
-    
+
     https://stackoverflow.com/questions/17119116/how-many-ways-can-you-insert-a-series-of-values-into-a-bst-to-form-a-specific-tr
     """
     import math
@@ -678,8 +690,8 @@ if __name__ == '__main__':
         print()
 
     with ExerciseNum(7) as exercise_number:
-        from ch06.speaking import BinaryTree
-        bt = BinaryTree()
+        from ch06.speaking import SpeakingBinaryTree
+        bt = SpeakingBinaryTree()
         print(bt.insert(5))
         print(bt.insert(3))
         print(bt.insert(1))
@@ -692,12 +704,7 @@ if __name__ == '__main__':
         print()
 
     with ExerciseNum(9) as exercise_number:
-        from ch06.tree import BinaryTree
-        bt = BinaryTree()
-        for i in [19, 14, 53, 3, 15, 26, 58]:
-            bt.insert(i)
-        print(tree_structure(bt.root))
-        bt2 = recreate_tree('(19,(14,(3,,),(15,,)),(53,(26,,(29,,)),(58,,)))')
+        demonstrate_tree_structure()
         print(caption(chapter, exercise_number), 'tree_structure')
         print()
 
@@ -708,7 +715,6 @@ if __name__ == '__main__':
         print()
 
     with ExerciseNum(11) as exercise_number:
-        node = fibonacci_avl(6)
-        print(tree_structure(node))
+        print(tree_structure(fibonacci_avl(6)))
         print(caption(chapter, exercise_number), 'Fibonacci trees')
         print()

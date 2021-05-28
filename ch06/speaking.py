@@ -17,7 +17,7 @@ class BinaryNode:
         self.left  = None
         self.right = None
 
-class BinaryTree:
+class SpeakingBinaryTree:
     """
     A Binary tree contains the root node, and methods to manipulate the tree.
     """

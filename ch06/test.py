@@ -723,14 +723,14 @@ class TestChapter6(unittest.TestCase):
 
         root = recreate_tree('(26,(23,,),)')
         self.assertEqual('26', root.value)
-        
+
         root = recreate_tree('(23,5,(30,29,))')
         self.assertEqual('23', root.value)
 
     def test_speaking_tree(self):
-        from ch06.speaking import BinaryTree
+        from ch06.speaking import SpeakingBinaryTree
 
-        bt = BinaryTree()
+        bt = SpeakingBinaryTree()
         self.assertEqual('To insert `5`, create a new subtree with root of `5`.', bt.insert(5))
         self.assertEqual('To insert `3`, `3` is smaller than or equal to `5`, so insert `3` into the left subtree of `5`, but there is no left subtree, so create a new subtree with root of `3`.', bt.insert(3))
         self.assertEqual('To insert `1`, `1` is smaller than or equal to `5`, so insert `1` into the left subtree of `5` rooted at `3`. Now `1` is smaller than or equal to `3`, so insert `1` into the left subtree of `3`, but there is no left subtree, so create a new subtree with root of `1`.', bt.insert(1))
@@ -808,20 +808,20 @@ class TestChapter6(unittest.TestCase):
 
     def test_challenge_tree(self):
         from ch06.challenge import RankBinaryTree
-        
+
         rbt = RankBinaryTree()
         rbt.insert(8)
         rbt.insert(4)
         rbt.insert(14)
         rbt.insert(5)
         rbt.insert(10)
-        
+
         self.assertEqual(4, rbt.select(0))
         self.assertEqual(5, rbt.select(1))
         self.assertEqual(8, rbt.select(2))
         self.assertEqual(10, rbt.select(3))
         self.assertEqual(14, rbt.select(4))
-        
+
         self.assertEqual(0, rbt.rank(0))    # smaller than all
         self.assertEqual(0, rbt.rank(4))
         self.assertEqual(1, rbt.rank(5))
@@ -829,7 +829,7 @@ class TestChapter6(unittest.TestCase):
         self.assertEqual(3, rbt.rank(10))
         self.assertEqual(4, rbt.rank(14))
         self.assertEqual(5, rbt.rank(22))   # bigger than all
-        
+
         self.assertFalse(0 in rbt)
         self.assertTrue(4 in rbt)
         self.assertTrue(5 in rbt)

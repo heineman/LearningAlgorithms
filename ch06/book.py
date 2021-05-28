@@ -225,6 +225,28 @@ import random''', repeat=repeat, number=num))/num
 
     return tbl
 
+def sample_binary_tree_as_symbol():
+    """Create BST as symbol structure."""
+    from ch06.symbol import BinaryTree
+
+    def structure(n):
+        """Return structure of binary tree using parentheses to show nodes with left/right subtrees."""
+        if n is None:
+            return ''
+
+        return '({} => {},{},{})'.format(n.key, n.value, structure(n.left), structure(n.right))
+
+    # priorities from the Chapter 4 max binary heap example, in some random order.
+    entries = [(53, 'Iodine'), (20, 'Calcium'), (76, 'Osmium'), (5, 'Boron'),
+               (58, 'Cerium'), (79, 'Gold')]
+
+    symbol = BinaryTree()
+    for num,element in entries:
+        symbol.put(num, element)
+
+    # (9,(5,(2,(1,,),(4,,)),(8,(7,(6,,),(8,,)),(9,,))),(12,(10,,(11,,)),(14,(13,,),(14,,(15,,)))))
+    return structure(symbol.root)
+
 def sample_binary_tree_as_pq():
     """Create BST as priority queue structure."""
     from ch06.pq import PQ
@@ -245,10 +267,64 @@ def sample_binary_tree_as_pq():
     # (9,(5,(2,(1,,),(4,,)),(8,(7,(6,,),(8,,)),(9,,))),(12,(10,,(11,,)),(14,(13,,),(14,,(15,,)))))
     return structure(pq.tree.root)
 
+def show_unbalanced_result():
+    """Show tree resulting from two insertions that unbalances it."""
+    from ch06.tree import BinaryTree
+
+    def height(n):
+        """Compute height for node."""
+        if n is None:
+            return -1
+        return 1 + max(height(n.left), height(n.right))
+
+    def survey(n, result):
+        """Produce map of heights for all nodes."""
+        if n is None:
+            return
+
+        ht = height(n)
+        if ht in result:
+            result[ht].append(n.value)
+        else:
+            result[ht] = [n.value]
+
+        survey(n.left, result)
+        survey(n.right, result)
+
+    def report(result):
+        """Format results properly."""
+        for ht in sorted(result.keys()):
+            print(ht, result[ht])
+        print()
+
+    bt = BinaryTree()
+    for i in [19, 14, 53, 3, 15, 26, 58]:
+        bt.insert(i)
+
+    result = {}
+    survey(bt.root, result)
+    report(result)
+
+    result = {}
+    bt.insert(29)
+    survey(bt.root, result)
+    report(result)
+
+    result = {}
+    bt.insert(27)
+    survey(bt.root, result)
+    report(result)
+
+def fibonacci_tree_sample():
+    """Produce the 12-node Fibonacci tree in challenge exercise."""
+    from ch06.challenge import fibonacci_avl, tree_structure
+
+    node = fibonacci_avl(6)
+    print(tree_structure(node))
+
 def generate_ch06():
     """Generate Tables and Figures for chapter 06."""
     chapter = 6
-    sample_binary_tree_as_pq()
 
     with FigureNum(1) as figure_number:
         description  = 'Representing mathematical expressions using expression trees'
@@ -324,6 +400,58 @@ def generate_ch06():
     with FigureNum(9) as figure_number:
         description  = 'A complete binary tree stores the most values with the least height'
         label = caption(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(10) as figure_number:
+        description = 'Unbalanced tree after two insertions.'
+        label = caption(chapter, figure_number)
+        show_unbalanced_result()
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(11) as figure_number:
+        description = 'Recursive invocation when inserting a value.'
+        label = caption(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(12) as figure_number:
+        description = 'Rebalancing this binary search tree by rotating the root node to the right'
+        label = caption(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(13) as figure_number:
+        description = 'Four different node rotations'
+        label = caption(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with TableNum(4) as table_number:
+        description = 'Implementation of rotate left-right'
+        label = caption(chapter, table_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(14) as figure_number:
+        description = 'Binary search tree as symbol table: keys are atomic numbers; values are element names'
+        label = caption(chapter, figure_number)
+        sample_binary_tree_as_symbol()
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(15) as figure_number:
+        description = 'Binary search tree as priority queue: priorities are atomic numbers; values are element names'
+        label = caption(chapter, figure_number)
+        sample_binary_tree_as_pq()
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(16) as figure_number:
+        description = 'A Fibonacci tree with twelve nodes'
+        label = caption(chapter, figure_number)
+        fibonacci_tree_sample()
         print('{}. {}'.format(label, description))
         print()
 
