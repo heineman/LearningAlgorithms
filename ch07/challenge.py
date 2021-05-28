@@ -79,10 +79,10 @@ if __name__ == '__main__':
         print('path_to_recursive implementation')
         print(caption(chapter, exercise_number), 'Recursive Path_to')
         print()
-        
+
     with ExerciseNum(3) as exercise_number:
         print('recover_cycle in ch07.digraph_search')
         print()
         print(caption(chapter, exercise_number), 'Recover cycle')
-    
+
     #defeat_guided_search()

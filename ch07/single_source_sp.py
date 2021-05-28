@@ -54,9 +54,9 @@ def dijkstra_sp(G, src):
             impq.enqueue(v, inf)
 
     def relax(e):
-        u, v, weight = e[0], e[1], e[2][WEIGHT]
-        if dist_to[u] + weight < dist_to[v]:
-            dist_to[v] = dist_to[u] + weight
+        n, v, weight = e[0], e[1], e[2][WEIGHT]
+        if dist_to[n] + weight < dist_to[v]:
+            dist_to[v] = dist_to[n] + weight
             edge_to[v] = e
             impq.decrease_priority(v, dist_to[v])
 

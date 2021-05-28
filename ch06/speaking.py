@@ -35,18 +35,18 @@ class BinaryTree:
             return (BinaryNode(val), '{}create a new subtree with root of `{}`.'.format(sofar, val))
 
         if val <= node.value:
-            sofar += '`{1}` is smaller than or equal to `{0}`, so insert `{1}` into the left subtree of `{0}` '.format(node.value, val)
+            sofar += '`{1}` is smaller than or equal to `{0}`, so insert `{1}` into the left subtree of `{0}`'.format(node.value, val)
             if node.left is None:
-                sofar += 'but there is no left subtree, so '
+                sofar += ', but there is no left subtree, so '
             else:
-                sofar += 'rooted at `{}`. Now '.format(node.left.value)
+                sofar += ' rooted at `{}`. Now '.format(node.left.value)
             (node.left, expl) = self._insert(node.left, val, sofar)
             return (node, expl)
 
-        sofar += '`{1}` is larger than `{0}`, so insert `{1}` into the right subtree of `{0}` '.format(node.value, val)
+        sofar += '`{1}` is larger than `{0}`, so insert `{1}` into the right subtree of `{0}`'.format(node.value, val)
         if node.right is None:
-            sofar += 'but there is no right subtree, so '
+            sofar += ', but there is no right subtree, so '
         else:
-            sofar += 'rooted at `{}`. Now '.format(node.right.value)
+            sofar += ' rooted at `{}`. Now '.format(node.right.value)
         (node.right, expl) = self._insert(node.right, val, sofar)
         return (node, expl)

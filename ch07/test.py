@@ -1,4 +1,4 @@
-"""Testing for Chapter 07."""
+"""Test cases for Chapter 07."""
 
 import unittest
 from os import path

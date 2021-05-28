@@ -732,8 +732,8 @@ class TestChapter6(unittest.TestCase):
 
         bt = BinaryTree()
         self.assertEqual('To insert `5`, create a new subtree with root of `5`.', bt.insert(5))
-        self.assertEqual('To insert `3`, `3` is smaller than or equal to `5`, so insert `3` into the left subtree of `5` but there is no left subtree, so create a new subtree with root of `3`.', bt.insert(3))
-        self.assertEqual('To insert `1`, `1` is smaller than or equal to `5`, so insert `1` into the left subtree of `5` rooted at `3`. Now `1` is smaller than or equal to `3`, so insert `1` into the left subtree of `3` but there is no left subtree, so create a new subtree with root of `1`.', bt.insert(1))
+        self.assertEqual('To insert `3`, `3` is smaller than or equal to `5`, so insert `3` into the left subtree of `5`, but there is no left subtree, so create a new subtree with root of `3`.', bt.insert(3))
+        self.assertEqual('To insert `1`, `1` is smaller than or equal to `5`, so insert `1` into the left subtree of `5` rooted at `3`. Now `1` is smaller than or equal to `3`, so insert `1` into the left subtree of `3`, but there is no left subtree, so create a new subtree with root of `1`.', bt.insert(1))
 
     def test_stress_recreate(self):
         from ch06.tree import BinaryTree
@@ -838,12 +838,6 @@ class TestChapter6(unittest.TestCase):
         self.assertTrue(14 in rbt)
         self.assertFalse(22 in rbt)
 
-                
-
-        
-        
-
 #######################################################################
 if __name__ == '__main__':
     unittest.main()
-
