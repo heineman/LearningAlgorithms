@@ -543,8 +543,8 @@ def generate_ch03():
 
     print('Additional computations for perfect hashing')
     perfect_trial('by')
-    perfect_trial('foregift')
-    perfect_trial('invalid-word')
+    perfect_trial('watered')
+    perfect_trial('not-a-word')
 
     with TableNum(6) as table_number:
         process(iteration_order(),

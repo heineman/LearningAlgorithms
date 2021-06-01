@@ -202,12 +202,14 @@ def check_for_duplicates():
         clash on variants and gelato
     """
     hash_values = {}
+    clashes = 0
     for w in english_words():
         hc = hash(w)
         if hc in hash_values:
             print('clash on', w, 'and', hash_values[hc])
+            clashes += 1
         hash_values[hc] = w
-    print('Number of duplicate hashcodes found for dictionary:', len(hash_values))
+    print('Number of duplicate hashcodes found for dictionary:', clashes)
 
 #######################################################################
 if __name__ == '__main__':
@@ -215,7 +217,7 @@ if __name__ == '__main__':
     time_results_linked()
     print()
 
-    print('Count how many times hashcode is computed (i.e., when % is invoked) on PUT.')
+    print('Count how many times hashcode is computed (i.e., when % is invoked) on PUT')
     probability_of_failure()
     print()
 
@@ -229,6 +231,6 @@ if __name__ == '__main__':
     compare_time(ewords)
     print()
 
-    print('Trying to find two words in the dictionary with the same hash value.')
+    print('Trying to find two words in the dictionary with the same Python hash() value')
     check_for_duplicates()
     print()

@@ -3,7 +3,7 @@ Timing Results for chapter 7.
 
 Executing Floyd-Warshall on Massachusetts Highway is costly since it is an O(N^3)
 algorithm and the graph has 2305 vertices. An alternative is to use a technique
-called "Chained Dijkstra's", where multiple invocations of Dijkstra's single-source 
+called "Chained Dijkstra's", where multiple invocations of Dijkstra's single-source
 shortest path are used, one for each vertex, v, to find the best computed shortest path
 from that vertex.
 
@@ -16,10 +16,10 @@ now compute same results with chained Dijkstra
 start (42.045357, -70.214707) to end (42.539347, -73.341637) in longest shortest distance 251.4311470193551 in time 73.632 seconds
 
 The first result above takes about twenty minutes. Using the chained approach, the
-second result (implemented by networkx as all_pairs_dijkstra_path_length) takes 
-significantly faster. This is because Floyd-Warshall is O(V^3) while Chained 
-Dijkstra's is O(V * (V+E) * log V) and since the graph is sparse, E is on the 
-order of V, leading to an overall classification of O(V^2 * log V) which handily 
+second result (implemented by networkx as all_pairs_dijkstra_path_length) takes
+significantly faster. This is because Floyd-Warshall is O(V^3) while Chained
+Dijkstra's is O(V * (V+E) * log V) and since the graph is sparse, E is on the
+order of V, leading to an overall classification of O(V^2 * log V) which handily
 beats O(V^3).
 
 The third approach is native Python code implementing Chained Dijkstra's, and this
@@ -30,6 +30,7 @@ is still better, which is the reason for using Networkx in the first place.
 import time
 
 def floyd_warshall_highway():
+    """Generate Floyd-Warshall results with MA highway data."""
     from ch07.tmg_load import tmg_load, highway_map
     from ch07.dependencies import plt_error
 
@@ -48,15 +49,15 @@ def floyd_warshall_highway():
                     longest_so_far = dist_to[i][j]
                     start = i
                     end = j
-        end_fw_time = time.time() 
+        end_fw_time = time.time()
         print('start {} to end {} in longest shortest distance {} in time {:.3f} seconds'
               .format(positions[start], positions[end], longest_so_far, end_fw_time-start_fw_time))
-        
+
         # so much faster since graph is sparse
         from networkx.algorithms.shortest_paths.weighted import all_pairs_dijkstra_path_length
         start_time = time.time()
         dist_to = dict(all_pairs_dijkstra_path_length(G))
-        
+
         longest_so_far = 0
         start = -1
         end = -1
@@ -71,6 +72,7 @@ def floyd_warshall_highway():
               .format(positions[start], positions[end], longest_so_far, end_time-start_time))
 
 def chained_dijkstra():
+    """Generate Chained Dijkstra results with MA highway data."""
     from ch07.tmg_load import tmg_load, highway_map
     from ch07.dependencies import plt_error
     from ch07.single_source_sp import dijkstra_sp

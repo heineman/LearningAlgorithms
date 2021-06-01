@@ -147,7 +147,7 @@ def iterator(pq):
             pqit.enqueue(child, pq.storage[child].priority)
 
 def iterator_trial():
-    """Generate a sample Priority Queue and show develop iterator."""
+    """Generate a sample Priority Queue and show iterator capability."""
     from ch04.heap import PQ
     import random
 

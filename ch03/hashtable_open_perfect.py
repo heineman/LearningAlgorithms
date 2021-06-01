@@ -13,7 +13,7 @@ from ch03.perfect.generated_dictionary import perfect_hash
 class Hashtable:
     """Hashtable using perfect hashing from 321,129 English word dictionary."""
     def __init__(self):
-        self.table = [None] * 321165
+        self.table = [None] * 321129
         self.N = 0
 
     def get(self, k):

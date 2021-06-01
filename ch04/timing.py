@@ -7,16 +7,15 @@ is directly proportional to that, and we are trying to find the average
 operational cost (of both enqueue and dequeue).
 
 Compare performance of resizable hashtables.
-       N        Heap       DHeap    
-     256        2.87        3.00    
-     512        3.23        3.34    
-   1,024        3.46        3.64    
-   2,048        3.87        4.02    
-   4,096        4.33        4.52    
-   8,192        4.69        4.86    
-  16,384        5.10        5.44    
-  32,768        6.55        6.88    
-
+       N        Heap       DHeap
+     256        2.87        3.00
+     512        3.23        3.34
+   1,024        3.46        3.64
+   2,048        3.87        4.02
+   4,096        4.33        4.52
+   8,192        4.69        4.86
+  16,384        5.10        5.44
+  32,768        6.55        6.88
 
 """
 import timeit
@@ -87,10 +86,12 @@ def trial_factorial_heap(max_n=32768, output=True, decimals=2):
         N *= 2
     return tbl
 
-def factorial_heap_timing():
+def factorial_heap_timing(max_n=5920):
     """Provide empirical evidence on runtime behavior of max factorial heap."""
-    file = open("factorial_timing_results3.csv", "w")
-    for N in range(154,50000):
+    # 10, 34, 154, 874, 5914, 46234 are the boundaries to evaluate
+    name = 'factorial_timing_results.csv'
+    file = open(name, 'w')
+    for N in range(154, max_n):
         num_to_insert=1
         if N % 1000 == 0:
             print(N)
@@ -98,7 +99,7 @@ def factorial_heap_timing():
 sz = len(pq)
 for i in range({}):
     pq.enqueue(99,sz+i)
-'''.format(num_to_insert, N+1)
+'''.format(num_to_insert)
         timing = min(timeit.repeat(stmt=stmt, setup='''
 from ch04.factorial_heap import PQ
 pq = PQ({0}+700)
@@ -107,7 +108,8 @@ for i in range({0},0,-1):
         file.write(str(timing))
         file.write('\n')
     file.close()
-    
+    print('created file:', name)
+
 def dynamic_comparison(max_n=32768, output=True, decimals=2):
     """Generate table for comparing resizable hashtable performance."""
     T = 3
@@ -128,7 +130,11 @@ def dynamic_comparison(max_n=32768, output=True, decimals=2):
 
 #######################################################################
 if __name__ == '__main__':
+    print('Head-to-head comparison of binary heaps and factorial heaps.')
+    trial_factorial_heap()
+
+    print('Evaluate performance of factorial heaps on enqueue.')
     factorial_heap_timing()
-    
+
     print('Compare performance of resizable Heaps.')
     dynamic_comparison()
