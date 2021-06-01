@@ -44,11 +44,11 @@ class PQ:
         """Switch the values in storage[i] and storage[j]."""
         self.storage[i],self.storage[j] = self.storage[j],self.storage[i]
 
-    def swim(self,child):
+    def swim(self, child):
         """Reestablish heap-order property from storage[child] up."""
         while child > 1 and self.less(child//2, child):
             self.swap(child, child//2)
-            child = child//2
+            child = child // 2
 
     def sink(self, parent):
         """Reestablish heap-order property from storage[parent] down."""

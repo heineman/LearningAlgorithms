@@ -36,9 +36,10 @@ def make_sample_graph():
         if i < 5:
             G.add_edge('C{}'.format(i), 'C{}'.format(i+1))
 
-    print(G.number_of_nodes(), 'nodes and ', G.number_of_edges(), 'edges.')
-    print('neighbors of C3:', list(G['C3']))
+    print(G.number_of_nodes(), 'nodes and', G.number_of_edges(), 'edges.')
+    print('adjacent nodes to C3:', list(G['C3']))
     print('edges adjacent to C3:', list(G.edges('C3')))
+    return G
 
 def make_sample_directed_graph():
     """Create sample graph."""
@@ -57,8 +58,8 @@ def make_sample_directed_graph():
         if i < 5:
             DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
 
-    print(DG.number_of_nodes(), 'nodes and ', DG.number_of_edges(), 'edges.')
-    print('neighbors of C3:', list(DG['C3']))
+    print(DG.number_of_nodes(), 'nodes and', DG.number_of_edges(), 'edges.')
+    print('adjacent nodes to C3:', list(DG['C3']))
     print('edges adjacent to C3:', list(DG.edges('C3')))
     return DG
 

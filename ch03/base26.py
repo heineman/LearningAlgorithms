@@ -10,12 +10,12 @@ Functions to work with base26 hash scheme.
 from algs.sorting import unique
 from ch03.months import s_data, s_num, days_in_month, days_bas, days_mixed
 
-def base26(m):
+def base26(w):
     """Convert string into base26 representation where a=0 and z=25."""
     val = 0
-    for ch in m.lower():
+    for ch in w.lower():
         next_digit = ord(ch) - ord('a')
-        val  = 26*val + next_digit
+        val = 26*val + next_digit
     return val
 
 def eval_search_base26(m):

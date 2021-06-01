@@ -68,16 +68,16 @@ def counting_sort(A, M):
     are guaranteed to be in the range 0 to and not including M.
     """
     counts = [0] * M
-    for val in A:
-        counts[val] += 1
+    for v in A:
+        counts[v] += 1
 
     pos = 0
-    val = 0
+    v = 0
     while pos < len(A):
-        for idx in range(counts[val]):
-            A[pos+idx] = val
-        pos += counts[val]
-        val += 1
+        for idx in range(counts[v]):
+            A[pos+idx] = v
+        pos += counts[v]
+        v += 1
 
 def counting_sort_improved(A,M):
     """
@@ -255,9 +255,18 @@ def tournament_allows_odd(A):
 
     return (largest,second)
 
+def two_largest_attempt(A):
+    """Failed attempt to implement two largest."""
+    m1 = max(A[:len(A)//2])
+    m2 = max(A[len(A)//2:])
+    if m1 < m2:
+        return (m2, m1)
+    return (m1, m2)
+
 #######################################################################
 if __name__ == '__main__':
     chapter = 1
+
     with ExerciseNum(1) as exercise_number:
         s = 'A man, a plan, a canal. Panama!'
         print(s,'is a palindrome:', is_palindrome_letters_only(s))
@@ -275,3 +284,15 @@ if __name__ == '__main__':
         run_counting_sort_trials()
         print(caption(chapter, exercise_number),
               'Counting Sort Trials')
+
+    with ExerciseNum(4) as exercise_number:
+        print('see tournament_allows_odd in ch01.challenge')
+        print(caption(chapter, exercise_number),
+              'Odd tournament')
+
+    with ExerciseNum(5) as exercise_number:
+        print('Should print (9, 8)', two_largest_attempt([9, 3, 5, 7, 8, 1]))
+        print('Fails to print (9, 8)', two_largest_attempt([9, 8, 5, 7, 3, 1]))
+        print(caption(chapter, exercise_number),
+              'Failed Two largest')
+

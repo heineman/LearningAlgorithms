@@ -14,11 +14,11 @@ def largest_two(A):
     if my_max < second:
         my_max,second = second,my_max
 
-    for i in range(2, len(A)):
-        if my_max < A[i]:
-            my_max,second = A[i],my_max
-        elif second < A[i]:
-            second = A[i]
+    for idx in range(2, len(A)):
+        if my_max < A[idx]:
+            my_max,second = A[idx],my_max
+        elif second < A[idx]:
+            second = A[idx]
     return (my_max, second)
 
 def sorting_two(A):
@@ -43,11 +43,11 @@ def mutable_two(A):
     if len(A) < 2:
         raise ValueError('Must have at least two values')
 
-    index_max = max(range(len(A)), key=A.__getitem__)
-    my_max = A[index_max]
-    del A[index_max]
+    idx = max(range(len(A)), key=A.__getitem__)
+    my_max = A[idx]
+    del A[idx]
     second = max(A)
-    A.insert(index_max, my_max)
+    A.insert(idx, my_max)
     return (my_max, second)
 
 class Match:

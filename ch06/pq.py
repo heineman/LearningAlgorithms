@@ -116,8 +116,8 @@ class PQ:
         if p is None:
             raise ValueError('key for symbol table cannot be None.')
 
-        self.N += 1
         self.tree.insert(v, p)
+        self.N += 1
 
     def peek(self):
         """Return value associated with node with maximum priority in queue."""

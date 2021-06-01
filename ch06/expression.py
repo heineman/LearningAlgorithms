@@ -66,9 +66,9 @@ class Expression:
         element - A function to perform a binary operation
     """
     def __init__(self, func, left, right):
+        self.func = func
         self.left  = left
         self.right = right
-        self.func = func
 
     def __str__(self):
         return '({} {} {})'.format(
@@ -78,8 +78,7 @@ class Expression:
 
     def eval(self):
         """Evaluate expression."""
-        return self.func(self.left.eval(),
-                         self.right.eval())
+        return self.func(self.left.eval(), self.right.eval())
 
     def references(self):
         """Return generator for all references, if any exist."""

@@ -19,10 +19,10 @@ class Entry:
 
 class LinkedEntry:
     """A (k, v) entry for a hashtable using linked lists, via next."""
-    def __init__(self, k, v, nxt=None):
+    def __init__(self, k, v, rest=None):
         self.key = k
         self.value = v
-        self.next = nxt
+        self.next = rest
 
     def __str__(self):
         return '{} -> {}'.format(self.key, self.value)

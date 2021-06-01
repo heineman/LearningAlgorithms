@@ -250,5 +250,8 @@ if __name__ == '__main__':
               'Binary Array Search Evidence')
         print()
 
-    run_max_sort_worst_case()
-    print()
+    with ExerciseNum(5) as exercise_number:
+        run_max_sort_worst_case()
+        print(caption(chapter, exercise_number),
+              'Max sort')
+        print()

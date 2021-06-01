@@ -473,7 +473,6 @@ class TestChapter3(unittest.TestCase):
             ht.put(w, w)
 
         # make sure all still present
-        print('-----')
         for w in values:
             self.assertEqual(w, ht.get(w))
 

@@ -63,8 +63,7 @@ class DynamicHashtable:
 
         self.load_factor = 0.75
 
-        # Ensure resize event happens NO LATER than M-1, since you need at
-        # least one empty bucket
+        # Ensure for M <= 3 that threshold is no greater than M-1
         self.threshold = min(M * self.load_factor, M-1)
 
     def get(self, k):
@@ -132,8 +131,7 @@ class DynamicHashtablePlusRemove:
 
         self.load_factor = 0.75
 
-        # Ensure resize event happens NO LATER than M-1, since you need at
-        # least one empty bucket
+        # Ensure for M <= 3 that threshold is no greater than M-1
         self.threshold = min(M * self.load_factor, M-1)
 
     def __len__(self):

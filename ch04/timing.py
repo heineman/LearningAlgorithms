@@ -87,6 +87,27 @@ def trial_factorial_heap(max_n=32768, output=True, decimals=2):
         N *= 2
     return tbl
 
+def factorial_heap_timing():
+    """Provide empirical evidence on runtime behavior of max factorial heap."""
+    file = open("factorial_timing_results3.csv", "w")
+    for N in range(154,50000):
+        num_to_insert=1
+        if N % 1000 == 0:
+            print(N)
+        stmt = '''
+sz = len(pq)
+for i in range({}):
+    pq.enqueue(99,sz+i)
+'''.format(num_to_insert, N+1)
+        timing = min(timeit.repeat(stmt=stmt, setup='''
+from ch04.factorial_heap import PQ
+pq = PQ({0}+700)
+for i in range({0},0,-1):
+    pq.enqueue(i,i)'''.format(N), repeat=10, number=7))/7
+        file.write(str(timing))
+        file.write('\n')
+    file.close()
+    
 def dynamic_comparison(max_n=32768, output=True, decimals=2):
     """Generate table for comparing resizable hashtable performance."""
     T = 3
@@ -107,5 +128,7 @@ def dynamic_comparison(max_n=32768, output=True, decimals=2):
 
 #######################################################################
 if __name__ == '__main__':
+    factorial_heap_timing()
+    
     print('Compare performance of resizable Heaps.')
     dynamic_comparison()

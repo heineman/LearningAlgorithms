@@ -57,15 +57,6 @@ def rotate_right_left(node):
     node.compute_height()
     return new_root
 
-def resolve_right_leaning(node):
-    """If node is right-leaning, rebalance and return new root node for subtree."""
-    if node.height_difference() == -2:
-        if node.right.height_difference() <= 0:
-            node = rotate_left(node)
-        else:
-            node = rotate_right_left(node)
-    return node
-
 def resolve_left_leaning(node):
     """If node is right-leaning, rebalance and return new root node for subtree."""
     if node.height_difference() == 2:
@@ -73,6 +64,15 @@ def resolve_left_leaning(node):
             node = rotate_right(node)
         else:
             node = rotate_left_right(node)
+    return node
+
+def resolve_right_leaning(node):
+    """If node is right-leaning, rebalance and return new root node for subtree."""
+    if node.height_difference() == -2:
+        if node.right.height_difference() <= 0:
+            node = rotate_left(node)
+        else:
+            node = rotate_right_left(node)
     return node
 
 def check_avl_property(n):

@@ -47,8 +47,8 @@ def has_cycle(DG):
     in_stack = {}
 
     def dfs(v):
-        in_stack[v] = True
         marked[v] = True
+        in_stack[v] = True
 
         for w in DG[v]:
             if not w in marked:

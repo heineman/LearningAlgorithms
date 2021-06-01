@@ -74,8 +74,8 @@ def dfs_search(G, src):
     node_from = {}
 
     stack = Stack()
-    stack.push(src)
     marked[src] = True
+    stack.push(src)
 
     while not stack.is_empty():
         v = stack.pop()
@@ -99,8 +99,8 @@ def bfs_search(G, src):
     node_from = {}
 
     q = Queue()
-    q.enqueue(src)
     marked[src] = True
+    q.enqueue(src)
 
     while not q.is_empty():
         v = q.dequeue()
@@ -124,12 +124,10 @@ def guided_search(G, src, target, distance):
     worst case possibility always exists.
     """
     from ch04.heap import PQ
-    pq = PQ(G.number_of_nodes())
     marked = {}
     node_from = {}
 
-    dist_to = {}
-    dist_to[src] = 0
+    pq = PQ(G.number_of_nodes())
     marked[src] = True
 
     # Using a MAX PRIORITY QUEUE means we rely on negative distance to
@@ -142,9 +140,8 @@ def guided_search(G, src, target, distance):
         for w in G.neighbors(v):
             if not w in marked:
                 node_from[w] = v
-                dist_to[w] = dist_to[v] + 1
-                pq.enqueue(w, -distance(w, target))
                 marked[w] = True
+                pq.enqueue(w, -distance(w, target))
 
     return node_from
 

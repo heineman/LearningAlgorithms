@@ -103,9 +103,9 @@ def debug_expression():
     from ch06.expression import Value, Expression, add, mult
 
     # Sample Recursive Expression
-    add1 = Expression(add, Value(1), Value(5))
-    mult2 = Expression(mult, add1, Value(9))
-    return mult2
+    a = Expression(add, Value(1), Value(5))
+    m = Expression(mult, a, Value(9))
+    return m
 
 def run_trials_prepend(N, num):
     """Run a single trial."""

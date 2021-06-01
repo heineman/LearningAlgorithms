@@ -381,7 +381,7 @@ def avoid_digit(n, digit):
     """Sample Python generator to yield all integers from 1 to n that do not involve digit."""
     strd = str(digit)
     for i in range(n):
-        if strd not in str(i):
+        if not strd in str(i):
             yield i
 
 def iteration_order(output=True):

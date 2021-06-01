@@ -23,12 +23,12 @@ def insertion_sort(A):
 
             A[j],A[j-1] = A[j-1],A[j]
 
-def insertion_sort_cmp(A, cmp=lambda one,two: one <= two):
-    """Sort A using Insertion Sort."""
+def insertion_sort_cmp(A, less=lambda one,two: one <= two):
+    """Sort A using Insertion Sort with externally-provided less operation."""
     N = len(A)
     for i in range(1,N):
         for j in range(i,0,-1):
-            if cmp(A[j-1], A[j]):
+            if less(A[j-1], A[j]):
                 break
 
             A[j],A[j-1] = A[j-1],A[j]

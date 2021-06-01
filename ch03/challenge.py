@@ -80,8 +80,7 @@ class ValueBadHash:
         return hash(self.v) % 4
 
     def __eq__(self, other):
-        return (self.__class__ == other.__class__ and
-                self.v == other.v)
+        return (self.__class__ == other.__class__ and self.v == other.v)
 
 def bad_timing(words, size=50000, output=True):
     """Statistics on hashtables."""
@@ -276,8 +275,7 @@ class DynamicHashtableIncrementalResizing:
 
         self.load_factor = 0.75
 
-        # Ensure resize event happens NO LATER than M-1, to align
-        # with open addressing
+        # Ensure for M <= 3 that threshold is no greater than M-1
         self.threshold = min(M * self.load_factor, M-1)
 
     def get(self, k):
@@ -413,8 +411,7 @@ class PythonSimulationHashtable:
 
         self.load_factor = 0.75
 
-        # Ensure resize event happens NO LATER than M-1, since you need at
-        # least one empty bucket
+        # Ensure for M <= 3 that threshold is no greater than M-1
         self.threshold = min(M * self.load_factor, M-1)
 
     def get(self, k):

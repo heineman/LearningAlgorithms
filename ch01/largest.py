@@ -20,16 +20,16 @@ def alternate(A):
     In worst case, requires (1/2)*(N^2 + 3N - 2) invocations of less-than.
     In best case requires N.
     """
-    for val in A:
-        val_is_largest = True
-        for other in A:
-            if val < other:
-                val_is_largest = False
+    for v in A:
+        v_is_largest = True             # When iterating over A, each value, v, could be largest
+        for x in A:
+            if v < x:                   # If v is smaller than some x, stop and record not largest
+                v_is_largest = False
                 break
-        if val_is_largest:
-            return val
+        if v_is_largest:                # If largest, return v since it is maximum value.
+            return v
 
-    return None
+    return None                         # If A is empty, return None
 
 def just_three(A):
     """

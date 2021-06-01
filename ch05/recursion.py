@@ -7,10 +7,10 @@ def find_max(A):
         """Use recursion to find maximum value in A[lo:hi+1]."""
         if lo == hi: return A[lo]
 
-        mid = (lo+hi)//2
-        left = rmax(lo, mid)
-        right = rmax(mid+1, hi)
-        return max(left, right)
+        mid = (lo+hi) // 2
+        L = rmax(lo, mid)
+        R = rmax(mid+1, hi)
+        return max(L, R)
 
     return rmax(0, len(A)-1)
 
