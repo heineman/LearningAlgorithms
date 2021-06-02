@@ -36,11 +36,11 @@ def path_to_recursive(node_from, src, target):
             yield n
         yield target
 
-def defeat_guided_search():
+def defeat_guided_search(n=15):
     """Construct a rectangular maze graph that thwarts guided search."""
     from ch07.solver_guided import GuidedSearchSolver
-    m = Maze(13,13)
-    m.initialize()    # back to scratch WITH ALL WALLS
+    m = Maze(n,n)
+    m.initialize()                     # back to scratch WITH ALL WALLS
 
     for r in range(0, m.num_rows-2):   # leave open the first and last
         for c in range(0, m.num_cols):
@@ -85,4 +85,5 @@ if __name__ == '__main__':
         print()
         print(caption(chapter, exercise_number), 'Recover cycle')
 
-    #defeat_guided_search()
+    print('A maze that defeats Guided Search.')
+    defeat_guided_search()

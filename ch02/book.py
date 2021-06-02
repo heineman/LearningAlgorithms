@@ -99,20 +99,6 @@ random.shuffle(x)'''.format(n), repeat=100, number=100))
         print(tbl.best_model('Time'))
     return tbl
 
-def incremental_multiplication():
-    """
-    Compute results for multiplying large numbers.
-    This takes several hours to run, and is not executed by default.
-    """
-    num = 1000
-    for n in range(10, 2048):
-        all_times = timeit.repeat(stmt='idx += 1\nmult_pair(pairs[idx])', setup='''
-from ch02.mult import create_random_pair, mult_pair
-idx = -1 
-pairs = [create_random_pair({}) for _ in range({})]'''.format(n,num), repeat=20, number=num)
-
-        print(n,min(all_times), max(all_times))
-
 def large_multiplication(output=True, decimals=4):
     """Compute results for multiplying large numbers."""
     num = 1000

@@ -20,8 +20,8 @@ def fibonacci_example(spreadsheet):
         'A3': '=(A2+1)',
         'A4': '=(A3+1)',
         'A5': '=(A4+1)',
-#         'A6': '=(A5+1)',
-#         'A7': '=(A6+1)',
+#         'A6': '=(A5+1)',         ## Add these lines back in for full
+#         'A7': '=(A6+1)',         ## example.
 #         'A8': '=(A7+1)',
         'B2': '0',
         'B3': '1',

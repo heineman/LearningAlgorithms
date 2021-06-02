@@ -164,6 +164,22 @@ class TestChapter4(unittest.TestCase):
         pair = self.priority_queue_stress_test(PQ(len(words)), len(words))
         # Note: we cannot guarantee individual words BUT we can guarantee length
         self.assertEqual((len('abdominohysterectomy'), len('a')), (len(pair[0]), len(pair[1])))
+        
+    def test_validate_factorial_heap_pq(self):
+        """Validate levels for factorial heap after enqueue and dequeue."""
+        from ch04.factorial_heap import PQ, validate
+
+        end = 10000
+        pq = PQ(end)
+        for i in range(end):
+            pq.enqueue(i, i)
+            validate(pq)
+
+        last = end-1
+        while pq:
+            self.assertEqual(last, pq.dequeue())
+            last -= 1
+            validate(pq)
 
     def test_builtin_heap_pq(self):
         from ch04.builtin import PQ

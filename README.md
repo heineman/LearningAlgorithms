@@ -7,8 +7,8 @@ This repository contains the Python code for:
 	ISBN: 978-1-49-209106-6
 	
 Each chapter has its own folder containing the code for that chapter.
-All Python code conforms to Python 3.4 and has been tested to work
-with Python 3.3. While the core algorithms presented in the book
+All Python code conforms to Python 3.4 and has been tested to work as far
+back as Python 3.3. While the core algorithms presented in the book
 will continue to work with earlier versions of Python, some code used
 to generate the tables and images in the book will not compile properly
 because of changes to Python libraries.
@@ -80,7 +80,7 @@ is not efficient or suitable for production use.
 
 ## Images
 
-All of the tables in the book are reproducible from the Python scripts 
+All of the tables in the book are reproducible from the Python `book.py` scripts 
 found in each chapter. Many of the images will also be generated from
 these tables: these generates files are placed (by chapter number) 
 within the `images` directory.
@@ -94,6 +94,7 @@ the coverage module with:
 
 Then in the top directory, execute the following commands to generate code
 coverage data and then present it as an HTML directory (found in `htmlcov`).
+Make sure your PYTHONPATH includes the current directory.
 There is a .coveragerc file that ensures only the book code is targeted.
 If you have not installed the coverage module, then replace each 
 "coverage run" below with just "python3" and remove the "-a" command 

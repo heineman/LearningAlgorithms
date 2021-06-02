@@ -107,8 +107,26 @@ x=list(range({}))
 random.shuffle(x)'''.format(n), number=1)
         tbl.row([n, sort_time, factorial_model(n, factorial_coeffs[0])])
 
+def incremental_multiplication(output=True):
+    """
+    Compute results for multiplying large numbers.
+    This takes several hours to run if you increment by 1. Instead, check powers of 2.
+    """
+    num = 1000
+    tbl = DataTable([8,8,8], ['N', 'Min Mult', 'Max Mult'], decimals=5, output=output)
+    for n in [2 ** k for k in range(3, 12)]:
+        all_times = timeit.repeat(stmt='idx += 1\nmult_pair(pairs[idx])', setup='''
+from ch02.mult import create_random_pair, mult_pair
+idx = -1 
+pairs = [create_random_pair({}) for _ in range({})]'''.format(n,num), repeat=20, number=num)
+        tbl.row([n, min(all_times), max(all_times)])
+    return tbl
+
 #######################################################################
 if __name__ == '__main__':
+    print('Timing of Multiplication of n-digit numbers.')
+    incremental_multiplication()
+
     print('Permutation Sort Trials (up to N=12): These can take Unusually Long.')
     run_permutation_sort_worst_case(12)
 

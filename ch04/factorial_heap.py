@@ -40,7 +40,11 @@ def validate_level(pq, lev, k):
     return True   # checks out!
 
 def validate(pq):
-    """Validate heap-ordered property is valid (assumed heap-shape)."""
+    """
+    Validate heap-ordered property is valid (assumed heap-shape).
+    Used while developing this class. Insert calls to `validate` after
+    dequeue and enqueue.
+    """
     return validate_level(pq, 0, 1)
 
 class PQ:
