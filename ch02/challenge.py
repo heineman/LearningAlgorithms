@@ -224,6 +224,75 @@ x=sorted(random.sample(range({0}*4), {0}))'''.format(n), number=num)
 
     return tbl
 
+def worst_range(A, target):
+    """
+    Given a sorted list, find the range A[lo:hi] such that all values in the range
+    equal to target.
+    """
+    if not target in A:
+        return None
+    lo = A.index(target)
+    if lo == len(A)-1:
+        return (lo, lo)
+
+    hi = lo + 1
+    while hi < len(A):
+        if A[hi] != target:
+            return (lo, hi-1)
+        hi += 1
+    return (lo, hi-1)
+
+def best_range(A, target):
+    """
+    Given a sorted list, find the range A[lo:hi] such that all values in the range
+    equal to target.
+    """
+    if len(A) == 0:
+        return None
+    lo = 0
+    hi = len(A)-1
+
+    while lo <= hi:
+        mid = (lo + hi) // 2
+
+        if target < A[mid]:
+            hi = mid-1
+        elif target > A[mid]:
+            lo = mid+1
+        else:
+            break
+
+    if lo > hi:
+        return None
+
+    # find left-edge of range. This time use < to exit loop when on final one
+    left_hi = mid - 1
+    while lo < left_hi:
+        m = (lo + left_hi) // 2
+
+        if target == A[m]:     # keep going to the left
+            left_hi = m-1
+        else:
+            lo = m + 1
+
+    if A[lo] != target:
+        lo += 1
+
+    # find right-edge of range. This time use < to exit loop when on final one
+    right = mid + 1
+    while right < hi:
+        m = (right + hi) // 2
+
+        if target == A[m]:     # keep going to the right
+            right = m+1
+        else:
+            hi = m - 1
+
+    if right == len(A) or A[right] != target:
+        right -= 1
+
+    return (lo, right)
+
 #######################################################################
 if __name__ == '__main__':
     chapter = 2

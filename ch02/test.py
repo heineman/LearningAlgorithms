@@ -73,6 +73,51 @@ class TestChapter2(unittest.TestCase):
         tbl = performance_bas(max_k=10, output=False)
         self.assertTrue(tbl.entry(32,'T(N)') < tbl.entry(512,'T(N)'))
 
+    def test_range(self):
+        A = [1, 2, 2, 2, 3, 4]
+        from ch02.challenge import worst_range, best_range
+        self.assertIsNone(worst_range([], 2))
+        self.assertIsNone(best_range([], 2))
+
+        self.assertEqual((1,3), worst_range(A, 2))
+        self.assertEqual((0,0), worst_range(A, 1))
+        self.assertEqual((4,4), worst_range(A, 3))
+        self.assertEqual((5,5), worst_range(A, 4))
+
+        self.assertIsNone(worst_range(A,0))
+        self.assertIsNone(worst_range(A,7))
+
+        self.assertEqual((1,3), best_range(A, 2))
+        self.assertEqual((0,0), best_range(A, 1))
+        self.assertEqual((4,4), best_range(A, 3))
+        self.assertEqual((5,5), best_range(A, 4))
+
+        self.assertIsNone(best_range(A,0))
+        self.assertIsNone(best_range(A,7))
+
+        A = [3] * 10000
+        self.assertEqual((0,9999), worst_range(A, 3))
+        self.assertEqual((0,9999), best_range(A, 3))
+
+        # a bit of a stress test....
+        tgt = random.random()
+        alist = [tgt] * 999
+        for _ in range(5000):
+            alist.append(random.random())
+        alist = sorted(alist)
+        self.assertEqual(worst_range(A, tgt), best_range(A, tgt))
+
+        # All single ones....
+        nums = list(range(100))
+        for i in range(100):
+            self.assertEqual((i,i), best_range(nums, i))
+            self.assertEqual((i,i), worst_range(nums, i))
+
+        nums = list(range(0,100,2))
+        for i in range(1,100,2):
+            self.assertIsNone(best_range(nums, i))
+            self.assertIsNone(worst_range(nums, i))
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

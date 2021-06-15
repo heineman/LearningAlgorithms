@@ -16,10 +16,10 @@ class Order:
     SHUFFLED = 2
     ALTERNATING = 3
 
-def run_init_trial():
+def run_init_trial(output=True):
     """First Table in chapter 1."""
     n = 100
-    tbl = DataTable([12,12,12],['N','Ascending','Descending'], decimals=3)
+    tbl = DataTable([12,12,12],['N','Ascending','Descending'], output=output, decimals=3)
 
     while n <= 1000000:
         # 1 up to but not including N
@@ -35,6 +35,59 @@ down = list(range({}, 0, -1))'''.format(n), repeat=10, number=50))/50
         tbl.row([n, m_up, m_down])
         n *= 10
     return tbl
+
+def visualize_flawed(A):
+    """Show values in flawed() visualization."""
+    print(' \t ',' | '.join([str(x) for x in A])[:-1], ' |')
+    my_max = 0
+    print(' \t ', end='')
+    for v in A:
+        if my_max < v:
+            my_max = v
+            print('[{}]|'.format(v), end='')
+        else:
+            print(' {} |'.format(v), end='')
+    print()
+    print()
+    
+def visualize_alternate(A):
+    """Show values in alternate() visualization."""
+    print('\t ','\t'.join([str(x) for x in A]))
+    
+    col = 0
+    cols = {}
+    done = False
+    for v in A:
+        if done: 
+            break
+        row = 0
+        v_is_largest = True
+        for x in A:
+            if not row in cols:
+                cols[row] = {}
+            if not col in cols[row]:
+                cols[row][col] = {}
+            cols[row][col] = '{} < {}?'.format(v, x)
+            if v < x:
+                v_is_largest = False
+                break
+            row += 1
+        
+        if v_is_largest:
+            done = True
+            break
+        col += 1
+    print()
+    for row in range(len(A)):
+        print('{}\t'.format(A[row]), end='')
+        for c in range(col+1):
+            if row in cols and c in cols[row]:
+                print('{}\t'.format(cols[row][c]), end='')
+            else:
+                print('\t', end='')
+        
+        print()
+    print()
 
 def run_largest_alternate(output=True, decimals=3):
     """Generate tables for largest and alternate."""
@@ -163,13 +216,13 @@ x=list(range({}))
 
     return tbl
 
-def run_best_worst(output=True, decimals=2):
+def run_best_worst(max_n=525288, output=True, decimals=2):
     """Perform best and worst case analysis for largest."""
     n = 4096
     tbl = DataTable([8,10,10,10,10],['N', 'LargestW', 'MaxW', 'LargestB', 'MaxB'],
                     output=output, decimals=decimals)
 
-    while n <= 32768:    ###  524288:
+    while n <= max_n:    ###  524288:
         ups = list(range(1,n+1))         # 1 up to n
         downs = list(range(n, 0, -1))    # n down to 1
 
@@ -264,6 +317,73 @@ def count_operations(output=True):
     print()
     return tbl
 
+def visualize_tournament_two(A):
+    """Visualize execution of tournament."""
+    print('        |' + '|'.join([str(x) for x in A]) + '|')
+    
+    N = len(A)
+    winner = [None] * (N-1)
+    loser = [None] * (N-1)
+    prior = [-1] * (N-1)
+
+    # populate N/2 initial winners/losers
+    idx = 0
+    for i in range(0, N, 2):
+        if A[i] < A[i+1]:
+            winner[idx] = A[i+1]
+            loser[idx] = A[i]
+        else:
+            winner[idx] = A[i]
+            loser[idx] = A[i+1]
+        idx += 1
+
+    def output(m,i, step):
+        print('winner\t|', end='')
+        for v in winner:
+            if v is None:
+                print(' |', end='')
+            else:
+                print('{}|'.format(v), end='')
+            
+        print('\t{}\nloser\t|'.format(step), end='')
+        for v in loser:
+            if v is None:
+                print(' |', end='')
+            else:
+                print('{}|'.format(v), end='')
+        print('\n\t ', end='')
+        print('  ' * m, end='')
+        print('m', end='')
+        print('  ' * (i-m-1), end='')
+        print(' i')
+         
+    # pair up subsequent winners and record priors
+    m = 0
+    output(m,idx, 'Initialize step')
+    print()
+    while idx < N-1:
+        if winner[m] < winner[m+1]:
+            winner[idx] = winner[m+1]
+            loser[idx]  = winner[m]
+            prior[idx]  = m+1
+        else:
+            winner[idx] = winner[m]
+            loser[idx]  = winner[m+1]
+            prior[idx]  = m
+        m += 2
+        idx += 1
+        output(m,idx, 'Advance step {}'.format(m//2))
+    # Find where second is hiding!
+    largest = winner[m]
+    second = loser[m]
+    m = prior[m]
+    while m >= 0:
+        if second < loser[m]:
+            second = loser[m]
+        m = prior[m]
+
+    return (largest, second)
+
 def generate_ch01():
     """Generate Tables and Figures for chapter 01."""
     chapter = 1
@@ -279,25 +399,27 @@ def generate_ch01():
               'Three different problem instances processed by an algorithm')
         print()
 
-    with FigureNum(2) as figure_number:
-        import dis
-
-        def f():
-            """Sample code to be disassembled."""
-            A=[13, 2, 18, 7, 50]
-            if len(A) == 0:
-                return None
-            return max(A)
-        dis.dis(f)
-        print('max of [13, 2, 18, 7, 50] is', f())
-        print(caption(chapter, figure_number),
-              'Counting operations or instructions is complicated.')
-
     with TableNum(1) as table_number:
         process(run_init_trial(),
                 chapter, table_number,
                 'Executing max() on two kinds of problem instances of size N (time in ms)',
                 yaxis = 'Time (in ms)')
+
+    with FigureNum(2) as figure_number:
+        visualize_flawed([1, 5, 2, 9, 3, 4])
+        print(caption(chapter, figure_number),
+              'Visualizing the execution of flawed()')
+        
+    with FigureNum(3) as figure_number:
+        visualize_alternate([1, 5, 2, 9, 3, 4])
+        print(caption(chapter, figure_number),
+              'Visualizing the execution of alternate()')
+
+    with FigureNum(4) as figure_number:
+        visualize_alternate([9, 5, 2, 1, 3, 4])
+        visualize_alternate([1, 2, 3, 4, 5, 9])
+        print(caption(chapter, figure_number),
+              'Visualizing the execution of alternate() on best and worst cases')
 
     # TODO: Option for secondary axis specification
     with TableNum(2) as table_number:
@@ -306,9 +428,9 @@ def generate_ch01():
                 'Comparing largest() with alternate() on worst case problem instances')
 
     # Take results and plot #LessA on left-axis as line, and TimesA on right axis as column
-    with FigureNum(6) as figure_number:
+    with FigureNum(5) as figure_number:
         print(caption(chapter, figure_number),
-              'Visualizing relationship between #Less-Than and runtime performance')
+              'Relationship between #Less-Than and runtime performance')
 
     with TableNum(3) as table_number:
         process(run_best_worst(),
@@ -321,8 +443,23 @@ def generate_ch01():
                 'Performance of different approached on 525,288 values in different orders',
                 create_image = False)
 
+    with FigureNum(6) as figure_number:
+        print('by hand')
+        print(caption(chapter, figure_number),
+              'A tournament with eight initial values')
+
+    with FigureNum(7) as figure_number:
+        print('by hand')
+        print(caption(chapter, figure_number),
+              'A tournament with 32 values')
+
+    with FigureNum(8) as figure_number:
+        visualize_tournament_two([3,1,4,1,5,9,2,6])
+        print(caption(chapter, figure_number),
+              'Step-by-step execution of tournament algorithm')
+
     with TableNum(5) as table_number:
-        process(just_compare_sort_tournament_two(),
+        process(run_largest_two_trials(Order.SHUFFLED),
                 chapter, table_number,
                 'Comparing runtime performance (in ms) of all four algorithms',
                 yaxis = 'Time (in ms)')
