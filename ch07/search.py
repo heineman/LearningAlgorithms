@@ -29,6 +29,7 @@ def path_to(node_from, src, target):
     while v != src:
         path.append(v)
         v = node_from[v]
+
     # last one to push is the source, which makes it
     # the first one to be retrieved
     path.append(src)

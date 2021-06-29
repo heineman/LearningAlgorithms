@@ -437,15 +437,15 @@ class TestChapter7(unittest.TestCase):
         from ch07.dependencies import plt_error
 
         if not plt_error:
-            (G, positions) = tmg_load(highway_map())
-            (_,EAST,_,WEST) = bounding_ids(positions)
+            (G, positions, _) = tmg_load(highway_map())
+            (_, EAST, _, WEST) = bounding_ids(positions)
             output_file = generate_guided_search_figure(G, positions, WEST, EAST)
             self.assertTrue(path.isfile(output_file))
 
     def test_bounding(self):
         from ch07.tmg_load import tmg_load, highway_map, bounding_ids
-        (_,positions) = tmg_load(highway_map())
-        [NORTH,EAST,SOUTH,WEST] = bounding_ids(positions)
+        (_, positions, _) = tmg_load(highway_map())
+        (NORTH, EAST, SOUTH, WEST) = bounding_ids(positions)
         self.assertTrue(positions[NORTH][0] > positions[SOUTH][0])   # LAT Is higher for north
         self.assertTrue(positions[EAST][1] > positions[WEST][1])     # LONG is higher for east
 
@@ -473,6 +473,16 @@ class TestChapter7(unittest.TestCase):
         except FileNotFoundError:
             entries = load_xlsx(os.path.join('resources', 'ch07-fibonacci-example.xlsx'))
             self.assertEqual('=(B5 + B6)', entries.get('B7'))
+
+    def test_dag_shortest(self):
+        """Validate same answer from Dijkstra and Topological shortest path on sample mesh."""
+        from ch07.challenge import mesh_graph, topological_sp
+        from ch07.single_source_sp import dijkstra_sp
+        N = 10
+        DAG = mesh_graph(N)
+        (dist_to, _) = dijkstra_sp(DAG, 1)
+        (dist_to_topol, _) = topological_sp(DAG, 1)
+        self.assertEqual(dist_to[N*N], dist_to_topol[N*N])
 
 #######################################################################
 if __name__ == '__main__':

@@ -98,6 +98,49 @@ class UndirectedGraph:
         self.adjacency[v] = Node(u, self.adjacency[v])
         self.E += 1
 
+    def remove_edge(self, u, v):
+        """Remove edge from u - v."""
+        if not u in self.labels:
+            return
+
+        if not v in self.labels:
+            return
+
+        # if not in adjacency[u], return now
+        n = self.adjacency[u]
+        prev = None
+        while n:
+            if n.value == v:
+                break
+            prev = n
+            n = n.next
+            
+        # if we get here and n is None, doesn't exist
+        if n is None:
+            return
+        
+        # Either remove from head, or remove from list
+        if prev is None:
+            self.adjacency[u] = n.next
+        else:
+            prev.next = n.next
+            
+        self.E -= 1
+        
+        # remove from v now
+        n = self.adjacency[v]
+        prev = None
+        while n:
+            if n.value == u:
+                break
+            prev = n
+            n = n.next
+            
+        if prev is None:
+            self.adjacency[v] = n.next
+        else:
+            prev.next = n.next
+
     def add_edges_from(self, edges):
         """Add edges to graph, if not already there."""
         for u,v in edges:

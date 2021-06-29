@@ -207,7 +207,7 @@ def generate_bfs_and_dijkstra_figure(src, target):
         return None
     import matplotlib.pyplot as plt
 
-    (G, positions) = tmg_load(highway_map())
+    (G, positions, _) = tmg_load(highway_map())
     (dist_to, edge_to) = dijkstra_sp(G, src)
     print('Dijkstra shortest distance is {} total steps with distance={:.1f}'.format(len(edges_path_to(edge_to, src, target))-1, dist_to[target]))
     path = edges_path_to(edge_to, src, target)
@@ -233,7 +233,7 @@ def generate_dfs_figure(src, target):
         return None
     import matplotlib.pyplot as plt
 
-    (G, positions) = tmg_load(highway_map())
+    (G, positions, _) = tmg_load(highway_map())
     plt.clf()
     plot_gps(positions)
     plot_highways(positions, G.edges())
@@ -256,7 +256,7 @@ def generate_guided_search_figure(G, positions, src, target):
         return None
     import matplotlib.pyplot as plt
 
-    (G, positions) = tmg_load(highway_map())
+    (G, positions, _) = tmg_load(highway_map())
     plt.clf()
     plot_gps(positions)
     plot_highways(positions, G.edges())
@@ -508,7 +508,7 @@ def generate_ch07():
     with FigureNum(5) as figure_number:
         from ch07.search import dfs_search, draw_solution
 
-        description  = 'Depth First Search will eventually locate the target if maze is connected'
+        description  = 'Depth First Search locates target if reachable from source'
         label = caption(chapter, figure_number)
         random.seed(15)
         m = Maze(3,5)
@@ -621,7 +621,7 @@ def generate_ch07():
     with FigureNum(14) as figure_number:
         description = 'Modeling highway infrastructure in Massachusetts.'
         label = caption(chapter, figure_number)
-        (_, mapPositions) = tmg_load(highway_map())
+        (_, mapPositions, _) = tmg_load(highway_map())
         (_,EAST,_,WEST) = bounding_ids(mapPositions)
         output_file = generate_bfs_and_dijkstra_figure(WEST, EAST)
         print('Generated {}'.format(output_file))
@@ -632,7 +632,7 @@ def generate_ch07():
     with FigureNum(15) as figure_number:
         description = 'Modeling highway infrastructure in Massachusetts.'
         label = caption(chapter, figure_number)
-        (_, mapPositions) = tmg_load(highway_map())
+        (_, mapPositions, _) = tmg_load(highway_map())
         (_,EAST,_,WEST) = bounding_ids(mapPositions)
         output_file = generate_dfs_figure(WEST, EAST)
         print('Generated {}'.format(output_file))

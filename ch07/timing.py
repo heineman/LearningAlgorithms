@@ -35,7 +35,7 @@ def floyd_warshall_highway():
     from ch07.dependencies import plt_error
 
     if not plt_error:
-        (G, positions) = tmg_load(highway_map())
+        (G, positions, _) = tmg_load(highway_map())
         from networkx.algorithms.shortest_paths.dense import floyd_warshall
         print('This might take awhile')
         start_fw_time = time.time()
@@ -78,7 +78,7 @@ def chained_dijkstra():
     from ch07.single_source_sp import dijkstra_sp
 
     if not plt_error:
-        (G, positions) = tmg_load(highway_map())
+        (G, positions, _) = tmg_load(highway_map())
 
         start_time = time.time()
         longest_so_far = 0

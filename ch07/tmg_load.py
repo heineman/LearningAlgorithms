@@ -106,7 +106,7 @@ def tmg_load(raw_data):
         {NODE: LABEL LAT LONG}
         {EDGE: id1 id2 LABEL}
 
-    For each edge, compute the distance
+    For each edge, compute the distance. Also return labels for the nodes.
     """
     G = nx.Graph()
     line = 0
@@ -120,12 +120,14 @@ def tmg_load(raw_data):
     num_edges = int(snum_edges)
 
     positions = {}
+    labels = {}
 
     for i in range(num_nodes):
-        (_, slat1, slong1) = raw_data[line].split()
+        (label, slat1, slong1) = raw_data[line].split()
         line += 1
 
         positions[i] = (float(slat1), float(slong1))
+        labels[i] = label
         G.add_node(i)
 
     for i in range(num_edges):
@@ -137,14 +139,14 @@ def tmg_load(raw_data):
         d = distance(positions[u], positions[v])
         G.add_edge(u, v, weight=d)
 
-    return (G, positions)
+    return (G, positions, labels)
 
 #######################################################################
 if __name__ == '__main__':
     if not plt_error:
         import matplotlib.pyplot as plt
 
-        (G,positions) = tmg_load(highway_map())
+        (G,positions, _) = tmg_load(highway_map())
         print(G.number_of_nodes(), G.number_of_edges())
         print(bounding_ids(positions))
 
