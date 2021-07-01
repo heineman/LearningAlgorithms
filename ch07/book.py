@@ -218,7 +218,7 @@ def generate_bfs_and_dijkstra_figure(src, target):
     node_from = bfs_search(G, src)
     total = compute_distance(positions, node_from, src, target)
 
-    plot_node_from(G, positions, src, target, node_from, color='purple')
+    plot_node_from(positions, src, target, node_from, color='purple')
     print('{0} total steps for Breadth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target))-1, total))
     plt.axis('off')
     output_file = image_file('figure-mass-highway-bfs.svg')
@@ -241,7 +241,7 @@ def generate_dfs_figure(src, target):
     node_from = dfs_search_recursive(G, src)
     total = compute_distance(positions, node_from, src, target)
 
-    plot_node_from(G, positions, src, target, node_from, color='purple')
+    plot_node_from(positions, src, target, node_from, color='purple')
     print('{0} total steps for Depth First Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target))-1, total))
     plt.axis('off')
     output_file = image_file('figure-mass-highway-dfs.svg')
@@ -268,7 +268,7 @@ def generate_guided_search_figure(G, positions, src, target):
     node_from = guided_search(G, src, target, distance=distance_gps)
     total = compute_distance(positions, node_from, src, target)
 
-    plot_node_from(G, positions, src, target, node_from, color='purple')
+    plot_node_from(positions, src, target, node_from, color='purple')
     print('{0} total steps for Guided Search with distance={1:.1f} miles'.format(len(path_to(node_from, src, target))-1, total))
     plt.axis('off')
     output_file = image_file('figure-mass-highway-guided.svg')

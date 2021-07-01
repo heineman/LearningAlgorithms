@@ -409,6 +409,41 @@ def iteration_order(output=True):
         tbl.row([p_oa[0], p_ll[0], p_ph[0]])
     return tbl
 
+def perfect_shakespeare_trial(key):
+    """Depict steps in computation of perfect hash for given key in shakespeare example."""
+    from ch03.perfect.shakespeare import G, S1, S2, hash_f
+    hk1 = hash_f(key, S1)
+    print('hash_f(\'{}\', S1)={}'.format(key, hk1))
+
+    total = 0
+    for idx,ch in enumerate(key):
+        print(comma(S1[idx]),'*',ord(ch),end='')
+        total += S1[idx]*ord(ch)
+        if idx < len(key)-1: print(' + ', end='')
+    print(' % {0} = {1} % {0} = {2}'.format(comma(len(G)), comma(total), comma(total % len(G))))
+    print()
+
+    hk2 = hash_f(key, S2)
+    print('hash_f(\'{}\', S2)={}'.format(key, hk2))
+    total = 0
+    for idx,ch in enumerate(key):
+        print(comma(S2[idx]),'*',ord(ch),end='')
+        total += S2[idx]*ord(ch)
+        if idx < len(key)-1: print(' + ', end='')
+    print(' % {0} = {1} % {0} = {2}'.format(comma(len(G)), comma(total), comma(total % len(G))))
+
+    print('G[{}] = {}'.format(comma(hk1),G[hk1]))
+    print('G[{}] = {}'.format(comma(hk2),G[hk2]))
+    print()
+    from ch03.hashtable_open_perfect import Hashtable
+    ht1 = Hashtable()
+    ht1.put(key,key)
+    for idx,val in enumerate(ht1.table):
+        if val:
+            print(val,'at index position',idx)
+            return idx
+    return None
+
 def perfect_trial(key):
     """Depict steps in the computation of perfect hash for given key."""
     from ch03.perfect.generated_dictionary import G, S1, S2, hash_f
@@ -540,6 +575,10 @@ def generate_ch03():
         process(count_hash(),
                 chapter, table_number,
                 'Words whose addition causes a resize event, with total # of insertions and average number of times a word was inserted')
+
+    print('Additional computations for perfect hashing for shakespeare example')
+    perfect_shakespeare_trial('a')
+    perfect_shakespeare_trial('by')
 
     print('Additional computations for perfect hashing')
     perfect_trial('by')

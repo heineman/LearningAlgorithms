@@ -100,10 +100,10 @@ class UndirectedGraph:
 
     def remove_edge(self, u, v):
         """Remove edge from u - v."""
-        if not u in self.labels:
+        if not u in self.adjacency:
             return
 
-        if not v in self.labels:
+        if not v in self.adjacency:
             return
 
         # if not in adjacency[u], return now
@@ -114,19 +114,19 @@ class UndirectedGraph:
                 break
             prev = n
             n = n.next
-            
+
         # if we get here and n is None, doesn't exist
         if n is None:
             return
-        
+
         # Either remove from head, or remove from list
         if prev is None:
             self.adjacency[u] = n.next
         else:
             prev.next = n.next
-            
+
         self.E -= 1
-        
+
         # remove from v now
         n = self.adjacency[v]
         prev = None
@@ -135,7 +135,7 @@ class UndirectedGraph:
                 break
             prev = n
             n = n.next
-            
+
         if prev is None:
             self.adjacency[v] = n.next
         else:
@@ -483,11 +483,12 @@ def draw(graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
     """I am not going to provide this capability."""
     return
 
-def dijkstra_path(G, src, target):
-    """Dijkstra delegation."""
-    from ch07.single_source_sp import dijkstra_sp
-
-    return dijkstra_sp(G, src, target)
+# TO DELETE
+# def dijkstra_path(G, src, target):
+#     """Dijkstra delegation."""
+#     from ch07.single_source_sp import dijkstra_sp
+#
+#     return dijkstra_sp(G, src, target)
 
 #######################################################################
 # Test case is here so replacement can be tested independently of whether

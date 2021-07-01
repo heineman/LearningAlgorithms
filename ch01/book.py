@@ -49,16 +49,16 @@ def visualize_flawed(A):
             print(' {} |'.format(v), end='')
     print()
     print()
-    
+
 def visualize_alternate(A):
     """Show values in alternate() visualization."""
     print('\t ','\t'.join([str(x) for x in A]))
-    
+
     col = 0
     cols = {}
     done = False
     for v in A:
-        if done: 
+        if done:
             break
         row = 0
         v_is_largest = True
@@ -72,7 +72,7 @@ def visualize_alternate(A):
                 v_is_largest = False
                 break
             row += 1
-        
+
         if v_is_largest:
             done = True
             break
@@ -85,7 +85,7 @@ def visualize_alternate(A):
                 print('{}\t'.format(cols[row][c]), end='')
             else:
                 print('\t', end='')
-        
+
         print()
     print()
 
@@ -320,7 +320,7 @@ def count_operations(output=True):
 def visualize_tournament_two(A):
     """Visualize execution of tournament."""
     print('        |' + '|'.join([str(x) for x in A]) + '|')
-    
+
     N = len(A)
     winner = [None] * (N-1)
     loser = [None] * (N-1)
@@ -344,7 +344,7 @@ def visualize_tournament_two(A):
                 print(' |', end='')
             else:
                 print('{}|'.format(v), end='')
-            
+
         print('\t{}\nloser\t|'.format(step), end='')
         for v in loser:
             if v is None:
@@ -356,7 +356,7 @@ def visualize_tournament_two(A):
         print('m', end='')
         print('  ' * (i-m-1), end='')
         print(' i')
-         
+
     # pair up subsequent winners and record priors
     m = 0
     output(m,idx, 'Initialize step')
@@ -409,7 +409,7 @@ def generate_ch01():
         visualize_flawed([1, 5, 2, 9, 3, 4])
         print(caption(chapter, figure_number),
               'Visualizing the execution of flawed()')
-        
+
     with FigureNum(3) as figure_number:
         visualize_alternate([1, 5, 2, 9, 3, 4])
         print(caption(chapter, figure_number),
@@ -440,7 +440,7 @@ def generate_ch01():
     with TableNum(4) as table_number:
         process(performance_different_approaches(),
                 chapter, table_number,
-                'Performance of different approached on 525,288 values in different orders',
+                'Performance of different approached on 524,288 values in different orders',
                 create_image = False)
 
     with FigureNum(6) as figure_number:

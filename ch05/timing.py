@@ -24,7 +24,7 @@ from algs.table import DataTable
 
 def table_trials(max_k=15, output=True, decimals=3):
     """Compare Merge Sort against built in Python sort up to, but not including 2**max_k."""
-    tbl = DataTable([8,10,10], ['N', 'MergeSort', 'Built-In Sort'], 
+    tbl = DataTable([8,10,10], ['N', 'MergeSort', 'Built-In Sort'],
                     output=output, decimals=decimals)
 
     for n in [2**k for k in range(8, max_k)]:
@@ -46,7 +46,7 @@ def quadratic_sort_trials(max_k=12, output=True, decimals=2):
     """
     Compare Selection Sort against two flavors of Insertion Sort up to (but not including) 2^max_k.
     """
-    tbl = DataTable([8,8,8,8], ['N', 'Select', 'Insert', 'InsertBAS'], 
+    tbl = DataTable([8,8,8,8], ['N', 'Select', 'Insert', 'InsertBAS'],
                     output=output, decimals=decimals)
 
     for n in [2**k for k in range(8, max_k)]:

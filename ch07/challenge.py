@@ -1,19 +1,18 @@
 """
 Challenge Exercises for Chapter 7.
 """
+import timeit
 from algs.table import DataTable, ExerciseNum, caption
 from ch07.dependencies import tkinter_error, plt_error
-import timeit
+from ch07.maze import Maze
 
 try:
     import networkx as nx
 except ImportError:
     import ch07.replacement as nx
-    
-from ch07.maze import Maze
-from ch07.dependencies import tkinter_error
 
 def dfs_search_recursive(G, src):
+    """Entry to recursive Depth First Search."""
     marked = {}
     node_from = {}
 
@@ -84,7 +83,7 @@ def avoid_interstate_90():
     from ch07.plot_map import plot_path
     from algs.output import image_file
     (G,positions,labels) = tmg_load(highway_map())
-    
+
     # Since graph is undirected, we will visit each edge twice. Make sure to
     # only remove when u < v to avoid deleting same edge twice
     edges_to_remove = []
@@ -100,7 +99,7 @@ def avoid_interstate_90():
     for e in edges_to_remove:
         G.remove_edge(e[0], e[1])
     print('num edges:', G.number_of_edges())
-    
+
     # create a new graph whose edges are not wholly on I-90
     (_,_,_,WEST) = bounding_ids(positions)
     (dist_to, edge_to) = dijkstra_sp(G, WEST)
@@ -110,7 +109,7 @@ def avoid_interstate_90():
     plot_gps(positions)
     plot_highways(positions, G.edges())
     plot_path(positions, path)
-   
+
     output_file = image_file('figure-mass-no-I-90-dijkstra.svg')
     plt.savefig(output_file, format="svg")
     print(output_file)
@@ -147,22 +146,22 @@ def topological_sp(DAG, src):
     """Given a DAG, compute shortest path from src."""
     from ch07.digraph_search import topological_sort
     from ch07.single_source_sp import WEIGHT
-    
+
     inf = float('inf')
     dist_to = {v:inf for v in DAG.nodes()}
     dist_to[src] = 0
     edge_to = {}
-    
+
     def relax(e):
         n, v, weight = e[0], e[1], e[2][WEIGHT]
         if dist_to[n] + weight < dist_to[v]:
             dist_to[v] = dist_to[n] + weight
             edge_to[v] = e
-            
+
     for n in topological_sort(DAG):
         for e in DAG.edges(n, data=True):
             relax(e)
-    
+
     return (dist_to, edge_to)
 
 def dag_trials(output=True):
@@ -186,7 +185,7 @@ if __name__ == '__main__':
     chapter = 7
     #avoid_interstate_90()
     dag_trials()
-    
+
     with ExerciseNum(1) as exercise_number:
         print('dfs_search_recursive in ch07.challenge')
         print(caption(chapter, exercise_number), 'Recursive depth first search')

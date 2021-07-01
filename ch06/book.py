@@ -346,7 +346,7 @@ def generate_ch06():
     with TableNum(1) as table_number:
         process(generate_list_table(),
                 chapter, table_number,
-                'Time to prepend or append 1,000 values to list of size N', yaxis="Time (in ms)")
+                'Comparing insert and remove performance of lists against binary search tree (time in ms)', yaxis="Time (in ms)")
 
     with FigureNum(3) as figure_number:
         description  = 'Binary Search Tree containing seven values'

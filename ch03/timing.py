@@ -1,17 +1,17 @@
 """Timing results for chapter 3.
 
 Average search Times with separate chaining hashtables (time in ns)
-       N       8,192      16,384      32,768      65,536     131,072     262,144     524,288    1,048,576    
-      32       0.481       0.369       0.289       0.264       0.344       0.324       0.315       0.334    
-      64       0.722       0.479       0.350       0.321       0.371       0.365       0.348       0.334    
-     128       1.223       0.744       0.480       0.364       0.407       0.379       0.357       0.349    
-     256       2.228       1.242       0.733       0.490       0.444       0.384       0.357       0.351    
-     512       4.149       2.407       1.233       0.743       0.568       0.473       0.387       0.371    
-   1,024       8.477       4.450       2.306       1.278       0.852       0.595       0.441       0.406    
-   2,048      16.966       8.596       4.367       2.301       1.389       0.906       0.576       0.485    
-   4,096      34.964      17.214       8.635       4.443       2.505       1.438       0.916       0.638    
-   8,192      71.714      36.167      17.442       9.053       4.664       2.555       1.423       0.882    
-  16,384     153.146      71.819      34.965      17.323       8.890       4.687       2.526       1.444    
+       N       8,192      16,384      32,768      65,536     131,072     262,144     524,288    1,048,576
+      32       0.481       0.369       0.289       0.264       0.344       0.324       0.315       0.334
+      64       0.722       0.479       0.350       0.321       0.371       0.365       0.348       0.334
+     128       1.223       0.744       0.480       0.364       0.407       0.379       0.357       0.349
+     256       2.228       1.242       0.733       0.490       0.444       0.384       0.357       0.351
+     512       4.149       2.407       1.233       0.743       0.568       0.473       0.387       0.371
+   1,024       8.477       4.450       2.306       1.278       0.852       0.595       0.441       0.406
+   2,048      16.966       8.596       4.367       2.301       1.389       0.906       0.576       0.485
+   4,096      34.964      17.214       8.635       4.443       2.505       1.438       0.916       0.638
+   8,192      71.714      36.167      17.442       9.053       4.664       2.555       1.423       0.882
+  16,384     153.146      71.819      34.965      17.323       8.890       4.687       2.526       1.444
 
 Count how many times hashcode is computed (i.e., when % is invoked) on PUT.
 Out of 900 attempts there were 126 failures
@@ -30,9 +30,8 @@ aaliis 8
 aals 9
 
 Compare performance of perfect hash with regular hashtable
-       N      Linked     Perfect    
- 321,129      0.3386      1.4224    
-
+       N      Linked     Perfect
+ 321,129      0.3386      1.4224
 
 """
 import timeit
@@ -159,15 +158,15 @@ words={}'''.format(words),
 def check_for_duplicates():
     """
     Determine if there are any hash() clashes on the words in the English language.
-    
+
     Because Python uses 64-bit hashcodes the likelihood is tremendously small.
     Also remember that Python now salts hash code values, so they are not the
     same from one run to the next.
-    
+
     The Python code below finds no clashes on hash() values.
-    
+
     The following Java code finds 11 clashes::
-    
+
         import java.book.*;
         public class EnglishClash {
             public static void main(String[] args) throws Exception {
@@ -186,9 +185,9 @@ def check_for_duplicates():
                 sc.close();
             }
         }
-    
+
     The above code finds 11 clashes
-    
+
         clash on hazardless and agarwal
         clash on hierarch and crinolines
         clash on isohel and epistolaries

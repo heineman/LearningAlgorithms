@@ -382,6 +382,18 @@ def recreate_tree(expr, convert=lambda x: x):
     node.compute_height()
     return node
 
+def trial_multiple_rotations(num_attempts=10000):
+    """Some trial and error went into these ranges."""
+    for (extra,lo,hi) in [(0,4,6), (1, 12, 40), (2, 33, 88), (3, 88, 200)]:
+        (structure, _) = find_multiple_rotations(extra, lo=lo, hi=hi, num_attempts=num_attempts, output=False)
+        n = recreate_tree(structure)
+
+        def count_nodes(n):
+            if n is None: return 0
+            return 1 + count_nodes(n.left) + count_nodes(n.right)
+
+        print(extra, n.height, count_nodes(n), structure)
+
 def find_multiple_rotations(extra, lo=4, hi=15, num_attempts=10000, output=True):
     """Find the smallest binary-tree that requires extra rotations upon insert."""
 
@@ -612,14 +624,14 @@ def manually_build(vals, height):
     Only call with vals <= 7, since 15 requires 1,307,674,368,000 possible arrangements.
     """
     import itertools
-    count = 0
+    ct = 0
     for val in itertools.permutations(vals):
         rbt = RankBinaryTree()
         for v in val:
             rbt.insert(v)
         if rbt.root.height == height:
-            count += 1
-    return count
+            ct += 1
+    return ct
 
 def demonstrate_tree_structure():
     """compute tree_structure for a sample tree."""
@@ -713,7 +725,7 @@ if __name__ == '__main__':
         print()
 
     with ExerciseNum(10) as exercise_number:
-        find_multiple_rotations(1, num_attempts=10000)   # doesn't always find one...
+        trial_multiple_rotations(num_attempts=10000)   # doesn't always find one...
         print('experiment with different values of these parameters to explore larger deltas')
         print(caption(chapter, exercise_number), 'counting rotations upon delete.')
         print()

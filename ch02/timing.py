@@ -125,7 +125,7 @@ pairs = [create_random_pair({}) for _ in range({})]'''.format(n,num), repeat=20,
 def run_range_analysis(output=True):
     """Confirm O(log N) algorithm to find range of duplicates."""
     tbl = DataTable([8,8,8], ['N', 'O(N)', 'O(log N)'], decimals=7, output=output)
-    
+
     commands = '''
 from random import random
 tgt = random()
@@ -141,13 +141,13 @@ from ch02.challenge import best_range
 {}'''.format(custom), repeat=40, number=50))/50
         worst_times = min(timeit.repeat(stmt='worst_range(alist, tgt)', setup='''
 from ch02.challenge import worst_range
-{}'''.format(custom), repeat=40, number=50))/50        
+{}'''.format(custom), repeat=40, number=50))/50
         
         tbl.row([n, worst_times, best_times])
 
 #######################################################################
 if __name__ == '__main__':
-    
+
     print('Timing of Multiplication of n-digit numbers.')
     incremental_multiplication()
 
@@ -156,6 +156,6 @@ if __name__ == '__main__':
 
     print('Random Sort Trials (up to N=11): These can take Unusually Long.')
     run_random_sort(11)
-    
+
     print('Timing of finding range among duplicates.')
     run_range_analysis()

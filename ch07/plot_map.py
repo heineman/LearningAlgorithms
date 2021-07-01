@@ -52,7 +52,7 @@ def plot_path(positions, path, marker='.', color='red'):
     plt.plot(px, py, color=color)
     plt.scatter(px, py, marker=marker, color=color)
 
-def plot_node_from(G, positions, src, target, node_from, marker='.', color='orange'):
+def plot_node_from(positions, src, target, node_from, marker='.', color='orange'):
     """Plot path from src to target using node_from[] information."""
     if plt_error:
         return

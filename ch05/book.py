@@ -1,6 +1,5 @@
 """Tables and Figures for Chapter 5
 
-
 If you have some time to review Factorial implementations, consider the internal
 Python implementation
 
@@ -505,7 +504,6 @@ def tim_sort_figure():
 def generate_ch05():
     """Generate Tables and Figures for chapter 05."""
     chapter = 5
-    show_partition()
 
     with FigureNum(1) as figure_number:
         description  = 'Sample array, A, to sort'
@@ -558,15 +556,15 @@ def generate_ch05():
         print('{}. {}'.format(label, description))
         print()
 
-    with TableNum(1) as table_number:
+    with FigureNum(5) as figure_number:
         # for actual results from book, use max_k=18 as an argument, but it will take hours.
         timing_selection_insertion()
-        description  = 'Runtime performance (in seconds) for Selection Sort and Insertion Sort'
-        label = caption(chapter, table_number)
+        description  = 'Timing results of Insertion Sort and Selection Sort'
+        label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(5) as figure_number:
+    with FigureNum(6) as figure_number:
         description  = 'Visualizing the recursive invocation of fact(3)'
         label = caption(chapter, figure_number)
         print('Fact(3) = ', fact(3))
@@ -574,63 +572,70 @@ def generate_ch05():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(6) as figure_number:
+    with FigureNum(7) as figure_number:
         description  = 'Recursive invocation when calling rmax(0,3) on A=[15,21,20,2]'
         label = caption(chapter, figure_number)
         print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(7) as figure_number:
-        description  = 'Complete recursive invocation of rmax'
-        label = caption(chapter, figure_number)
-        print('Done by hand')
-        print('{}. {}'.format(label, description))
-        print()
-
     with FigureNum(8) as figure_number:
-        description  = 'Merging two stacks into one'
+        description  = 'Complete recursive invocation of rmax(0,7)'
         label = caption(chapter, figure_number)
         print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(9) as figure_number:
-        description  = 'Step by step merge sort of two sorted sub-arrays of size 4'
+        description  = 'Merging two stacks into one'
         label = caption(chapter, figure_number)
         print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(10) as figure_number:
-        show_partition()
-        description  = 'Results of partition(A,0,7,0)'
+        description  = 'Step by step merge sort of two sorted sub-arrays of size 4'
         label = caption(chapter, figure_number)
+        print('Done by hand')
         print('{}. {}'.format(label, description))
         print()
 
     with FigureNum(11) as figure_number:
+        show_partition()
+        description  = 'Results of partition(A,0,7,0) using A[0] as pivot'
+        label = caption(chapter, figure_number)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(12) as figure_number:
+        description  = 'Full recursive invocation of Quicksort'
+        label = caption(chapter, figure_number)
+        print('Done by hand')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(13) as figure_number:
         heapsort_intuition()
         description  = 'Intuition behind how a max binary heap can be used for sorting'
         label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(12) as figure_number:
+    with FigureNum(14) as figure_number:
         show_heapify()
-        description  = 'Converting array into a max binary heap requires < 2N comparisons'
+        description  = 'Converting array into a max binary heap'
         label = caption(chapter, figure_number)
         print('{}. {}'.format(label, description))
         print()
 
-    with TableNum(2) as table_number:
+    with TableNum(1) as table_number:
         timing_nlogn_sorting()
         description  = 'Runtime performance (in seconds) for different sorting algorithms'
         label = caption(chapter, table_number)
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(13) as figure_number:
+    with FigureNum(15) as figure_number:
         tim_sort_figure()
         description  = 'Changes to array when applying Tim Sort with initial size of 4'
         label = caption(chapter, figure_number)

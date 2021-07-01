@@ -21,6 +21,11 @@ class TestChapter5(unittest.TestCase):
         merge_sort(sample)
         self.assertEqual(expected, sample)
 
+        sample = [5, 4, 3, 2, 1]                       # make sure works on reversed list
+        expected = sorted(sample)
+        merge_sort(sample)
+        self.assertEqual(expected, sample)
+
     def test_merge_sort_counting(self):
         from ch05.merge import merge_sort_counting
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
@@ -47,9 +52,19 @@ class TestChapter5(unittest.TestCase):
         quick_sort(sample)
         self.assertEqual(expected, sample)
 
+        sample = [5, 4, 3, 2, 1]                       # make sure works on reversed list
+        expected = sorted(sample)
+        quick_sort(sample)
+        self.assertEqual(expected, sample)
+
     def test_selection_sort(self):
         from ch05.sorting import selection_sort
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
+        expected = sorted(sample)
+        selection_sort(sample)
+        self.assertEqual(expected, sample)
+
+        sample = [5, 4, 3, 2, 1]                       # make sure works on reversed list
         expected = sorted(sample)
         selection_sort(sample)
         self.assertEqual(expected, sample)
@@ -64,6 +79,11 @@ class TestChapter5(unittest.TestCase):
     def test_insertion_sort(self):
         from ch05.sorting import insertion_sort
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
+        expected = sorted(sample)
+        insertion_sort(sample)
+        self.assertEqual(expected, sample)
+
+        sample = [5, 4, 3, 2, 1]                       # make sure works on reversed list
         expected = sorted(sample)
         insertion_sort(sample)
         self.assertEqual(expected, sample)
