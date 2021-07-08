@@ -382,17 +382,52 @@ def recreate_tree(expr, convert=lambda x: x):
     node.compute_height()
     return node
 
-def trial_multiple_rotations(num_attempts=10000):
+def trial_multiple_rotations(output=True, num_attempts=10000):
     """Some trial and error went into these ranges."""
-    for (extra,lo,hi) in [(0,4,6), (1, 12, 40), (2, 33, 88), (3, 88, 200)]:
-        (structure, _) = find_multiple_rotations(extra, lo=lo, hi=hi, num_attempts=num_attempts, output=False)
+    from ch05.challenge import fib
+    tbl = DataTable([6,6,6,6],['NumRot', 'Height', 'N', 'Random Tree'], output=output)
+    tbl.format('Random Tree', 's')
+    tbl.format('NumRot', 'd')
+    tbl.format('Height', 'd')
+    tbl.format('N', 'd')
+
+    for extra in range(3):
+        (structure, _) = find_multiple_rotations(extra, lo=4, hi=40, num_attempts=num_attempts, output=False)
         n = recreate_tree(structure)
 
         def count_nodes(n):
             if n is None: return 0
             return 1 + count_nodes(n.left) + count_nodes(n.right)
 
-        print(extra, n.height, count_nodes(n), structure)
+        tbl.row([extra+1, n.height, count_nodes(n), structure])
+
+    # Now use Fibonacci Trees to accomplish the same result.
+    if output:
+        print()
+    tbl = DataTable([6,6,6,13],['NumRot', 'Height', 'N', 'Fib AVL Trees'], output=output)
+    tbl.format('Fib AVL Trees', 's')
+    tbl.format('NumRot', 'd')
+    tbl.format('Height', 'd')
+    tbl.format('N', 'd')
+    for n in range(6,14,2):
+        root = fibonacci_avl(n)
+        root.compute_height()
+        check_avl_property(root)             # double-check
+        structure = tree_structure(root)
+        bt = ObservableBinaryTree()
+        height = root.height
+        bt.root = root
+        count = count_nodes(root)
+
+        num_rotations = rotations[0]
+        to_delete = fib(n+1)-1
+        bt.remove(to_delete)
+        check_avl_property(bt.root)
+        num_rotations = rotations[0] - num_rotations
+
+        tbl.row([num_rotations, height, count, structure])
+
+    return (tbl)
 
 def find_multiple_rotations(extra, lo=4, hi=15, num_attempts=10000, output=True):
     """Find the smallest binary-tree that requires extra rotations upon insert."""
@@ -726,7 +761,7 @@ if __name__ == '__main__':
 
     with ExerciseNum(10) as exercise_number:
         trial_multiple_rotations(num_attempts=10000)   # doesn't always find one...
-        print('experiment with different values of these parameters to explore larger deltas')
+        print('Experiment with different values of these parameters to explore larger deltas')
         print(caption(chapter, exercise_number), 'counting rotations upon delete.')
         print()
 

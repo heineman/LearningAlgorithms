@@ -36,6 +36,14 @@ down = list(range({}, 0, -1))'''.format(n), repeat=10, number=50))/50
         n *= 10
     return tbl
 
+def flawed(A):
+    """Flawed implementation of max()."""
+    my_max = 0
+    for v in A:
+        if my_max < v:
+            my_max = v
+    return my_max
+
 def visualize_flawed(A):
     """Show values in flawed() visualization."""
     print(' \t ',' | '.join([str(x) for x in A])[:-1], ' |')

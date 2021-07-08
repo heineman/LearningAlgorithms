@@ -14,6 +14,11 @@ WORST_CASE = list(range(10,0,-1))
 
 class TestChapter1(unittest.TestCase):
 
+    def test_flawed(self):
+        from ch01.book import flawed
+        self.assertEqual(5, flawed([3,2,1,4,5]))
+        self.assertEqual(0, flawed([-3,-2,-1,-4,-5]))   # This is the mistake
+
     def test_largest(self):
         self.assertEqual(9, native_largest(BEST_CASE))
 
