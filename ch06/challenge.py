@@ -427,7 +427,7 @@ def trial_multiple_rotations(output=True, num_attempts=10000):
 
         tbl.row([num_rotations, height, count, structure])
 
-    return (tbl)
+    return tbl
 
 def find_multiple_rotations(extra, lo=4, hi=15, num_attempts=10000, output=True):
     """Find the smallest binary-tree that requires extra rotations upon insert."""
