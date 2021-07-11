@@ -8,11 +8,17 @@ try:
 except ImportError:
     import ch07.replacement as nx
 
-from algs.table import DataTable, caption, FigureNum, TableNum, SKIP
+from algs.table import DataTable, caption, FigureNum, SKIP
 from algs.output import image_file
 from resources.highway import highway_map
 
 from ch07.dependencies import tkinter_error, plt_error
+
+if tkinter_error:
+    pass
+else:
+    import tkinter
+    
 from ch07.maze import Maze, to_networkx
 from ch07.snapshot import tkinter_register_snapshot
 from ch07.search import path_to, bfs_search, dfs_search_recursive, guided_search
@@ -41,7 +47,7 @@ def make_sample_graph():
     print('edges adjacent to C3:', list(G.edges('C3')))
     return G
 
-def make_sample_directed_graph():
+def make_sample_directed_graph(output=True):
     """Create sample graph."""
     DG = nx.DiGraph()
 
@@ -58,10 +64,18 @@ def make_sample_directed_graph():
         if i < 5:
             DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
 
-    print(DG.number_of_nodes(), 'nodes and', DG.number_of_edges(), 'edges.')
-    print('adjacent nodes to C3:', list(DG['C3']))
-    print('edges adjacent to C3:', list(DG.edges('C3')))
+    if output:
+        print(DG.number_of_nodes(), 'nodes and', DG.number_of_edges(), 'edges.')
+        print('adjacent nodes to C3:', list(DG['C3']))
+        print('edges adjacent to C3:', list(DG.edges('C3')))
     return DG
+
+def print_sample_linear_ordering():
+    """Produce sample linear ordering for spreadsheet example."""
+    from ch07.digraph_search import topological_sort
+    DG = make_sample_directed_graph(output=False)
+    linear = topological_sort(DG)
+    print(list(linear))
 
 def topological_example(G, N):
     """Create stylized graph with N^2 nodes and edges to lead to sink node."""
@@ -437,10 +451,6 @@ def visualize_results_floyd_warshall_two_steps(DG):
                 dist_to[u][v] = new_len
                 node_from[u][v] = node_from[k][v]
 
-    tbl_nf = DataTable([8] * DG.number_of_nodes(), list(DG.nodes()))
-    for n in DG.nodes():
-        tbl_nf.format(n, 's')
-
     output_node_from_floyd_warshall(DG, node_from)
     print()
 
@@ -450,6 +460,35 @@ def visualize_results_floyd_warshall_two_steps(DG):
 def generate_ch07():
     """Generate Tables and Figures for chapter 07."""
     chapter = 7
+    with FigureNum(23) as figure_number:
+        description = 'Initialize dist_to[][] and node_from[][] based on G'
+        label = caption(chapter, figure_number)
+        DG_TABLE = nx.DiGraph()
+        DG_TABLE.add_edge('a', 'b', weight=4)
+        DG_TABLE.add_edge('b', 'a', weight=2)
+        DG_TABLE.add_edge('a', 'c', weight=3)
+        DG_TABLE.add_edge('b', 'd', weight=5)
+        DG_TABLE.add_edge('c', 'b', weight=6)
+        DG_TABLE.add_edge('d', 'b', weight=1)
+        DG_TABLE.add_edge('d', 'c', weight=7)
+        visualize_results_floyd_warshall_just_initialize(DG_TABLE)
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(24) as figure_number:
+        description = 'Changes to node_from[][] and dist_to[][] after k processes a and b'
+        label = caption(chapter, figure_number)
+        DG_TABLE = nx.DiGraph()
+        DG_TABLE.add_edge('a', 'b', weight=4)
+        DG_TABLE.add_edge('b', 'a', weight=2)
+        DG_TABLE.add_edge('a', 'c', weight=3)
+        DG_TABLE.add_edge('b', 'd', weight=5)
+        DG_TABLE.add_edge('c', 'b', weight=6)
+        DG_TABLE.add_edge('d', 'b', weight=1)
+        DG_TABLE.add_edge('d', 'c', weight=7)
+        visualize_results_floyd_warshall_two_steps(DG_TABLE)
+        print('{}. {}'.format(label, description))
+        print()
 
     with FigureNum(1) as figure_number:
         description  = 'Modeling different problems using graphs'
@@ -478,7 +517,6 @@ def generate_ch07():
         if tkinter_error:
             print('unable to generate {}'.format(postscript_output))
         else:
-            import tkinter
             root = tkinter.Tk()
             canvas = Viewer(m, 50).view(root)
             tkinter_register_snapshot(root, canvas, postscript_output)
@@ -562,7 +600,6 @@ def generate_ch07():
         if tkinter_error:
             print('unable to generate {}'.format(postscript_output))
         else:
-            import tkinter
             root = tkinter.Tk()
             bfs = BreadthFirstSearchSolver(root, m, 15, refresh_rate=0, stop_end=True)
             tkinter_register_snapshot(root, bfs.canvas, '{}-BFS.ps'.format(label))
@@ -611,6 +648,11 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
+    # In-text linear ordering 
+    print_sample_linear_ordering()
+    print('Linear ordering of spreadsheet cells after Figure 12.')
+    print()
+
     with FigureNum(13) as figure_number:
         description = 'Visualizing execution of Depth First Search for Topological Sort.'
         label = caption(chapter, figure_number)
@@ -647,9 +689,9 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with TableNum(1) as table_number:
+    with FigureNum(17) as figure_number:
         description = "Executing Dijkstra's algorithm on small graph"
-        label = caption(chapter, table_number)
+        label = caption(chapter, figure_number)
         DG_GOOD = nx.DiGraph()
         DG_GOOD.add_edge('a', 'b', weight=3)
         DG_GOOD.add_edge('a', 'c', weight=9)
@@ -660,9 +702,9 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with TableNum(2) as table_number:
+    with FigureNum(18) as figure_number:
         description = "A negative edge weight in the wrong place breaks Dijkstra's algorithm"
-        label = caption(chapter, table_number)
+        label = caption(chapter, figure_number)
         DG_GOOD = nx.DiGraph()
         DG_GOOD.add_edge('a', 'b', weight=3)
         DG_GOOD.add_edge('a', 'c', weight=1)
@@ -677,7 +719,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(17) as figure_number:
+    with FigureNum(19) as figure_number:
         description = 'Two graphs with negative edge weights, but only one has a negative cycle'
         label = caption(chapter, figure_number)
         DG_GOOD = nx.DiGraph()
@@ -705,7 +747,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(18) as figure_number:
+    with FigureNum(20) as figure_number:
         description = 'Example for all-pairs shortest path problem'
         label = caption(chapter, figure_number)
         DG_AP = nx.DiGraph()
@@ -722,15 +764,15 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(19) as figure_number:
+    with FigureNum(21) as figure_number:
         description = 'Intuition behind the all-pairs shortest path problem'
         label = caption(chapter, figure_number)
         print('by hand')
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(20) as figure_number:
-        description = 'Actual shortest paths, dist_to[][], and node_from[][] for example'
+    with FigureNum(22) as figure_number:
+        description = 'dist_to, node_from, and actual shortest paths for graph in Figure 7-20'
         label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()
         DG_TABLE.add_edge('a', 'b', weight=4)
@@ -744,7 +786,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(21) as figure_number:
+    with FigureNum(23) as figure_number:
         description = 'Initialize dist_to[][] and node_from[][] based on G'
         label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()
@@ -759,7 +801,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    with FigureNum(22) as figure_number:
+    with FigureNum(24) as figure_number:
         description = 'Changes to node_from[][] and dist_to[][] after k processes a and b'
         label = caption(chapter, figure_number)
         DG_TABLE = nx.DiGraph()

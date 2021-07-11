@@ -27,6 +27,14 @@ def actual_table(output=True):
         if output:
             print('Linear = {}*N + {}'.format(a, b))
 
+        [(qa,qb), _] = curve_fit(quadratic_model, np.array(xvals), np.array(yvals))
+        if output:
+            print('Quadratic = {}*N*N + {}*N'.format(qa, qb))
+
+        [(na), _] = curve_fit(n_log_n_model, np.array(xvals), np.array(yvals))
+        if output:
+            print('N Log N = {}*N*log N'.format(na))
+
     tbl = DataTable([8,8,8], ['N', 'Actual', 'Model'], output=output)
 
     tbl.row([100, 0.063, linear_model(100,a,b)])

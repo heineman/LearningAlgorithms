@@ -17,7 +17,6 @@ echo "Generating Timing results for each chapter. Should take about one hour."
 %PYTHON3% ch03\timing.py > ch03.txt
 %PYTHON3% ch04\timing.py > ch04.txt
 %PYTHON3% ch05\timing.py > ch05.txt
-%PYTHON3% ch06\timing.py > ch06.txt
 %PYTHON3% ch07\timing.py > ch07.txt
 
 echo "Generating challenge exercises for each chapter. Should take about two hours."

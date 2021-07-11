@@ -28,10 +28,12 @@ def bellman_ford(G, src):
         return False
 
     #debug_state('initialize', G, node_from, dist_to)
-    for i in range(G.number_of_nodes()+1):
+    # Do N total passes. Only N-1 are needed, but use the Nth final one to detect
+    # if there had been a negative cycle.
+    for i in range(G.number_of_nodes()):
         for e in G.edges(data=True):
             if relax(e):
-                if i == G.number_of_nodes():
+                if i == G.number_of_nodes()-1:
                     raise RuntimeError('Negative Cycle exists in graph.')
 
     return (dist_to, edge_to)

@@ -53,4 +53,7 @@ def search_for_base():
 
 #######################################################################
 if __name__ == '__main__':
-    print('base26 of June is', base26('june'))
+    print('base26 of june is {:,d}'.format(base26('june')))
+    print('base26 of january is {:,d}'.format(base26('january')))
+    print('base26 of august is {0:,d} with {0:,d} % 34 = {1}'.format(base26('august'), base26('august') % 34))
+    print('base26 of abbreviated is {0:,d} and for march is {1:,d}'.format(base26('abbreviated') % 34, base26('march') % 34))

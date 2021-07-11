@@ -93,6 +93,13 @@ class TestChapter3(unittest.TestCase):
         with self.assertRaises(ValueError):
             _ = Hashtable(0)
 
+        # Make one with M=5 and ensure you can put FOUR value in it
+        ht = Hashtable(5)
+        ht.put(1,1)
+        ht.put(2,2)
+        ht.put(3,3)
+        ht.put(4,4)
+
         S = 100
         ht = Hashtable(S)
         self.assertEqual((0,0), stats_open_addressing(ht))   # empty hash table
@@ -116,6 +123,13 @@ class TestChapter3(unittest.TestCase):
         # Need M > 1
         with self.assertRaises(ValueError):
             _ = Hashtable(0)
+
+        # Make one with M=5 and ensure you can put FOUR value in it
+        ht = Hashtable(5)
+        ht.put(1,1)
+        ht.put(2,2)
+        ht.put(3,3)
+        ht.put(4,4)
 
         S = 1000
         ht = Hashtable(77)

@@ -375,7 +375,6 @@ class TestChapter7(unittest.TestCase):
             if nx.__version__ == 'replacement':
                 pass
             else:
-                import networkx.algorithms.cycles
                 networkx.algorithms.cycles.find_cycle(ss.digraph)
                 acycle = networkx.algorithms.cycles.find_cycle(ss.digraph)
                 self.assertTrue(len(acycle) > 1)

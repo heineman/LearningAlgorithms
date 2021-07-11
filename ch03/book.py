@@ -497,7 +497,7 @@ def generate_ch03():
     with TableNum(1) as table_number:
         process(generate_hash(),
                 chapter, table_number,
-                'Example hash() and hash code expressions for a table of size 15',
+                'Example hash() and hash code expressions for a table of size 15 (because of salting will be different from book)',
                 create_image=False)
 
     with FigureNum(2) as figure_number:
