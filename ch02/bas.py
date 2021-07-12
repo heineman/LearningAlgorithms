@@ -20,4 +20,4 @@ def binary_array_search(A, target):
         else:
             return mid
 
-    return -(1+lo)
+    return -(lo+1)

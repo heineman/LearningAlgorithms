@@ -820,10 +820,174 @@ def count_hash_incremental_move(output=True, decimals=4):
         total_delta = time.time() - now
         print('delta={}, Normal:{}'.format(delta, total_delta))
 
+def find_most_duplicated(A):
+    from ch03.hashtable_linked import Hashtable
+    if A is None or len(A) == 0:
+        raise ValueError('Unable to find most duplicated value in empty list')
+    ht = Hashtable()
+    for v in A:
+        if ht.get(v) is None:
+            ht.put(v, 1)
+        else:
+            ht.put(v, 1 + ht.get(v))
+
+    most = ht.get(A[0])
+    result = A[0]
+    for (k,count) in ht:
+        if count > most:
+            result = k
+            most = count
+
+    return result
+
+class HashtableOpenAddressingRemove:
+    """Open Addressing Hashtable supporting removal of values."""
+    def __init__(self, M=10):
+        self.table = [None] * M
+        if M < 2:
+            raise ValueError('Hashtable must contain space for at least two (key, value) pairs.')
+        self.M = M
+        self.N = 0
+
+        self.load_factor = 0.75
+
+        # Ensure for M <= 3 that threshold is no greater than M-1
+        self.threshold = min(M * self.load_factor, M-1)
+
+    def get(self, k):
+        """Retrieve value associated with key, k."""
+        hc = hash(k) % self.M       # First place it could be
+        while self.table[hc]:
+            if self.table[hc].key == k:
+                return self.table[hc].value
+            hc = (hc + 1) % self.M
+        return None                 # Couldn't find
+
+    def is_full(self):
+        """Determine if Hashtable is full."""
+        return self.N >= self.M - 1
+
+    def put(self, k, v):
+        """Associate value, v, with the key, k."""
+        hc = hash(k) % self.M       # First place it could be
+        while self.table[hc]:
+            if self.table[hc].key == k:     # Overwrite if already here
+                self.table[hc].value = v
+                return
+            hc = (hc + 1) % self.M
+
+        if self.N >= self.M - 1:
+            raise RuntimeError('Table is Full: cannot store {} -> {}'.format(k, v))
+
+        self.table[hc] = Entry(k, v)
+        self.N += 1
+        
+        if self.N >= self.threshold:
+            self.resize(2*self.M + 1)
+
+    def resize(self, new_size):
+        """Resize table and rehash existing entries into new table."""
+        temp = HashtableOpenAddressingRemove(new_size)
+        for n in self.table:
+            if n:
+                temp.put(n.key, n.value)
+        self.table = temp.table
+        temp.table = None     # ensures memory is freed
+        self.M = temp.M
+        self.threshold = self.load_factor * self.M
+        self.deleted = 0
+
+    def remove(self, k):
+        """
+        Remove (k,v) entry associated with k by rehashing all subsequent entries in chain.
+        Note: with bad luck, during rehashing, the same entry could be rehashed multiple times
+        """
+        hc = hash(k) % self.M       # First place it could be
+        while self.table[hc]:
+            if self.table[hc].key == k:        # This is one to be deleted
+                break
+            hc = (hc + 1) % self.M
+
+        if self.table[hc] is None:             # Not present
+            return
+        
+        result = self.table[hc].value          # Save to be returned
+        self.table[hc] = None                  # Remove it and update total
+        self.N -= 1
+
+        hc = (hc + 1) % self.M                 # Now rehash all subsequent ones in chain
+        while self.table[hc]:
+            entry = self.table[hc]
+            self.table[hc] = None
+            self.N -= 1                        # total is reduced by one...
+            self.put(entry.key, entry.value)   # Rehash so this won't get lost. This incremenets N by 1
+            hc = (hc + 1) % self.M
+        return result
+
+    def __iter__(self):
+        """Generate all (k, v) tuples for actual (i.e., non-deleted) entries."""
+        for entry in self.table:
+            if entry:
+                yield (entry.key, entry.value)
+
+def compare_removes(output=True):
+    """Run trials that create a Hashtable and then remove all entries."""
+    build_time_oa = min(timeit.repeat(stmt='''
+ht = HashtableOpenAddressingRemove(8)
+for w in words:
+    ht.put(w,w)''', setup='''
+from ch03.challenge import HashtableOpenAddressingRemove
+from resources.english import english_words
+words = english_words()[:20000]''', repeat=5, number=2))/2
+
+    build_time_sc = min(timeit.repeat(stmt='''
+ht = Hashtable(8)
+for w in words:
+    ht.put(w,w)''', setup='''
+from ch03.hashtable_linked import Hashtable
+from resources.english import english_words
+words = english_words()[:20000]''', repeat=5, number=2))/2
+
+    delete_time_oa = min(timeit.repeat(stmt='''
+for w in to_remove:
+    ht.remove(w)
+if ht.N != 0:
+    raise RuntimeError("should have emptied")''', setup='''
+import random
+from ch03.challenge import HashtableOpenAddressingRemove
+from resources.english import english_words
+words = english_words()[:20000]
+ht = HashtableOpenAddressingRemove(8)
+for w in words:
+    ht.put(w,w)
+to_remove = list(words)
+random.shuffle(to_remove)''', repeat=5, number=2))/2
+
+    delete_time_sc = min(timeit.repeat(stmt='''
+for w in to_remove:
+    ht.remove(w)
+if ht.N != 0:
+    raise RuntimeError("should have emptied")''', setup='''
+import random
+from ch03.hashtable_linked import Hashtable
+from resources.english import english_words
+words = english_words()[:20000]
+ht = Hashtable(8)
+for w in words:
+    ht.put(w,w)
+to_remove = list(words)
+random.shuffle(to_remove)''', repeat=5, number=2))/2
+
+    tbl = DataTable([20,8,8],['Hashtable Type', 'Build', 'Remove All'], output=output)
+    tbl.format('Hashtable Type', 's')
+    tbl.row(['Open Addressing:', build_time_oa, delete_time_oa])
+    tbl.row(['Separate Chaining:', build_time_sc, delete_time_sc])
+    return tbl
+
 #######################################################################
 if __name__ == '__main__':
     chapter = 3
-
+    
     with ExerciseNum(1) as exercise_number:
         exercise_triangle_number_probing()
         print(caption(chapter, exercise_number),
@@ -834,7 +998,7 @@ if __name__ == '__main__':
         print(caption(chapter, exercise_number),
               'Hashtable with sorted linked list chains')
 
-    # To provide a full exercise, remove the "[:5000]" from below
+    # To provide a full exercise, remove the "[:5000]" from below, otherwise takes too long for book.
     with ExerciseNum(3) as exercise_number:
         bad_timing(english_words()[:5000])
         print(caption(chapter, exercise_number),
@@ -854,3 +1018,19 @@ if __name__ == '__main__':
         count_hash_incremental_move()
         print(caption(chapter, exercise_number),
               'Compare incremental resize strategy against geometric resizing.')
+
+    with ExerciseNum(7) as exercise_number:
+        # TODO
+        print(caption(chapter, exercise_number),
+              'Incorporate logic to shrink hashtable storage once below 25% full.')
+        
+    with ExerciseNum(8) as exercise_number:
+        print('can be 1,2,3,4:', find_most_duplicated([1,2,3,4]))
+        print('must be 1:', find_most_duplicated([1,2,1,3]))
+        print(caption(chapter, exercise_number),
+              'Find value in list that is duplicated the most (return any if ties).')
+        
+    with ExerciseNum(9) as exercise_number:
+        compare_removes()
+        print(caption(chapter, exercise_number),
+              'Compare open addressing vs. separate chaining with deletions.')

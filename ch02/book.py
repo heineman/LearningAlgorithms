@@ -165,23 +165,23 @@ x=create_pair({})'''.format(n), number=num)
               tkn(n, tkn_coeffs[0], tkn_coeffs[1])])
     return tbl
 
-def algorithms_a_b():
+def algorithms_x_y():
     """Generate table for estimates of time for three computers and two algorithms."""
 
-    def alg_a(n):
-        """Number of operations for algorithm A."""
+    def alg_x(n):
+        """Number of operations for algorithm X."""
         return 5*n
 
-    def alg_b(n):
-        """Number of operations for algorithm B."""
+    def alg_y(n):
+        """Number of operations for algorithm Y."""
         return 2020*math.log(n)/math.log(2)
 
-    tbl = DataTable([15,15,8,8,8,8,8], ['N', 'A', 'B', 'A_slow', 'A_fast', 'B_fast', 'A_fastest'],
+    tbl = DataTable([15,15,8,8,8,8,8], ['N', 'X', 'Y', 'X_slow', 'X_fast', 'Y_fast', 'X_fastest'],
                     decimals=1)
-    tbl.format('A', ',d')
-    tbl.format('B', ',d')
+    tbl.format('X', ',d')
+    tbl.format('Y', ',d')
     for n in [2**k for k in range(2, 24)]:
-        tbl.row([n, alg_a(n), int(alg_b(n)), alg_a(n)/1500, alg_a(n)/3000, alg_b(n)/1500, alg_a(n)/(250*3000)])
+        tbl.row([n, alg_x(n), int(alg_y(n)), alg_x(n)/1500, alg_x(n)/3000, alg_y(n)/1500, alg_x(n)/(250*3000)])
     return tbl
 
 def growth_table(output=True):
@@ -226,12 +226,12 @@ def generate_ch02():
     with TableNum(1) as table_number:
         process(actual_table(),
                 chapter, table_number,
-                'Prototype run-time performance')
+                'Prototype runtime performance')
 
     with TableNum(2) as table_number:
         process(prototype_table(),
                 chapter, table_number,
-                'Comparing different mathematical models with actual performance')
+                'Comparing different mathematical models against actual performance')
 
     with TableNum(3) as table_number:
         process(large_multiplication(),
@@ -239,15 +239,17 @@ def generate_ch02():
                 'Multiplying two n-digit integers')
 
     with FigureNum(1) as figure_number:
+        print('Excel plot')
         print(caption(chapter, figure_number),
                'Compare models against performance')
 
     with FigureNum(2) as figure_number:
-        algorithms_a_b()
+        algorithms_x_y()
         print(caption(chapter, figure_number),
-               'Complexity classes provide context to understand performance')
+               'Performance of algorithms X and Y on different computers')
 
     with FigureNum(3) as figure_number:
+        print('Excel plots')
         print(caption(chapter, figure_number),
                'Visualizing the numbers from Figure 2-2')
 
@@ -256,9 +258,29 @@ def generate_ch02():
                 chapter, table_number,
                 'Growth of different computations')
 
+    with FigureNum(4) as figure_number:
+        print('by hand')
+        print(caption(chapter, figure_number),
+               'Doors of destiny!')
+
+    with FigureNum(5) as figure_number:
+        print('by hand')
+        print(caption(chapter, figure_number),
+               'Searching for 53 in a sorted array that contains the value.')
+
+    with FigureNum(6) as figure_number:
+        print('by hand')
+        print(caption(chapter, figure_number),
+               'Searching for 17 in a sorted array that does not contain the value.')
+
+    with FigureNum(7) as figure_number:
+        print('by hand')
+        print(caption(chapter, figure_number),
+               'All complexity classes are arranged in dominance hierarchy')
+
     with FigureNum(8) as figure_number:
         print(caption(chapter, figure_number),
-               'Plot runtime performance against problem instance size for complexity classes')
+               'Runtime performance plotted against problem instance size for complexity classes')
 
 #######################################################################
 if __name__ == '__main__':

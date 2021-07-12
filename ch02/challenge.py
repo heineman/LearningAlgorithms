@@ -324,3 +324,13 @@ if __name__ == '__main__':
         print(caption(chapter, exercise_number),
               'Max sort')
         print()
+
+    with ExerciseNum(6) as exercise_number:
+        print(caption(chapter, exercise_number),
+              'Galactic algorithms')
+        print()
+
+    with ExerciseNum(7) as exercise_number:
+        print(caption(chapter, exercise_number),
+              'Performance Measurements')
+        print()

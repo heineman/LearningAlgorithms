@@ -473,7 +473,7 @@ def generate_ch01():
                 yaxis = 'Time (in ms)')
 
     # Taken from table
-    with FigureNum(10) as figure_number:
+    with FigureNum(9) as figure_number:
         print(caption(chapter, figure_number),
               'Runtime performance comparison')
 

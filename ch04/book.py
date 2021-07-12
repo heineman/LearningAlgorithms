@@ -85,6 +85,48 @@ def initial_heap():
 
     return h
 
+def heap_enqueue_animation():
+    """Show changes to storage with each swim()."""
+    from ch04.entry import Entry
+
+    heap = initial_heap()
+    heap.N += 1
+    heap.storage[heap.N] = Entry(12, 12)
+    fig_num = 8
+    print('Fig. 4-{:<2d} : '.format(fig_num),' -- |' + '|'.join([' {:>3} '.format(e.priority) for e in heap.storage[1:heap.N+1]]))
+    print()
+    child = heap.N
+    while child > 1 and heap.less(child//2, child):
+        heap.swap(child, child//2)
+        child = child // 2
+        fig_num += 1
+        print('Fig. 4-{:<2d} : '.format(fig_num),' -- |' + '|'.join([' {:>3} '.format(e.priority) for e in heap.storage[1:heap.N+1]]))
+
+def heap_dequeue_animation():
+    """Show changes to storage with each sink()."""
+    heap = initial_heap()
+    heap.enqueue(12, 12)
+    heap.enqueue(16, 16)
+    print('Fig. 4-11 : ',' -- |' + '|'.join([' {:>3} '.format(e.priority) for e in heap.storage[1:heap.N+1]]))
+    heap.storage[1] = heap.storage[heap.N]
+    heap.storage[heap.N] = None
+    heap.N -= 1
+    fig_num = 13
+    print('Fig. 4-{} : '.format(fig_num),' -- |' + '|'.join([' {:>3} '.format(e.priority) for e in heap.storage[1:heap.N+1]]))
+    print()
+    parent = 1
+    while 2*parent <= heap.N:
+        child = 2*parent
+        if child < heap.N and heap.less(child, child+1):
+            child += 1
+        if not heap.less(parent, child):
+            break
+        heap.swap(child, parent)
+        fig_num += 1
+        print('Fig. 4-{} : '.format(fig_num),' -- |' + '|'.join([' {:>3} '.format(e.priority) for e in heap.storage[1:heap.N+1]]))
+
+        parent = child
+    
 def generate_ch04():
     """Generate tables/figures for chapter 04."""
     chapter = 4
@@ -141,7 +183,7 @@ def generate_ch04():
         print()
 
     with FigureNum(7) as figure_number:
-        description  = 'Which of these are valid binary max heaps'
+        description  = 'Which of these are valid binary max heaps?'
         label = caption(chapter, figure_number)
         print('Hand drawn')
         print('{}. {}'.format(label, description))
@@ -228,6 +270,34 @@ def generate_ch04():
         heap4 = initial_heap()
         heap4.enqueue(12, 12)
         print(' -- |' + '|'.join([' {:>3} '.format(e.priority) for e in heap4.storage[1:heap4.N+1]]))
+        print('Hand drawn')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(18) as figure_number:
+        description  = 'Changes to storage after enqueue in Figure 4-8'
+        label = caption(chapter, figure_number)
+        heap_enqueue_animation()
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(19) as figure_number:
+        description  = 'Changes to storage after dequeue in Figure 4-11'
+        label = caption(chapter, figure_number)
+        heap_dequeue_animation()
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(20) as figure_number:
+        description  = 'Using an array as a circular queue'
+        label = caption(chapter, figure_number)
+        print('Hand drawn')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(21) as figure_number:
+        description  = 'A novel factorial heap structure'
+        label = caption(chapter, figure_number)
         print('Hand drawn')
         print('{}. {}'.format(label, description))
         print()

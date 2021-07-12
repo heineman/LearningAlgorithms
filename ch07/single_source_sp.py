@@ -64,8 +64,8 @@ def dijkstra_sp(G, src):
 
     edge_to = {}
     while not impq.is_empty():
-        v = impq.dequeue()
-        for e in G.edges(v, data=True):
+        n = impq.dequeue()
+        for e in G.edges(n, data=True):
             relax(e)
 
     return (dist_to, edge_to)

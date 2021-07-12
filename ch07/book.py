@@ -460,6 +460,7 @@ def visualize_results_floyd_warshall_two_steps(DG):
 def generate_ch07():
     """Generate Tables and Figures for chapter 07."""
     chapter = 7
+
     with FigureNum(23) as figure_number:
         description = 'Initialize dist_to[][] and node_from[][] based on G'
         label = caption(chapter, figure_number)
@@ -815,6 +816,21 @@ def generate_ch07():
         visualize_results_floyd_warshall_two_steps(DG_TABLE)
         print('{}. {}'.format(label, description))
         print()
+
+    with FigureNum(25) as figure_number:
+        description = 'Sample Maze to defeat Guided Search'
+        label = caption(chapter, figure_number)
+        print('Done by hand.')
+        print('{}. {}'.format(label, description))
+        print()
+
+    with FigureNum(26) as figure_number:
+        description = 'Sample directed, acyclic graph for single-source, shortest path optimization.'
+        label = caption(chapter, figure_number)
+        print('Done by hand.')
+        print('{}. {}'.format(label, description))
+        print()
+
 
 #######################################################################
 if __name__ == '__main__':

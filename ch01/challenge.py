@@ -178,16 +178,16 @@ def run_median_less_than_trial(max_k=20, output=True):
 
     return tbl
 
-def is_palindrome1(s):
-    """Create slice with negative step and confirm equality with s."""
-    return s[::-1] == s
+def is_palindrome1(w):
+    """Create slice with negative step and confirm equality with w."""
+    return w[::-1] == w
 
-def is_palindrome2(s):
+def is_palindrome2(w):
     """Strip outermost characters if same, return false when mismatch."""
-    while len(s) > 1:
-        if s[0] != s[-1]:     # if mismatch, return False
+    while len(w) > 1:
+        if w[0] != w[-1]:     # if mismatch, return False
             return False
-        s = s[1:-1]           # strip characters on either end; repeat
+        w = w[1:-1]           # strip characters on either end; repeat
 
     return True               # must have been a Palindrome
 

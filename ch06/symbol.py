@@ -7,15 +7,15 @@ from ch06.avl import resolve_left_leaning, resolve_right_leaning
 
 class BinaryNode:
     """
-    Node structure to use in a binary tree.
+    Node structure to use in a binary tree implementing a symbol table.
 
     Attributes
     ----------
-        left - left child (or None)
-        right - right child (or None)
-        height - height of the node
-        key - key for (key, value) pair
-        value - value for (key, value) pair
+        left   - left child (or None)
+        right  - right child (or None)
+        height - height of the node in AVL tree
+        key    - key for (key, value) pair
+        value  - value for (key, value) pair
     """
     def __init__(self, k, v):
         self.key = k

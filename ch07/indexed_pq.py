@@ -4,13 +4,21 @@ Indexed minimum priority queue
 class IndexedMinPQ:
     """
     Heap storage for an indexed min priority queue.
+    
+    Attributes
+    ----------
+        size       - available storage (note 0th index unused)
+        N          - Number of (value, priority) pairs in the PQ
+        values     - stores the ith value in the PQ
+        priorities - stores the priority of the ith value in the PQ
+        location   - records index in values/priorities for given value
     """
     def __init__(self, size):
-        self.size = size
-        self.priorities = [None] * (size+1)   # binary heap using 1-based indexing
-        self.values = [None] * (size+1)
-        self.location = {}                 # For each value, remember its location in storage
         self.N = 0
+        self.size = size
+        self.values = [None] * (size+1)
+        self.priorities = [None] * (size+1)   # binary heap using 1-based indexing
+        self.location = {}                    # For each value, remember its location in storage
 
     def __len__(self):
         """Return number of values in priority queue."""

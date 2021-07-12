@@ -61,9 +61,9 @@ class Expression:
 
     Attributes
     ----------
-        left - left child (or None)
+        left  - left child (or None)
         right - right child (or None)
-        element - A function to perform a binary operation
+        func  - A function to perform a binary operation
     """
     def __init__(self, func, left, right):
         self.func = func

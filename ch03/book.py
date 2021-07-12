@@ -501,7 +501,7 @@ def generate_ch03():
                 create_image=False)
 
     with FigureNum(2) as figure_number:
-        description  = 'Structure of Hashtable storage after adding five (key, value) pairs'
+        description  = 'Structure of Hashtable storage after adding five (key, value) entries'
         label = caption(chapter, figure_number)
         sample_hashtable()
         print('{}. {}'.format(label, description))
@@ -510,7 +510,7 @@ def generate_ch03():
     with TableNum(2) as table_number:
         process(time_results_open_addressing(),
                 chapter, table_number,
-                'Average performance to insert N keys into a Hashtable of size M',
+                'Average performance to insert N keys into a Hashtable of size M (in milliseconds)',
                 yaxis='Time (in microseconds)')
 
     with FigureNum(3) as figure_number:
@@ -547,7 +547,7 @@ def generate_ch03():
         print()
 
     with FigureNum(7) as figure_number:
-        description  = 'Increasing M means existing entries can become "lost" since computed hash code depends on M'
+        description  = 'Some entries can get "lost" if they are simply copied when M increases'
         label = caption(chapter, figure_number)
         sample_hashtable()
         sample_separate_chaining_hashtable()

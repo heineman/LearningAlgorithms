@@ -10,49 +10,12 @@
 
 from ch03.entry import LinkedEntry
 
-def stats_linked_lists(ht, output=False):
-    """
-    Produce statistics on the linked-list implemented table. Returns
-    (average chain length for non-empty buckets, max chain length)
-    """
-    size = len(ht.table)
-    sizes = {}                      # record how many chains of given size exist
-    total_search = 0
-    max_length = 0
-    total_non_empty = 0
-    for i in range(size):
-        num = 0
-        idx = i
-        entry = ht.table[idx]
-        total_non_empty += 1 if entry else 0
-
-        while entry:                # count how many are in this entry
-            entry = entry.next
-            num += 1
-            total_search += num     # each entry in the linked list requires more searches to find
-        if num in sizes:            # also counts number with NO entries
-            sizes[num] = sizes[num] + 1
-        else:
-            sizes[num] = 1
-        if num > max_length:
-            max_length = num
-
-    if output:
-        print('Linked List ({} total entries in base size of {})'.format(ht.N, size))
-        for i in range(size):
-            if i in sizes:
-                print('{} linked lists have size of {}'.format(sizes[i], i))
-
-    if total_non_empty == 0:
-        return (0, 0)
-    return (ht.N/total_non_empty, max_length)
-
 class Hashtable:
     """Hashtable using array of M linked lists."""
     def __init__(self, M=10):
-        self.table = [None] * M
         if M < 1:
             raise ValueError('Hashtable storage must be at least 1.')
+        self.table = [None] * M
         self.M = M
         self.N = 0
 
@@ -181,3 +144,40 @@ class DynamicHashtable:
             while entry:
                 yield (entry.key, entry.value)
                 entry = entry.next
+
+def stats_linked_lists(ht, output=False):
+    """
+    Produce statistics on the linked-list implemented table. Returns
+    (average chain length for non-empty buckets, max chain length)
+    """
+    size = len(ht.table)
+    sizes = {}                      # record how many chains of given size exist
+    total_search = 0
+    max_length = 0
+    total_non_empty = 0
+    for i in range(size):
+        num = 0
+        idx = i
+        entry = ht.table[idx]
+        total_non_empty += 1 if entry else 0
+
+        while entry:                # count how many are in this entry
+            entry = entry.next
+            num += 1
+            total_search += num     # each entry in the linked list requires more searches to find
+        if num in sizes:            # also counts number with NO entries
+            sizes[num] = sizes[num] + 1
+        else:
+            sizes[num] = 1
+        if num > max_length:
+            max_length = num
+
+    if output:
+        print('Linked List ({} total entries in base size of {})'.format(ht.N, size))
+        for i in range(size):
+            if i in sizes:
+                print('{} linked lists have size of {}'.format(sizes[i], i))
+
+    if total_non_empty == 0:
+        return (0, 0)
+    return (ht.N/total_non_empty, max_length)

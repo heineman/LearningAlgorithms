@@ -52,9 +52,9 @@ def floyd_warshall(G):
 
         dist_to[u][u] = 0
 
-        for edge in G.edges(u, data=True):
-            v = edge[1]
-            dist_to[u][v] = edge[2][WEIGHT]
+        for e in G.edges(u, data=True):
+            v = e[1]
+            dist_to[u][v] = e[2][WEIGHT]
             node_from[u][v] = u
 
     for k in G.nodes():

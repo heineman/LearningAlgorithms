@@ -146,6 +146,36 @@ class TestChapter3(unittest.TestCase):
             self.assertIsNotNone(ht.remove(key(s)))
         self.assertEqual(0, ht.N)
 
+    def test_open_addressing_with_remove_challenge(self):
+        """The order of values in table is irrelevant."""
+        from ch03.challenge import HashtableOpenAddressingRemove
+
+        # Need M > 1
+        with self.assertRaises(ValueError):
+            _ = HashtableOpenAddressingRemove(0)
+
+        # Make one with M=5 and ensure you can put FOUR value in it
+        ht = HashtableOpenAddressingRemove(5)
+        ht.put(1,1)
+        ht.put(2,2)
+        ht.put(3,3)
+        ht.put(4,4)
+
+        S = 76
+        ht = HashtableOpenAddressingRemove(77)
+        for i in range(S):
+            ht.put(key(i), sample(i))
+        for i in range(S):
+            self.assertEqual(sample(i), ht.get(key(i)))
+        self.assertEqual(S, ht.N)
+
+        # Now go and delete values, in any order
+        to_remove = list(range(S))
+        random.shuffle(to_remove)
+        for s in to_remove:
+            self.assertIsNotNone(ht.remove(key(s)))
+        self.assertEqual(0, ht.N)
+
     def test_confirm_day_of_week_one_line(self):
         """Find first date where computations diverge."""
         from ch03.months import month_length, key_array, day_of_week_one_line

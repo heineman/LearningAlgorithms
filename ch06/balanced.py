@@ -11,8 +11,10 @@ class BinaryNode:
 
     Attributes
     ----------
-        left - left child (or None)
-        right - right child (or None)
+        left   - left child (or None)
+        right  - right child (or None)
+        value  - value stored by Node
+        height - computed height of node in AVL tree
     """
     def __init__(self, val):
         self.value = val

@@ -12,9 +12,10 @@ from ch03.entry import Entry, MarkedEntry
 class Hashtable:
     """Open Addressing Hashtable."""
     def __init__(self, M=10):
-        self.table = [None] * M
         if M < 2:
             raise ValueError('Hashtable must contain space for at least two (key, value) pairs.')
+
+        self.table = [None] * M
         self.M = M
         self.N = 0
 
@@ -55,9 +56,9 @@ class Hashtable:
 class DynamicHashtable:
     """Open Addressing Hashtable that supports resizing."""
     def __init__(self, M=10):
-        self.table = [None] * M
         if M < 1:
             raise ValueError('Hashtable must contain space for at least two (key, value) pairs.')
+        self.table = [None] * M
         self.M = M
         self.N = 0
 

@@ -403,7 +403,3 @@ if __name__ == '__main__':
     with ExerciseNum(8) as exercise_number:
         avoid_interstate_90()
         print(caption(chapter, exercise_number), 'Altered route when avoiding I-90')
-
-    with ExerciseNum(9) as exercise_number:
-        defeat_guided_search()
-        print(caption(chapter, exercise_number), 'A maze that defeats Guided Search')

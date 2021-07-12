@@ -11,14 +11,14 @@ from ch06.avl import resolve_left_leaning, resolve_right_leaning
 
 class BinaryNode:
     """
-    Node structure to use in a binary tree.
+    Node structure to use in a binary tree implementing a priority queue.
 
     Attributes
     ----------
-        left - left child (or None)
-        right - right child (or None)
-        height - height of the node
-        value - value for (value, priority) pair
+        left     - left child (or None)
+        right    - right child (or None)
+        height   - height of the node
+        value    - value for (value, priority) pair
         priority - key for (value, priority) pair
     """
     def __init__(self, v, p):

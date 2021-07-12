@@ -9,8 +9,9 @@ class BinaryNode:
 
     Attributes
     ----------
-        left - left child (or None)
+        left  - left child (or None)
         right - right child (or None)
+        value - value stored by Node
     """
     def __init__(self, val):
         self.value = val
