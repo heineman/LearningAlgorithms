@@ -565,7 +565,7 @@ class HashtableSortedLinkedLists:
             if entry.key > k:       # Can insert since we didn't find
                 self.N += 1
                 if prev is None:    # new First
-                    self.table[hc] = LinkedEntry(k, v, entry)            
+                    self.table[hc] = LinkedEntry(k, v, entry)
                 else:
                     prev.next = LinkedEntry(k, v, entry)
                 return
@@ -841,7 +841,10 @@ def find_most_duplicated(A):
     return result
 
 class HashtableOpenAddressingRemove:
-    """Open Addressing Hashtable supporting removal of values."""
+    """
+    Open Addressing Hashtable supporting removal of values. Also handles resize shrink events
+    when the size falls below 0.25 of full
+    """
     def __init__(self, M=10):
         self.table = [None] * M
         if M < 2:
@@ -850,6 +853,7 @@ class HashtableOpenAddressingRemove:
         self.N = 0
 
         self.load_factor = 0.75
+        self.shrink_factor = 0.25
 
         # Ensure for M <= 3 that threshold is no greater than M-1
         self.threshold = min(M * self.load_factor, M-1)
@@ -881,7 +885,7 @@ class HashtableOpenAddressingRemove:
 
         self.table[hc] = Entry(k, v)
         self.N += 1
-        
+
         if self.N >= self.threshold:
             self.resize(2*self.M + 1)
 
@@ -910,7 +914,7 @@ class HashtableOpenAddressingRemove:
 
         if self.table[hc] is None:             # Not present
             return
-        
+
         result = self.table[hc].value          # Save to be returned
         self.table[hc] = None                  # Remove it and update total
         self.N -= 1
@@ -920,8 +924,13 @@ class HashtableOpenAddressingRemove:
             entry = self.table[hc]
             self.table[hc] = None
             self.N -= 1                        # total is reduced by one...
-            self.put(entry.key, entry.value)   # Rehash so this won't get lost. This incremenets N by 1
+            self.put(entry.key, entry.value)   # Rehash so this won't get lost. This increments N
             hc = (hc + 1) % self.M
+
+        if self.N > 0 and self.N <= self.shrink_factor * self.M:
+            new_size = self.M // 2
+            if new_size % 2 == 0: new_size += 1
+            self.resize(new_size)
         return result
 
     def __iter__(self):
@@ -987,7 +996,7 @@ random.shuffle(to_remove)''', repeat=5, number=2))/2
 #######################################################################
 if __name__ == '__main__':
     chapter = 3
-    
+
     with ExerciseNum(1) as exercise_number:
         exercise_triangle_number_probing()
         print(caption(chapter, exercise_number),
@@ -1020,16 +1029,16 @@ if __name__ == '__main__':
               'Compare incremental resize strategy against geometric resizing.')
 
     with ExerciseNum(7) as exercise_number:
-        # TODO
+        print('HashtableOpenAddressingRemove in ch07.challenge')
         print(caption(chapter, exercise_number),
               'Incorporate logic to shrink hashtable storage once below 25% full.')
-        
+
     with ExerciseNum(8) as exercise_number:
         print('can be 1,2,3,4:', find_most_duplicated([1,2,3,4]))
         print('must be 1:', find_most_duplicated([1,2,1,3]))
         print(caption(chapter, exercise_number),
               'Find value in list that is duplicated the most (return any if ties).')
-        
+
     with ExerciseNum(9) as exercise_number:
         compare_removes()
         print(caption(chapter, exercise_number),

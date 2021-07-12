@@ -18,7 +18,7 @@ if tkinter_error:
     pass
 else:
     import tkinter
-    
+
 from ch07.maze import Maze, to_networkx
 from ch07.snapshot import tkinter_register_snapshot
 from ch07.search import path_to, bfs_search, dfs_search_recursive, guided_search
@@ -649,7 +649,7 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-    # In-text linear ordering 
+    # In-text linear ordering
     print_sample_linear_ordering()
     print('Linear ordering of spreadsheet cells after Figure 12.')
     print()
@@ -825,7 +825,7 @@ def generate_ch07():
         print()
 
     with FigureNum(26) as figure_number:
-        description = 'Sample directed, acyclic graph for single-source, shortest path optimization.'
+        description = 'Sample directed, acyclic graph for single-source, shortest path optimization'
         label = caption(chapter, figure_number)
         print('Done by hand.')
         print('{}. {}'.format(label, description))

@@ -86,8 +86,8 @@ def visualize_alternate(A):
             break
         col += 1
     print()
-    for row in range(len(A)):
-        print('{}\t'.format(A[row]), end='')
+    for row,v in enumerate(A):
+        print('{}\t'.format(v), end='')
         for c in range(col+1):
             if row in cols and c in cols[row]:
                 print('{}\t'.format(cols[row][c]), end='')
@@ -395,6 +395,7 @@ def visualize_tournament_two(A):
 def generate_ch01():
     """Generate Tables and Figures for chapter 01."""
     chapter = 1
+    visualize_alternate([1, 5, 2, 9, 3, 4])
 
     with FigureNum(1) as figure_number:
         pi1 = [13, 2, 18, 7, 50]

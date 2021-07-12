@@ -78,11 +78,11 @@ def challenge_bellman_ford():
     DG.add_edge('c', 'd', weight=1)
     DG.add_edge('b', 'c', weight=1)
     DG.add_edge('s', 'b', weight=1)
-    
+
     (defective_dist_to, _) = defective_bellman_ford(DG, 's')
     (dist_to, _) = bellman_ford(DG, 's')
 
-    if dist_to != defective_dist_to:    
+    if dist_to != defective_dist_to:
         print('Proper Bellman-Ford computes {} but with one fewer iteration it is {}'.format(dist_to, defective_dist_to))
 
 def maze_to_defeat_guided_search(n=15):
@@ -333,38 +333,108 @@ def search_trials():
     """
     import random
     from ch07.maze import to_networkx, distance_to
-    
+
     tbl = DataTable([8,8,8,8],['N', 'BFS', 'DS', 'GS'], decimals=2)
     for N in [4, 8, 16, 32, 64, 128]:
         num_bfs = 0
         num_dfs = 0
         num_gs = 0
         for i in range(512):
-            random.seed(i)   
-            m = Maze(N,N)  
+            random.seed(i)
+            m = Maze(N,N)
             G = to_networkx(m)
-             
+
             num_bfs += annotated_bfs_search(G, m.start(), m.end())
             num_dfs += annotated_dfs_search(G, m.start(), m.end())
             num_gs += annotated_guided_search(G, m.start(), m.end(), distance_to)
- 
+
         tbl.row([N, num_bfs/512, num_dfs/512, num_gs/512])
 
     tbl = DataTable([8,8,8,8],['N', 'BFS', 'DS', 'GS'], decimals=2)
     for N in [4, 8, 16, 32, 64, 128]:
         m = maze_to_defeat_guided_search(N)
         G = to_networkx(m)
-            
+
         num_bfs = annotated_bfs_search(G, m.start(), m.end())
         num_dfs = annotated_dfs_search(G, m.start(), m.end())
         num_gs = annotated_guided_search(G, m.start(), m.end(), distance_to)
 
         tbl.row([N, num_bfs, num_dfs, num_gs])
 
+def bellman_ford_returns_negative_cycle(G, src):
+    """
+    Compute Single Source Shortest Path using Bellman_ford and return
+    dist_to[] with results and edge_to[] to be able to recover the
+    shortest paths. Can work even if there are negative edge weights,
+    but NOT if a negative cycle exists. Fortunately it can detect
+    this situation.
+    """
+    from ch07.single_source_sp import WEIGHT
+    inf = float('inf')
+    dist_to = {v:inf for v in G.nodes()}
+    dist_to[src] = 0
+    edge_to = {}
+
+    def relax(e):
+        u, v, weight = e[0], e[1], e[2][WEIGHT]
+        if dist_to[u] + weight < dist_to[v]:
+            dist_to[v] = dist_to[u] + weight
+            edge_to[v] = e
+            return True
+        return False
+
+    #debug_state('initialize', G, node_from, dist_to)
+    # Do N total passes. Only N-1 are needed, but use the Nth final one to detect
+    # if there had been a negative cycle.
+    for i in range(G.number_of_nodes()):
+        for e in G.edges(data=True):
+            if relax(e):
+                if i == G.number_of_nodes()-1:
+                    target = e[1]       # where you ended up
+                    v = e[0]            # last node before target
+                    path = [target]
+                    weight = e[2][WEIGHT]
+                    while v != target:
+                        path.append(v)
+                        e = edge_to[v]
+                        weight += e[2][WEIGHT]
+                        v = e[0]
+                    path.append(target)
+                    raise NegativeCycleError(G, path, weight)
+
+    return (dist_to, edge_to)
+
+class NegativeCycleError(RuntimeError):
+    """Stores information about the Negative Cycle."""
+    def __init__(self, G, path, weight):
+        self.graph = G
+        self.path = path
+        self.weight = weight
+        
+    def __str__(self):
+        result = ''
+        for n in self.path[:-1]:
+            result += '->' + str(n)
+        return '{}{} with weight={}'.format(self.path[-2], result, self.weight)
+
+def recover_negative_cycle_example():
+    """Show how to recover negative cycle after detected by Bellman-Ford."""
+    
+    DG = nx.DiGraph()
+    DG.add_edge('a', 'b', weight=1)
+    DG.add_edge('b', 'd', weight=-3)
+    DG.add_edge('d', 'c', weight=5)
+    DG.add_edge('c', 'b', weight=-4)
+    
+    try:
+        bellman_ford_returns_negative_cycle(DG, 'a')
+    except NegativeCycleError as nce:
+        print('detected negative cycle:', nce)
+
 #######################################################################
 if __name__ == '__main__':
     chapter = 7
-
+    
     with ExerciseNum(1) as exercise_number:
         print('dfs_search_recursive in ch07.challenge')
         print(caption(chapter, exercise_number), 'Recursive depth first search')
@@ -382,13 +452,14 @@ if __name__ == '__main__':
 
     with ExerciseNum(4) as exercise_number:
         print('recover_negative_cycle in ch07.digraph_search')
-        print('tbd')    # TODO
+        recover_negative_cycle_example()
         print(caption(chapter, exercise_number), 'Recover Negative cycle')
+        print()
 
     with ExerciseNum(5) as exercise_number:
         print('Construct graph with N=5 nodes requiring 4 iterations')
         challenge_bellman_ford()
-        print(caption(chapter, exercise_number), 'Recover cycle')
+        print(caption(chapter, exercise_number), 'Validate Need for N-1 iterations')
         print()
 
     with ExerciseNum(6) as exercise_number:
@@ -399,6 +470,7 @@ if __name__ == '__main__':
     with ExerciseNum(7) as exercise_number:
         dag_trials()
         print(caption(chapter, exercise_number), 'DAG trials')
+        print()
 
     with ExerciseNum(8) as exercise_number:
         avoid_interstate_90()

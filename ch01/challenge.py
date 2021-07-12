@@ -268,8 +268,8 @@ if __name__ == '__main__':
     chapter = 1
 
     with ExerciseNum(1) as exercise_number:
-        s = 'A man, a plan, a canal. Panama!'
-        print(s,'is a palindrome:', is_palindrome_letters_only(s))
+        sample = 'A man, a plan, a canal. Panama!'
+        print(sample,'is a palindrome:', is_palindrome_letters_only(sample))
         print(caption(chapter, exercise_number),
               'Palindrome Detector')
 
@@ -295,4 +295,3 @@ if __name__ == '__main__':
         print('Fails to print (9, 8)', two_largest_attempt([9, 8, 5, 7, 3, 1]))
         print(caption(chapter, exercise_number),
               'Failed Two largest')
-

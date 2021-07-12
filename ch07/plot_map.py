@@ -2,11 +2,6 @@
 Supporting functions for plotting the latitude/longitude data.
 """
 
-try:
-    import networkx as nx
-except ImportError:
-    import ch07.replacement as nx
-
 from ch07.dependencies import plt_error
 from ch07.replacement import WEIGHT
 
@@ -43,14 +38,14 @@ def plot_path(positions, path, marker='.', color='red'):
         return
     import matplotlib.pyplot as plt
 
-    px = []
-    py = []
+    pxs = []
+    pys = []
     for v in path:
         pos = positions[v]
-        px.append(pos[1])
-        py.append(pos[0])
-    plt.plot(px, py, color=color)
-    plt.scatter(px, py, marker=marker, color=color)
+        pxs.append(pos[1])
+        pys.append(pos[0])
+    plt.plot(pxs, pys, color=color)
+    plt.scatter(pxs, pys, marker=marker, color=color)
 
 def plot_node_from(positions, src, target, node_from, marker='.', color='orange'):
     """Plot path from src to target using node_from[] information."""

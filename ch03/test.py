@@ -161,7 +161,7 @@ class TestChapter3(unittest.TestCase):
         ht.put(3,3)
         ht.put(4,4)
 
-        S = 76
+        S = 777   # ten-times as much, to allow for resizing
         ht = HashtableOpenAddressingRemove(77)
         for i in range(S):
             ht.put(key(i), sample(i))
@@ -623,7 +623,7 @@ class TestChapter3(unittest.TestCase):
         ht.put(77, 99)
         ht.put(77, 101)
         self.assertEqual(101, ht.get(77))
-        self.assertEqual([(77,101)], [k for k in ht])
+        self.assertEqual([(77,101)], list(ht))
 
         # place 14 more values until full (since must leave ONE empty).
         for k in range(14):
@@ -637,7 +637,7 @@ class TestChapter3(unittest.TestCase):
 
     def test_sorted_linked_list_hash_table(self):
         from ch03.challenge import HashtableSortedLinkedLists
-        
+
         with self.assertRaises(ValueError):
             HashtableSortedLinkedLists(-2)
 

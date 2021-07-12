@@ -164,16 +164,32 @@ class TestChapter7(unittest.TestCase):
 
     def test_bellman_ford_negative_cycle_sp(self):
         from ch07.single_source_sp import bellman_ford
-
-        NegCycle = nx.DiGraph()
-        NegCycle.add_edge('a', 'b', weight=3)
-        NegCycle.add_edge('b', 'c', weight=-2)
-        NegCycle.add_edge('c', 'd', weight=-3)
-        NegCycle.add_edge('d', 'b', weight=4)
-        NegCycle.add_edge('d', 'e', weight=5)
+        from ch07.challenge import bellman_ford_returns_negative_cycle, NegativeCycleError
+        neg_cycle = nx.DiGraph()
+        neg_cycle.add_edge('a', 'b', weight=1)
+        neg_cycle.add_edge('b', 'd', weight=-3)
+        neg_cycle.add_edge('d', 'c', weight=5)
+        neg_cycle.add_edge('c', 'b', weight=-4)
 
         with self.assertRaises(RuntimeError):
-            bellman_ford(NegCycle, 'a')
+            bellman_ford(neg_cycle, 'a')
+
+        with self.assertRaises(NegativeCycleError):
+            bellman_ford_returns_negative_cycle(neg_cycle, 'a')
+
+        # Validate semantic information in NegativeCycleError: Note that cycle returned is 
+        # implementation-specific, so you could choose to only match regExp on weight=-2
+        with self.assertRaisesRegex(NegativeCycleError, 'c->d->b->c with weight=-2'):
+            bellman_ford_returns_negative_cycle(neg_cycle, 'a')
+
+        no_neg_cycle = nx.DiGraph()
+        no_neg_cycle.add_edge('a', 'b', weight=1)
+        no_neg_cycle.add_edge('b', 'd', weight=-3)
+        no_neg_cycle.add_edge('d', 'c', weight=5)
+        no_neg_cycle.add_edge('c', 'b', weight=-1)
+
+        bellman_ford(no_neg_cycle, 'a')
+        bellman_ford_returns_negative_cycle(no_neg_cycle, 'a')
 
     def test_bad_dijkstra_sp(self):
         from ch07.single_source_sp import dijkstra_sp

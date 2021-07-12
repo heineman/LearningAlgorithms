@@ -126,7 +126,7 @@ def heap_dequeue_animation():
         print('Fig. 4-{} : '.format(fig_num),' -- |' + '|'.join([' {:>3} '.format(e.priority) for e in heap.storage[1:heap.N+1]]))
 
         parent = child
-    
+
 def generate_ch04():
     """Generate tables/figures for chapter 04."""
     chapter = 4
