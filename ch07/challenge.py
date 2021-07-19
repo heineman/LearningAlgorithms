@@ -407,10 +407,11 @@ def bellman_ford_returns_negative_cycle(G, src):
 class NegativeCycleError(RuntimeError):
     """Stores information about the Negative Cycle."""
     def __init__(self, G, path, weight):
+        super().__init__()
         self.graph = G
         self.path = path
         self.weight = weight
-        
+
     def __str__(self):
         result = ''
         for n in self.path[:-1]:
@@ -419,13 +420,13 @@ class NegativeCycleError(RuntimeError):
 
 def recover_negative_cycle_example():
     """Show how to recover negative cycle after detected by Bellman-Ford."""
-    
+
     DG = nx.DiGraph()
     DG.add_edge('a', 'b', weight=1)
     DG.add_edge('b', 'd', weight=-3)
     DG.add_edge('d', 'c', weight=5)
     DG.add_edge('c', 'b', weight=-4)
-    
+
     try:
         bellman_ford_returns_negative_cycle(DG, 'a')
     except NegativeCycleError as nce:
@@ -434,7 +435,7 @@ def recover_negative_cycle_example():
 #######################################################################
 if __name__ == '__main__':
     chapter = 7
-    
+
     with ExerciseNum(1) as exercise_number:
         print('dfs_search_recursive in ch07.challenge')
         print(caption(chapter, exercise_number), 'Recursive depth first search')

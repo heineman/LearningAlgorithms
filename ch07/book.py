@@ -831,7 +831,6 @@ def generate_ch07():
         print('{}. {}'.format(label, description))
         print()
 
-
 #######################################################################
 if __name__ == '__main__':
     generate_ch07()

@@ -80,7 +80,7 @@ class ValueBadHash:
         return hash(self.v) % 4
 
     def __eq__(self, other):
-        return (self.__class__ == other.__class__ and self.v == other.v)
+        return self.__class__ == other.__class__ and self.v == other.v
 
 def bad_timing(words, size=50000, output=True):
     """Statistics on hashtables."""
@@ -717,7 +717,7 @@ for w in words[:160564]:
 
         search_sc = min(timeit.repeat(stmt='''
 for w in words[160564:]:
-    ht.get(w)'''.format(size), setup='''
+    ht.get(w)''', setup='''
 from ch03.hashtable_linked import Hashtable
 from resources.english import english_words
 words = english_words()
@@ -760,7 +760,7 @@ N = {0} // 4
 for i in range(1, N, 1):
     flip_every_k(ht, i, N)'''.format(size), setup='''
 from ch03.hashtable_linked import Hashtable
-from ch03.challenge import flip_every_k'''.format(size), repeat=7, number=5))/5
+from ch03.challenge import flip_every_k''', repeat=7, number=5))/5
 
         hashtable_plus = min(timeit.repeat(stmt='''
 ht = DynamicHashtablePlusRemove({0})
@@ -768,7 +768,7 @@ N = {0} // 4
 for i in range(1, N, 1):
     flip_every_k(ht, i, N)'''.format(size), setup='''
 from ch03.hashtable_open import DynamicHashtablePlusRemove
-from ch03.challenge import flip_every_k'''.format(size), repeat=7, number=5))/5
+from ch03.challenge import flip_every_k''', repeat=7, number=5))/5
         tbl.row([size, linked_list, hashtable_plus])
     return tbl
 
@@ -821,6 +821,7 @@ def count_hash_incremental_move(output=True, decimals=4):
         print('delta={}, Normal:{}'.format(delta, total_delta))
 
 def find_most_duplicated(A):
+    """Return most duplicated value in A using Hashtable."""
     from ch03.hashtable_linked import Hashtable
     if A is None or len(A) == 0:
         raise ValueError('Unable to find most duplicated value in empty list')
@@ -899,7 +900,6 @@ class HashtableOpenAddressingRemove:
         temp.table = None     # ensures memory is freed
         self.M = temp.M
         self.threshold = self.load_factor * self.M
-        self.deleted = 0
 
     def remove(self, k):
         """
@@ -912,8 +912,8 @@ class HashtableOpenAddressingRemove:
                 break
             hc = (hc + 1) % self.M
 
-        if self.table[hc] is None:             # Not present
-            return
+        if self.table[hc] is None:             # Not present, so return None
+            return None
 
         result = self.table[hc].value          # Save to be returned
         self.table[hc] = None                  # Remove it and update total

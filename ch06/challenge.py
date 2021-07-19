@@ -634,7 +634,10 @@ class RankBinaryTree:
         return node.key
 
     def rank(self, key):
-        """Return rank (or -1 if it doesn't exist) of key in the tree. min() = 0"""
+        """
+        Return rank (i.e, number of keys less than key) in the tree. min() = 0.
+        It is not required that key actually belong in the tree.
+        """
         return self._rank(self.root, key)
 
     def _rank(self, node, key):
@@ -708,6 +711,34 @@ def compute_perfect_tree(total):
     half = total // 2
     return (math.factorial(total-1) / (math.factorial(half) * math.factorial(half))) * compute_perfect_tree(half) * compute_perfect_tree(half)
 
+def num_perfect_balanced_sequences():
+    """
+    compute S(N), the number of sequences of N values to be inserted that lead to a
+    perfect complete binary tree. Now generalize to find a recursive formula
+    for c(k) to predict value of S(N) when N = 2^(k-1).
+    """
+    from algs.modeling import numpy_error
+    print(7, compute_perfect_tree(7))
+    print(15, compute_perfect_tree(15))
+    print(31, compute_perfect_tree(31))
+
+    if numpy_error:
+        print('cannot compute scipy.special.comb()')
+        return
+
+    import scipy
+
+    # https://oeis.org/A056972
+    def counting(k):
+        if k == 1:
+            return 1
+
+        binomial = scipy.special.comb(2 ** k - 2, 2 ** (k-1) - 1)
+        return binomial * (counting(k-1) ** 2)
+
+    for n in range(1,8):
+        print(n, counting(n))
+
 #######################################################################
 if __name__ == '__main__':
     chapter = 6
@@ -728,9 +759,7 @@ if __name__ == '__main__':
         print()
 
     with ExerciseNum(4) as exercise_number:
-        print(7, compute_perfect_tree(7))
-        print(15, compute_perfect_tree(15))
-        print(31, compute_perfect_tree(31))
+        num_perfect_balanced_sequences()
         print(caption(chapter, exercise_number), 'select() and rank() methods')
         print()
 

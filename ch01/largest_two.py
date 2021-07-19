@@ -88,11 +88,42 @@ class Match:
             m.prior = match2
         return m
 
+class ExtendedMatch:
+    """
+    ExtendedMatch class used during Tournament algorithm to determine first and
+    second largest values in list. Only supports an even-number of
+    initial values.
+
+    Attributes
+    ----------
+    larger : Comparable
+        largest value in the match (i.e., the winner)
+    smaller : list[Comparable]
+        All values that lost during comparisons with Larger
+
+    Methods
+    -------
+    add_loser(val)
+        Add new loser to growing set of losers.
+    """
+
+    def __init__(self, val1, val2):
+        if val1 < val2:
+            self.larger = val2
+            self.smaller = [val1]
+        else:
+            self.larger = val1
+            self.smaller = [val2]
+
+    def add_loser(self, val):
+        """Update losers with new victim."""
+        self.smaller.append(val)
+
 def tournament_two_object(A):
     """
     Returns two largest values in A. Only works for lists whose length
-    is a power of 2. This implementation is much slower because it
-    instantiates Match objects.
+    is a power of 2. This implementation is much slower because of
+    the subtle costs associated with del tourn[0:2].
     """
     if len(A) < 2:
         raise ValueError('Must have at least two values')
@@ -109,6 +140,79 @@ def tournament_two_object(A):
 
     # Find where second is hiding!
     m = tourn[0]
+    largest = m.larger
+    second = m.smaller
+    while m.prior:
+        m = m.prior
+        if second < m.smaller:
+            second = m.smaller
+
+    return (largest,second)
+
+def tournament_two_losers(A):
+    """
+    Returns two largest values in A. Only works for lists whose length
+    is a power of 2. Each winner accumulates list of the values it beat,
+    from which you call max() to find the second largest.
+    """
+    from algs.node import Node
+    if len(A) < 2:
+        raise ValueError('Must have at least two values')
+    if len(A) % 2 == 1:
+        raise ValueError('Only works for lists with even number of values.')
+
+    tourn = None
+    for i in range(0, len(A), 2):
+        tourn = Node(ExtendedMatch(A[i], A[i+1]), tourn)
+
+    while not tourn.next is None:
+        results = None
+        while tourn:
+            next_one = tourn.next.next
+            tv = tourn.value
+            tnv = tourn.next.value
+            if tv.larger > tnv.larger:
+                tv.add_loser(tnv.larger)
+                tourn.next = results        # Keep tourn
+                results = tourn
+            else:
+                tnv.add_loser(tv.larger)
+                tourn.next.next = results   # Keey tourn.next
+                results = tourn.next
+            tourn = next_one
+        tourn = results
+
+    # Find where second is hiding!
+    m = tourn.value
+    largest = m.larger
+    second = max(m.smaller)
+    return (largest,second)
+
+def tournament_two_linked(A):
+    """
+    Returns two largest values in A. Only works for lists whose length
+    is a power of 2. Uses linked list, a topic not introduced until chapter 3.
+    """
+    from algs.node import Node
+    if len(A) < 2:
+        raise ValueError('Must have at least two values')
+    if len(A) % 2 == 1:
+        raise ValueError('Only works for lists with even number of values.')
+
+    tourn = None
+    for i in range(0, len(A), 2):
+        tourn = Node(Match(A[i], A[i+1]), tourn)
+
+    # as long as multiple matches remaining
+    while not tourn.next is None:
+        results = None
+        while tourn:
+            results = Node(Match.advance(tourn.value, tourn.next.value), results)
+            tourn = tourn.next.next
+        tourn = results
+
+    # Find where second is hiding!
+    m = tourn.value
     largest = m.larger
     second = m.smaller
     while m.prior:

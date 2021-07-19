@@ -13,6 +13,13 @@ def selection_sort(A):
 
         A[i],A[min_index] = A[min_index],A[i]
 
+def python_selection_sort(A):
+    """Optimized Selection Sort in Python. Perhaps 20% improvement."""
+    N = len(A)
+    for i in range(N-1):
+        idx = min(range(i, N), key=A.__getitem__)
+        A[i],A[idx] = A[idx],A[i]
+
 def insertion_sort(A):
     """Sort A using Insertion Sort. Use Aj-1 <= Aj to ensure stable sort."""
     N = len(A)

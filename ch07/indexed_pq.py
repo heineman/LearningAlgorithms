@@ -4,7 +4,7 @@ Indexed minimum priority queue
 class IndexedMinPQ:
     """
     Heap storage for an indexed min priority queue.
-    
+
     Attributes
     ----------
         size       - available storage (note 0th index unused)

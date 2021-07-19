@@ -69,6 +69,18 @@ class TestChapter5(unittest.TestCase):
         selection_sort(sample)
         self.assertEqual(expected, sample)
 
+    def test_python_selection_sort(self):
+        from ch05.sorting import python_selection_sort
+        sample = [15,21,20,2,15,24,5,19]               # standard example in chapter
+        expected = sorted(sample)
+        python_selection_sort(sample)
+        self.assertEqual(expected, sample)
+
+        sample = [5, 4, 3, 2, 1]                       # make sure works on reversed list
+        expected = sorted(sample)
+        python_selection_sort(sample)
+        self.assertEqual(expected, sample)
+
     def test_selection_sort_counting(self):
         from ch05.sorting import selection_sort_counting
         sample = [15,21,20,2,15,24,5,19]               # standard example in chapter

@@ -142,7 +142,7 @@ from ch02.challenge import best_range
         worst_times = min(timeit.repeat(stmt='worst_range(alist, tgt)', setup='''
 from ch02.challenge import worst_range
 {}'''.format(custom), repeat=40, number=50))/50
-        
+
         tbl.row([n, worst_times, best_times])
 
 #######################################################################

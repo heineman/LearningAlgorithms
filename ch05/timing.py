@@ -44,9 +44,10 @@ random.shuffle(x)'''.format(n), repeat=20, number=15))/15
 
 def quadratic_sort_trials(max_k=12, output=True, decimals=2):
     """
-    Compare Selection Sort against two flavors of Insertion Sort up to (but not including) 2^max_k.
+    Compare two flavors of Selection Sort against two flavors of Insertion Sort
+    up to (but not including) 2^max_k.
     """
-    tbl = DataTable([8,8,8,8], ['N', 'Select', 'Insert', 'InsertBAS'],
+    tbl = DataTable([8,8,8,8,8], ['N', 'Select', 'PythonSelect', 'Insert', 'InsertBAS'],
                     output=output, decimals=decimals)
 
     for n in [2**k for k in range(8, max_k)]:
@@ -56,7 +57,18 @@ def quadratic_sort_trials(max_k=12, output=True, decimals=2):
             m_select = 1000*min(timeit.repeat(stmt='selection_sort(x)', setup='''
 import random
 from ch05.sorting import selection_sort
-x=list(range({}))
+random.seed({0})
+x=list(range({0}))
+random.shuffle(x)'''.format(n), repeat=20, number=15))/15
+
+        if n > 2048:
+            m_pselect = -1
+        else:
+            m_pselect = 1000*min(timeit.repeat(stmt='python_selection_sort(x)', setup='''
+import random
+from ch05.sorting import python_selection_sort
+random.seed({0})
+x=list(range({0}))
 random.shuffle(x)'''.format(n), repeat=20, number=15))/15
 
         if n > 8192:
@@ -65,23 +77,25 @@ random.shuffle(x)'''.format(n), repeat=20, number=15))/15
             m_insert = 1000*min(timeit.repeat(stmt='insertion_sort(x)', setup='''
 import random
 from ch05.sorting import insertion_sort
-x=list(range({}))
+random.seed({0})
+x=list(range({0}))
 random.shuffle(x)'''.format(n), repeat=20, number=15))/15
 
         m_insert_bas = 1000*min(timeit.repeat(stmt='insertion_sort_bas(x)', setup='''
 import random
 from ch05.sorting import insertion_sort_bas
-x=list(range({}))
+random.seed({0})
+x=list(range({0}))
 random.shuffle(x)'''.format(n), repeat=20, number=15))/15
 
-        tbl.row([n, m_select, m_insert, m_insert_bas])
+        tbl.row([n, m_select, m_pselect, m_insert, m_insert_bas])
     return tbl
 
 #######################################################################
 if __name__ == '__main__':
-    print('Compare Merge Sort against built in Python sort. This takes unusually long.')
+    print('Compare Selection Sort against two flavors of Insertion Sort; takes unusually long.')
+    quadratic_sort_trials()
+
+    print('Compare Merge Sort against built-in Python sort. This takes unusually long.')
     table_trials()
     print()
-
-    print('Compare Selection Sort against two flavors of Insertion Sort. This takes unusually long.')
-    quadratic_sort_trials()

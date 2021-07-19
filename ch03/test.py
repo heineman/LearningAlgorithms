@@ -22,6 +22,9 @@ class TestChapter3(unittest.TestCase):
         n = ord('n') - ord('a')
         e = ord('e') - ord('a')
         self.assertEqual(17576*j + 676*u + 26*n + e, base26('june'))
+        self.assertEqual(172046, base26('June'))
+        self.assertEqual(2786534658, base26('January'))
+        self.assertEqual(9258983, base26('August'))
 
     def test_builtin(self):
         from ch04.builtin import PQ
