@@ -227,6 +227,35 @@ class TestChapter1(unittest.TestCase):
         tbl = run_largest_two_trials(Order.REVERSED, max_k=15, output=False)
         self.assertTrue(tbl.entry(8192, 'double_two') < tbl.entry(16384, 'double_two'))
 
+    def test_different_tournaments(self):
+        from ch01.largest_two import tournament_two_linked, tournament_two_losers
+        
+        n = 128
+        for _ in range(1000):
+            tourn = list(range(n))
+            random.shuffle(tourn)
+            base1, base2 = tournament_two(tourn)
+            
+            tourn = list(range(n))
+            random.shuffle(tourn)
+            ll_1, ll_2 = tournament_two_linked(tourn)
+            
+            tourn = list(range(n))
+            random.shuffle(tourn)
+            tl_1, tl_2 = tournament_two_losers(tourn)
+            
+            tourn = list(range(n))
+            random.shuffle(tourn)
+            to_1, to_2 = tournament_two_object(tourn)
+            
+            self.assertEqual(base1, ll_1)
+            self.assertEqual(base1, tl_1)
+            self.assertEqual(base1, to_1)
+
+            self.assertEqual(base2, ll_2)
+            self.assertEqual(base2, tl_2)
+            self.assertEqual(base2, to_2)
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

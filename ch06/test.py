@@ -58,6 +58,19 @@ class TestChapter6(unittest.TestCase):
         expr = build_expression('3')
         self.assertEqual(3.0, expr.value)
 
+    def test_damaged_recursive_data_structures(self):
+        from ch06.expression import Expression, Value, add
+        from algs.node import Node
+        n = Node(3)
+        n.next = n      # This is dangerous!
+        with self.assertRaises(RuntimeError):
+            print(sum_list(n))
+        
+        a = Expression(add, Value(1), Value(5))
+        a.left = a      # This is dangerous!
+        with self.assertRaises(RuntimeError):
+            print(a.eval())
+
     def test_sum_list(self):
         self.assertEqual(0, sum_list(create_linked_list([])))
         self.assertEqual(1, sum_list(create_linked_list([1])))

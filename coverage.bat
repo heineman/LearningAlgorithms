@@ -18,7 +18,6 @@ echo "Generating Timing results for each chapter. Should take about 2.5 hours"
 %COVERAGE3% run -a ch03\timing.py > tim_ch03.txt
 %COVERAGE3% run -a ch04\timing.py > tim_ch04.txt
 %COVERAGE3% run -a ch05\timing.py > tim_ch05.txt
-%COVERAGE3% run -a ch06\timing.py > tim_ch06.txt
 %COVERAGE3% run -a ch07\timing.py > tim_ch07.txt
 
 echo "Generating challenge exercises for each chapter. Should take about an hour."
