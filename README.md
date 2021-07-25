@@ -3,6 +3,7 @@
 This repository contains the Python code for:
 
 	Learning Algorithms: A Programmer's Guide to Writing Better Code
+	http://oreil.ly/learn-algorithms
 	George T. Heineman
 	ISBN: 978-1-49-209106-6
 	
@@ -147,4 +148,24 @@ hashtables.
 | SUM:          |                113     |     3173    |      3452      |   12119 |
 
 github.com/AlDanial/cloc v 1.86  T=0.38 s (293.9 files/s, 48759.3 lines/s)
+
+## Executable programs
+
+Aside from the `book.py`, `challenge.py`, `test.py` and `timing.py` that can be found 
+in each chapter, there are some standalone Python scripts that can be executed:
+
+* `ch03.perfect` - computes a perfect hash table for its input
+* `ch03.base26` - computes base26() computations shown in chapter 3
+* `cho3.months` - prints the examples from chapter 3 
+* `ch07.maze` - visualizes the maze in Figure 7-3. Feel free to change parameters to visualize mazes of different size.
+* `ch07.replacement` - runs test cases for the replacement code for networkx
+* `ch07.search` - visualize result of Breadth First Search on sample maze
+* `ch07.solver_bfs` - animates Breadth First Search on a larger maze. Change parameter `refresh_rate` to `0.001` to slow down.
+* `ch07.solver_dfs` - animates Depth First Search on a larger maze. Parameter `refresh_rate` is `0.001` so you can see its execution.
+* `ch07.solver_guided` - animates Guided Search on a larger maze. Parameter `refresh_rate` is `0.001` so you can see its execution.
+* `ch07.spreadsheet` - simulates a small spreadsheet application with 5 columns and 3 rows. Formulas can be infix expressions with parentheses
+* `ch07.tmg_load` - loads Massachusetts highway data set and visualizes waypoints and highway segments
+* `ch07.viewer` - visualizes a 50x50 rectangular maze with `salt` of 0.05. Change to 0 and results is a perfect rectangular maze.
+* `ch07.xlsx_example` - application loads up an actual (though small) XLSX document containing the Fibonacci example from Figure 7-11. 
+
 

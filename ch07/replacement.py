@@ -38,8 +38,9 @@ class UndirectedGraph:
 
     def __getitem__(self, u):
         """Get neighboring nodes to this node."""
-        for node in self.adjacency[u]:
-            yield node
+        if self.adjacency[u]:
+            for node in self.adjacency[u]:
+                yield node
 
     def number_of_nodes(self):
         """Return number of nodes in graph."""
@@ -400,9 +401,11 @@ class DirectedGraph:
         """Add edge from u => v with optional weight associated with edge."""
         if not u in self.adjacency:
             self.adjacency[u] = []
+            self.positions[u] = None
 
         if not v in self.adjacency:
             self.adjacency[v] = []
+            self.positions[v] = None
 
         # already there
         if v in self.adjacency[u]:
@@ -435,7 +438,7 @@ class DirectedGraph:
             if len(edge) == 2:
                 self.add_edge(edge[0], edge[1])
             else:
-                self.add_edge(edge[0], edge[1], edge[2])    # weights
+                self.add_edge(edge[0], edge[1], weight=edge[2])    # weights
 
 class Graph(MatrixUndirectedGraph):
     """Replacement graph structure for undirected graphs."""
@@ -482,13 +485,6 @@ def get_node_attributes(graph, pos='pos'):
 def draw(graph, pos, with_labels = True, node_color='w', font_size=8, ax=None):
     """I am not going to provide this capability."""
     return
-
-# TO DELETE
-# def dijkstra_path(G, src, target):
-#     """Dijkstra delegation."""
-#     from ch07.single_source_sp import dijkstra_sp
-#
-#     return dijkstra_sp(G, src, target)
 
 #######################################################################
 # Test case is here so replacement can be tested independently of whether
@@ -553,6 +549,18 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(sorted([('C3', 'B3'), ('C3', 'C2'), ('C3', 'C4')]),
                          sorted(list(G.edges('C3'))))
 
+        # removing edges
+        G.remove_edge('B3', 'B4')
+        self.assertEqual(12, G.number_of_nodes())
+        self.assertEqual(11, G.number_of_edges())
+        self.assertEqual(sorted(['B5', 'C4']), sorted(list(G['B4'])))
+        G.remove_edge('B3', 'B4')   # non existent edge
+        G.remove_edge('XX', 'B4')   # non existent nodes
+        G.remove_edge('B3', 'YY')   # non existent nodes
+        G.remove_edge('B3', 'B5')
+        G.remove_edge('C3', 'B3')   # B3 is now isolated.
+        self.assertEqual([], list(G['B3']))
+
     def test_matrix_undirected_graph(self):
         G = MatrixUndirectedGraph()
 
@@ -591,11 +599,16 @@ class TestChapter7(unittest.TestCase):
         self.assertEqual(sorted([('B3', 'B4'), ('B3', 'C3')]),
                          sorted(list(G.edges('B3'))))
 
+        self.assertEqual(['B3', 'C2'], sorted((list(G['C3']))))
+
     def test_matrix_undirected_graph_weighted(self):
         G = MatrixUndirectedGraph()
 
         with self.assertRaises(ValueError):
             G.add_edge('A2', 'A3', weight=MatrixUndirectedGraph.NO_EDGE)
+
+        # Does nothing, since no edge
+        G.remove_edge('A2', 'A3')
 
         G.add_edge('A2', 'A3', weight=1)
         self.assertEqual([('A2', 'A3', {'weight': 1})], list(G.edges()))
@@ -660,33 +673,53 @@ class TestChapter7(unittest.TestCase):
 
         self.assertTrue(DG.get_edge_data('A2', 'A4') is None)
 
-        edge_list = [ ('B{}'.format(i), 'C{}'.format(i)) for i in range(2,6)]
+        edge_list = [ ('B{}'.format(i), 'C{}'.format(i), 4) for i in range(2,6)]
+        result_list = [ ('B{}'.format(i), 'C{}'.format(i), {'weight': 4}) for i in range(2,6)]
         DG.add_edges_from(edge_list)
-        self.assertEqual(sorted(edge_list + [('A2', 'A3', {'weight': 1}), ('A3', 'A4', {'weight': 2}), ('A4', 'A5', {'weight': 3})]), sorted(list(DG.edges())))
+        self.assertEqual(sorted(result_list + [('A2', 'A3', {'weight': 1}), ('A3', 'A4', {'weight': 2}), ('A4', 'A5', {'weight': 3})]), sorted(list(DG.edges())))
         for i in range(2, 6):
             if 2 < i < 5:
-                DG.add_edge('B{}'.format(i), 'B{}'.format(i+1))
+                DG.add_edge('B{}'.format(i), 'B{}'.format(i+1), 4)
             if i < 5:
-                DG.add_edge('C{}'.format(i), 'C{}'.format(i+1))
+                DG.add_edge('C{}'.format(i), 'C{}'.format(i+1), 4)
 
+        DG.add_edge('B2', 'B4', 4)   # from Figure 7-10
+        DG.add_edge('B3', 'B5', 4)
+        
         self.assertEqual(12, DG.number_of_nodes())
-        self.assertEqual(12, DG.number_of_edges())
+        self.assertEqual(14, DG.number_of_edges())
         self.assertEqual(sorted(['B5', 'C4']), sorted(list(DG['B4'])))
-        self.assertEqual(sorted([('C3', 'C4')]), sorted(list(DG.edges('C3'))))
+        self.assertEqual(sorted([('C3', 'C4', {'weight': 4})]), sorted(list(DG.edges('C3'))))
+
+        # make sure topological sort works
+        result = list(topological_sort(DG))
+        self.assertTrue(result.index('B3') < result.index('B5'))  ## could check others...
 
         DG.remove_edge('C3', 'C4')
         self.assertEqual(12, DG.number_of_nodes())
-        self.assertEqual(11, DG.number_of_edges())
-        self.assertEqual(sorted(['B4', 'C3']), sorted(list(DG['B3'])))
-        self.assertEqual(sorted([('B3', 'B4'), ('B3', 'C3')]),
+        self.assertEqual(13, DG.number_of_edges())
+        self.assertEqual(sorted(['B4', 'B5', 'C3']), sorted(list(DG['B3'])))
+        self.assertEqual(sorted([('B3', 'B4', {'weight': 4}), ('B3', 'B5', {'weight': 4}), ('B3', 'C3', {'weight': 4})]),
                          sorted(list(DG.edges('B3'))))
 
-        self.assertEqual(11, len(list(DG.edges())))
+        self.assertEqual(13, len(list(DG.edges())))
         DG.remove_edge('A2', 'nothing')  # NO IMPACT
         DG.remove_edge('nothing', 'A2')  # NO IMPACT
 
         DG.remove_edge('A2', 'A3')
-        self.assertEqual(10, len(list(DG.edges())))
+        self.assertEqual(12, len(list(DG.edges())))
+
+        # Make sure add_node and add_nodes_from work
+        self.assertFalse('XX' in DG)
+        DG.add_node('XX')
+        self.assertTrue('XX' in DG)
+        DG.add_node('XX')   # no effect
+        DG.add_nodes_from(['YY', 'ZZ'])
+        self.assertEqual(15, DG.number_of_nodes())
+        DG.remove_edge('XX', 'ZZ')   # not an edge. No effect.
+        
+        result = get_node_attributes(DG)
+        self.assertEqual(15, len(result))
 
     def test_dijkstra_sp(self):
         DG = DirectedGraph()

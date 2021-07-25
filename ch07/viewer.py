@@ -73,7 +73,7 @@ if __name__ == '__main__':
     else:
         import tkinter
         random.seed(15)
-        m = Maze(50,50)
+        m = Maze(50,50,salt=0.05)
         root = tkinter.Tk()
         Viewer(m, 15).view(root)
         root.mainloop()
