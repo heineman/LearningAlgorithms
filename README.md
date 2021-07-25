@@ -1,4 +1,4 @@
-# README file for Learning Algorithms code
+![Book cover](images/cover.png)
 
 This repository contains the Python code for:
 
@@ -151,8 +151,8 @@ github.com/AlDanial/cloc v 1.86  T=0.38 s (293.9 files/s, 48759.3 lines/s)
 
 ## Executable programs
 
-Aside from the `book.py`, `challenge.py`, `test.py` and `timing.py` that can be found 
-in each chapter, there are some standalone Python scripts that can be executed:
+Aside from the `book.py`, `challenge.py`, `test.py` and `timing.py` scripts that can be  
+found in each chapter, there are some standalone Python scripts that can be executed:
 
 * `ch03.perfect` - computes a perfect hash table for its input
 * `ch03.base26` - computes base26() computations shown in chapter 3
@@ -167,5 +167,3 @@ in each chapter, there are some standalone Python scripts that can be executed:
 * `ch07.tmg_load` - loads Massachusetts highway data set and visualizes waypoints and highway segments
 * `ch07.viewer` - visualizes a 50x50 rectangular maze with `salt` of 0.05. Change to 0 and results is a perfect rectangular maze.
 * `ch07.xlsx_example` - application loads up an actual (though small) XLSX document containing the Fibonacci example from Figure 7-11. 
-
-
