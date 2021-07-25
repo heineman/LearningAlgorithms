@@ -1,4 +1,4 @@
-"""Tables for Chapter 3.
+"""Tables and Figures for Chapter 3.
 
 """
 import timeit

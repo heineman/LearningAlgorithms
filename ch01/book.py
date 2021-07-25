@@ -1,4 +1,4 @@
-"""Tables for Chapter 1.
+"""Tables and Figures for Chapter 1.
 
 Sample output for this execution.
 

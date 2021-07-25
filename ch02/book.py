@@ -1,4 +1,4 @@
-"""Tables for Chapter 2.
+"""Tables and Figures for Chapter 2.
 
 This script requires that `numpy` and `scipy` be installed within the
 Python environment you are running this script in.

@@ -86,7 +86,10 @@ def challenge_bellman_ford():
         print('Proper Bellman-Ford computes {} but with one fewer iteration it is {}'.format(dist_to, defective_dist_to))
 
 def maze_to_defeat_guided_search(n=15):
-    """Construct maze that defeats guided search by forcing exploration of XXX cells."""
+    """
+    Construct maze that defeats guided search by forcing exploration of (n-1)^2 + n/2
+    cells when n is even. For odd n, it becomes (n-1)^2 + n/2 + 1.
+    """
     m = Maze(n,n)
     m.initialize()                     # back to scratch WITH ALL WALLS
 
@@ -107,7 +110,11 @@ def maze_to_defeat_guided_search(n=15):
     return m
 
 def defeat_guided_search(n=15):
-    """Construct a rectangular maze graph that thwarts guided search."""
+    """
+    Construct a rectangular maze graph that thwarts guided search.
+    Result is output to postscript file. n must be smaller than 80
+    otherwise strange _tkinter.TclError occurs.
+    """
     from ch07.solver_guided import GuidedSearchSolver
     m = maze_to_defeat_guided_search(n)
 

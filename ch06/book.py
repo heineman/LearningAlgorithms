@@ -1,4 +1,4 @@
-"""Code for chapter 06."""
+"""Tables and Figures for chapter 06."""
 
 import timeit
 import math

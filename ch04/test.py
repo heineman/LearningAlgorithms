@@ -211,20 +211,6 @@ class TestChapter4(unittest.TestCase):
             result.append(queue.dequeue())
         return result
 
-    def stress_priority(self, queue, ct):
-        """Stress test for priority queue."""
-        for i in range(ct//2):    # populate with half, in increasing priority
-            queue.enqueue(ct)
-
-        while not queue.is_empty():   # take away 2, add 1
-            i += 1
-            queue.enqueue(i)
-
-            queue.dequeue()           # will eventually drain
-            if queue.is_empty():
-                return
-            queue.dequeue()
-
     def test_queue_quick_normal(self):
         from ch04.list_queue import Queue
         q = Queue()

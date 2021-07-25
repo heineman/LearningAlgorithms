@@ -851,6 +851,17 @@ class TestChapter6(unittest.TestCase):
         self.assertTrue(14 in rbt)
         self.assertFalse(22 in rbt)
 
+    def test_manually_build(self):
+        from ch06.challenge import manually_build
+        vals = [1,2,3,4,5]
+
+        # Turns out, only 16 ways to build a BST of height 4
+        # CANNOT build one with height of 5, since max is 4.
+        ct = manually_build(vals, 4)
+        self.assertEqual(16, ct)
+        ct = manually_build(vals, 5)
+        self.assertEqual(0, ct)
+
 #######################################################################
 if __name__ == '__main__':
     unittest.main()

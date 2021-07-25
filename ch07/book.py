@@ -1,4 +1,4 @@
-"""Code for chapter 07."""
+"""Tables and Figures for chapter 07."""
 
 import timeit
 import random
