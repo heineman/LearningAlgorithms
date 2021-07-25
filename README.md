@@ -114,7 +114,6 @@ If you want to complete all timing results, then add those as well:
     coverage run -a ch03/timing.py
     coverage run -a ch04/timing.py
     coverage run -a ch05/timing.py
-    coverage run -a ch06/timing.py
     coverage run -a ch07/timing.py
 
 Each chapter has challenge exercises that have been completely solved, these
@@ -132,20 +131,20 @@ hashtables.
 
 `perl cloc-1.86.pl LearningAlgorithms --exclude-dir=perfect,htmlcov`
 
-     148 text files.
-     147 unique files.
-      32 files ignored.
+     121 text files.
+     120 unique files.
+      10 files ignored.
 
 
 | Language      |              files     |     blank   |     comment    |    code |
 | ------------- | ---------------------- | ----------- | -------------- | ------- |
-| Python        |                112     |     2789    |      3137      |   10602 |
-| Markdown      |                  1     |       34    |         0      |      82 |
-| DOS Batch     |                  3     |       16    |         9      |      63 |
+| Python        |                107     |     3112    |      3444      |   11919 |
+| Markdown      |                  1     |       44    |         0      |     107 |
+| DOS Batch     |                  2     |       11    |         6      |      45 |
 | XML           |                  2     |        0    |         0      |      25 |
-| Bourne Shell  |                  1     |        6    |         2      |      24 |
+| Bourne Shell  |                  1     |        6    |         2      |      23 |
 ||
-| SUM:          |               119      |   2845      |   3148         | 10796   |
+| SUM:          |                113     |     3173    |      3452      |   12119 |
 
-github.com/AlDanial/cloc v 1.86  T=1.74 s (137.9 files/s, 83921.3 lines/s)
+github.com/AlDanial/cloc v 1.86  T=0.38 s (293.9 files/s, 48759.3 lines/s)
 
