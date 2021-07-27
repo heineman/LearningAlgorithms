@@ -1,3 +1,3 @@
 """
-Module containing Python code for Learning Algorithms: 
+Module containing Python code for Learning Algorithms
 """

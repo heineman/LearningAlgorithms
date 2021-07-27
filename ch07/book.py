@@ -1,4 +1,11 @@
-"""Tables and Figures for chapter 07."""
+"""Tables and Figures for chapter 07.
+
+   Learning Algorithms:
+   A programmer's guide to writing better code
+   Chapter 7: Graphs: Only Connect!
+   (C) 2021, George T. Heineman
+
+"""
 
 import timeit
 import random

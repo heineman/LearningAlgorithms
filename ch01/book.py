@@ -1,6 +1,9 @@
 """Tables and Figures for Chapter 1.
 
-Sample output for this execution.
+   Learning Algorithms:
+   A programmer's guide to writing better code
+   Chapter 1: Problem Solving
+   (C) 2021, George T. Heineman
 
 """
 import timeit
@@ -395,7 +398,6 @@ def visualize_tournament_two(A):
 def generate_ch01():
     """Generate Tables and Figures for chapter 01."""
     chapter = 1
-    visualize_alternate([1, 5, 2, 9, 3, 4])
 
     with FigureNum(1) as figure_number:
         pi1 = [13, 2, 18, 7, 50]

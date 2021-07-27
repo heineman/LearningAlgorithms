@@ -1,5 +1,8 @@
-"""
-Generate all Tables/Figures.
+"""Generate all Tables/Figures for entire book
+
+   Learning Algorithms:
+   A programmer's guide to writing better code
+   (C) 2021, George T. Heineman
 
 Import all external modules that are ever used in the book, so you can 
 see now whether there are any surprises, and not later!
@@ -37,6 +40,7 @@ from ch07.book import generate_ch07
 #######################################################################
 from datetime import datetime
 
+# Generate all chapters, with timestamps
 print("ch01:", datetime.now())
 generate_ch01()
 print("ch02:", datetime.now())

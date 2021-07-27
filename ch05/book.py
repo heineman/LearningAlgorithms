@@ -1,5 +1,11 @@
 """Tables and Figures for Chapter 5
 
+   Learning Algorithms:
+   A programmer's guide to writing better code
+   Chapter 5: Sorting Without A Hat
+   (C) 2021, George T. Heineman
+
+
 If you have some time to review Factorial implementations, consider the internal
 Python implementation
 

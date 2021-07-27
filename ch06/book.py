@@ -1,4 +1,11 @@
-"""Tables and Figures for chapter 06."""
+"""Tables and Figures for chapter 06.
+
+   Learning Algorithms:
+   A programmer's guide to writing better code
+   Chapter 6: Binary Trees: Infinity in the Palm of Your Hand
+   (C) 2021, George T. Heineman
+
+"""
 
 import timeit
 import math

@@ -1,5 +1,10 @@
 """Tables and Figures for Chapter 3.
 
+   Learning Algorithms:
+   A programmer's guide to writing better code
+   Chapter 3: Better Living Through Better Hashing
+   (C) 2021, George T. Heineman
+
 """
 import timeit
 from algs.table import DataTable, caption, SKIP, comma, process, TableNum, FigureNum
@@ -483,6 +488,7 @@ def generate_ch03():
     """Generate Tables and Figures for chapter 03."""
     chapter = 3
 
+    # Starts without a formal figure number
     from ch03.months import print_month
     print_month('February', 2024)
 

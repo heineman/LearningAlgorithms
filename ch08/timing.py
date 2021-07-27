@@ -266,8 +266,33 @@ def generate_heap_table(max_k=18, output=True, decimals=3):
 
     return (add_tbl, remove_tbl)
 
+def compare_python_hashtable():
+    """Compare statistics from simulated Python Hashtable vs. existing Hashtable."""
+    build_dhl = min(timeit.repeat(stmt='''
+ht = DynamicHashtable(8)
+for w in words:
+    ht.put(w,w)''', setup='''
+from ch03.hashtable_open import DynamicHashtable
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+
+    build_phl = min(timeit.repeat(stmt='''
+pht = PythonSimulationHashtable(8)
+for w in words:
+    pht.put(w,w)''', setup='''
+from ch03.challenge import PythonSimulationHashtable
+from resources.english import english_words
+words = english_words()''', repeat=7, number=5))/5
+
+    print('Open addressing Simulation build time:', build_dhl)
+    print('Python addressing HT build time:', build_phl)
+    print('   >> about a {:.2f} percent improvement.'.format(100*(build_dhl-build_phl)/build_dhl))
+
 #######################################################################
 if __name__ == '__main__':
+    print('Compare hashtable timings')
+    compare_python_hashtable()
+
     print('Stack Tables')
     generate_stack_table()
 

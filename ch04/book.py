@@ -1,5 +1,10 @@
 """Tables and Figures for Chapter 4
 
+   Learning Algorithms:
+   A programmer's guide to writing better code
+   Chapter 4: Heaping It On
+   (C) 2021, George T. Heineman
+
 """
 import timeit
 

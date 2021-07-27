@@ -467,28 +467,6 @@ class PythonSimulationHashtable:
             if entry:
                 yield (entry.key, entry.value)
 
-def compare_python_hashtable():
-    """Compare statistics from simulated Python Hashtable vs. existing Hashtable."""
-
-    build_dhl = min(timeit.repeat(stmt='''
-ht = DynamicHashtable(8)
-for w in words:
-    ht.put(w,w)''', setup='''
-from ch03.hashtable_open import DynamicHashtable
-from resources.english import english_words
-words = english_words()''', repeat=7, number=5))/5
-
-    build_phl = min(timeit.repeat(stmt='''
-pht = PythonSimulationHashtable(8)
-for w in words:
-    pht.put(w,w)''', setup='''
-from ch03.challenge import PythonSimulationHashtable
-from resources.english import english_words
-words = english_words()''', repeat=7, number=5))/5
-
-    print('Open addressing Simulation build time:', build_dhl)
-    print('Python addressing HT build time:', build_phl)
-
 def exercise_triangle_number_probing(output=True, decimals=4):
     """Compare triangle number probing with M=powers of 2."""
 
