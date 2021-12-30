@@ -21,7 +21,7 @@ $PYTHON3 ch04/timing.py > ch04.txt
 $PYTHON3 ch05/timing.py > ch05.txt
 $PYTHON3 ch07/timing.py > ch07.txt
 
-echo "Challenge Exercise at end of each chapter."
+echo "Challenge Exercise at end of each chapter. Might take up to fifteen hours"
 $PYTHON3 ch01/challenge.py > ch01.txt
 $PYTHON3 ch02/challenge.py > ch02.txt
 $PYTHON3 ch03/challenge.py > ch03.txt
